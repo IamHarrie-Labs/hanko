@@ -1,0 +1,175 @@
+{
+  "created_at": 1787935837,
+  "completed_at": 1787935837,
+  "id": "434ef9a1-f727-9186-896b-3b6663d680d1",
+  "max_output_tokens": null,
+  "model": "grok-4.3",
+  "object": "response",
+  "output": [
+    {
+      "id": "rs_434ef9a1-f727-9186-896b-3b6663d680d1",
+      "summary": [
+        {
+          "text": "The task is: \"Retrieve the most recent posts from @elonmusk. Return each post verbatim with its numeric post id, author handle, and ISO-8601 creation timestamp. Do not summarise or invent. If a field ...The task is to retrieve the most recent posts from @elonmusk and return them in a specific JSON format with post_id, author, created_at, text, url for each post.",
+          "type": "summary_text"
+        }
+      ],
+      "type": "reasoning",
+      "status": "completed"
+    },
+    {
+      "call_id": "xs_call-56723cfb-4f7b-4840-994f-3756795175d0-0",
+      "input": "{\"query\":\"from:elonmusk\",\"limit\":\"5\",\"mode\":\"Latest\"}",
+      "name": "x_keyword_search",
+      "type": "custom_tool_call",
+      "id": "ctc_434ef9a1-f727-9186-896b-3b6663d680d1_call-56723cfb-4f7b-4840-994f-3756795175d0-0",
+      "status": "completed"
+    },
+    {
+      "id": "tco_434ef9a1-f727-9186-896b-3b6663d680d1_call-56723cfb-4f7b-4840-994f-3756795175d0-0",
+      "summary": [],
+      "type": "reasoning",
+      "status": "completed"
+    },
+    {
+      "content": [
+        {
+          "type": "output_text",
+          "text": "{\"posts\": [{\"post_id\": \"2093346582091452683\", \"author\": \"@elonmusk\", \"created_at\": \"2026-08-28T14:34:52Z\", \"text\": \"Cool\", \"url\": \"https://x.com/elonmusk/status/2093346582091452683\"}, {\"post_id\": \"2093208060353274317\", \"author\": \"@elonmusk\", \"created_at\": \"2026-08-28T05:24:26Z\", \"text\": \"\\ud83d\\udcaf\", \"url\": \"https://x.com/elonmusk/status/2093208060353274317\"}, {\"post_id\": \"2093173146903806299\", \"author\": \"@elonmusk\", \"created_at\": \"2026-08-28T03:05:42Z\", \"text\": \"https://x.com/i/grok/share/e8ae33eba78a45289580e84937a587a6\", \"url\": \"https://x.com/elonmusk/status/2093173146903806299\"}]}",
+          "logprobs": [],
+          "annotations": [
+            {
+              "type": "url_citation",
+              "url": "https://x.com/i/status/2093346582091452683",
+              "start_index": 0,
+              "end_index": 0,
+              "title": "https://x.com/i/status/2093346582091452683"
+            },
+            {
+              "type": "url_citation",
+              "url": "https://x.com/i/status/2093173146903806299",
+              "start_index": 0,
+              "end_index": 0,
+              "title": "https://x.com/i/status/2093173146903806299"
+            },
+            {
+              "type": "url_citation",
+              "url": "https://x.com/i/status/2093208060353274317",
+              "start_index": 0,
+              "end_index": 0,
+              "title": "https://x.com/i/status/2093208060353274317"
+            }
+          ]
+        }
+      ],
+      "id": "msg_434ef9a1-f727-9186-896b-3b6663d680d1",
+      "role": "assistant",
+      "type": "message",
+      "status": "completed"
+    }
+  ],
+  "parallel_tool_calls": true,
+  "previous_response_id": null,
+  "reasoning": {
+    "effort": "low",
+    "summary": "detailed"
+  },
+  "temperature": 0.7,
+  "text": {
+    "format": {
+      "type": "json_schema",
+      "schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "posts"
+        ],
+        "properties": {
+          "posts": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "post_id",
+                "author",
+                "created_at",
+                "text",
+                "url"
+              ],
+              "properties": {
+                "post_id": {
+                  "type": "string"
+                },
+                "author": {
+                  "type": "string"
+                },
+                "created_at": {
+                  "type": "string"
+                },
+                "text": {
+                  "type": "string"
+                },
+                "url": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "tool_choice": "required",
+  "tools": [
+    {
+      "type": "x_search"
+    }
+  ],
+  "top_p": 0.95,
+  "usage": {
+    "input_tokens": 4808,
+    "input_tokens_details": {
+      "cached_tokens": 2368
+    },
+    "output_tokens": 1291,
+    "output_tokens_details": {
+      "reasoning_tokens": 860
+    },
+    "total_tokens": 6099,
+    "num_sources_used": 0,
+    "num_server_side_tools_used": 1,
+    "cost_in_usd_ticks": 117511000,
+    "server_side_tool_usage_details": {
+      "web_search_calls": 0,
+      "x_search_calls": 1,
+      "code_interpreter_calls": 0,
+      "file_search_calls": 0,
+      "mcp_calls": 0,
+      "document_search_calls": 0,
+      "image_generation_calls": 0
+    },
+    "context_details": {
+      "input_tokens": 3107,
+      "output_tokens": 785
+    }
+  },
+  "user": null,
+  "incomplete_details": null,
+  "status": "completed",
+  "store": true,
+  "metadata": {
+    "system_fingerprint": "fp_eb3c003fc66c14ed"
+  },
+  "background": false,
+  "service_tier": "default",
+  "truncation": "disabled",
+  "top_logprobs": 0,
+  "presence_penalty": 0.0,
+  "frequency_penalty": 0.0,
+  "prompt_cache_key": null,
+  "max_tool_calls": null,
+  "safety_identifier": null,
+  "error": null,
+  "instructions": null
+}

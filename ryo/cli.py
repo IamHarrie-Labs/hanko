@@ -376,10 +376,21 @@ def build_parser() -> argparse.ArgumentParser:
 
 def cmd_env(args: argparse.Namespace) -> int:
     """Report which credentials are present. Names and presence only."""
+    import os
+
     for name, present in key_status(
-        "XAI_API_KEY", "RYO_API_BASE", "RYO_API_KEY"
+        "XAI_API_KEY", "RYO_MCP_KEY", "RYO_API_BASE", "RYO_API_KEY"
     ).items():
         print(("set    " if present else "not set") + "  " + name)
+
+    expiry = os.environ.get("RYO_MCP_KEY_EXPIRES_AT")
+    rate = os.environ.get("RYO_MCP_RATE_PER_MINUTE")
+    if expiry or rate:
+        print("")
+        if expiry:
+            print("  RYO MCP key expires " + expiry)
+        if rate:
+            print("  RYO MCP rate limit  " + rate + "/min")
     print("")
     print("Adapters whose key is missing record a FAILED snapshot saying so,")
     print("rather than throwing or pretending the source was quiet.")

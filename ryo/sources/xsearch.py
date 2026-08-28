@@ -1,57 +1,91 @@
 """X adapter, backed by the xAI Responses API and its x_search tool.
 
-Design notes worth keeping in view:
+WHAT A LIVE CALL ACTUALLY RETURNS (confirmed 2026-08-28, not assumed)
 
-  Grok is an ingestion layer here, not a reasoner. This adapter asks it to
-  retrieve posts and nothing else. No sentiment, no conviction, no verdict
-  is requested or stored -- interpretation happens downstream, against
-  stored bytes, so it can be re-run and audited without re-fetching.
+The x_search tool does not hand back structured post objects. A plain call
+returns two things:
 
-  Coverage is UNKNOWN by construction. x_search is a search tool, not a
-  timeline feed: it cannot promise it returned everything a handle posted
-  in the window. Claiming COMPLETE would be a lie, and it is exactly the
-  lie that would inflate a convergence count.
+  a message whose text is the model's PROSE rendering of the posts, with no
+  per-post boundaries, no authors and no timestamps; and
 
-  The whole API response is stored verbatim, not just the extracted posts.
-  If the extractor turns out to be wrong, the original bytes are still on
-  disk and old snapshots can be re-parsed rather than re-fetched.
+  an `annotations` array of `url_citation` entries -- one post URL each,
+  from which a numeric post id can be read.
 
-SCHEMA CAVEAT: the exact shape of x_search tool results has not yet been
-confirmed against a live response. _extract_posts below walks the payload
-structurally instead of assuming a path, and raises PayloadShapeError when
-it finds nothing post-shaped. Confirm the real shape on the first live
-call and tighten this, bumping adapter_version when you do.
+Prose is useless as evidence: it cannot be attributed to a specific post,
+and re-running the model would silently rewrite it. So this adapter asks
+for a JSON schema instead, which makes the model emit per-post fields, and
+then VERIFIES what comes back against the tool's own citations.
+
+    a post whose id appears in the citations is kept
+    a post whose id does not is dropped, never trusted
+
+That check is the difference between evidence and assertion. In the
+verification probe all five returned ids were cited; the point is that
+when one is not, it does not enter the evidence set.
+
+WHAT THE CHECK DOES AND DOES NOT PROVE
+
+It proves the post EXISTS and that the tool actually saw it. It does not
+prove the model transcribed the text or the timestamp faithfully -- those
+fields are model-transcribed and are marked as such in every item's extra.
+Downstream code that treats a transcribed timestamp as authoritative is
+overreading it. The raw payload is stored either way, so a better
+extraction can be applied to old snapshots without re-fetching.
+
+COST: about $0.012 per call at grok-4.3 (roughly $0.005 of that is the
+tool invocation, the rest tokens). Batch handles into one query where you
+can -- `from:a OR from:b` costs one tool call, not two.
 """
 
 from __future__ import annotations
 
+import json
 import os
-from typing import Any, Iterator
+from typing import Any
 
 import httpx
 
-from ..provenance import Coverage, Status, from_iso, to_iso
+from ..provenance import Coverage, Status, from_iso
 from .base import PayloadShapeError, Query, RawResponse
 
 API_URL = "https://api.x.ai/v1/responses"
 
-# Keys a post-shaped object plausibly uses for each field, in priority order.
-_ID_KEYS = ("id", "post_id", "tweet_id", "rest_id")
-_TEXT_KEYS = ("text", "full_text", "body", "content")
-_AUTHOR_KEYS = ("username", "handle", "screen_name", "author", "user_name")
-_DATE_KEYS = ("created_at", "published_at", "timestamp", "date")
-_URL_KEYS = ("url", "link", "permalink")
+POST_SCHEMA: dict[str, Any] = {
+    "type": "object",
+    "additionalProperties": False,
+    "required": ["posts"],
+    "properties": {
+        "posts": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "additionalProperties": False,
+                "required": ["post_id", "author", "created_at", "text", "url"],
+                "properties": {
+                    "post_id": {"type": "string"},
+                    "author": {"type": "string"},
+                    "created_at": {"type": "string"},
+                    "text": {"type": "string"},
+                    "url": {"type": "string"},
+                },
+            },
+        }
+    },
+}
 
 
 class XSearchSource:
     source_id = "x"
-    adapter_version = "0.1.0"
+    # 1.0.0: rewritten against a real response. Snapshots captured by the
+    # 0.1.x guesswork are still on disk and still readable; they simply
+    # replay with the adapter that captured them.
+    adapter_version = "1.0.0"
 
     def __init__(
         self,
         api_key: str | None = None,
         model: str = "grok-4.3",
-        timeout: float = 60.0,
+        timeout: float = 120.0,
     ) -> None:
         self._api_key = api_key or os.environ.get("XAI_API_KEY")
         self._model = model
@@ -73,6 +107,14 @@ class XSearchSource:
             "input": self._prompt(query),
             "tools": [{"type": "x_search"}],
             "tool_choice": "required",
+            "text": {
+                "format": {
+                    "type": "json_schema",
+                    "name": "posts",
+                    "schema": POST_SCHEMA,
+                    "strict": True,
+                }
+            },
         }
 
         try:
@@ -111,116 +153,153 @@ class XSearchSource:
         return RawResponse(
             payload=payload,
             status=Status.OK,
-            # Never COMPLETE. See the module docstring.
+            # Never COMPLETE: x_search is a search tool, not a timeline
+            # feed, and claiming proven recall would inflate a convergence
+            # count across handles.
             coverage=Coverage.UNKNOWN,
             meta={
                 "model": self._model,
                 "usage": usage,
+                # Ticks are 1e-10 USD, so this is the real per-call cost.
+                "cost_usd": round(usage.get("cost_in_usd_ticks", 0) * 1e-10, 6),
                 "subjects_requested": len(query.subjects),
             },
         )
 
     def _prompt(self, query: Query) -> str:
-        handles = ", ".join("@" + s.lstrip("@") for s in query.subjects)
+        handles = " OR ".join("from:" + s.lstrip("@") for s in query.subjects)
         window = ""
         if query.since:
-            window = " posted since " + to_iso(query.since)
+            from ..provenance import to_iso
+
+            window = " Restrict to posts published since " + to_iso(query.since) + "."
         return (
-            "Retrieve the most recent posts from these accounts"
-            + window
-            + ": "
-            + handles
-            + ". Return the posts themselves. Do not summarise, rank, "
-            "interpret, or judge them."
+            "Search X for: " + handles + "." + window
+            + " Return the most recent posts verbatim, each with its numeric"
+            " post id, author handle, and ISO-8601 creation timestamp."
+            " Do not summarise, rank, interpret or invent. If a field is"
+            " genuinely unavailable, return an empty string for it rather"
+            " than guessing."
         )
 
     # ---- pure ----------------------------------------------------------
 
     def parse(self, payload: Any) -> list[dict[str, Any]]:
-        posts = _extract_posts(payload)
-        if not posts:
-            raise PayloadShapeError(
-                "no post-shaped objects found in x_search response; "
-                "confirm the tool result schema and bump adapter_version"
-            )
+        message = _message(payload)
+        cited = cited_ids(payload)
 
+        try:
+            data = json.loads(message.get("text") or "")
+        except (TypeError, ValueError) as exc:
+            raise PayloadShapeError(
+                "message text was not the JSON the schema asked for: " + str(exc)
+            ) from exc
+
+        posts = data.get("posts")
+        if not isinstance(posts, list):
+            raise PayloadShapeError("no `posts` array in the structured response")
+
+        tool_query = _tool_query(payload)
         items: list[dict[str, Any]] = []
         seen: set[str] = set()
-        for raw in posts:
-            external_id = str(_first(raw, _ID_KEYS) or "")
-            if not external_id or external_id in seen:
+
+        for post in posts:
+            post_id = str(post.get("post_id") or "").strip()
+            if not post_id or post_id in seen:
                 continue
-            seen.add(external_id)
+            if post_id not in cited:
+                # The model produced a post the tool never cited. Dropped:
+                # unverifiable is not the same as true, and this is the one
+                # place a fabrication could enter the evidence set.
+                continue
+            seen.add(post_id)
             items.append(
                 {
-                    "external_id": external_id,
-                    "author": str(_first(raw, _AUTHOR_KEYS) or "unknown"),
-                    "published_at": _coerce_date(_first(raw, _DATE_KEYS)),
-                    "text": str(_first(raw, _TEXT_KEYS) or ""),
-                    "url": _first(raw, _URL_KEYS),
+                    "external_id": post_id,
+                    "author": str(post.get("author") or "").lstrip("@") or "unknown",
+                    "published_at": _coerce_date(post.get("created_at")),
+                    "text": str(post.get("text") or ""),
+                    "url": post.get("url") or "https://x.com/i/status/" + post_id,
                     "extra": {
-                        # Kept so the independence check downstream can tell
-                        # an original post from an echo of one.
-                        "is_repost": bool(
-                            raw.get("is_repost")
-                            or raw.get("retweeted")
-                            or raw.get("is_quote")
-                        ),
-                        "raw": raw,
+                        # Existence is proven by the tool's own citation.
+                        # The text and timestamp are the model's
+                        # transcription and are not independently verified.
+                        "existence": "cited_by_tool",
+                        "fields": "model_transcribed",
+                        "tool_query": tool_query,
+                        "is_repost": bool(post.get("is_repost")),
                     },
                 }
             )
 
-        # Sort by id, not by arrival. The API may reorder between calls and
-        # item_index must not move underneath a stored evidence_id.
         items.sort(key=lambda i: i["external_id"])
         return items
 
 
-def _first(obj: dict[str, Any], keys: tuple[str, ...]) -> Any:
-    for key in keys:
-        value = obj.get(key)
-        if value not in (None, ""):
-            # An author sometimes arrives nested as {"author": {"username": ...}}
-            if isinstance(value, dict):
-                nested = _first(value, _AUTHOR_KEYS + _ID_KEYS)
-                if nested is not None:
-                    return nested
-                continue
-            return value
+# ---- pure helpers, shared with the verification report -------------------
+
+
+def _message(payload: Any) -> dict[str, Any]:
+    if not isinstance(payload, dict):
+        raise PayloadShapeError("payload is not an object")
+    for item in payload.get("output", []):
+        if item.get("type") == "message":
+            content = item.get("content") or []
+            if content:
+                return content[0]
+    raise PayloadShapeError("no message item in the response output")
+
+
+def cited_ids(payload: Any) -> set[str]:
+    """Post ids the tool itself cited. The ground truth for verification."""
+    try:
+        message = _message(payload)
+    except PayloadShapeError:
+        return set()
+    ids = set()
+    for annotation in message.get("annotations") or []:
+        url = annotation.get("url") or ""
+        tail = url.rstrip("/").rsplit("/", 1)[-1]
+        if tail.isdigit():
+            ids.add(tail)
+    return ids
+
+
+def _tool_query(payload: Any) -> str | None:
+    for item in payload.get("output", []) if isinstance(payload, dict) else []:
+        if item.get("type") == "custom_tool_call":
+            return item.get("input")
     return None
 
 
+def verification_report(payload: Any) -> dict[str, Any]:
+    """What was kept, what was dropped, and why. Pure, and auditable.
+
+    parse() returns only verified posts, so this is how the dropped ones
+    stay visible. Nothing is lost either way -- the raw payload is stored,
+    so a later, better extraction can be run over old snapshots.
+    """
+    cited = cited_ids(payload)
+    try:
+        data = json.loads(_message(payload).get("text") or "")
+        returned = [str(p.get("post_id") or "") for p in data.get("posts", [])]
+    except (PayloadShapeError, TypeError, ValueError):
+        return {"cited": len(cited), "returned": 0, "verified": 0, "dropped": []}
+
+    dropped = [pid for pid in returned if pid and pid not in cited]
+    return {
+        "cited": len(cited),
+        "returned": len(returned),
+        "verified": len([p for p in returned if p in cited]),
+        "dropped": dropped,
+        "tool_query": _tool_query(payload),
+    }
+
+
 def _coerce_date(value: Any):
-    if not isinstance(value, str):
+    if not isinstance(value, str) or not value.strip():
         return None
     try:
-        return from_iso(value)
+        return from_iso(value.strip())
     except ValueError:
         return None
-
-
-def _walk(node: Any) -> Iterator[dict[str, Any]]:
-    if isinstance(node, dict):
-        yield node
-        for value in node.values():
-            yield from _walk(value)
-    elif isinstance(node, list):
-        for value in node:
-            yield from _walk(value)
-
-
-def _extract_posts(payload: Any) -> list[dict[str, Any]]:
-    """Find post-shaped objects anywhere in the response.
-
-    Structural rather than path-based on purpose: the response envelope is
-    free to move around without invalidating months of stored snapshots.
-    An object counts as a post when it carries both an id and body text.
-    """
-    found: list[dict[str, Any]] = []
-    for node in _walk(payload):
-        has_id = any(node.get(k) for k in _ID_KEYS)
-        has_text = any(node.get(k) for k in _TEXT_KEYS)
-        if has_id and has_text:
-            found.append(node)
-    return found

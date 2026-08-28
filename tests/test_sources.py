@@ -7,7 +7,14 @@ from __future__ import annotations
 
 import pytest
 
+import json
+from pathlib import Path
+
 from ryo.sources import PayloadShapeError, RssSource, XSearchSource
+from ryo.sources.xsearch import cited_ids, verification_report
+from ryo.sources.base import Query
+
+FIXTURES = Path(__file__).resolve().parent.parent / "fixtures"
 
 RSS_BODY = """<?xml version="1.0"?>
 <rss version="2.0"><channel>
@@ -97,91 +104,121 @@ class TestRss:
 
 
 class TestXSearch:
-    def test_finds_posts_regardless_of_envelope_shape(self):
-        flat = {"posts": [{"id": "1", "text": "hello", "username": "alpha"}]}
-        nested = {
-            "output": [
-                {
-                    "type": "tool_result",
-                    "content": {
-                        "results": [{"id": "1", "text": "hello", "username": "alpha"}]
-                    },
-                }
-            ]
+    """Exercised against a fixture captured from a real live response."""
+
+    def _payload(self):
+        return json.loads(
+            (FIXTURES / "xsearch_live_shape.json").read_text(encoding="utf-8")
+        )
+
+    def test_parses_the_real_response_shape(self):
+        items = XSearchSource(api_key="unused").parse(self._payload())
+        assert items
+        assert all(i["external_id"].isdigit() for i in items)
+        assert {i["author"] for i in items} == {"elonmusk"}
+        assert all(i["published_at"] is not None for i in items)
+
+    def test_drops_a_post_the_tool_never_cited(self):
+        payload = self._payload()
+        message = _message_content(payload)
+        data = json.loads(message["text"])
+        data["posts"].append(
+            {
+                "post_id": "9999999999999999999",
+                "author": "@elonmusk",
+                "created_at": "2026-08-28T12:00:00Z",
+                "text": "a post the tool never returned",
+                "url": "https://x.com/i/status/9999999999999999999",
+            }
+        )
+        message["text"] = json.dumps(data)
+
+        items = XSearchSource(api_key="unused").parse(payload)
+        # This is the one place a fabrication could enter the evidence set.
+        assert "9999999999999999999" not in {i["external_id"] for i in items}
+
+    def test_dropped_posts_stay_visible_in_the_report(self):
+        payload = self._payload()
+        message = _message_content(payload)
+        data = json.loads(message["text"])
+        data["posts"].append(
+            {
+                "post_id": "9999999999999999999",
+                "author": "@elonmusk",
+                "created_at": "",
+                "text": "uncited",
+                "url": "",
+            }
+        )
+        message["text"] = json.dumps(data)
+
+        report = verification_report(payload)
+        assert report["dropped"] == ["9999999999999999999"]
+        assert report["verified"] == report["returned"] - 1
+
+    def test_records_that_fields_are_transcribed_not_verified(self):
+        items = XSearchSource(api_key="unused").parse(self._payload())
+        extra = items[0]["extra"]
+        # The citation proves the post exists. It does not prove the model
+        # transcribed the text or the timestamp faithfully.
+        assert extra["existence"] == "cited_by_tool"
+        assert extra["fields"] == "model_transcribed"
+        assert "from:" in extra["tool_query"]
+
+    def test_cited_ids_come_from_the_tools_own_annotations(self):
+        assert cited_ids(self._payload()) == {
+            i["external_id"] for i in XSearchSource(api_key="unused").parse(self._payload())
         }
-        source = XSearchSource(api_key="unused")
-        assert source.parse(flat) == source.parse(nested)
 
-    def test_extracts_the_fields_the_agent_needs(self):
-        items = XSearchSource(api_key="unused").parse(
-            {
-                "posts": [
-                    {
-                        "id": "1900000000000000001",
-                        "text": "Accumulating $TOKENA.",
-                        "username": "voice_alpha",
-                        "created_at": "2026-08-27T09:14:00Z",
-                        "url": "https://x.com/voice_alpha/status/1900000000000000001",
-                    }
-                ]
-            }
-        )
-        assert items[0]["author"] == "voice_alpha"
-        assert items[0]["published_at"].hour == 9
+    def test_prose_without_structure_raises_rather_than_reporting_silence(self):
+        payload = self._payload()
+        _message_content(payload)["text"] = "Cool. Impressive. Of course."
+        # A plain x_search call returns exactly this: prose with no per-post
+        # boundaries. "I cannot read this" must not look like "nobody posted".
+        with pytest.raises(PayloadShapeError):
+            XSearchSource(api_key="unused").parse(payload)
 
-    def test_reposts_are_flagged_for_the_independence_check(self):
-        items = XSearchSource(api_key="unused").parse(
-            {
-                "posts": [
-                    {"id": "1", "text": "original", "username": "a"},
-                    {"id": "2", "text": "echo", "username": "b", "is_repost": True},
-                ]
-            }
-        )
-        assert [i["extra"]["is_repost"] for i in items] == [False, True]
-
-    def test_duplicate_ids_are_collapsed(self):
-        # The same post can appear more than once in a search response.
-        # Counting it twice would inflate a convergence score.
-        items = XSearchSource(api_key="unused").parse(
-            {
-                "a": [{"id": "1", "text": "hello", "username": "alpha"}],
-                "b": [{"id": "1", "text": "hello", "username": "alpha"}],
-            }
-        )
-        assert len(items) == 1
+    def test_missing_message_raises(self):
+        with pytest.raises(PayloadShapeError):
+            XSearchSource(api_key="unused").parse({"output": []})
 
     def test_ordering_does_not_depend_on_arrival_order(self):
-        source = XSearchSource(api_key="unused")
-        one = source.parse(
-            {"posts": [{"id": "2", "text": "b", "username": "x"},
-                       {"id": "1", "text": "a", "username": "x"}]}
-        )
-        two = source.parse(
-            {"posts": [{"id": "1", "text": "a", "username": "x"},
-                       {"id": "2", "text": "b", "username": "x"}]}
-        )
-        assert one == two
+        payload = self._payload()
+        message = _message_content(payload)
+        data = json.loads(message["text"])
+        forward = XSearchSource(api_key="unused").parse(payload)
 
-    def test_unreadable_payload_raises_rather_than_reporting_silence(self):
-        # "I cannot read this" must not look like "nobody posted".
-        with pytest.raises(PayloadShapeError):
-            XSearchSource(api_key="unused").parse({"output": [{"text": "no ids here"}]})
+        data["posts"].reverse()
+        message["text"] = json.dumps(data)
+        assert XSearchSource(api_key="unused").parse(payload) == forward
+
+    def test_is_pure(self):
+        payload = self._payload()
+        source = XSearchSource(api_key="unused")
+        assert source.parse(payload) == source.parse(payload)
 
     def test_missing_api_key_fails_honestly(self):
         from ryo.provenance import Status
-        from ryo.sources import Query
 
         resp = XSearchSource(api_key=None).fetch(Query(subjects=("alpha",)))
         assert resp.status is Status.FAILED
         assert "XAI_API_KEY" in (resp.error or "")
 
     def test_coverage_is_never_claimed_complete(self):
-        # x_search is a search tool, not a timeline. Claiming complete
-        # coverage is the lie that would inflate a convergence count.
-        from ryo.provenance import Coverage, Status
-        from ryo.sources import Query
+        from ryo.provenance import Coverage
 
         resp = XSearchSource(api_key=None).fetch(Query(subjects=("alpha",)))
+        # A search tool cannot prove it returned everything a handle posted.
         assert resp.coverage is not Coverage.COMPLETE
-        assert resp.status is Status.FAILED
+
+    def test_handles_are_batched_into_one_query(self):
+        prompt = XSearchSource(api_key="unused")._prompt(
+            Query(subjects=("alpha", "beta"))
+        )
+        # One tool invocation for many handles: the tool call is the
+        # expensive half of a call, so batching is a real cost decision.
+        assert "from:alpha OR from:beta" in prompt
+
+
+def _message_content(payload):
+    return next(i for i in payload["output"] if i.get("type") == "message")["content"][0]
