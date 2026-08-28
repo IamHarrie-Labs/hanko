@@ -1,0 +1,17 @@
+{
+  "status": "ok",
+  "coverage": "unknown",
+  "error": null,
+  "items": [
+    {
+      "external_id": "1900000000000000020",
+      "author": "voice_alpha",
+      "published_at": "2026-08-27T10:20:00Z",
+      "text": "Loading $TOKENB. Buying here.",
+      "url": null,
+      "extra": {
+        "is_repost": false
+      }
+    }
+  ]
+}
