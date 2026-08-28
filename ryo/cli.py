@@ -15,6 +15,7 @@ import json
 import sys
 from pathlib import Path
 
+from .config import key_status, load_env
 from .provenance import Status, to_iso
 from .snapshot import SnapshotStore
 from .sources import FixtureSource, Query, resolve
@@ -364,13 +365,29 @@ def build_parser() -> argparse.ArgumentParser:
     facts.add_argument("--base-url", dest="base_url")
     facts.set_defaults(func=cmd_facts)
 
+    env = sub.add_parser("env", help="show which credentials are present")
+    env.set_defaults(func=cmd_env)
+
     verify = sub.add_parser("verify", help="check every stored object still hashes")
     verify.set_defaults(func=cmd_verify)
 
     return parser
 
 
+def cmd_env(args: argparse.Namespace) -> int:
+    """Report which credentials are present. Names and presence only."""
+    for name, present in key_status(
+        "XAI_API_KEY", "RYO_API_BASE", "RYO_API_KEY"
+    ).items():
+        print(("set    " if present else "not set") + "  " + name)
+    print("")
+    print("Adapters whose key is missing record a FAILED snapshot saying so,")
+    print("rather than throwing or pretending the source was quiet.")
+    return 0
+
+
 def main(argv: list[str] | None = None) -> int:
+    load_env()
     args = build_parser().parse_args(argv)
     return args.func(args)
 
