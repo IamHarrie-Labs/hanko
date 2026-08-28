@@ -198,16 +198,77 @@ def cmd_audit(args: argparse.Namespace) -> int:
 _FACT_TOOLS = ("analyze_token", "deep_analysis", "check_safety")
 
 
+def _tool_source(tool: str, args: argparse.Namespace):
+    """Build a tool adapter for the chosen transport.
+
+    MCP is the default because that is the credential the hackathon
+    issues. REST stays available for the case where a plain HTTP endpoint
+    is published.
+    """
+    if args.transport == "rest":
+        from .ryotools import RyoToolSource
+
+        return RyoToolSource(tool, base_url=args.base_url)
+
+    from .ryotools import RyoMcpSource
+
+    return RyoMcpSource(tool, url=args.base_url)
+
+
+def cmd_tools(args: argparse.Namespace) -> int:
+    """Ask the MCP server what it actually exposes.
+
+    Worth running before anything else: it confirms the handshake, the
+    credential and the real tool names and argument schemas, rather than
+    trusting the seven names published on the site.
+    """
+    from .ryotools import McpClient, McpError
+
+    client = McpClient(args.base_url)
+    try:
+        info = client.initialize()
+        tools = client.list_tools()
+    except McpError as exc:
+        print("MCP handshake failed: " + str(exc), file=sys.stderr)
+        return 1
+
+    server = info.get("serverInfo", {})
+    print("server    " + str(server.get("name")) + " " + str(server.get("version")))
+    print("protocol  " + str(info.get("protocolVersion")))
+    print("tools     " + str(len(tools)))
+    print("")
+    for tool in tools:
+        print("  " + str(tool.get("name")))
+        description = (tool.get("description") or "").strip().splitlines()
+        if description:
+            print("      " + description[0][:100])
+        schema = tool.get("inputSchema") or {}
+        properties = schema.get("properties") or {}
+        if properties:
+            print("      args: " + ", ".join(sorted(properties)))
+
+    from .ryotools import TOOLS
+
+    published = set(TOOLS)
+    actual = {str(t.get("name")) for t in tools}
+    if published - actual:
+        print("")
+        print("  published but not offered: " + ", ".join(sorted(published - actual)))
+    if actual - published:
+        print("  offered but not published: " + ", ".join(sorted(actual - published)))
+    return 0
+
+
 def cmd_facts(args: argparse.Namespace) -> int:
     """Collect the fact-bearing tools for one token and extract MarketFacts."""
-    from .ryotools import RyoToolSource, extract_market_facts
+    from .ryotools import extract_market_facts
 
     store = _store(args)
     payloads: dict[str, object] = {}
     last_snapshot: str | None = None
 
     for tool in args.tool or list(_FACT_TOOLS):
-        source = RyoToolSource(tool, base_url=args.base_url)
+        source = _tool_source(tool, args)
         snap = store.collect(source, Query(subjects=(args.token,)))
         print(_MARK[snap.status] + "  " + tool.ljust(16) + snap.snapshot_id
               + ("  " + snap.error if snap.error else ""))
@@ -362,8 +423,13 @@ def build_parser() -> argparse.ArgumentParser:
     facts = sub.add_parser("facts", help="collect RYO tools and extract market facts")
     facts.add_argument("token")
     facts.add_argument("--tool", action="append", help="default: analyze_token, deep_analysis, check_safety")
-    facts.add_argument("--base-url", dest="base_url")
+    facts.add_argument("--base-url", dest="base_url", help="MCP endpoint, or REST host")
+    facts.add_argument("--transport", choices=("mcp", "rest"), default="mcp")
     facts.set_defaults(func=cmd_facts)
+
+    tools = sub.add_parser("tools", help="list the tools the MCP server exposes")
+    tools.add_argument("--base-url", dest="base_url")
+    tools.set_defaults(func=cmd_tools)
 
     env = sub.add_parser("env", help="show which credentials are present")
     env.set_defaults(func=cmd_env)
@@ -379,7 +445,7 @@ def cmd_env(args: argparse.Namespace) -> int:
     import os
 
     for name, present in key_status(
-        "XAI_API_KEY", "RYO_MCP_KEY", "RYO_API_BASE", "RYO_API_KEY"
+        "XAI_API_KEY", "RYO_MCP_URL", "RYO_MCP_KEY", "RYO_API_BASE", "RYO_API_KEY"
     ).items():
         print(("set    " if present else "not set") + "  " + name)
 
