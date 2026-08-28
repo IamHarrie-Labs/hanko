@@ -1,0 +1,14 @@
+{
+  "at": "2026-08-30T12:00:00Z",
+  "subjects": {
+    "TOKENA": {
+      "price_usd": 1.02,
+      "liquidity_usd": 880000.0,
+      "independent_voices": 2.0
+    },
+    "TOKENB": {
+      "independent_voices": 1.0,
+      "volume_24h_usd": 700000.0
+    }
+  }
+}
