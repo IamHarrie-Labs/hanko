@@ -1,0 +1,17 @@
+{
+  "status": "degraded",
+  "coverage": "partial",
+  "error": "3 of 20 handles returned no results within the window",
+  "items": [
+    {
+      "external_id": "1900000000000000010",
+      "author": "voice_alpha",
+      "published_at": "2026-08-27T08:00:00Z",
+      "text": "Watching $TOKENB.",
+      "url": null,
+      "extra": {
+        "is_repost": false
+      }
+    }
+  ]
+}
