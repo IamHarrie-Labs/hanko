@@ -35,6 +35,13 @@ def resolve(source_id: str) -> Source:
     Raises rather than substituting a stand-in: replaying a snapshot with
     the wrong adapter would produce evidence that was never observed.
     """
+    if source_id.startswith("ryo:"):
+        # Tool sources are constructed by name rather than registered one
+        # by one, so a snapshot from any of the seven replays the same way.
+        from ..ryotools.client import RyoToolSource
+
+        return RyoToolSource(source_id.removeprefix("ryo:"))
+
     if source_id not in _BUILDERS:
         raise KeyError(
             "no adapter registered for source_id " + repr(source_id)

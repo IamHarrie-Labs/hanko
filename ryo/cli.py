@@ -194,6 +194,43 @@ def cmd_audit(args: argparse.Namespace) -> int:
     return 0
 
 
+_FACT_TOOLS = ("analyze_token", "deep_analysis", "check_safety")
+
+
+def cmd_facts(args: argparse.Namespace) -> int:
+    """Collect the fact-bearing tools for one token and extract MarketFacts."""
+    from .ryotools import RyoToolSource, extract_market_facts
+
+    store = _store(args)
+    payloads: dict[str, object] = {}
+    last_snapshot: str | None = None
+
+    for tool in args.tool or list(_FACT_TOOLS):
+        source = RyoToolSource(tool, base_url=args.base_url)
+        snap = store.collect(source, Query(subjects=(args.token,)))
+        print(_MARK[snap.status] + "  " + tool.ljust(16) + snap.snapshot_id
+              + ("  " + snap.error if snap.error else ""))
+        if snap.has_payload:
+            payloads[tool] = store.load_payload(snap.payload_digest)
+            last_snapshot = snap.snapshot_id
+
+    result = extract_market_facts(args.token, payloads, snapshot_id=last_snapshot)
+    print("")
+    for field_name, key in sorted(result.found.items()):
+        print("  " + field_name.ljust(16) + str(getattr(result.facts, field_name)).ljust(14)
+              + "from " + key)
+    for field_name in result.missing:
+        print("  " + field_name.ljust(16) + "MISSING")
+    for note in result.notes:
+        print("  note: " + note)
+
+    if result.missing:
+        print("")
+        print("  " + str(len(result.missing)) + " field(s) missing; these become gaps"
+              " and reduce position size rather than defaulting to zero.")
+    return 0
+
+
 _METRICS = (
     "price_usd",
     "volume_24h_usd",
@@ -320,6 +357,12 @@ def build_parser() -> argparse.ArgumentParser:
     scorecard = sub.add_parser("scorecard", help="calibration and per-voice track record")
     scorecard.add_argument("--reviews", type=Path, default=Path("reviews.jsonl"))
     scorecard.set_defaults(func=cmd_scorecard)
+
+    facts = sub.add_parser("facts", help="collect RYO tools and extract market facts")
+    facts.add_argument("token")
+    facts.add_argument("--tool", action="append", help="default: analyze_token, deep_analysis, check_safety")
+    facts.add_argument("--base-url", dest="base_url")
+    facts.set_defaults(func=cmd_facts)
 
     verify = sub.add_parser("verify", help="check every stored object still hashes")
     verify.set_defaults(func=cmd_verify)
