@@ -1,8 +1,16 @@
-# ryo-brain — evidence layer
+# hanko
 
-The ingestion and provenance foundation for a RYO-CHAN agent. Everything the
-agent later reasons over enters through here, and everything it claims later
-traces back through here to bytes that were actually received.
+**An agent that files receipts.**
+
+A 判子 is the seal a person stamps on a document to commit to it. The mark goes
+on before the outcome is known and cannot be taken back — which is exactly what
+this agent does with every decision it makes.
+
+Twenty market voices go in. What comes out is a sized position, a receipt, and a
+written commitment to what would prove it wrong — replayable, byte for byte,
+from the exact data the agent saw.
+
+Built for the RYO-CHAN platform and its seven read-only research tools.
 
 ## The one rule
 
@@ -20,17 +28,17 @@ submission rests on.
 ## Layout
 
 ```
-ryo/provenance.py      canonical JSON, sha256 addressing, Status, Coverage
-ryo/evidence.py        Evidence + Provenance — the source-agnostic unit
-ryo/sources/base.py    the adapter contract
-ryo/sources/xsearch.py X, via the xAI Responses API and its x_search tool
-ryo/sources/rss.py     RSS/Atom — free, and the only source with trustworthy timestamps
-ryo/sources/fixture.py local JSON — free development, and every failure mode in CI
-ryo/snapshot/store.py  append-only content-addressed store, replay, integrity
-ryo/review/outcome.py     grading a decision against its own commitment
-ryo/review/reliability.py calibration, per-voice and per-rule track records
-ryo/review/ledger.py      append-only reviews, one per decision
-ryo/cli.py             collect / decide / review / scorecard / audit / verify
+hanko/provenance.py      canonical JSON, sha256 addressing, Status, Coverage
+hanko/evidence.py        Evidence + Provenance — the source-agnostic unit
+hanko/sources/base.py    the adapter contract
+hanko/sources/xsearch.py X, via the xAI Responses API and its x_search tool
+hanko/sources/rss.py     RSS/Atom — free, and the only source with trustworthy timestamps
+hanko/sources/fixture.py local JSON — free development, and every failure mode in CI
+hanko/snapshot/store.py  append-only content-addressed store, replay, integrity
+hanko/review/outcome.py     grading a decision against its own commitment
+hanko/review/reliability.py calibration, per-voice and per-rule track records
+hanko/review/ledger.py      append-only reviews, one per decision
+hanko/cli.py             collect / decide / review / scorecard / audit / verify
 ```
 
 ## Why it is built this way
@@ -68,17 +76,17 @@ pytest
 ```
 
 ```bash
-ryo collect x --subject voice_alpha --subject voice_beta
-ryo collect rss --subject https://example.com/feed.xml
-ryo ls
-ryo replay snap_7723f3520b7dfa2efa6856e3
-ryo verify
+hanko collect x --subject voice_alpha --subject voice_beta
+hanko collect rss --subject https://example.com/feed.xml
+hanko ls
+hanko replay snap_7723f3520b7dfa2efa6856e3
+hanko verify
 ```
 
 Offline, against a fixture:
 
 ```bash
-ryo collect x --subject voice_alpha --fixture fixtures/x_three_voices.json
+hanko collect x --subject voice_alpha --fixture fixtures/x_three_voices.json
 ```
 
 `XAI_API_KEY` must be set for live X collection. Without it the adapter records
@@ -86,7 +94,7 @@ a `FAILED` snapshot saying so, rather than throwing.
 
 ## Status
 
-82 tests, all offline, ~2.5s. Covered at the evidence layer: canonical form and
+138 tests, all offline, ~5s. Covered at the evidence layer: canonical form and
 address stability, payload deduplication, tamper detection, adapter-version
 mismatch on replay, replay determinism, evidence identity pinned to bytes and
 position, and each failure mode (rate limit, partial window, empty result,
@@ -99,11 +107,23 @@ profit not rescuing a falsified thesis, uncheckable metrics staying unresolved,
 inconclusive reviews excluded from every rate, echoes earning neither credit nor
 blame, calibration, and the refusal to re-review a decision.
 
-**Unverified:** the exact shape of `x_search` tool results. `_extract_posts`
-walks the payload structurally rather than assuming a path, and raises
-`PayloadShapeError` when nothing post-shaped is found. Confirm the real shape on
-the first live call, tighten the extractor, and bump `adapter_version` — old
-snapshots keep their original bytes and can be re-parsed rather than re-fetched.
+At the MCP layer: the JSON-RPC handshake, session handling, SSE decoding, every
+transport failure mode, and a test asserting that facts extracted from an MCP
+payload are identical to facts extracted from a REST payload.
+
+**Confirmed against the live API, 28 Aug 2026.** `x_search` does not return
+structured post objects. It returns the model's *prose* rendering of the posts
+plus an array of URL citations. Prose cannot be attributed to a specific post,
+so the adapter requests a JSON schema and then verifies every returned post id
+against the tool's own citations — cited posts are kept, uncited posts are
+dropped. That check proves a post exists and that the tool saw it; it does not
+prove the model transcribed the text or timestamp faithfully, so those fields
+are flagged as model-transcribed on every item.
+
+**Still unverified:** the RYO MCP endpoint URL is not yet in hand, so no live
+tool call has run and the tool argument schemas remain a best guess. Run
+`hanko tools` once the URL is known — it reports the real names and schemas and
+diffs them against the seven published on the site.
 
 ## Decision Records
 
@@ -111,13 +131,13 @@ A record states, at the moment of the decision: what was concluded, on what
 evidence, by what reasoning, what was missing, and **what would prove it wrong**.
 
 ```
-ryo/decision/reading.py      interpretation, recorded once and frozen
-ryo/decision/convergence.py  independence: is this many voices, or one echoed?
-ryo/decision/quality.py      gaps, and the evidence-quality score that sets size
-ryo/decision/policy.py       risk limits, hashed into every record
-ryo/decision/engine.py       the verdict function -- pure by contract
-ryo/decision/record.py       the record, and the commitment that names it
-ryo/decision/ledger.py       append-only ledger, and the replay proof
+hanko/decision/reading.py      interpretation, recorded once and frozen
+hanko/decision/convergence.py  independence: is this many voices, or one echoed?
+hanko/decision/quality.py      gaps, and the evidence-quality score that sets size
+hanko/decision/policy.py       risk limits, hashed into every record
+hanko/decision/engine.py       the verdict function -- pure by contract
+hanko/decision/record.py       the record, and the commitment that names it
+hanko/decision/ledger.py       append-only ledger, and the replay proof
 ```
 
 **The engine is pure.** `decide()` reads its arguments and nothing else: no
@@ -150,7 +170,7 @@ get a different id — a new decision, not an edited one. Refusals commit too: a
 ### Seeing it
 
 ```bash
-ryo decide x --token TOKENA --subject voice_alpha --subject voice_beta --subject voice_gamma --market fixtures/market_tokena.json --as-of 2026-08-27T12:00:00Z --fixture fixtures/x_three_voices.json
+hanko decide x --token TOKENA --subject voice_alpha --subject voice_beta --subject voice_gamma --market fixtures/market_tokena.json --as-of 2026-08-27T12:00:00Z --fixture fixtures/x_three_voices.json
 ```
 
 ```
@@ -171,7 +191,7 @@ Three authors mentioned the token; two of them were independent. Swap in the
 market fixture with no safety score and the same evidence sizes at 3.08%
 instead of 3.28% — nothing in the rules changed, only what was known.
 
-`ryo audit` re-derives every recorded decision from stored bytes and insists it
+`hanko audit` re-derives every recorded decision from stored bytes and insists it
 reproduces. That is the CI gate that turns "preserves a repeatable reasoning
 trail" from a README claim into a failing build.
 
@@ -202,7 +222,7 @@ the exact failure pre-registration exists to prevent, so the ledger refuses a
 second review rather than keeping the latest.
 
 ```bash
-ryo review --observations fixtures/observations_day3.json --now 2026-08-30T12:00:00Z
+hanko review --observations fixtures/observations_day3.json --now 2026-08-30T12:00:00Z
 ```
 
 ```
@@ -217,7 +237,7 @@ FALSIFIED  TOKENA  (enter at confidence 0.66)
 ### The scorecard
 
 ```bash
-ryo scorecard
+hanko scorecard
 ```
 
 ```

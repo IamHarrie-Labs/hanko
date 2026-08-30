@@ -15,7 +15,7 @@ Two things are deliberate.
   attached. The snapshot store is where failures are represented, and an
   exception escaping here would turn a recordable fact into a lost one.
 
-  Extraction is unchanged. ryo.ryotools.facts reads MCP payloads and REST
+  Extraction is unchanged. hanko.ryotools.facts reads MCP payloads and REST
   payloads with the same pure function, because both are just stored JSON
   by the time it sees them. That is the payoff of the adapter boundary --
   swapping transport does not touch a single line of reasoning code.
@@ -40,7 +40,7 @@ from ..sources.base import Query, RawResponse
 from .client import TOOLS
 
 PROTOCOL_VERSION = "2025-06-18"
-CLIENT_INFO = {"name": "ryo-brain", "version": "0.1.0"}
+CLIENT_INFO = {"name": "hanko", "version": "0.1.0"}
 
 
 class McpError(RuntimeError):
@@ -353,7 +353,7 @@ class RyoMcpSource:
         )
 
     def parse(self, payload: Any) -> list[dict[str, Any]]:
-        """No evidence items. Facts are extracted by ryo.ryotools.facts."""
+        """No evidence items. Facts are extracted by hanko.ryotools.facts."""
         return []
 
 

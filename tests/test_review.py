@@ -7,7 +7,7 @@ from pathlib import Path
 
 import pytest
 
-from ryo.decision import (
+from hanko.decision import (
     DecisionInputs,
     DecisionLedger,
     KeywordInterpreter,
@@ -17,7 +17,7 @@ from ryo.decision import (
     decide,
     read_all,
 )
-from ryo.review import (
+from hanko.review import (
     CheckOutcome,
     DuplicateReview,
     Observations,
@@ -27,8 +27,8 @@ from ryo.review import (
     due_decisions,
     review_decision,
 )
-from ryo.snapshot import SnapshotStore
-from ryo.sources import FixtureSource, Query
+from hanko.snapshot import SnapshotStore
+from hanko.sources import FixtureSource, Query
 
 FIXTURES = Path(__file__).resolve().parent.parent / "fixtures"
 AS_OF = datetime(2026, 8, 27, 12, 0, tzinfo=timezone.utc)

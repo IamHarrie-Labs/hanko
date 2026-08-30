@@ -10,9 +10,9 @@ import pytest
 import json
 from pathlib import Path
 
-from ryo.sources import PayloadShapeError, RssSource, XSearchSource
-from ryo.sources.xsearch import cited_ids, verification_report
-from ryo.sources.base import Query
+from hanko.sources import PayloadShapeError, RssSource, XSearchSource
+from hanko.sources.xsearch import cited_ids, verification_report
+from hanko.sources.base import Query
 
 FIXTURES = Path(__file__).resolve().parent.parent / "fixtures"
 
@@ -198,14 +198,14 @@ class TestXSearch:
         assert source.parse(payload) == source.parse(payload)
 
     def test_missing_api_key_fails_honestly(self):
-        from ryo.provenance import Status
+        from hanko.provenance import Status
 
         resp = XSearchSource(api_key=None).fetch(Query(subjects=("alpha",)))
         assert resp.status is Status.FAILED
         assert "XAI_API_KEY" in (resp.error or "")
 
     def test_coverage_is_never_claimed_complete(self):
-        from ryo.provenance import Coverage
+        from hanko.provenance import Coverage
 
         resp = XSearchSource(api_key=None).fetch(Query(subjects=("alpha",)))
         # A search tool cannot prove it returned everything a handle posted.

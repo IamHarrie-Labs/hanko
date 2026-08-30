@@ -45,7 +45,7 @@ class RyoToolSource:
     `parse` returns no items: a tool response is a set of facts, not a set
     of utterances, and forcing market data into the Evidence shape would
     put an author and a body of text on a number. Facts are extracted
-    separately, and purely, by ryo.ryotools.facts.
+    separately, and purely, by hanko.ryotools.facts.
     """
 
     adapter_version = "0.1.0"

@@ -63,7 +63,7 @@ class RssSource:
         with httpx.Client(
             timeout=self._timeout,
             follow_redirects=True,
-            headers={"user-agent": "ryo-brain/0.1 (hackathon research agent)"},
+            headers={"user-agent": "hanko/0.1 (hackathon research agent)"},
         ) as client:
             for url in query.subjects:
                 try:

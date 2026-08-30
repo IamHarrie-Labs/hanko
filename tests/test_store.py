@@ -12,9 +12,9 @@ from pathlib import Path
 
 import pytest
 
-from ryo.provenance import Coverage, Status, canonical_json, digest
-from ryo.snapshot import IntegrityError, SnapshotStore
-from ryo.sources import FixtureSource, Query, RawResponse
+from hanko.provenance import Coverage, Status, canonical_json, digest
+from hanko.snapshot import IntegrityError, SnapshotStore
+from hanko.sources import FixtureSource, Query, RawResponse
 
 FIXTURES = Path(__file__).resolve().parent.parent / "fixtures"
 

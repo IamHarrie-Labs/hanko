@@ -12,10 +12,10 @@ import json
 import httpx
 import pytest
 
-from ryo.provenance import Coverage, Status
-from ryo.ryotools.mcp import McpClient, McpError, RyoMcpSource, _extract
-from ryo.snapshot import SnapshotStore
-from ryo.sources.base import Query
+from hanko.provenance import Coverage, Status
+from hanko.ryotools.mcp import McpClient, McpError, RyoMcpSource, _extract
+from hanko.snapshot import SnapshotStore
+from hanko.sources.base import Query
 
 URL = "https://mcp.example/rpc"
 
@@ -239,7 +239,7 @@ class TestSourceContract:
         assert "429" in (snap.error or "")
 
     def test_source_id_distinguishes_transport(self):
-        from ryo.ryotools import RyoToolSource
+        from hanko.ryotools import RyoToolSource
 
         assert RyoMcpSource("analyze_token").source_id == "ryomcp:analyze_token"
         assert RyoToolSource("analyze_token").source_id == "ryo:analyze_token"
@@ -247,7 +247,7 @@ class TestSourceContract:
 
 def test_extraction_is_identical_across_transports(tmp_path):
     """The whole point of the adapter boundary."""
-    from ryo.ryotools import extract_market_facts
+    from hanko.ryotools import extract_market_facts
 
     store = SnapshotStore(tmp_path / "s")
     source = RyoMcpSource("analyze_token", client=client_for(FakeServer()))

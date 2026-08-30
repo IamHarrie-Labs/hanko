@@ -6,7 +6,7 @@ import os
 
 import pytest
 
-from ryo.config import key_status, load_env
+from hanko.config import key_status, load_env
 
 
 _MANAGED = ("XAI_API_KEY", "RYO_API_KEY", "RYO_API_BASE")

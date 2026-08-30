@@ -1,11 +1,11 @@
 """Command line over the snapshot store.
 
-    ryo collect x --subject voice_alpha --subject voice_beta
-    ryo collect rss --subject https://www.coindesk.com/arc/outboundfeeds/rss/
-    ryo ls
-    ryo show snap_abc123
-    ryo replay snap_abc123
-    ryo verify
+    hanko collect x --subject voice_alpha --subject voice_beta
+    hanko collect rss --subject https://www.coindesk.com/arc/outboundfeeds/rss/
+    hanko ls
+    hanko show snap_abc123
+    hanko replay snap_abc123
+    hanko verify
 """
 
 from __future__ import annotations
@@ -47,7 +47,7 @@ def cmd_collect(args: argparse.Namespace) -> int:
         evidence = store.replay(snap.snapshot_id, source)
         print("  evidence  " + str(len(evidence)) + " item(s)")
     # A failed collection is a successful recording, so exit 0. Use
-    # `ryo verify` for the question of whether the store is intact.
+    # `hanko verify` for the question of whether the store is intact.
     return 0
 
 
@@ -368,7 +368,7 @@ def cmd_verify(args: argparse.Namespace) -> int:
 
 
 def build_parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(prog="ryo", description=__doc__)
+    parser = argparse.ArgumentParser(prog="hanko", description=__doc__)
     parser.add_argument("--root", type=Path, default=DEFAULT_ROOT)
     sub = parser.add_subparsers(dest="command", required=True)
 

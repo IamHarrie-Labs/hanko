@@ -4,10 +4,10 @@ from __future__ import annotations
 
 import pytest
 
-from ryo.provenance import Coverage, Status
-from ryo.ryotools import RyoToolSource, extract_market_facts
-from ryo.ryotools.client import _degraded
-from ryo.sources.base import Query
+from hanko.provenance import Coverage, Status
+from hanko.ryotools import RyoToolSource, extract_market_facts
+from hanko.ryotools.client import _degraded
+from hanko.sources.base import Query
 
 
 class TestClient:
@@ -140,7 +140,7 @@ class TestExtraction:
 
 
 def test_a_failed_tool_call_still_produces_a_snapshot(tmp_path):
-    from ryo.snapshot import SnapshotStore
+    from hanko.snapshot import SnapshotStore
 
     store = SnapshotStore(tmp_path / "snapshots")
     source = RyoToolSource("check_safety", base_url="http://127.0.0.1:1", timeout=0.2)

@@ -8,7 +8,7 @@ from pathlib import Path
 
 import pytest
 
-from ryo.decision import (
+from hanko.decision import (
     DecisionInputs,
     DecisionLedger,
     DuplicateDecision,
@@ -24,10 +24,10 @@ from ryo.decision import (
     read_all,
     replay_decision,
 )
-from ryo.decision.quality import Gap, GapKind
-from ryo.provenance import Status
-from ryo.snapshot import SnapshotStore
-from ryo.sources import FixtureSource, Query
+from hanko.decision.quality import Gap, GapKind
+from hanko.provenance import Status
+from hanko.snapshot import SnapshotStore
+from hanko.sources import FixtureSource, Query
 
 FIXTURES = Path(__file__).resolve().parent.parent / "fixtures"
 AS_OF = datetime(2026, 8, 27, 12, 0, tzinfo=timezone.utc)
@@ -105,7 +105,7 @@ class TestInterpreter:
         assert first == second
 
     def test_posts_without_a_ticker_produce_no_reading(self, store, x_source):
-        from ryo.evidence import Evidence, Provenance
+        from hanko.evidence import Evidence, Provenance
 
         evidence = Evidence(
             external_id="x",
