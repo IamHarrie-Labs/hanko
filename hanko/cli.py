@@ -293,6 +293,49 @@ def cmd_facts(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_exit_liquidity(args: argparse.Namespace) -> int:
+    """Run the exit_liquidity skill on its own, as a Track 3 judge would."""
+    from .decision.record import MarketFacts
+    from .skills.exit_liquidity import assess, describe
+
+    if args.schema:
+        print(json.dumps(describe(), indent=2))
+        return 0
+
+    if args.market:
+        facts = MarketFacts.from_dict(
+            json.loads(Path(args.market).read_text(encoding="utf-8"))
+        )
+        sources = {"liquidity_usd": "file:" + Path(args.market).name}
+    else:
+        from .ryotools import extract_market_facts
+
+        store = _store(args)
+        payloads: dict[str, object] = {}
+        for tool in ("analyze_token", "deep_analysis"):
+            snap = store.collect(_tool_source(tool, args), Query(subjects=(args.token,)))
+            print(_MARK[snap.status] + "  " + tool + "  " + (snap.error or ""))
+            if snap.has_payload:
+                payloads[tool] = store.load_payload(snap.payload_digest)
+        extraction = extract_market_facts(args.token, payloads)
+        facts, sources = extraction.facts, extraction.found
+        print("")
+
+    report = assess(
+        args.token,
+        facts,
+        size_usd=args.size,
+        max_slippage=args.max_slippage / 100,
+        participation=args.participation / 100,
+        sources=sources,
+    )
+    if args.json:
+        print(json.dumps(report.to_dict(), indent=2))
+    else:
+        print(report.explain())
+    return 0
+
+
 _METRICS = (
     "price_usd",
     "volume_24h_usd",
@@ -433,6 +476,22 @@ def build_parser() -> argparse.ArgumentParser:
 
     env = sub.add_parser("env", help="show which credentials are present")
     env.set_defaults(func=cmd_env)
+
+    exit_p = sub.add_parser(
+        "exit-liquidity", help="what does it cost to close a position at size?"
+    )
+    exit_p.add_argument("token")
+    exit_p.add_argument("--size", type=float, help="position size in USD")
+    exit_p.add_argument("--max-slippage", dest="max_slippage", type=float, default=3.0,
+                        help="acceptable price impact, percent (default 3)")
+    exit_p.add_argument("--participation", type=float, default=10.0,
+                        help="share of 24h volume for a patient exit, percent")
+    exit_p.add_argument("--market", type=Path, help="read facts from a JSON file")
+    exit_p.add_argument("--base-url", dest="base_url")
+    exit_p.add_argument("--transport", choices=("mcp", "rest"), default="mcp")
+    exit_p.add_argument("--json", action="store_true")
+    exit_p.add_argument("--schema", action="store_true", help="print the tool definition")
+    exit_p.set_defaults(func=cmd_exit_liquidity)
 
     verify = sub.add_parser("verify", help="check every stored object still hashes")
     verify.set_defaults(func=cmd_verify)

@@ -238,25 +238,6 @@ def decide(inputs: DecisionInputs, policy: Policy) -> DecisionRecord:
             )
         )
 
-    # R7 -- exit. Placeholder until the exit_liquidity skill lands; for now
-    # the absence of depth data is recorded rather than assumed away.
-    if inputs.market.liquidity_usd is None:
-        rules.append(
-            RuleFiring(
-                "exit_liquidity",
-                Outcome.NOTED,
-                "no depth data; exit cost at size is unknown",
-            )
-        )
-    else:
-        rules.append(
-            RuleFiring(
-                "exit_liquidity",
-                Outcome.SATISFIED,
-                "liquidity " + str(inputs.market.liquidity_usd) + " USD observed",
-            )
-        )
-
     # ---- resolve ---------------------------------------------------------
 
     if abstain:
@@ -265,6 +246,13 @@ def decide(inputs: DecisionInputs, policy: Policy) -> DecisionRecord:
         verdict, size = Verdict.PASS, 0.0
     else:
         size = policy.max_position_fraction * quality.overall * min(1.0, mean_conviction)
+
+        # R7 -- exit. The evidence says how much this position deserves;
+        # the pool says how much can actually be closed. The smaller of
+        # the two wins, because a position you cannot exit is not a
+        # smaller position, it is a different one.
+        size = _apply_exit_cap(size, inputs.market, policy, rules)
+
         if size < policy.min_position_fraction:
             rules.append(
                 RuleFiring(
@@ -278,6 +266,9 @@ def decide(inputs: DecisionInputs, policy: Policy) -> DecisionRecord:
             verdict, size = Verdict.ABSTAIN, 0.0
         else:
             verdict = Verdict.ENTER
+
+    if not any(r.rule_id == "exit_liquidity" for r in rules):
+        _apply_exit_cap(0.0, inputs.market, policy, rules)
 
     confidence = round(quality.overall * min(1.0, mean_conviction), 6)
     falsifiers = _falsifiers(verdict, inputs.market, convergence, policy)
@@ -303,6 +294,67 @@ def decide(inputs: DecisionInputs, policy: Policy) -> DecisionRecord:
         engine_version=ENGINE_VERSION,
         notes=inputs.notes,
     )
+
+
+def _apply_exit_cap(
+    size: float,
+    market: MarketFacts,
+    policy: Policy,
+    rules: list[RuleFiring],
+) -> float:
+    """Cap a position at the size the pool can actually give back.
+
+    Uses the exit_liquidity skill's model directly rather than a second
+    copy of the arithmetic, so the number the agent sizes on and the
+    number the tool publishes cannot drift apart.
+    """
+    from ..skills.exit_liquidity import model as exit_model
+
+    if market.liquidity_usd is None or market.liquidity_usd <= 0:
+        rules.append(
+            RuleFiring(
+                "exit_liquidity",
+                Outcome.NOTED,
+                "no pool liquidity available; exit cost at size is unknown and "
+                "is not assumed to be zero",
+            )
+        )
+        return size
+
+    max_notional = exit_model.size_for_slippage(
+        policy.max_exit_slippage, market.liquidity_usd
+    )
+    max_fraction = max_notional / policy.book_usd if policy.book_usd > 0 else 0.0
+    wanted_notional = size * policy.book_usd
+
+    if size > 0 and size > max_fraction:
+        rules.append(
+            RuleFiring(
+                "exit_liquidity",
+                Outcome.BLOCKED,
+                "evidence warranted " + str(round(size * 100, 2)) + "% ($"
+                + format(round(wanted_notional), ",") + ") but exiting that costs "
+                + str(round(exit_model.slippage_for(wanted_notional, market.liquidity_usd) * 100, 2))
+                + "%, over the " + str(round(policy.max_exit_slippage * 100, 2))
+                + "% ceiling; capped to " + str(round(max_fraction * 100, 2))
+                + "% ($" + format(round(max_notional), ",") + ")",
+            )
+        )
+        return max_fraction
+
+    detail = "liquidity $" + format(round(market.liquidity_usd), ",") + "; "
+    if size > 0:
+        detail += (
+            "exiting $" + format(round(wanted_notional), ",") + " costs "
+            + str(round(exit_model.slippage_for(wanted_notional, market.liquidity_usd) * 100, 2))
+            + "%, inside the " + str(round(policy.max_exit_slippage * 100, 2)) + "% ceiling"
+        )
+    else:
+        detail += (
+            "largest exit inside the ceiling is $" + format(round(max_notional), ",")
+        )
+    rules.append(RuleFiring("exit_liquidity", Outcome.SATISFIED, detail))
+    return size
 
 
 def _collect_gaps(

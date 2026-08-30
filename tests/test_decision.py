@@ -373,3 +373,67 @@ def test_explain_reads_as_a_trail(store, x_source):
     assert "independent_voices" in text
     assert "wrong if" in text
     assert "echo" in text
+
+# ---- exit liquidity caps the position ------------------------------------
+
+
+class TestExitCap:
+    def test_a_thin_pool_caps_the_position(self, store, x_source):
+        deep = decide(build_inputs(store, x_source), Policy())
+        thin_market = MarketFacts(
+            subject="TOKENA",
+            price_usd=1.25,
+            volume_24h_usd=4_200_000.0,
+            # Only $387 can be exited inside a 3% ceiling, which is under
+            # the 0.5%-of-book floor: too small to be worth taking.
+            liquidity_usd=25_000.0,
+            safety_score=0.82,
+        )
+        thin = decide(build_inputs(store, x_source, market=thin_market), Policy())
+
+        # The evidence is identical. Only the pool changed.
+        assert thin.verdict is Verdict.ABSTAIN
+        capped = next(r for r in thin.rules if r.rule_id == "exit_liquidity")
+        assert capped.outcome is Outcome.BLOCKED
+        assert "capped to" in capped.detail
+        assert thin.size_fraction < deep.size_fraction
+
+    def test_a_moderately_thin_pool_shrinks_rather_than_blocks(self, store, x_source):
+        market = MarketFacts(
+            subject="TOKENA",
+            price_usd=1.25,
+            volume_24h_usd=4_200_000.0,
+            liquidity_usd=150_000.0,
+            safety_score=0.82,
+        )
+        record = decide(build_inputs(store, x_source, market=market), Policy())
+        # A position you cannot exit is not a smaller position, it is a
+        # different one -- so the size falls to what the pool can return.
+        assert record.verdict is Verdict.ENTER
+        assert record.size_fraction == pytest.approx(150_000 * (0.03 / 0.97) / 2 / 100_000)
+
+    def test_the_rule_fires_even_when_the_decision_never_reaches_sizing(self, store, x_source):
+        record = decide(build_inputs(store, x_source), Policy(min_independent_voices=3))
+        assert record.verdict is Verdict.PASS
+        # A trail that goes quiet on the paths it did not take explains less.
+        assert any(r.rule_id == "exit_liquidity" for r in record.rules)
+
+    def test_absent_liquidity_is_not_assumed_to_be_free(self, store, x_source):
+        blind = MarketFacts(
+            subject="TOKENA", price_usd=1.25, volume_24h_usd=4_200_000.0, safety_score=0.82
+        )
+        record = decide(build_inputs(store, x_source, market=blind), Policy())
+        rule = next(r for r in record.rules if r.rule_id == "exit_liquidity")
+        assert rule.outcome is Outcome.NOTED
+        assert "not assumed to be zero" in rule.detail
+
+    def test_the_agent_and_the_skill_agree_on_the_number(self, store, x_source):
+        from hanko.skills.exit_liquidity import assess
+
+        policy = Policy()
+        record = decide(build_inputs(store, x_source), policy)
+        notional = record.size_fraction * policy.book_usd
+        skill = assess("TOKENA", HEALTHY_MARKET, size_usd=notional, as_of=AS_OF)
+        # One model, used in both places: the number the agent sizes on and
+        # the number the published tool reports cannot drift apart.
+        assert skill.estimate.slippage <= policy.max_exit_slippage

@@ -28,6 +28,7 @@ class Policy:
     min_evidence_quality: float = 0.40
 
     # --- risk limits ------------------------------------------------------
+    book_usd: float = 100_000.0  # notional the fractions below apply to
     max_position_fraction: float = 0.05  # of book, at perfect evidence
     min_position_fraction: float = 0.005  # below this, take nothing at all
     max_exit_slippage: float = 0.03  # ceiling used by the exit-liquidity gate
@@ -62,6 +63,7 @@ class Policy:
             "min_independent_voices": self.min_independent_voices,
             "min_mean_conviction": self.min_mean_conviction,
             "min_evidence_quality": self.min_evidence_quality,
+            "book_usd": self.book_usd,
             "max_position_fraction": self.max_position_fraction,
             "min_position_fraction": self.min_position_fraction,
             "max_exit_slippage": self.max_exit_slippage,
