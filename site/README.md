@@ -5,8 +5,9 @@ framework, no dependencies — matching how the rest of the project is built.
 
 ```
 site/index.html          the page
-site/assets/             the hanko wordmark
-site/build.py            refreshes the numbers from the repo
+site/assets/              generated images -- do not hand-edit, see below
+site/build.py             refreshes the numbers and trail from the repo
+site/make_assets.py       cuts site/assets/ from design/logo-source.jpg
 ```
 
 ## Viewing it
@@ -41,6 +42,38 @@ decisions, applied to its website.
 
 Long lines are re-wrapped with a hanging indent to fit the card. That is the one
 cosmetic liberty taken with real output; nothing is reworded or trimmed.
+
+## The logo
+
+The handoff shipped one 1280x1280 JPEG and cropped it in CSS with
+`background-position` -- workable inside a design tool, fragile as a real
+asset: the whole lockup depended on a background image resolving and two
+hand-tuned pixel offsets staying in sync with each other, and it produced no
+favicon, no social preview image, and no alt text.
+
+`site/make_assets.py` cuts real files out of it once, measured against the
+letterforms rather than eyeballed:
+
+```bash
+pip install Pillow
+python site/make_assets.py
+```
+
+```
+site/assets/hanko-logo.png   694x360  the full lockup, used as <img> content
+site/assets/favicon.png       32x32   the H, for the browser tab
+site/assets/icon-180.png     180x180  apple-touch-icon
+site/assets/icon-512.png     512x512  the icon manifests ask for
+site/assets/og-image.png    1200x630  link-preview card
+```
+
+The crop keeps the flat `#E3E2DD` ground intact rather than keying it out --
+that colour is exactly the page's `--ground` token, which is presumably where
+it came from, and keeping it avoids the halo a JPEG alpha key would leave.
+
+`site/assets/` is generated and committed, the same way a favicon usually is.
+Regenerate it after touching `design/logo-source.jpg`; nothing else in the
+build depends on Pillow.
 
 ## Deploying
 

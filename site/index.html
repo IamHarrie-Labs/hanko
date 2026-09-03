@@ -6,9 +6,19 @@
 <title>Hanko — an agent that files receipts</title>
 <meta name="description" content="Twenty market voices go in. What comes out is a sized position, a receipt, and a written commitment to what would prove it wrong. Replayable, byte for byte.">
 
+<link rel="icon" href="assets/favicon.png" sizes="32x32" type="image/png">
+<link rel="icon" href="assets/icon-512.png" sizes="512x512" type="image/png">
+<link rel="apple-touch-icon" href="assets/icon-180.png">
+<meta name="theme-color" content="#E3E2DD">
+
 <meta property="og:title" content="Hanko — an agent that files receipts">
 <meta property="og:description" content="A sized position, a receipt, and a written commitment to what would prove it wrong. Replayable, byte for byte.">
 <meta property="og:type" content="website">
+<meta property="og:image" content="assets/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="assets/og-image.png">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -86,12 +96,10 @@ h2 { font-size: 46px; line-height: 1.06; letter-spacing: -.028em; font-weight: 7
   padding: 14px var(--gutter);
   display: flex; align-items: center; justify-content: space-between; gap: 24px;
 }
-.mark {
-  display: block; flex: none;
-  background-image: url('assets/hanko-mark.jpg');
-  background-repeat: no-repeat;
-}
-.mark-nav { width: 115px; height: 60px; background-size: 213px auto; background-position: -47px -72px; }
+/* The lockup is a real image, cut to 694x360 by site/make_assets.py.
+   At 1.928:1 it renders at exactly the two sizes the design specified. */
+.mark { display: block; flex: none; height: auto; }
+.mark-nav { width: 115px; }
 .nav-links {
   display: flex; align-items: center; gap: 22px;
   font-size: 13.5px; letter-spacing: .02em; white-space: nowrap;
@@ -110,11 +118,7 @@ h2 { font-size: 46px; line-height: 1.06; letter-spacing: -.028em; font-weight: 7
 
 .hero { padding-top: 72px; padding-bottom: 40px; }
 .hero-grid { display: grid; grid-template-columns: 1.05fr 1fr; gap: 56px; align-items: center; }
-.mark-hero {
-  width: 340px; height: 177px; max-width: 100%;
-  background-size: 631px auto; background-position: -138px -212px;
-  margin-bottom: 28px;
-}
+.mark-hero { width: 340px; max-width: 100%; margin-bottom: 28px; }
 .hero .eyebrow { font-size: 11.5px; }
 h1 { font-size: 62px; line-height: 1.02; letter-spacing: -.032em; font-weight: 700; margin: 0 0 22px; }
 .lede { font-size: 18.5px; line-height: 1.55; color: var(--body); margin: 0 0 14px; max-width: 30em; }
@@ -358,7 +362,7 @@ h1 { font-size: 62px; line-height: 1.02; letter-spacing: -.032em; font-weight: 7
   .stage { border-right: 1px solid var(--line-2); }
   .band-inner { padding-top: 64px; padding-bottom: 68px; }
   #voices, #commitment, #pipeline, #proof { padding-top: 64px; }
-  .mark-hero { width: 260px; height: 136px; background-size: 483px auto; background-position: -106px -162px; }
+  .mark-hero { width: 260px; }
   .receipt pre { font-size: 11.5px; min-height: 0; }
   .stamp { font-size: 22px; right: -8px; }
 }
@@ -376,7 +380,9 @@ h1 { font-size: 62px; line-height: 1.02; letter-spacing: -.032em; font-weight: 7
 
 <nav class="nav">
   <div class="nav-inner">
-    <a href="#top" class="mark mark-nav" aria-label="Hanko — home"></a>
+    <a href="#top" aria-label="Hanko — home" style="display: flex; flex: none">
+      <img class="mark mark-nav" src="assets/hanko-logo.png" width="694" height="360" alt="">
+    </a>
     <div class="nav-links">
       <a href="#receipt">Receipt</a>
       <a href="#missing">Missing data</a>
@@ -391,7 +397,8 @@ h1 { font-size: 62px; line-height: 1.02; letter-spacing: -.032em; font-weight: 7
 <header id="top" class="shell hero">
   <div class="hero-grid">
     <div>
-      <div class="mark mark-hero" role="img" aria-label="Hanko"></div>
+      <img class="mark mark-hero" src="assets/hanko-logo.png" width="694" height="360"
+           alt="Hanko, hand-lettered over a pink brush stroke" fetchpriority="high">
       <div class="eyebrow">判子 · A seal you cannot take back</div>
       <h1>An agent that files receipts.</h1>
       <p class="lede">Twenty market voices go in. What comes out is a sized position, a receipt, and a written commitment to what would prove it wrong.</p>
@@ -449,7 +456,7 @@ h1 { font-size: 62px; line-height: 1.02; letter-spacing: -.032em; font-weight: 7
     <div class="stat">
       <div class="label">Lines</div>
       <div class="stat-value" data-stat="lines">7,413</div>
-      <div class="stat-note">Across <span data-stat="commits">9</span> commits</div>
+      <div class="stat-note">Across <span data-stat="commits">10</span> commits</div>
     </div>
     <div class="stat">
       <div class="label">Layers</div>
@@ -677,7 +684,7 @@ h1 { font-size: 62px; line-height: 1.02; letter-spacing: -.032em; font-weight: 7
 
     <div class="colophon">
       <span>Hanko 判子 · RYO-CHAN Hackathon 2026</span>
-      <span><span data-stat="tests">173</span> tests · <span data-stat="lines">7,413</span> lines · <span data-stat="commits">9</span> commits · <a href="#" data-repo>GitHub</a></span>
+      <span><span data-stat="tests">173</span> tests · <span data-stat="lines">7,413</span> lines · <span data-stat="commits">10</span> commits · <a href="#" data-repo>GitHub</a></span>
     </div>
   </div>
 </footer>
