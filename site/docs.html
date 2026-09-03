@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hanko — docs</title>
+<meta name="description" content="How Hanko actually works: the layer boundaries, the MCP transport, what a live x_search call really returns, the exit_liquidity skill, and what is proven versus not yet proven.">
+
+<link rel="icon" href="assets/favicon.png" sizes="32x32" type="image/png">
+<link rel="icon" href="assets/icon-512.png" sizes="512x512" type="image/png">
+<link rel="apple-touch-icon" href="assets/icon-180.png">
+<meta name="theme-color" content="#E3E2DD">
+
+<meta property="og:title" content="Hanko — docs">
+<meta property="og:description" content="The layer boundaries, the MCP transport, what a live x_search call really returns, and what is proven versus not yet proven.">
+<meta property="og:type" content="website">
+<meta property="og:image" content="assets/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="assets/og-image.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="index.html" aria-label="Hanko — home" style="display: flex; flex: none">
+      <img class="mark mark-nav" src="assets/hanko-logo.png" width="694" height="360" alt="">
+    </a>
+    <div class="nav-links">
+      <a href="index.html#missing">Missing data</a>
+      <a href="index.html#commitment">Commitment</a>
+      <a href="#layers">Layers</a>
+      <a href="#proven">Proven</a>
+    </div>
+    <a href="#" data-repo class="btn btn-dark">GITHUB REPO</a>
+  </div>
+</nav>
+
+<header class="shell docs-hero">
+  <a href="index.html" class="back-link">&larr; Hanko</a>
+  <div class="eyebrow">Docs</div>
+  <h1>How it actually works, in full.</h1>
+  <p class="lede">The landing page shows what the agent does. This is the rest of it: where the layer boundaries sit, what the MCP transport actually handles, what a live <code>x_search</code> call really returns, how the exit-cost model is built, and the honest ledger of what is proven versus not yet proven.</p>
+
+  <nav class="toc" aria-label="On this page">
+    <a href="#layers">Layers</a>
+    <a href="#mcp-transport">MCP transport</a>
+    <a href="#x-search">x_search</a>
+    <a href="#exit-liquidity">exit_liquidity</a>
+    <a href="#proven">Proven</a>
+    <a href="#open">Not yet proven</a>
+  </nav>
+</header>
+
+<section id="layers" class="shell doc-section">
+  <div class="eyebrow">01 · Layers</div>
+  <h2>Five packages, each owning one guarantee.</h2>
+  <p class="section-lede">The codebase is organised around what each layer promises, not around what it happens to import. Read top to bottom, the guarantees compose: a decision cannot cite evidence that was not stored, and cannot be sized on a market fact that was fabricated.</p>
+
+  <table class="layer-table">
+    <thead>
+      <tr><th>Package</th><th>Owns</th><th>Guarantee</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>hanko/sources</code></td>
+        <td>X via xAI <code>x_search</code>, RSS and Atom, fixtures, one adapter contract</td>
+        <td class="guarantee">fetch() may fail; parse() is pure</td>
+      </tr>
+      <tr>
+        <td><code>hanko/snapshot</code></td>
+        <td>Append-only, content-addressed store; replay; integrity checking</td>
+        <td class="guarantee">Altered bytes cannot load silently</td>
+      </tr>
+      <tr>
+        <td><code>hanko/ryotools</code></td>
+        <td>The seven RYO tools over MCP and REST; structural fact extraction</td>
+        <td class="guarantee">Read-only; no write path exists</td>
+      </tr>
+      <tr>
+        <td><code>hanko/decision</code></td>
+        <td>Readings, independence, evidence quality, verdicts, pre-registration</td>
+        <td class="guarantee">decide() is a pure function</td>
+      </tr>
+      <tr>
+        <td><code>hanko/review</code></td>
+        <td>Falsifier checking, calibration, per-voice and per-rule track records</td>
+        <td class="guarantee">One review per decision, enforced</td>
+      </tr>
+      <tr>
+        <td><code>hanko/skills</code></td>
+        <td>Research skills contributed back to the tool surface, e.g. <code>exit_liquidity</code></td>
+        <td class="guarantee">Same read-only, honesty-first contract</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p class="footnote">The purity boundary on the homepage sits between <code>hanko/decision</code> and everything upstream of it: collection and interpretation may touch the network and a model; deciding and reviewing may not.</p>
+</section>
+
+<section id="mcp-transport" class="shell doc-section">
+  <div class="eyebrow">02 · Transport</div>
+  <h2>The MCP transport, in full.</h2>
+  <p class="section-lede">The hackathon issues an MCP credential, so MCP — not REST — is the path known to exist. This is a small, dependency-free JSON-RPC 2.0 client over Streamable HTTP, covering exactly the handshake the seven read-only tools need.</p>
+
+  <div class="doc-note">
+    <div class="label">initialize &rarr; notifications/initialized &rarr; tools/list | tools/call</div>
+    <p>It accepts both plain JSON and server-sent-event responses, because assuming one and failing on a server that streams would be a guess about someone else's implementation. It honours the published 60-per-minute rate limit by spacing calls rather than discovering the limit through 429s. And it records which of the three possible result shapes each payload arrived in — <code>structuredContent</code>, JSON embedded in a text block, or plain text — rather than assuming one, because a server can change shape between versions and a snapshot should say which shape it was captured in.</p>
+    <p>The transport stops at the source boundary. A handshake failure, a rate limit, a protocol error, and an <code>isError</code> tool result all become a recorded snapshot with the reason attached, never an exception that escapes and turns a recordable fact into a lost one.</p>
+    <p>A test asserts that facts extracted from an MCP payload are byte-identical to facts extracted from a REST payload for the same data. Swapping transport touches no line of reasoning code — the seven tools, the decision engine, and the review loop cannot tell which one supplied a number.</p>
+  </div>
+</section>
+
+<section id="x-search" class="shell doc-section">
+  <div class="eyebrow">03 · Evidence</div>
+  <h2>What a live x_search call actually returns.</h2>
+  <p class="section-lede">Confirmed against the real xAI API on 28 August 2026, not assumed — and it changed the adapter's design.</p>
+
+  <div class="doc-note">
+    <div class="label">Prose plus citations, not structured posts</div>
+    <p>A plain call to <code>x_search</code> does not hand back structured post objects. It returns a message whose text is the model's <strong>prose</strong> rendering of the posts it found — no per-post boundaries, no separated authors, no separated timestamps — plus an <code>annotations</code> array of <code>url_citation</code> entries, one post URL each, from which a numeric post id can be read.</p>
+    <p>Prose is useless as evidence: it cannot be attributed to a specific post, and re-running the model would silently rewrite it. So the adapter asks for a JSON schema instead, which makes the model emit per-post fields, and then <strong>verifies what comes back against the tool's own citations</strong>. A post whose id appears in the citations is kept. A post whose id does not is dropped, never trusted. In the verification probe all five returned ids were cited — the point is that when one is not, it does not enter the evidence set.</p>
+    <div class="limit">The honest limit: this check proves a post exists and that the tool actually saw it. It does not prove the model transcribed the text or the timestamp faithfully — those fields are model-transcribed, and are marked as such in every item's <code>extra</code>. Downstream code that treats a transcribed timestamp as authoritative is overreading it. The raw payload is stored either way, so a better extraction can be applied to old snapshots without re-fetching.</div>
+  </div>
+
+  <p class="footnote">Cost: about $0.012 per call at grok-4.3 (roughly $0.005 of that is the tool invocation, the rest tokens). Batching handles into one query — <code>from:a OR from:b</code> — costs one tool call, not two.</p>
+</section>
+
+<section id="exit-liquidity" class="shell doc-section">
+  <div class="eyebrow">04 · Track 3</div>
+  <h2>exit_liquidity: can you actually get out?</h2>
+  <p class="section-lede">The seven published tools all answer some version of "is this worth entering?" <code>check_safety</code> says a token is not a scam. <code>analyze_token</code> and <code>deep_analysis</code> say what it is doing. None of them answer whether a position can be <em>closed</em>, or what closing it costs — and a token can hold a 0.82 safety score and still be a position you cannot exit without giving back a tenth of it.</p>
+
+  <div class="doc-note">
+    <div class="label">Modelled, not measured</div>
+    <p>No order book is observed anywhere in this skill, so the <code>Confidence</code> type has no <code>HIGH</code> value at all — the enum simply does not contain one. Every figure is computed from a constant-product curve (<code>slippage = f / (1 + f)</code> where <code>f</code> is the exit size as a fraction of pool depth) against reported liquidity, and the response carries the model id and its five stated assumptions alongside every number. Past 25% of the pool the model says so and downgrades its own confidence, rather than extrapolating a figure it does not believe.</p>
+    <p>A missing input produces no number: absent liquidity returns <code>null</code> and a verdict of <code>unknown</code> — never zero, which would read as "free to exit."</p>
+  </div>
+
+  <p class="footnote">It is also the size gate inside the decision engine, importing the same model rather than a second copy of the arithmetic, so the number the agent sizes a position on and the number this tool publishes cannot drift apart. 28 tests, offline, no network.</p>
+</section>
+
+<section id="proven" class="shell doc-section">
+  <div class="eyebrow">05 · Test coverage</div>
+  <h2>Proven, and not yet proven.</h2>
+  <p class="section-lede">A project about not overclaiming should not overclaim about itself either.</p>
+
+  <div class="proof-head good">Proven &middot; <span data-stat="tests">173</span> tests, all offline, about 5 seconds</div>
+  <ul class="proof-list doc-list">
+    <li class="proof-item"><span class="sigil good">+</span><span>Canonical form and address stability, payload deduplication, tamper detection</span></li>
+    <li class="proof-item"><span class="sigil good">+</span><span>Replay determinism, and evidence identity pinned to bytes and position</span></li>
+    <li class="proof-item"><span class="sigil good">+</span><span>Every failure mode: rate limit, partial window, empty result, raising adapter, malformed feed, unreadable payload</span></li>
+    <li class="proof-item"><span class="sigil good">+</span><span>Echo demotion, and PASS kept separate from ABSTAIN</span></li>
+    <li class="proof-item"><span class="sigil good">+</span><span>Size shrinking under missing safety data, a failed source, and stale evidence</span></li>
+    <li class="proof-item"><span class="sigil good">+</span><span>End-to-end reproduction of a stored decision from stored bytes</span></li>
+    <li class="proof-item"><span class="sigil good">+</span><span>Profit not rescuing a falsified thesis, and uncheckable metrics staying unresolved</span></li>
+    <li class="proof-item"><span class="sigil good">+</span><span>Inconclusive reviews excluded from every calibration rate, and reported as their own number</span></li>
+    <li class="proof-item"><span class="sigil good">+</span><span>Echoes earning neither credit nor blame in per-voice reliability</span></li>
+    <li class="proof-item"><span class="sigil good">+</span><span>MCP handshake, session handling, SSE decoding, transport-independent extraction</span></li>
+    <li class="proof-item"><span class="sigil good">+</span><span>The exit-cost curve against closed-form constant-product values, and its inverse</span></li>
+    <li class="proof-item"><span class="sigil good">+</span><span>Model-validity flagging and confidence downgrade past 25% of pool depth</span></li>
+  </ul>
+
+  <div id="open" style="margin-top: 44px; scroll-margin-top: 24px">
+    <div class="proof-head open">Not yet proven</div>
+    <ul class="proof-list doc-list open">
+      <li class="proof-item"><span class="sigil open">?</span><span>The RYO MCP endpoint URL is not yet in hand, so no live tool call has run</span></li>
+      <li class="proof-item"><span class="sigil open">?</span><span>Tool argument schemas are a best guess until <code>hanko tools</code> reports the real ones</span></li>
+      <li class="proof-item"><span class="sigil open">?</span><span>No live sweep has run long enough to produce a calibration curve from real decisions</span></li>
+    </ul>
+  </div>
+
+  <div class="teaser">
+    <p>Every one of these lines maps to a real test. Read them, or run them yourself.</p>
+    <a href="#" data-repo>Read the code</a>
+  </div>
+</section>
+
+<footer class="band">
+  <div class="shell band-inner" style="padding-top: 56px; padding-bottom: 56px">
+    <div class="colophon">
+      <span>Hanko 判子 · RYO-CHAN Hackathon 2026</span>
+      <span><span data-stat="tests">173</span> tests · <span data-stat="lines">7,413</span> lines · <span data-stat="commits">11</span> commits · <a href="index.html">Home</a> · <a href="#" data-repo>GitHub</a></span>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

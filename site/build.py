@@ -25,7 +25,12 @@ import textwrap
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-INDEX = Path(__file__).resolve().parent / "index.html"
+SITE_DIR = Path(__file__).resolve().parent
+INDEX = SITE_DIR / "index.html"
+# Every page that carries the live stat spans or the GitHub link. The
+# trail substitution is index-only in effect: docs.html has no
+# <pre id="trail"> for the regex to match, so it is a safe no-op there.
+PAGES = (INDEX, SITE_DIR / "docs.html")
 
 # Fixed inputs, so the published trail is reproducible rather than
 # whatever the market happened to look like when the site was built.
@@ -157,27 +162,38 @@ def main() -> int:
     if shutil.which("git") is None:
         raise SystemExit("git is required to read the commit count")
 
-    current = INDEX.read_text(encoding="utf-8")
-    updated = apply(
-        current,
-        trail=decision_trail(),
-        stats={
-            "tests": test_count(),
-            "lines": line_count(),
-            "commits": commit_count(),
-        },
-        repo=repo_url(),
-    )
+    # Computed once and applied to every page, so the test count on the
+    # docs page can never read differently from the one on the homepage.
+    trail = decision_trail()
+    stats = {
+        "tests": test_count(),
+        "lines": line_count(),
+        "commits": commit_count(),
+    }
+    repo = repo_url()
 
-    if updated == current:
+    stale = []
+    for page in PAGES:
+        if not page.exists():
+            continue
+        current = page.read_text(encoding="utf-8")
+        updated = apply(current, trail=trail, stats=stats, repo=repo)
+        if updated == current:
+            continue
+        stale.append((page, updated))
+
+    if not stale:
         print("site is current")
         return 0
     if args.check:
-        print("site is stale; run: python site/build.py", file=sys.stderr)
+        for page, _ in stale:
+            print("stale: " + str(page.relative_to(ROOT)), file=sys.stderr)
+        print("run: python site/build.py", file=sys.stderr)
         return 1
 
-    INDEX.write_text(updated, encoding="utf-8")
-    print("rewrote " + str(INDEX.relative_to(ROOT)))
+    for page, updated in stale:
+        page.write_text(updated, encoding="utf-8")
+        print("rewrote " + str(page.relative_to(ROOT)))
     return 0
 
 

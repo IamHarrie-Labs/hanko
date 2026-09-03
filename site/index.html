@@ -24,356 +24,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 
-<style>
-:root {
-  --ground:    #E3E2DD;
-  --surface:   #EFEDE9;
-  --ink:       #171614;
-  --on-ink:    #F4F2EF;
-  --body:      #3B3833;
-  --muted:     #6B6660;
-  --muted-ink: #7C766E;
-  --dim-ink:   #B5AFA7;
-  --line:      rgba(23, 22, 20, .14);
-  --line-2:    rgba(23, 22, 20, .18);
-  --line-ink:  rgba(244, 242, 239, .18);
-
-  --accent:      #E357AE;
-  --accent-lift: #FF9AD9;
-  --accent-deep: #B0348A;
-  --good:        #2E7D45;
-  --good-lift:   #A9E0B4;
-
-  --shell: 1180px;
-  --gutter: 32px;
-  --mono: 'JetBrains Mono', ui-monospace, Menlo, monospace;
-}
-
-* { box-sizing: border-box; }
-
-html { scroll-behavior: smooth; }
-
-body {
-  margin: 0;
-  background: var(--ground);
-  color: var(--ink);
-  font-family: 'Space Grotesk', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  max-width: 100%;
-  overflow-x: hidden;
-}
-
-a { color: var(--ink); text-decoration: none; }
-a:hover { color: var(--accent); }
-a:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 2px; }
-
-h1, h2 { text-wrap: balance; }
-p { text-wrap: pretty; }
-
-.shell { max-width: var(--shell); margin: 0 auto; padding-left: var(--gutter); padding-right: var(--gutter); }
-.eyebrow {
-  font-family: var(--mono); font-size: 11px; letter-spacing: .14em;
-  color: var(--muted); margin-bottom: 18px; text-transform: uppercase;
-}
-.label {
-  font-family: var(--mono); font-size: 10.5px; letter-spacing: .12em;
-  color: var(--muted); margin-bottom: 14px; text-transform: uppercase;
-}
-h2 { font-size: 46px; line-height: 1.06; letter-spacing: -.028em; font-weight: 700; margin: 0 0 18px; }
-.section-lede { font-size: 18px; line-height: 1.6; color: var(--body); margin: 0 0 44px; max-width: 44em; }
-.footnote { font-size: 15px; line-height: 1.6; color: var(--muted); margin: 26px 0 0; max-width: 46em; }
-
-/* ---------- nav ---------- */
-
-.nav {
-  position: sticky; top: 0; z-index: 50;
-  background: rgba(227, 226, 221, .88);
-  backdrop-filter: blur(10px);
-  border-bottom: 1px solid rgba(23, 22, 20, .12);
-}
-.nav-inner {
-  max-width: var(--shell); margin: 0 auto;
-  padding: 14px var(--gutter);
-  display: flex; align-items: center; justify-content: space-between; gap: 24px;
-}
-/* The lockup is a real image, cut to 694x360 by site/make_assets.py.
-   At 1.928:1 it renders at exactly the two sizes the design specified. */
-.mark { display: block; flex: none; height: auto; }
-.mark-nav { width: 115px; }
-.nav-links {
-  display: flex; align-items: center; gap: 22px;
-  font-size: 13.5px; letter-spacing: .02em; white-space: nowrap;
-}
-.btn {
-  flex: none; border-radius: 2px; white-space: nowrap;
-  transition: background-color .15s ease, color .15s ease, border-color .15s ease;
-}
-.btn-dark {
-  padding: 9px 16px; background: var(--ink); color: var(--on-ink);
-  font-family: var(--mono); font-size: 11px; letter-spacing: .08em;
-}
-.btn-dark:hover { background: var(--accent); color: var(--ink); }
-
-/* ---------- hero ---------- */
-
-.hero { padding-top: 72px; padding-bottom: 40px; }
-.hero-grid { display: grid; grid-template-columns: 1.05fr 1fr; gap: 56px; align-items: center; }
-.mark-hero { width: 340px; max-width: 100%; margin-bottom: 28px; }
-.hero .eyebrow { font-size: 11.5px; }
-h1 { font-size: 62px; line-height: 1.02; letter-spacing: -.032em; font-weight: 700; margin: 0 0 22px; }
-.lede { font-size: 18.5px; line-height: 1.55; color: var(--body); margin: 0 0 14px; max-width: 30em; }
-.lede + .lede { margin-bottom: 32px; }
-.cta-row { display: flex; gap: 12px; flex-wrap: wrap; }
-.btn-solid { padding: 13px 22px; background: var(--ink); color: var(--on-ink); font-size: 14.5px; font-weight: 500; }
-.btn-solid:hover { background: var(--accent); color: var(--ink); }
-.btn-outline {
-  padding: 13px 22px; border: 1px solid rgba(23, 22, 20, .28);
-  font-size: 14.5px; font-weight: 500;
-}
-.btn-outline:hover { border-color: var(--accent); }
-
-/* ---------- receipt ---------- */
-
-#receipt { scroll-margin-top: 90px; }
-.receipt {
-  background: var(--ink); border-radius: 3px; padding: 22px 24px 26px;
-  box-shadow: 0 24px 60px -30px rgba(23, 22, 20, .6);
-}
-.receipt-head {
-  display: flex; justify-content: space-between; align-items: center;
-  font-family: var(--mono); font-size: 10.5px; letter-spacing: .1em;
-  color: var(--muted-ink);
-  padding-bottom: 14px; margin-bottom: 16px;
-  border-bottom: 1px solid rgba(244, 242, 239, .14);
-}
-.receipt-live { color: var(--accent-lift); }
-.receipt pre {
-  margin: 0; font-family: var(--mono); font-size: 12.4px; line-height: 1.72;
-  color: #DCD8D2; white-space: pre-wrap; min-height: 420px;
-}
-.caret { color: var(--accent-lift); animation: blink 1s steps(1) infinite; }
-.receipt-caption { font-size: 14px; line-height: 1.6; color: var(--muted); margin: 16px 2px 0; }
-
-@keyframes blink { 0%, 49% { opacity: 1 } 50%, 100% { opacity: 0 } }
-@keyframes stampIn {
-  0%   { transform: rotate(-9deg) scale(2.4); opacity: 0 }
-  60%  { transform: rotate(-9deg) scale(1);   opacity: 1 }
-  70%  { transform: rotate(-9deg) scale(1.04) }
-  100% { transform: rotate(-9deg) scale(1);   opacity: 1 }
-}
-
-/* ---------- stats ---------- */
-
-.stats {
-  display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px;
-  background: var(--line); border: 1px solid var(--line); margin-top: 64px;
-}
-.stat { background: var(--ground); padding: 22px 24px; }
-.stat .label { margin-bottom: 8px; }
-.stat-value {
-  font-size: 34px; font-weight: 700; letter-spacing: -.02em; line-height: 1;
-  font-variant-numeric: tabular-nums;
-}
-.stat-note { font-size: 13px; color: var(--muted); margin-top: 6px; }
-
-/* ---------- dark bands ---------- */
-
-.band { background: var(--ink); color: var(--on-ink); }
-.band .eyebrow, .band .label { color: var(--muted-ink); }
-.band .section-lede { color: var(--dim-ink); }
-.band .footnote { color: var(--muted-ink); }
-.band-inner { padding-top: 96px; padding-bottom: 100px; }
-
-#missing { margin-top: 40px; scroll-margin-top: 70px; }
-
-.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
-
-.panel { border: 1px solid var(--line-ink); padding: 28px 28px 30px; }
-.panel-flag { border-color: rgba(255, 154, 217, .45); background: rgba(227, 87, 174, .06); }
-.panel-flag .label { color: var(--accent-lift); }
-.panel .label { margin-bottom: 20px; }
-
-.metric { display: flex; align-items: baseline; gap: 10px; margin-bottom: 4px; }
-.metric-value { font-size: 76px; font-weight: 700; letter-spacing: -.04em; line-height: 1; }
-.metric-flag .metric-value { color: var(--accent-lift); }
-.metric-unit { font-size: 15px; color: var(--dim-ink); }
-
-.readout {
-  font-family: var(--mono); font-size: 12.6px; line-height: 1.9;
-  color: var(--dim-ink); margin-top: 22px;
-}
-.readout .faint { color: var(--muted-ink); }
-.readout .good { color: var(--good-lift); margin-top: 10px; }
-.readout .flag { color: var(--accent-lift); }
-.readout .flag-lead { color: var(--accent-lift); margin-top: 10px; }
-
-/* ---------- voices ---------- */
-
-#voices { padding-top: 96px; padding-bottom: 40px; scroll-margin-top: 70px; }
-.voices { display: grid; grid-template-columns: 1fr 1fr 1fr .9fr; gap: 20px; align-items: stretch; }
-.voice { border: 1px solid rgba(23, 22, 20, .16); padding: 24px; background: var(--surface); }
-.voice-echo {
-  border: 1px dashed rgba(227, 87, 174, .7);
-  background: rgba(227, 87, 174, .07);
-  transition: opacity .5s ease;
-}
-.avatar {
-  width: 42px; height: 42px; border-radius: 50%;
-  background: var(--ink); color: var(--on-ink);
-  display: flex; align-items: center; justify-content: center;
-  font-family: var(--mono); font-size: 13px; margin-bottom: 16px;
-}
-.avatar-echo { background: var(--accent); color: var(--ink); }
-.voice-name { font-family: var(--mono); font-size: 13px; margin-bottom: 6px; }
-.voice-note { font-size: 13.5px; color: var(--muted); line-height: 1.5; }
-.voice-status { font-family: var(--mono); font-size: 11px; letter-spacing: .08em; margin-top: 16px; }
-.counted { color: var(--good); }
-.demoted { color: var(--accent-deep); }
-
-.voice-tally {
-  border: 1px solid var(--ink); padding: 24px;
-  background: var(--ink); color: var(--on-ink);
-  display: flex; flex-direction: column; justify-content: center;
-}
-.voice-tally .label { color: var(--muted-ink); margin-bottom: 10px; }
-.tally-value { font-size: 60px; font-weight: 700; line-height: 1; letter-spacing: -.03em; }
-.tally-note { font-size: 13px; color: var(--dim-ink); margin-top: 8px; }
-
-/* ---------- commitment ---------- */
-
-#commitment { padding-top: 96px; padding-bottom: 40px; scroll-margin-top: 70px; }
-.seal { border: 1px solid rgba(23, 22, 20, .2); background: var(--surface); padding: 28px; }
-.seal-graded { position: relative; overflow: hidden; }
-.seal-head {
-  display: flex; justify-content: space-between; align-items: baseline;
-  font-family: var(--mono); font-size: 10.5px; letter-spacing: .12em;
-  color: var(--muted); margin-bottom: 22px; text-transform: uppercase;
-}
-.seal-verdict { font-size: 30px; font-weight: 700; letter-spacing: -.02em; margin-bottom: 4px; }
-.seal-body { font-family: var(--mono); font-size: 12.6px; line-height: 1.95; color: var(--body); margin-top: 18px; }
-.seal-body .faint { color: var(--muted); }
-.seal-body .gap { margin-top: 14px; }
-.seal-body .met { color: var(--accent-deep); }
-.seal-body .held { color: var(--good); }
-
-.stamp {
-  position: absolute; right: -14px; bottom: 18px;
-  border: 4px solid var(--accent-deep); color: var(--accent-deep);
-  border-radius: 4px; padding: 8px 20px;
-  font-family: var(--mono); font-size: 30px; font-weight: 700; letter-spacing: .06em;
-  opacity: .82;
-  animation: stampIn 620ms cubic-bezier(.2, .8, .2, 1) both;
-}
-
-/* ---------- pipeline ---------- */
-
-#pipeline { padding-top: 96px; padding-bottom: 40px; scroll-margin-top: 70px; }
-.pipeline { display: grid; grid-template-columns: 1fr 1fr auto 1fr 1fr; align-items: stretch; }
-.stage { border: 1px solid var(--line-2); border-right: none; padding: 26px 24px; background: var(--surface); }
-.stage:last-child { border-right: 1px solid var(--line-2); }
-.stage .label { margin-bottom: 14px; }
-.stage-name { font-size: 24px; font-weight: 700; margin-bottom: 10px; }
-.stage-note { font-size: 14.5px; line-height: 1.55; color: var(--body); }
-.stage-purity { font-family: var(--mono); font-size: 11px; margin-top: 18px; color: var(--accent-deep); }
-.stage-dark { border-color: var(--ink); background: var(--ink); color: var(--on-ink); }
-.stage-dark .label { color: var(--muted-ink); }
-.stage-dark .stage-note { color: var(--dim-ink); }
-.stage-dark .stage-purity { color: var(--accent-lift); }
-.stage-dark:last-child { border-right: 1px solid var(--ink); }
-
-.boundary {
-  width: 56px; background: var(--accent);
-  display: flex; align-items: center; justify-content: center;
-}
-.boundary span {
-  font-family: var(--mono); font-size: 11px; letter-spacing: .16em; font-weight: 700;
-  color: var(--ink); writing-mode: vertical-rl; text-orientation: mixed; white-space: nowrap;
-}
-
-.notes { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 56px; }
-.note-card { border: 1px solid var(--line-2); padding: 28px; background: var(--surface); }
-.note-body { font-size: 15.5px; line-height: 1.6; color: var(--body); }
-.note-limit {
-  font-size: 14px; line-height: 1.6; color: var(--accent-deep);
-  margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--line);
-}
-
-/* ---------- proof ---------- */
-
-#proof { padding-top: 96px; padding-bottom: 40px; }
-#proof h2 { margin-bottom: 44px; }
-.proof-grid { display: grid; grid-template-columns: 1.4fr 1fr; gap: 40px; }
-.proof-head { font-family: var(--mono); font-size: 11.5px; letter-spacing: .1em; margin-bottom: 18px; text-transform: uppercase; }
-.proof-head.good { color: var(--good); }
-.proof-head.open { color: var(--accent-deep); }
-.proof-list { list-style: none; margin: 0; padding: 0; }
-.proof-item {
-  display: grid; grid-template-columns: 20px 1fr; gap: 10px;
-  padding: 11px 0; border-bottom: 1px solid rgba(23, 22, 20, .1);
-  font-size: 15.5px; line-height: 1.5; color: var(--body);
-}
-.proof-item .sigil { font-family: var(--mono); }
-.proof-item .sigil.good { color: var(--good); }
-.proof-item .sigil.open { color: var(--accent-deep); }
-
-/* ---------- name ---------- */
-
-#name { margin-top: 96px; scroll-margin-top: 70px; }
-#name .band-inner { padding-top: 100px; padding-bottom: 100px; }
-.name-grid { display: grid; grid-template-columns: 1fr 1.1fr; gap: 64px; align-items: center; }
-.kanji { font-size: 120px; line-height: 1; font-weight: 700; letter-spacing: -.02em; margin-bottom: 20px; }
-.kanji-sub { font-family: var(--mono); font-size: 11px; letter-spacing: .16em; color: var(--muted-ink); }
-.name-lede { font-size: 21px; line-height: 1.55; margin: 0 0 20px; }
-.name-body { font-size: 17px; line-height: 1.6; color: var(--dim-ink); margin: 0; }
-
-.colophon {
-  margin-top: 80px; padding-top: 28px;
-  border-top: 1px solid rgba(244, 242, 239, .16);
-  display: flex; justify-content: space-between; align-items: center;
-  gap: 24px; flex-wrap: wrap;
-  font-family: var(--mono); font-size: 11.5px; letter-spacing: .06em; color: var(--muted-ink);
-}
-.colophon a { color: var(--accent-lift); }
-
-/* ---------- responsive ---------- */
-
-@media (max-width: 1080px) {
-  .hero-grid { grid-template-columns: 1fr; gap: 44px; }
-  .name-grid { grid-template-columns: 1fr; gap: 36px; }
-  h1 { font-size: 52px; }
-  h2 { font-size: 38px; }
-  .pipeline { grid-template-columns: 1fr 1fr; }
-  .stage { border-right: 1px solid var(--line-2); border-bottom: none; }
-  .stage-dark, .stage-dark:last-child { border-right-color: var(--ink); }
-  .boundary { grid-column: 1 / -1; width: auto; padding: 12px 0; }
-  .boundary span { writing-mode: horizontal-tb; }
-  .voices { grid-template-columns: 1fr 1fr; }
-}
-
-@media (max-width: 760px) {
-  :root { --gutter: 20px; }
-  h1 { font-size: 40px; }
-  h2 { font-size: 30px; }
-  .kanji { font-size: 88px; }
-  .metric-value { font-size: 58px; }
-  .nav-links { display: none; }
-  .stats { grid-template-columns: 1fr 1fr; }
-  .two-col, .notes, .proof-grid, .voices, .pipeline { grid-template-columns: 1fr; }
-  .stage { border-right: 1px solid var(--line-2); }
-  .band-inner { padding-top: 64px; padding-bottom: 68px; }
-  #voices, #commitment, #pipeline, #proof { padding-top: 64px; }
-  .mark-hero { width: 260px; }
-  .receipt pre { font-size: 11.5px; min-height: 0; }
-  .stamp { font-size: 22px; right: -8px; }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  html { scroll-behavior: auto; }
-  .caret { animation: none; }
-  .stamp { animation: none; }
-  .voice-echo { transition: none; }
-}
-</style>
+<link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
@@ -388,7 +39,7 @@ h1 { font-size: 62px; line-height: 1.02; letter-spacing: -.032em; font-weight: 7
       <a href="#missing">Missing data</a>
       <a href="#commitment">Commitment</a>
       <a href="#pipeline">Pipeline</a>
-      <a href="#name">The name</a>
+      <a href="docs.html">Docs</a>
     </div>
     <a href="#" data-repo class="btn btn-dark">GITHUB REPO</a>
   </div>
@@ -456,7 +107,7 @@ h1 { font-size: 62px; line-height: 1.02; letter-spacing: -.032em; font-weight: 7
     <div class="stat">
       <div class="label">Lines</div>
       <div class="stat-value" data-stat="lines">7,413</div>
-      <div class="stat-note">Across <span data-stat="commits">10</span> commits</div>
+      <div class="stat-note">Across <span data-stat="commits">11</span> commits</div>
     </div>
     <div class="stat">
       <div class="label">Layers</div>
@@ -626,16 +277,9 @@ h1 { font-size: 62px; line-height: 1.02; letter-spacing: -.032em; font-weight: 7
 
   <p class="footnote" style="max-width: 48em">Because interpretation is frozen rather than repeated, replaying a decision proves something specific and honest: the reasoning is reproducible. It does not pretend the model would say the same thing twice. It removes the model from the question entirely.</p>
 
-  <div class="notes">
-    <div class="note-card">
-      <div class="label">The MCP transport</div>
-      <div class="note-body">A dependency-free JSON-RPC 2.0 client over Streamable HTTP, covering the handshake the seven read-only tools need. It accepts plain JSON and server-sent events, honours the published 60-per-minute limit, and records which of the three possible result shapes each payload arrived in rather than assuming one. A test asserts that facts extracted from an MCP payload are identical to facts extracted from REST, so swapping transport touches no line of reasoning code.</div>
-    </div>
-    <div class="note-card">
-      <div class="label">What a live x_search returns</div>
-      <div class="note-body">Confirmed against the real API on 28 August, and it changed the design. x_search does not hand back structured post objects. It returns the model's prose rendering of the posts plus an array of URL citations. Prose is useless as evidence, so the adapter requests a JSON schema then verifies every returned post id against the tool's own citations. A cited post is kept. An uncited post is dropped, never trusted.</div>
-      <div class="note-limit">The honest limit: the citation check proves a post exists and that the tool saw it. It does not prove the model transcribed the text or timestamp faithfully, so those fields are flagged as model-transcribed on every item.</div>
-    </div>
+  <div class="teaser">
+    <p>The MCP transport, and what a live <code>x_search</code> call actually returns — confirmed against the real API, not assumed — are written up in full in the docs.</p>
+    <a href="docs.html#mcp-transport">Read the transport docs</a>
   </div>
 </section>
 
@@ -647,14 +291,9 @@ h1 { font-size: 62px; line-height: 1.02; letter-spacing: -.032em; font-weight: 7
     <div>
       <div class="proof-head good">Proven · <span data-stat="tests">173</span> tests, all offline</div>
       <ul class="proof-list">
-        <li class="proof-item"><span class="sigil good">+</span><span>Canonical form and address stability, payload deduplication, tamper detection</span></li>
-        <li class="proof-item"><span class="sigil good">+</span><span>Replay determinism, and evidence identity pinned to bytes and position</span></li>
         <li class="proof-item"><span class="sigil good">+</span><span>Every failure mode: rate limit, partial window, empty result, raising adapter, malformed feed, unreadable payload</span></li>
-        <li class="proof-item"><span class="sigil good">+</span><span>Echo demotion, and PASS kept separate from ABSTAIN</span></li>
         <li class="proof-item"><span class="sigil good">+</span><span>Size shrinking under missing safety data, a failed source, and stale evidence</span></li>
         <li class="proof-item"><span class="sigil good">+</span><span>End-to-end reproduction of a stored decision from stored bytes</span></li>
-        <li class="proof-item"><span class="sigil good">+</span><span>Profit not rescuing a falsified thesis, and uncheckable metrics staying unresolved</span></li>
-        <li class="proof-item"><span class="sigil good">+</span><span>MCP handshake, session handling, SSE decoding, transport-independent extraction</span></li>
       </ul>
     </div>
 
@@ -662,10 +301,14 @@ h1 { font-size: 62px; line-height: 1.02; letter-spacing: -.032em; font-weight: 7
       <div class="proof-head open">Not yet proven</div>
       <ul class="proof-list">
         <li class="proof-item"><span class="sigil open">?</span><span>The RYO MCP endpoint URL is not yet in hand, so no live tool call has run</span></li>
-        <li class="proof-item"><span class="sigil open">?</span><span>Tool argument schemas are a best guess until <code>hanko tools</code> reports the real ones</span></li>
         <li class="proof-item"><span class="sigil open">?</span><span>No live sweep has run long enough to produce a calibration curve from real decisions</span></li>
       </ul>
     </div>
+  </div>
+
+  <div class="teaser">
+    <p>The full list — twelve proven claims, each mapped to a real test — is in the docs.</p>
+    <a href="docs.html#proven">See everything that's proven</a>
   </div>
 </section>
 
@@ -684,7 +327,7 @@ h1 { font-size: 62px; line-height: 1.02; letter-spacing: -.032em; font-weight: 7
 
     <div class="colophon">
       <span>Hanko 判子 · RYO-CHAN Hackathon 2026</span>
-      <span><span data-stat="tests">173</span> tests · <span data-stat="lines">7,413</span> lines · <span data-stat="commits">10</span> commits · <a href="#" data-repo>GitHub</a></span>
+      <span><span data-stat="tests">173</span> tests · <span data-stat="lines">7,413</span> lines · <span data-stat="commits">11</span> commits · <a href="#" data-repo>GitHub</a></span>
     </div>
   </div>
 </footer>

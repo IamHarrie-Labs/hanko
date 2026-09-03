@@ -4,11 +4,26 @@ The Hanko landing page. Static HTML, no build step required to view it, no
 framework, no dependencies — matching how the rest of the project is built.
 
 ```
-site/index.html          the page
+site/index.html          the landing page -- the hook, kept short
+site/docs.html            everything the landing page used to bury in prose
+site/styles.css           shared design system for both pages
 site/assets/              generated images -- do not hand-edit, see below
-site/build.py             refreshes the numbers and trail from the repo
+site/build.py             refreshes the numbers and trail on both pages
 site/make_assets.py       cuts site/assets/ from design/logo-source.jpg
 ```
+
+## Landing page vs docs
+
+The landing page is the pitch: the live receipt, the three moments that show
+the risk model working, and one line of setup for each. The full technical
+writeups -- what the MCP transport actually handles, what a live `x_search`
+call returns and its honest limit, how the exit_liquidity model works, the
+complete proven/not-yet-proven ledger -- moved to `docs.html`, linked from
+short teaser cards at the point in the landing page where the long version
+used to sit.
+
+The two pages share `styles.css` rather than duplicating it, so a token
+change (a colour, a type size) only has to happen once.
 
 ## Viewing it
 
