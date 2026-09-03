@@ -199,13 +199,24 @@ class SnapshotStore:
             fh.write(json.dumps(snap.to_dict(), ensure_ascii=False) + "\n")
         return snap
 
-    def collect(self, source: Source, query: Query) -> Snapshot:
+    def collect(
+        self,
+        source: Source,
+        query: Query,
+        *,
+        requested_at: datetime | None = None,
+    ) -> Snapshot:
         """Fetch and record, turning a raised exception into a FAILED snapshot.
 
         An adapter that throws still produces a record. Silence is the one
         outcome this store will not represent.
+
+        `requested_at` overrides the clock. Only pass it for a source that
+        has no real capture instant -- a fixture read from disk -- where
+        stamping "now" would invent a moment that never happened and make
+        an otherwise reproducible demo differ on every run.
         """
-        requested_at = utcnow()
+        requested_at = requested_at or utcnow()
         try:
             response = source.fetch(query)
         except Exception as exc:  # noqa: BLE001 - the failure is itself data

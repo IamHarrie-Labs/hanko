@@ -188,3 +188,27 @@ def test_find_filters_by_source_and_status(store, x_source):
     assert len(store.find(source_id="x")) == 2
     assert len(store.find(status=Status.FAILED)) == 1
     assert len(store.find(since=datetime(2030, 1, 1, tzinfo=timezone.utc))) == 0
+
+
+def test_a_pinned_capture_time_makes_a_fixture_run_reproducible(tmp_path, x_source):
+    """A fixture has no capture instant, so one may be supplied.
+
+    Without this the snapshot id embeds wall-clock time, every capture
+    differs, and a demo built on a fixture cannot publish a stable
+    decision id.
+    """
+    at = datetime(2026, 8, 27, 12, 0, tzinfo=timezone.utc)
+    first = SnapshotStore(tmp_path / "a").collect(
+        x_source, Query(subjects=("voice_alpha",)), requested_at=at
+    )
+    second = SnapshotStore(tmp_path / "b").collect(
+        x_source, Query(subjects=("voice_alpha",)), requested_at=at
+    )
+    assert first.snapshot_id == second.snapshot_id
+    assert first.requested_at == at
+
+
+def test_the_clock_is_still_the_default(store, x_source):
+    before = datetime.now(timezone.utc)
+    snap = store.collect(x_source, Query(subjects=("voice_alpha",)))
+    assert snap.requested_at >= before

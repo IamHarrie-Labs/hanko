@@ -112,7 +112,20 @@ def cmd_decide(args: argparse.Namespace) -> int:
         if args.fixture
         else resolve(args.source)
     )
-    snap = store.collect(source, Query(subjects=tuple(args.subject)))
+    as_of = (
+        datetime.fromisoformat(args.as_of.replace("Z", "+00:00"))
+        if args.as_of
+        else datetime.now(timezone.utc)
+    )
+
+    # A fixture has no capture instant of its own. Pinning it to --as-of
+    # keeps the whole run reproducible, which is what lets the website
+    # publish a decision id rather than a different one every build.
+    snap = store.collect(
+        source,
+        Query(subjects=tuple(args.subject)),
+        requested_at=as_of if (args.fixture and args.as_of) else None,
+    )
     if not snap.has_payload:
         print("collection failed: " + (snap.error or "unknown"))
         print("no decision recorded -- the agent will not trade on nothing.")
@@ -125,12 +138,6 @@ def cmd_decide(args: argparse.Namespace) -> int:
         if args.market
         else MarketFacts(subject=args.token.upper())
     )
-    as_of = (
-        datetime.fromisoformat(args.as_of.replace("Z", "+00:00"))
-        if args.as_of
-        else datetime.now(timezone.utc)
-    )
-
     record = decide(
         DecisionInputs(
             subject=args.token,
