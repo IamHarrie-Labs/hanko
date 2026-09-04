@@ -52,7 +52,7 @@
            alt="Hanko, hand-lettered over a pink brush stroke" fetchpriority="high">
       <div class="eyebrow">判子 · A seal you cannot take back</div>
       <h1>An agent that files receipts.</h1>
-      <p class="lede">Twenty market voices go in. What comes out is a sized position, a receipt, and a written commitment to what would prove it wrong.</p>
+      <p class="lede">Twenty market voices go in. What comes out is a sized position, a receipt, and a commitment to what would prove it wrong.</p>
       <p class="lede">Replayable, byte for byte, from the exact data the agent saw.</p>
       <div class="cta-row">
         <a href="https://github.com/IamHarrie-Labs/hanko" data-repo class="btn btn-solid">Read the code on GitHub</a>
@@ -107,7 +107,7 @@
     <div class="stat">
       <div class="label">Lines</div>
       <div class="stat-value" data-stat="lines">7,413</div>
-      <div class="stat-note">Across <span data-stat="commits">14</span> commits</div>
+      <div class="stat-note">Across <span data-stat="commits">15</span> commits</div>
     </div>
     <div class="stat">
       <div class="label">Layers</div>
@@ -128,7 +128,7 @@
   <div class="shell band-inner">
     <div class="eyebrow">02 · Missing data shrinks the position</div>
     <h2 style="max-width: 22em">Nothing in the rules changed. Only what it knew.</h2>
-    <p class="section-lede" style="margin-bottom: 48px">No rule says "halve the size if the safety check is unavailable." A gap lowers completeness, completeness lowers evidence quality, and evidence quality sets the size. The four quality components combine as a weighted geometric mean, so a component at zero takes the whole score to zero.</p>
+    <p class="section-lede" style="margin-bottom: 48px">No rule says "halve the size if the safety check is unavailable." A gap lowers completeness, completeness lowers quality, and quality sets size — combined as a geometric mean, so one component at zero takes the whole score to zero.</p>
 
     <div class="two-col">
       <div class="panel">
@@ -163,14 +163,14 @@
       </div>
     </div>
 
-    <p class="footnote">Enthusiasm from twenty posters cannot average away an absent safety check. Most entries treat missing data as a compliance checkbox. Here it is the risk model.</p>
+    <p class="footnote">Most entries treat missing data as a compliance checkbox. Here it's the risk model.</p>
   </div>
 </section>
 
 <section id="voices" class="shell">
   <div class="eyebrow">03 · Independence, not agreement</div>
   <h2 style="max-width: 20em">Three voices, two opinions.</h2>
-  <p class="section-lede">Three accounts quoting one thesis is one observation wearing a disguise. Every mention is checked against the ones before it. Reposts, quotes and near duplicates inside a time window are demoted to echoes, each recorded with the post it repeats and the reason it was demoted.</p>
+  <p class="section-lede">Three accounts quoting one thesis is one observation wearing a disguise. Reposts and near-duplicates get demoted to echoes, each tagged with the post it repeats and why.</p>
 
   <div class="voices">
     <div class="voice">
@@ -201,13 +201,13 @@
     </div>
   </div>
 
-  <p class="footnote">This is the easiest way for a multi-voice agent to be confidently wrong, and it is worse with news than with social. Five outlets covering one press release look like five sources and are one wire story.</p>
+  <p class="footnote">This is the easiest way for a multi-voice agent to be confidently wrong. Five outlets covering one press release look like five sources — it's one wire story.</p>
 </section>
 
 <section id="commitment" class="shell">
   <div class="eyebrow">04 · Pre-registration</div>
   <h2 style="max-width: 22em">The commitment is sealed before the outcome is known.</h2>
-  <p class="section-lede">Move a threshold, a size or a review date after the fact and you get a different decision_id. A new decision, not an edited one. Hindsight rationalisation stops being a temptation and becomes a structural impossibility. Refusals commit too: a PASS records what would have flipped it.</p>
+  <p class="section-lede">Move a threshold, a size, or a review date after the fact and the decision_id changes too — a new decision, not an edited one. Hindsight rationalisation becomes structurally impossible. Refusals commit too: a PASS records what would have flipped it.</p>
 
   <div class="two-col">
     <div class="seal">
@@ -236,13 +236,13 @@
     </div>
   </div>
 
-  <p class="footnote">A decision can be profitable and still falsified: the price rose while the liquidity that justified the size drained away, meaning the reasoning was wrong and the outcome was luck. Both facts are recorded. Only one of them sets the grade.</p>
+  <p class="footnote">A decision can be profitable and still falsified: the price rose while the liquidity that justified the size drained away — the reasoning was wrong, the outcome was luck. Both are recorded; only one sets the grade.</p>
 </section>
 
 <section id="pipeline" class="shell">
   <div class="eyebrow">05 · How it works</div>
   <h2 style="max-width: 20em">Four stages, and one boundary that matters.</h2>
-  <p class="section-lede" style="margin-bottom: 48px">Everything before the boundary may touch the network and fail. Everything after it is a pure function of recorded inputs. Determinism and honest handling of missing data stop being features somebody remembers to add, and become properties the shape of the code enforces.</p>
+  <p class="section-lede" style="margin-bottom: 48px">Everything before the boundary may touch the network and fail; everything after it is a pure function of recorded inputs. Determinism and honest handling of missing data aren't features to remember — they're properties the code's shape enforces.</p>
 
   <div class="pipeline">
     <div class="stage">
@@ -271,12 +271,12 @@
     <div class="stage stage-dark">
       <div class="label">Stage 04</div>
       <div class="stage-name">Review</div>
-      <div class="stage-note">At the pre-registered date, each falsifier is checked against observed facts and the decision is graded against its own words.</div>
+      <div class="stage-note">At the pre-registered date, each falsifier is checked against observed facts and graded against its own words.</div>
       <div class="stage-purity">pure · replayable</div>
     </div>
   </div>
 
-  <p class="footnote" style="max-width: 48em">Because interpretation is frozen rather than repeated, replaying a decision proves something specific and honest: the reasoning is reproducible. It does not pretend the model would say the same thing twice. It removes the model from the question entirely.</p>
+  <p class="footnote" style="max-width: 48em">Interpretation is frozen, not repeated, so replaying a decision proves something specific: the reasoning is reproducible — not that the model would repeat itself, because the model isn't part of the question.</p>
 
   <div class="teaser">
     <p>The MCP transport, and what a live <code>x_search</code> call actually returns — confirmed against the real API, not assumed — are written up in full in the docs.</p>
@@ -322,13 +322,13 @@
       </div>
       <div>
         <p class="name-lede">A hanko is the seal you stamp on a document to commit to it. The mark goes on before the outcome is known, and it cannot be taken back.</p>
-        <p class="name-body">That is what this agent does with every decision it makes. Pre-registration is a hanko. Hashing the commitment into the decision_id is a hanko. A card is stamped once at decision time, and stamped again at review, HELD or FALSIFIED, over the original.</p>
+        <p class="name-body">That's what this agent does with every decision: pre-registration is a hanko, hashing the commitment into the decision_id is a hanko. Stamped once at decision time. Stamped again at review — HELD or FALSIFIED, over the original.</p>
       </div>
     </div>
 
     <div class="colophon">
       <span>Hanko 判子 · RYO-CHAN Hackathon 2026</span>
-      <span><span data-stat="tests">173</span> tests · <span data-stat="lines">7,413</span> lines · <span data-stat="commits">14</span> commits · <a href="https://github.com/IamHarrie-Labs/hanko" data-repo>GitHub</a></span>
+      <span><span data-stat="tests">173</span> tests · <span data-stat="lines">7,413</span> lines · <span data-stat="commits">15</span> commits · <a href="https://github.com/IamHarrie-Labs/hanko" data-repo>GitHub</a></span>
     </div>
   </div>
 </footer>
