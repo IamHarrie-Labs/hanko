@@ -1,0 +1,9 @@
+{
+  "status": "ok",
+  "coverage": "complete",
+  "payload": {
+    "pools": {
+      "liquidity_usd": 900000.0
+    }
+  }
+}

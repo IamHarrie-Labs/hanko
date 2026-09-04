@@ -1,0 +1,8 @@
+{
+  "status": "ok",
+  "coverage": "complete",
+  "payload": {
+    "price_usd": 1.25,
+    "volume_24h": 4200000.0
+  }
+}

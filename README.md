@@ -265,8 +265,60 @@ it, reporting it as 100% would promote it. Per-rule reliability answers the
 uncomfortable question: a rule that is always satisfied on losers is not a
 filter, it is decoration.
 
+## The sweep
+
+`hanko decide` handles one token, from one source, by hand. A real watchlist
+needs the same thing done for twenty tokens across several sources on a
+schedule, without one dead source or one bad token taking the rest of the
+run down with it. `hanko/sweep.py` is that orchestration.
+
+```bash
+hanko sweep --watchlist watchlist.json --as-of 2026-08-27T12:00:00Z
+```
+
+One pass: decide on every entry in the watchlist, then grade every decision
+the ledgers say is due. A failing token is recorded in the report and the
+sweep moves past it rather than raising; a token dropped from the watchlist
+still gets its outstanding decisions reviewed rather than orphaned.
+
+**Every snapshot in one sweep is stamped at the sweep's own `as_of`, not the
+literal wall clock.** The several source calls inside one pass take a few
+real seconds, but they all belong to the same logical instant, and a sweep
+re-run against unchanged sources should reach the same `decision_id` rather
+than a new one just because the retry landed a second later.
+
+**Review uses a fresh look, not the frozen one.** `fresh_observations()`
+re-collects evidence and re-derives `independent_voices` at review time
+rather than reusing the original decision's numbers — the whole point of a
+review is what's true *now*, and a stale copy of "true then" would grade a
+decision against itself.
+
+Meant to be invoked by something that already knows how to schedule things —
+cron, a scheduled GitHub Action, Windows Task Scheduler — one pass and exit,
+not a loop that sleeps in-process. A failed run is a failed invocation, not a
+process to go find and kill.
+
+```bash
+hanko sweep --watchlist fixtures/sweep_demo/watchlist.json \
+  --fixture-dir fixtures/sweep_demo --as-of 2026-08-27T12:00:00Z
+```
+
+```
+sweep at 2026-08-27T12:00:00+00:00
+  ENTER   TOKENA  dec_6c7456f128a467d1a268742d
+```
+
+15 tests, all offline, using a fixture stand-in for RYO tool responses
+(`FixtureFactsSource`, shaped like the live tool sources rather than the
+evidence-shaped `FixtureSource`) alongside the existing evidence fixtures.
+Covered: a failed evidence source or fact tool becoming a gap rather than an
+exception, one bad token not cancelling the rest of the sweep, a decision
+already in the ledger being skipped rather than duplicated, a token dropped
+from the watchlist still getting reviewed, and review pulling fresh
+observations rather than the ones frozen into the original decision.
+
 ## Next
 
-Wire `audit` and `scorecard` into CI, and feed per-voice reliability back into
-evidence weighting so the agent's own track record starts shaping what it
-believes.
+Wire `sweep`, `audit`, and `scorecard` into CI or a scheduled run, and feed
+per-voice reliability back into evidence weighting so the agent's own track
+record starts shaping what it believes.

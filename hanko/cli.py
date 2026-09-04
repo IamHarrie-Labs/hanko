@@ -2,6 +2,7 @@
 
     hanko collect x --subject voice_alpha --subject voice_beta
     hanko collect rss --subject https://www.coindesk.com/arc/outboundfeeds/rss/
+    hanko sweep --watchlist watchlist.json --as-of 2026-08-27T12:00:00Z
     hanko ls
     hanko show snap_abc123
     hanko replay snap_abc123
@@ -396,6 +397,54 @@ def cmd_review(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_sweep(args: argparse.Namespace) -> int:
+    """One pass over a watchlist: decide on everything, grade what's due.
+
+    Meant to be called on a schedule (cron, a GitHub Action, Task
+    Scheduler) rather than looped in-process -- one pass and exit, so a
+    failed run is just a failed invocation, not a process to find and
+    kill.
+    """
+    from datetime import datetime, timezone
+
+    from .decision import DecisionLedger, KeywordInterpreter, Policy
+    from .review import ReviewLedger
+    from .ryotools import FixtureFactsSource
+    from .sweep import load_watchlist, run_sweep
+
+    watchlist = load_watchlist(args.watchlist)
+    as_of = (
+        datetime.fromisoformat(args.as_of.replace("Z", "+00:00"))
+        if args.as_of
+        else datetime.now(timezone.utc)
+    )
+
+    if args.fixture_dir:
+        fixture_dir = args.fixture_dir
+
+        def resolve_fn(source_id: str):
+            name = source_id.removeprefix("ryomcp:").removeprefix("ryo:")
+            path = fixture_dir / (name + ".json")
+            if source_id.startswith(("ryomcp:", "ryo:")):
+                return FixtureFactsSource(path, source_id=source_id)
+            return FixtureSource(path, source_id=source_id)
+    else:
+        resolve_fn = resolve  # live: already dispatches x / rss / ryomcp: / ryo: by prefix
+
+    report = run_sweep(
+        watchlist,
+        _store(args),
+        DecisionLedger(args.ledger),
+        ReviewLedger(args.reviews),
+        Policy(),
+        interpreter=KeywordInterpreter(),
+        resolve=resolve_fn,
+        as_of=as_of,
+    )
+    print(report.explain())
+    return 1 if report.failures else 0
+
+
 def cmd_scorecard(args: argparse.Namespace) -> int:
     from .review import ReviewLedger, build_scorecard
 
@@ -465,6 +514,17 @@ def build_parser() -> argparse.ArgumentParser:
     review.add_argument("--ledger", type=Path, default=Path("decisions.jsonl"))
     review.add_argument("--reviews", type=Path, default=Path("reviews.jsonl"))
     review.set_defaults(func=cmd_review)
+
+    sweep = sub.add_parser("sweep", help="one pass over a watchlist: decide, then review what's due")
+    sweep.add_argument("--watchlist", type=Path, required=True)
+    sweep.add_argument("--as-of", dest="as_of", help="RFC3339, for reproducible runs")
+    sweep.add_argument("--ledger", type=Path, default=Path("decisions.jsonl"))
+    sweep.add_argument("--reviews", type=Path, default=Path("reviews.jsonl"))
+    sweep.add_argument(
+        "--fixture-dir", type=Path,
+        help="read every source from <dir>/<name>.json instead of live transports",
+    )
+    sweep.set_defaults(func=cmd_sweep)
 
     scorecard = sub.add_parser("scorecard", help="calibration and per-voice track record")
     scorecard.add_argument("--reviews", type=Path, default=Path("reviews.jsonl"))

@@ -8,11 +8,13 @@ where a plain HTTP endpoint is published.
 
 from .client import DEFAULT_BASE, TOOLS, RyoToolSource, build_sources
 from .facts import Extraction, extract_market_facts
+from .fixture import FixtureFactsSource
 from .mcp import McpClient, McpError, RyoMcpSource, ToolResult, build_mcp_sources
 
 __all__ = [
     "DEFAULT_BASE",
     "Extraction",
+    "FixtureFactsSource",
     "McpClient",
     "McpError",
     "RyoMcpSource",

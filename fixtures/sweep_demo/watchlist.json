@@ -1,0 +1,14 @@
+{
+  "watchlist": [
+    {
+      "token": "TOKENA",
+      "sources": {
+        "x": [
+          "voice_alpha",
+          "voice_beta",
+          "voice_gamma"
+        ]
+      }
+    }
+  ]
+}
