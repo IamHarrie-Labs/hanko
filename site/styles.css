@@ -356,7 +356,24 @@ h1 { font-size: 62px; line-height: 1.02; letter-spacing: -.032em; font-weight: 7
   .stage { border-right: 1px solid var(--line-2); }
   .band-inner { padding-top: 64px; padding-bottom: 68px; }
   #voices, #commitment, #pipeline, #proof { padding-top: 64px; }
-  .mark-hero { width: 260px; }
+  .mark-hero { width: 200px; }
+  /* The real trail is long -- built-time wrapping is tuned to the
+     desktop card's width, so on a narrow phone every one of those
+     lines wraps again and the card runs past 900px tall, burying the
+     rest of the page. Capped and faded rather than shortened: the
+     full, unedited trail is still what's in the DOM (view-source
+     shows it, and a screen reader gets all of it) -- clipping is a
+     visual affordance only, the same trick a real receipt printer
+     does when it cuts the paper mid-run. Which lines land inside the
+     cap is left to wherever the pixel count falls rather than
+     hand-picked, so this reads as an honest preview and not a
+     curated highlight reel. */
+  .receipt { position: relative; max-height: 320px; overflow: hidden; }
+  .receipt::after {
+    content: ""; position: absolute; inset: auto 0 0 0; height: 72px;
+    background: linear-gradient(to bottom, transparent, var(--ink));
+    pointer-events: none;
+  }
   .receipt pre { font-size: 11.5px; min-height: 0; }
   .stamp { font-size: 22px; right: -8px; }
 }
