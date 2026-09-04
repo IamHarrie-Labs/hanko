@@ -125,6 +125,20 @@ def commit_count() -> str:
     return run(["git", "rev-list", "--count", "HEAD"]).strip()
 
 
+def layer_count() -> str:
+    """Real packages under hanko/, counted rather than typed.
+
+    A package is a directory with an __init__.py. Counting beats a
+    hardcoded number for the same reason the trail is generated instead
+    of pasted: the number stops being a claim that can go stale.
+    """
+    packages = [
+        p for p in (ROOT / "hanko").iterdir()
+        if p.is_dir() and (p / "__init__.py").exists()
+    ]
+    return str(len(packages))
+
+
 def repo_url() -> str | None:
     try:
         url = run(["git", "remote", "get-url", "origin"]).strip()
@@ -169,6 +183,7 @@ def main() -> int:
         "tests": test_count(),
         "lines": line_count(),
         "commits": commit_count(),
+        "layers": layer_count(),
     }
     repo = repo_url()
 
