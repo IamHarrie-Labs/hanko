@@ -29,7 +29,7 @@
 
 <body>
 
-<nav class="nav">
+<nav class="nav nav-hero-gated">
   <div class="nav-inner">
     <a href="#top" aria-label="Hanko — home" style="display: flex; flex: none">
       <img class="mark mark-nav" src="assets/hanko-logo.png" width="694" height="360" alt="">
@@ -107,7 +107,7 @@
     <div class="stat">
       <div class="label">Lines</div>
       <div class="stat-value" data-stat="lines">7,413</div>
-      <div class="stat-note">Across <span data-stat="commits">12</span> commits</div>
+      <div class="stat-note">Across <span data-stat="commits">13</span> commits</div>
     </div>
     <div class="stat">
       <div class="label">Layers</div>
@@ -121,6 +121,7 @@
     </div>
   </div>
   <!-- stats:end -->
+  <div id="hero-end" aria-hidden="true"></div>
 </header>
 
 <section id="missing" class="band">
@@ -327,7 +328,7 @@
 
     <div class="colophon">
       <span>Hanko 判子 · RYO-CHAN Hackathon 2026</span>
-      <span><span data-stat="tests">173</span> tests · <span data-stat="lines">7,413</span> lines · <span data-stat="commits">12</span> commits · <a href="https://github.com/IamHarrie-Labs/hanko" data-repo>GitHub</a></span>
+      <span><span data-stat="tests">173</span> tests · <span data-stat="lines">7,413</span> lines · <span data-stat="commits">13</span> commits · <a href="https://github.com/IamHarrie-Labs/hanko" data-repo>GitHub</a></span>
     </div>
   </div>
 </footer>
@@ -402,6 +403,34 @@
     stamp.textContent = 'FALSIFIED';
     card.appendChild(stamp);
   });
+
+  // ---- the nav waits until the reader has scrolled past the hero --------
+  // Unlike the three moments above this toggles both ways, so it hides
+  // again on the way back to the top rather than staying revealed once.
+  //
+  // Driven by both IntersectionObserver and a plain scroll listener,
+  // deliberately redundant: IO is the efficient path, but its recompute
+  // rides the compositor's paint cycle and can lag behind a fast or
+  // programmatic scroll (an anchor jump, a scrollTo, a trackpad fling).
+  // The scroll listener reads the sentinel's real position on every
+  // event regardless, so the nav never gets stuck in the wrong state.
+  (function () {
+    var nav = document.querySelector('.nav-hero-gated');
+    var sentinel = document.getElementById('hero-end');
+    if (!nav || !sentinel) return;
+
+    function recompute() {
+      nav.classList.toggle('nav-visible', sentinel.getBoundingClientRect().top < 0);
+    }
+
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(recompute, { threshold: 0 }).observe(sentinel);
+    } else {
+      nav.classList.add('nav-visible'); // fail open: never hide navigation permanently
+    }
+    window.addEventListener('scroll', recompute, { passive: true });
+    recompute();
+  })();
 })();
 </script>
 
