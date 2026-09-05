@@ -1,13 +1,16 @@
 """Extracting market facts from RYO tool responses. Pure.
 
-The exact response shapes of the seven research tools are not yet confirmed
-against a live endpoint, so extraction is structural rather than path-based:
-each field is matched against a list of plausible key names, anywhere in the
-payload. That way the envelope can move without invalidating stored
-snapshots, and a shape that was never anticipated fails visibly instead of
-silently returning a zero.
+Confirmed against the live server on 2026-09-05: `analyze_token` nests
+price and volume under `data.market`, and neither a numeric safety score
+nor a liquidity-depth figure exists anywhere in the catalog (see
+`ryotools/client.py`'s module docstring for what that call actually
+returned). Extraction stays structural rather than path-based even so --
+each field is matched against a list of plausible key names, anywhere in
+the payload -- because the envelope's nesting can still change between
+tool versions without invalidating stored snapshots, and a shape that was
+never anticipated fails visibly instead of silently returning a zero.
 
-Two rules hold regardless of what the real schema turns out to be.
+Two rules hold regardless of what the schema does next.
 
   A field that is not found stays None. It becomes a gap, the gap lowers
   evidence quality, and quality lowers position size. Nothing is defaulted,
@@ -110,8 +113,8 @@ def extract_market_facts(
     """Pull MarketFacts out of one or more tool payloads.
 
     `payloads` maps tool name to that tool's stored payload, so a single
-    set of facts can be assembled from analyze_token, deep_analysis and
-    check_safety together while still recording which tool supplied what.
+    set of facts can be assembled from analyze_token and deep_analysis
+    together while still recording which tool supplied what.
     """
     found: dict[str, str] = {}
     values: dict[str, float] = {}

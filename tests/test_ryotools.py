@@ -12,7 +12,7 @@ from hanko.sources.base import Query
 
 class TestClient:
     def test_rejects_a_tool_that_is_not_published(self):
-        with pytest.raises(ValueError, match="seven published tools"):
+        with pytest.raises(ValueError, match="six published tools"):
             RyoToolSource("place_order")
 
     def test_is_read_only(self):
@@ -29,8 +29,8 @@ class TestClient:
         assert resp.error
 
     def test_path_is_overridable_without_editing_the_module(self):
-        source = RyoToolSource("check_safety", paths={"check_safety": "/v2/safety"})
-        assert source.path == "/v2/safety"
+        source = RyoToolSource("analyze_token", paths={"analyze_token": "/v2/analyze"})
+        assert source.path == "/v2/analyze"
 
 
 class TestDegradationSignal:
@@ -40,12 +40,12 @@ class TestDegradationSignal:
     @pytest.mark.parametrize(
         "payload",
         [
-            {"degraded": True},
-            {"partial": True},
-            {"errors": ["holder data unavailable"]},
-            {"failed_sources": ["derivatives"]},
-            {"status": "degraded"},
-            {"warnings": "safety provider timed out"},
+            {"status": "partial"},
+            {"status": "unavailable"},
+            {"data_mode": "simulated"},
+            {"data_mode": "unknown"},
+            {"warnings": ["token-profile evidence is incomplete or unavailable"]},
+            {"availability": {"market_data": "available", "derivatives": "unavailable"}},
         ],
     )
     def test_an_admitted_gap_is_not_recorded_as_success(self, payload):
@@ -143,11 +143,11 @@ def test_a_failed_tool_call_still_produces_a_snapshot(tmp_path):
     from hanko.snapshot import SnapshotStore
 
     store = SnapshotStore(tmp_path / "snapshots")
-    source = RyoToolSource("check_safety", base_url="http://127.0.0.1:1", timeout=0.2)
+    source = RyoToolSource("analyze_token", base_url="http://127.0.0.1:1", timeout=0.2)
     snap = store.collect(source, Query(subjects=("TOKENA",)))
 
     assert snap.status is Status.FAILED
     assert snap.coverage is Coverage.UNKNOWN
-    assert snap.source_id == "ryo:check_safety"
+    assert snap.source_id == "ryo:analyze_token"
     # The record of the failure is what lets the decision size honestly.
     assert store.get(snap.snapshot_id).error

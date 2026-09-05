@@ -45,7 +45,10 @@ from .ryotools import extract_market_facts
 from .snapshot import SnapshotStore
 from .sources.base import Query, Source
 
-DEFAULT_FACT_TOOLS = ("analyze_token", "deep_analysis", "check_safety")
+# check_safety was on the hackathon's published tool list but is not on
+# the authenticated catalog -- confirmed 2026-09-05 against the live
+# server. Calling it would 404 every sweep, so it is not a default.
+DEFAULT_FACT_TOOLS = ("analyze_token", "deep_analysis")
 
 Resolver = Callable[[str], Source]
 

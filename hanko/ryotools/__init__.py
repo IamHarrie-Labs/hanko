@@ -1,4 +1,4 @@
-"""The seven read-only RYO research tools, over MCP or REST.
+"""The six read-only RYO research tools, over MCP or REST.
 
 Both transports satisfy the same source contract, so snapshots, integrity
 checks, replay and fact extraction are identical either way. MCP is the

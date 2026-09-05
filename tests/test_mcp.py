@@ -179,7 +179,7 @@ class TestResultShapes:
 
 class TestSourceContract:
     def test_rejects_a_tool_that_is_not_published(self):
-        with pytest.raises(ValueError, match="seven published tools"):
+        with pytest.raises(ValueError, match="six published tools"):
             RyoMcpSource("place_order")
 
     def test_a_successful_call_is_recorded_as_complete(self, tmp_path):
@@ -192,17 +192,19 @@ class TestSourceContract:
 
     def test_an_admitted_gap_is_recorded_as_degraded(self, tmp_path):
         store = SnapshotStore(tmp_path / "s")
-        server = FakeServer(tool_result={"price_usd": 1.0, "errors": ["safety timed out"]})
+        server = FakeServer(
+            tool_result={"status": "partial", "warnings": ["derivatives evidence timed out"]}
+        )
         source = RyoMcpSource("analyze_token", client=client_for(server))
         snap = store.collect(source, Query(subjects=("TOKENA",)))
         assert snap.status is Status.DEGRADED
         assert snap.coverage is Coverage.PARTIAL
-        assert "safety timed out" in (snap.error or "")
+        assert "derivatives evidence timed out" in (snap.error or "")
 
     def test_a_tool_error_never_becomes_data(self, tmp_path):
         store = SnapshotStore(tmp_path / "s")
         server = FakeServer(tool_result="upstream unavailable", tool_error=True)
-        source = RyoMcpSource("check_safety", client=client_for(server))
+        source = RyoMcpSource("analyze_token", client=client_for(server))
         snap = store.collect(source, Query(subjects=("TOKENA",)))
         assert snap.status is Status.FAILED
         assert snap.payload_digest is None

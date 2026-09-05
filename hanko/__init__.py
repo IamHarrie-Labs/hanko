@@ -6,7 +6,7 @@ That is what a Decision Record is here. The commitment is hashed, and
 the hash is the decision's identity, so a threshold moved after the
 fact produces a new decision rather than an edited one.
 
-Built for the RYO-CHAN platform, whose seven read-only research tools
+Built for the RYO-CHAN platform, whose six read-only research tools
 this agent reasons over.
 """
 

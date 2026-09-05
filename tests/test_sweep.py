@@ -110,7 +110,10 @@ class TestCollectAndDecide:
         )
         assert record.verdict is Verdict.ENTER
         assert record.market.price_usd == 1.25
-        assert record.market.safety_score == 0.82
+        # No safety tool exists on the real catalog (confirmed 2026-09-05),
+        # so DEFAULT_FACT_TOOLS never asks for one, and this stays None
+        # honestly rather than picking up a value from a tool never called.
+        assert record.market.safety_score is None
 
     def test_a_failed_evidence_source_becomes_a_gap_not_an_exception(self, store):
         record = collect_and_decide(
@@ -126,12 +129,18 @@ class TestCollectAndDecide:
         assert any(g.detail.startswith("x:") for g in record.gaps)
 
     def test_a_failed_fact_tool_becomes_a_gap_and_shrinks_the_position(self, store):
+        # check_safety here stands in for "some configured fact tool that
+        # fails" -- a mechanism test, not a claim that check_safety is on
+        # the real catalog (it isn't; DEFAULT_FACT_TOOLS never requests
+        # it). An entry can still ask for a third tool explicitly.
+        three_tools = dict(fact_tools=("analyze_token", "deep_analysis", "check_safety"))
         healthy = collect_and_decide(
-            make_entry(), store, resolve=make_resolver(),
+            make_entry(**three_tools), store, resolve=make_resolver(),
             interpreter=KeywordInterpreter(), policy=Policy(), as_of=AS_OF,
         )
         degraded = collect_and_decide(
-            make_entry(), store, resolve=make_resolver(check_safety="ryo_failed.json"),
+            make_entry(**three_tools), store,
+            resolve=make_resolver(check_safety="ryo_failed.json"),
             interpreter=KeywordInterpreter(), policy=Policy(), as_of=AS_OF,
         )
         assert degraded.market.safety_score is None
@@ -143,9 +152,9 @@ class TestCollectAndDecide:
             make_entry(), store, resolve=make_resolver(x_fixture="x_rate_limited.json"),
             interpreter=KeywordInterpreter(), policy=Policy(), as_of=AS_OF,
         )
-        # Four sources requested (x + three tools); every one left a
-        # snapshot behind regardless of whether it succeeded.
-        assert len(store.find()) == 4
+        # Three sources requested (x + the two default fact tools); every
+        # one left a snapshot behind regardless of whether it succeeded.
+        assert len(store.find()) == 3
 
 
 # ---- a full sweep -----------------------------------------------------------

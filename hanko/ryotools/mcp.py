@@ -1,9 +1,9 @@
-"""MCP transport for the seven RYO research tools.
+"""MCP transport for the six RYO research tools.
 
 The hackathon issues an MCP credential (ryo_mcp_*), so MCP -- not REST --
 is the path that is known to exist. This is a small, dependency-free
 JSON-RPC 2.0 client over Streamable HTTP, covering exactly the handshake
-the seven read-only tools need:
+the six read-only tools need:
 
     initialize  ->  notifications/initialized  ->  tools/list | tools/call
 
@@ -39,7 +39,7 @@ from ..provenance import Coverage, Status
 from ..sources.base import Query, RawResponse
 from .client import TOOLS
 
-PROTOCOL_VERSION = "2025-06-18"
+PROTOCOL_VERSION = "2024-11-05"  # confirmed via GET /api/mcp/health, 2026-09-05
 CLIENT_INFO = {"name": "hanko", "version": "0.1.0"}
 
 
@@ -290,19 +290,25 @@ class RyoMcpSource:
     ) -> None:
         if tool not in TOOLS:
             raise ValueError(
-                tool + " is not one of the seven published tools: " + ", ".join(TOOLS)
+                tool + " is not one of the six published tools: " + ", ".join(TOOLS)
             )
         self.tool = tool
         self.source_id = "ryomcp:" + tool
         self._client = client or McpClient(**client_kwargs)
 
     def fetch(self, query: Query) -> RawResponse:
+        from .client import _SYMBOL_TOOLS
+
+        # The live catalog's argument keys, confirmed 2026-09-05: a
+        # single-symbol tool takes "symbol", compare_tokens takes
+        # "symbols" as one comma-separated string, and the no-argument
+        # tools take {} regardless of what subjects a caller passes.
         arguments: dict[str, Any] = dict(query.options)
         if query.subjects:
-            arguments.setdefault(
-                "token",
-                list(query.subjects) if len(query.subjects) > 1 else query.subjects[0],
-            )
+            if self.tool in _SYMBOL_TOOLS:
+                arguments.setdefault("symbol", query.subjects[0])
+            elif self.tool == "compare_tokens":
+                arguments.setdefault("symbols", ", ".join(query.subjects))
 
         try:
             result = self._client.call_tool(self.tool, arguments)
@@ -361,6 +367,6 @@ def build_mcp_sources(
     tools: tuple[str, ...] = TOOLS,
     **kwargs: Any,
 ) -> dict[str, RyoMcpSource]:
-    """All seven over one shared session, so the handshake happens once."""
+    """All six over one shared session, so the handshake happens once."""
     client = McpClient(**kwargs)
     return {tool: RyoMcpSource(tool, client=client) for tool in tools}

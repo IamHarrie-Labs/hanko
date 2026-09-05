@@ -62,7 +62,7 @@
 
 <section id="layers" class="shell doc-section">
   <div class="eyebrow">01 · Layers</div>
-  <h2>Five packages, each owning one guarantee.</h2>
+  <h2>Six packages, each owning one guarantee.</h2>
   <p class="section-lede">The codebase is organised around what each layer promises, not around what it happens to import. Read top to bottom, the guarantees compose: a decision cannot cite evidence that was not stored, and cannot be sized on a market fact that was fabricated.</p>
 
   <table class="layer-table">
@@ -82,7 +82,7 @@
       </tr>
       <tr>
         <td><code>hanko/ryotools</code></td>
-        <td>The seven RYO tools over MCP and REST; structural fact extraction</td>
+        <td>The six RYO tools over MCP and REST; structural fact extraction</td>
         <td class="guarantee">Read-only; no write path exists</td>
       </tr>
       <tr>
@@ -109,13 +109,13 @@
 <section id="mcp-transport" class="shell doc-section">
   <div class="eyebrow">02 · Transport</div>
   <h2>The MCP transport, in full.</h2>
-  <p class="section-lede">The hackathon issues an MCP credential, so MCP — not REST — is the path known to exist. This is a small, dependency-free JSON-RPC 2.0 client over Streamable HTTP, covering exactly the handshake the seven read-only tools need.</p>
+  <p class="section-lede">The hackathon issues an MCP credential, so MCP — not REST — is the path known to exist. This is a small, dependency-free JSON-RPC 2.0 client over Streamable HTTP, covering exactly the handshake the six read-only tools need.</p>
 
   <div class="doc-note">
     <div class="label">initialize &rarr; notifications/initialized &rarr; tools/list | tools/call</div>
     <p>It accepts both plain JSON and server-sent-event responses, because assuming one and failing on a server that streams would be a guess about someone else's implementation. It honours the published 60-per-minute rate limit by spacing calls rather than discovering the limit through 429s. And it records which of the three possible result shapes each payload arrived in — <code>structuredContent</code>, JSON embedded in a text block, or plain text — rather than assuming one, because a server can change shape between versions and a snapshot should say which shape it was captured in.</p>
     <p>The transport stops at the source boundary. A handshake failure, a rate limit, a protocol error, and an <code>isError</code> tool result all become a recorded snapshot with the reason attached, never an exception that escapes and turns a recordable fact into a lost one.</p>
-    <p>A test asserts that facts extracted from an MCP payload are byte-identical to facts extracted from a REST payload for the same data. Swapping transport touches no line of reasoning code — the seven tools, the decision engine, and the review loop cannot tell which one supplied a number.</p>
+    <p>A test asserts that facts extracted from an MCP payload are byte-identical to facts extracted from a REST payload for the same data. Swapping transport touches no line of reasoning code — the six tools, the decision engine, and the review loop cannot tell which one supplied a number.</p>
   </div>
 </section>
 
@@ -137,7 +137,7 @@
 <section id="exit-liquidity" class="shell doc-section">
   <div class="eyebrow">04 · Track 3</div>
   <h2>exit_liquidity: can you actually get out?</h2>
-  <p class="section-lede">The seven published tools all answer some version of "is this worth entering?" <code>check_safety</code> says a token is not a scam. <code>analyze_token</code> and <code>deep_analysis</code> say what it is doing. None of them answer whether a position can be <em>closed</em>, or what closing it costs — and a token can hold a 0.82 safety score and still be a position you cannot exit without giving back a tenth of it.</p>
+  <p class="section-lede">Confirmed against the real, authenticated catalog: six tools, all answering some version of "is this worth entering?" <code>analyze_token</code> and <code>deep_analysis</code> say what a token is doing; there is no safety tool at all, only a qualitative risks list. None of the six answer whether a position can be <em>closed</em>, or what closing it costs — and a token can clear every measured signal and still be a position you cannot exit without giving back a tenth of it.</p>
 
   <div class="doc-note">
     <div class="label">Modelled, not measured</div>
@@ -188,7 +188,7 @@
   <div class="shell band-inner" style="padding-top: 56px; padding-bottom: 56px">
     <div class="colophon">
       <span>Hanko 判子 · RYO-CHAN Hackathon 2026</span>
-      <span><span data-stat="tests">188</span> tests · <span data-stat="lines">8,239</span> lines · <span data-stat="commits">17</span> commits · <a href="index.html">Home</a> · <a href="https://github.com/IamHarrie-Labs/hanko" data-repo>GitHub</a></span>
+      <span><span data-stat="tests">188</span> tests · <span data-stat="lines">8,304</span> lines · <span data-stat="commits">18</span> commits · <a href="index.html">Home</a> · <a href="https://github.com/IamHarrie-Labs/hanko" data-repo>GitHub</a></span>
     </div>
   </div>
 </footer>

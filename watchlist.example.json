@@ -1,5 +1,5 @@
 {
-  "_comment": "Copy to watchlist.json and fill in real handles once the RYO MCP URL is confirmed. Each entry is one token: which sources to pull evidence from, and which RYO tools to pull facts from. fact_tools defaults to analyze_token, deep_analysis, check_safety if omitted.",
+  "_comment": "Copy to watchlist.json and fill in real handles. The RYO MCP URL and key are already confirmed (see .env) -- this file only needs real source handles. Each entry is one token: which sources to pull evidence from, and which RYO tools to pull facts from. fact_tools defaults to analyze_token, deep_analysis if omitted -- those are two of the six tools on the real catalog; check_safety and supported_tokens are not on it and calling them will fail.",
   "watchlist": [
     {
       "token": "SOL",
@@ -13,7 +13,7 @@
         "x": ["voice_alpha"],
         "rss": ["https://www.coindesk.com/arc/outboundfeeds/rss/"]
       },
-      "fact_tools": ["analyze_token", "check_safety"]
+      "fact_tools": ["analyze_token", "deep_analysis"]
     }
   ]
 }

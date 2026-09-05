@@ -36,7 +36,7 @@ def resolve(source_id: str) -> Source:
     the wrong adapter would produce evidence that was never observed.
     """
     # Tool sources are constructed by name rather than registered one by
-    # one, so a snapshot from any of the seven replays the same way. The
+    # one, so a snapshot from any of the six replays the same way. The
     # prefix records which transport captured it: replaying an MCP capture
     # with the REST adapter would misattribute where the bytes came from.
     if source_id.startswith("ryomcp:"):

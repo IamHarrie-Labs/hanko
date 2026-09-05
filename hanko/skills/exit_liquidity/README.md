@@ -2,19 +2,23 @@
 
 **Track 3 · New Skills**
 
-> `check_safety` tells you a token isn't a scam. Nothing tells you whether you
-> can get *out* of it.
+> The six live RYO tools all answer *is this worth entering?* Nothing tells
+> you whether you can get *out* of it.
 
 ## The gap
 
-The seven published tools all answer the same question from different angles:
-*is this worth entering?* `check_safety` says it isn't a rug. `analyze_token` and
-`deep_analysis` say what it's doing. `compare_tokens` ranks candidates.
+Confirmed against the real, authenticated catalog (`GET /api/mcp/tools`), not
+the hackathon's own public tool list: six tools exist, and every one of them
+answers a version of the entry question. `analyze_token` and `deep_analysis`
+say what a token is doing. `compare_tokens` ranks candidates. There is no
+safety tool on the real catalog at all — the closest thing to a risk signal
+is a qualitative `intelligence.risks` list, not a score.
 
-None of them answer *can this position be closed, and what does closing it cost?*
+None of the six answer *can this position be closed, and what does closing it
+cost?*
 
-That's the number that turns research into a trade. A token can pass every
-safety check and still be a trap:
+That's the number that turns research into a trade. A token can look clean on
+every measured signal and still be a trap:
 
 ```
 ILLIQUID  TOKENA  confidence moderate
@@ -25,9 +29,10 @@ ILLIQUID  TOKENA  confidence moderate
   modelled with cpmm_v1, not observed
 ```
 
-That token has a **0.82 safety score**. It is not a scam. It is also a position
-you cannot close at size without giving back a tenth of it. Position size chosen
-without exit cost is a guess with a number attached.
+That token clears every measured signal `analyze_token` and `deep_analysis`
+report. It is also a position you cannot close at size without giving back a
+tenth of it. Position size chosen without exit cost is a guess with a number
+attached.
 
 ## What it returns
 
@@ -130,13 +135,13 @@ on and the number the tool publishes cannot drift apart:
 
 ```
 ABSTAIN TOKENA  size 0.0%
-  + safety: safety score 0.88
+  + quality_floor: evidence quality 0.75 clears 0.4
   x exit_liquidity: evidence warranted 3.28% ($3,279) but exiting that costs
     20.78%, over the 3.0% ceiling; capped to 0.39% ($387)
   x size_floor: warranted size 0.387% is below the floor of 0.5%
 ```
 
-Every evidence check passed. Safety passed. The agent declined because it could
+Every measured evidence check passed. The agent declined because it could
 not get out — and said so, in those words.
 
 ## Tests

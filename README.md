@@ -10,7 +10,7 @@ Twenty market voices go in. What comes out is a sized position, a receipt, and a
 written commitment to what would prove it wrong — replayable, byte for byte,
 from the exact data the agent saw.
 
-Built for the RYO-CHAN platform and its seven read-only research tools.
+Built for the RYO-CHAN platform and the six read-only research tools confirmed live on its authenticated MCP catalog.
 
 ## The one rule
 
@@ -94,7 +94,7 @@ a `FAILED` snapshot saying so, rather than throwing.
 
 ## Status
 
-138 tests, all offline, ~5s. Covered at the evidence layer: canonical form and
+188 tests, all offline, ~5s. Covered at the evidence layer: canonical form and
 address stability, payload deduplication, tamper detection, adapter-version
 mismatch on replay, replay determinism, evidence identity pinned to bytes and
 position, and each failure mode (rate limit, partial window, empty result,
@@ -120,10 +120,32 @@ dropped. That check proves a post exists and that the tool saw it; it does not
 prove the model transcribed the text or timestamp faithfully, so those fields
 are flagged as model-transcribed on every item.
 
-**Still unverified:** the RYO MCP endpoint URL is not yet in hand, so no live
-tool call has run and the tool argument schemas remain a best guess. Run
-`hanko tools` once the URL is known — it reports the real names and schemas and
-diffs them against the seven published on the site.
+**Confirmed against the live RYO MCP server, 5 Sep 2026.** `hanko tools`,
+`hanko facts SOL`, and `hanko decide` have all run against the real endpoint,
+not a fixture. Three things that changed once the guessing stopped:
+
+  The catalog is six tools, not the seven the hackathon's own public tool list
+  names. `check_safety` and `supported_tokens` are not on the authenticated
+  catalog; `monitor_market_sentiment_shift` is, and wasn't guessed at all.
+  There is no numeric safety score anywhere in the six — `safety_score` on
+  `MarketFacts` now stays `None` every time, honestly, rather than sometimes.
+
+  Argument keys are `symbol` (`analyze_token`, `deep_analysis`) and `symbols`
+  as one comma-separated string (`compare_tokens`), not `token` — both
+  transports were built guessing the latter and are now fixed to match.
+
+  The response is `{"tool": ..., "result": {envelope}, "latency_ms": ...}`
+  over REST, and the envelope's own `status` (`ok` / `partial` /
+  `unavailable`) and `data_mode` (`live` / `mixed` / `simulated` / `unknown`)
+  are what `_degraded()` now reads — a response that admits to being
+  `simulated` is treated exactly like a partial one, since simulated data
+  presented as live is the one fabrication the platform says it never does.
+
+**Still unverified:** no sweep has run long enough against live data to
+produce a calibration curve from real outcomes, and `exit_liquidity`'s
+`liquidity_usd` fact has not yet been observed present on a real
+`deep_analysis` call — the one made returned `token_profile: null`, which the
+skill's "null, never zero" design is built to expect.
 
 ## Decision Records
 

@@ -203,7 +203,7 @@ def cmd_audit(args: argparse.Namespace) -> int:
     return 0
 
 
-_FACT_TOOLS = ("analyze_token", "deep_analysis", "check_safety")
+_FACT_TOOLS = ("analyze_token", "deep_analysis")
 
 
 def _tool_source(tool: str, args: argparse.Namespace):
@@ -228,7 +228,7 @@ def cmd_tools(args: argparse.Namespace) -> int:
 
     Worth running before anything else: it confirms the handshake, the
     credential and the real tool names and argument schemas, rather than
-    trusting the seven names published on the site.
+    trusting the six names published on the site.
     """
     from .ryotools import McpClient, McpError
 
@@ -532,7 +532,7 @@ def build_parser() -> argparse.ArgumentParser:
 
     facts = sub.add_parser("facts", help="collect RYO tools and extract market facts")
     facts.add_argument("token")
-    facts.add_argument("--tool", action="append", help="default: analyze_token, deep_analysis, check_safety")
+    facts.add_argument("--tool", action="append", help="default: analyze_token, deep_analysis")
     facts.add_argument("--base-url", dest="base_url", help="MCP endpoint, or REST host")
     facts.add_argument("--transport", choices=("mcp", "rest"), default="mcp")
     facts.set_defaults(func=cmd_facts)
