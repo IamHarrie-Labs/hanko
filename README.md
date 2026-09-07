@@ -22,6 +22,12 @@ Built for the RYO-CHAN platform and the six read-only research tools confirmed l
 technical writeup at `/docs`. **[/try](https://tryhanko.vercel.app/try)** runs
 the new Track 3 skill live, against the real platform, from your browser.
 
+## Submission
+
+- **[Project Submission Form](RYOCHAN-Project-Submission-Form.pdf)** (PDF, this repo)
+- **[Demo video](https://drive.google.com/file/d/1nVfAE-yO4b4ni2CXKxa0DtAsWnY5Zpfx/view?usp=drivesdk)**
+- **[Announcement post on X](https://x.com/IamHarrie/status/2096908693967179844?s=20)**
+
 ## The one rule
 
 ```
