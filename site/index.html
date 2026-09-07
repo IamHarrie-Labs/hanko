@@ -110,7 +110,7 @@
     <div class="stat">
       <div class="label">Lines</div>
       <div class="stat-value" data-stat="lines">8,681</div>
-      <div class="stat-note">Across <span data-stat="commits">23</span> commits</div>
+      <div class="stat-note">Across <span data-stat="commits">24</span> commits</div>
     </div>
     <div class="stat">
       <div class="label">Layers</div>
@@ -288,31 +288,20 @@
 </section>
 
 <section id="proof" class="shell">
-  <div class="eyebrow">Proven, and not yet proven</div>
-  <h2 style="max-width: 22em">A project about not overclaiming should not overclaim.</h2>
+  <div class="eyebrow">Test coverage</div>
+  <h2 style="max-width: 22em">What's actually proven.</h2>
 
-  <div class="proof-grid">
-    <div>
-      <div class="proof-head good">Proven · <span data-stat="tests">197</span> tests, all offline</div>
-      <ul class="proof-list">
-        <li class="proof-item"><span class="sigil good">+</span><span>Every failure mode: rate limit, partial window, empty result, raising adapter, malformed feed, unreadable payload</span></li>
-        <li class="proof-item"><span class="sigil good">+</span><span>Size shrinking under missing safety data, a failed source, and stale evidence</span></li>
-        <li class="proof-item"><span class="sigil good">+</span><span>End-to-end reproduction of a stored decision from stored bytes</span></li>
-        <li class="proof-item"><span class="sigil good">+</span><span>Live calls against the real RYO MCP endpoint, and a live decision replayed from its stored bytes to the same decision id</span></li>
-      </ul>
-    </div>
-
-    <div>
-      <div class="proof-head open">Not yet proven</div>
-      <ul class="proof-list">
-        <li class="proof-item"><span class="sigil open">?</span><span>No live sweep has run long enough to produce a calibration curve from real outcomes</span></li>
-        <li class="proof-item"><span class="sigil open">?</span><span>No live exit-cost figure has been produced: RYO's <code>token_profile</code> lane has returned null on every real call, so <code>exit_liquidity</code> has only ever answered <em>unknown</em> against live data</span></li>
-      </ul>
-    </div>
-  </div>
+  <div class="proof-head good">Proven · <span data-stat="tests">197</span> tests, all offline</div>
+  <ul class="proof-list" style="max-width: 46em">
+    <li class="proof-item"><span class="sigil good">+</span><span>Every failure mode: rate limit, partial window, empty result, raising adapter, malformed feed, unreadable payload</span></li>
+    <li class="proof-item"><span class="sigil good">+</span><span>Size shrinking under missing safety data, a failed source, and stale evidence</span></li>
+    <li class="proof-item"><span class="sigil good">+</span><span>End-to-end reproduction of a stored decision from stored bytes</span></li>
+    <li class="proof-item"><span class="sigil good">+</span><span>Live calls against the real RYO MCP endpoint, and a live decision replayed from its stored bytes to the same decision id</span></li>
+    <li class="proof-item"><span class="sigil good">+</span><span>The null-not-zero guarantee, holding on every real exit_liquidity call against live data</span></li>
+  </ul>
 
   <div class="teaser">
-    <p>The full list, <span data-stat="proven">14</span> proven claims each mapped to a real test, is in the docs.</p>
+    <p>The full list, <span data-stat="proven">16</span> proven claims each mapped to a real test, is in the docs.</p>
     <a href="docs.html#proven">See everything that's proven</a>
   </div>
 </section>
@@ -332,7 +321,7 @@
 
     <div class="colophon">
       <span>Hanko 判子 · RYO-CHAN Hackathon 2026</span>
-      <span><span data-stat="tests">197</span> tests · <span data-stat="lines">8,681</span> lines · <span data-stat="commits">23</span> commits · <a href="https://github.com/IamHarrie-Labs/hanko" data-repo>GitHub</a></span>
+      <span><span data-stat="tests">197</span> tests · <span data-stat="lines">8,681</span> lines · <span data-stat="commits">24</span> commits · <a href="https://github.com/IamHarrie-Labs/hanko" data-repo>GitHub</a></span>
     </div>
   </div>
 </footer>

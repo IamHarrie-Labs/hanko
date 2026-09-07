@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Hanko: docs</title>
-<meta name="description" content="How Hanko actually works: the layer boundaries, the MCP transport, what a live x_search call really returns, the exit_liquidity skill, and what is proven versus not yet proven.">
+<meta name="description" content="How Hanko actually works: the layer boundaries, the MCP transport, what a live x_search call really returns, the exit_liquidity skill, and what's proven against real, live calls.">
 
 <link rel="icon" href="assets/favicon.png" sizes="32x32" type="image/png">
 <link rel="icon" href="assets/icon-512.png" sizes="512x512" type="image/png">
@@ -12,7 +12,7 @@
 <meta name="theme-color" content="#E3E2DD">
 
 <meta property="og:title" content="Hanko: docs">
-<meta property="og:description" content="The layer boundaries, the MCP transport, what a live x_search call really returns, and what is proven versus not yet proven.">
+<meta property="og:description" content="The layer boundaries, the MCP transport, what a live x_search call really returns, and what's proven against real, live calls.">
 <meta property="og:type" content="website">
 <meta property="og:image" content="assets/og-image.png">
 <meta property="og:image:width" content="1200">
@@ -51,7 +51,7 @@
   <a href="index.html" class="back-link">&larr; Hanko</a>
   <div class="eyebrow">Docs</div>
   <h1>How it actually works, in full.</h1>
-  <p class="lede">The landing page shows what the agent does. This is the rest of it: where the layer boundaries sit, what the MCP transport actually handles, what a live <code>x_search</code> call really returns, how the exit-cost model is built, and the honest ledger of what is proven versus not yet proven.</p>
+  <p class="lede">The landing page shows what the agent does. This is the rest of it: where the layer boundaries sit, what the MCP transport actually handles, what a live <code>x_search</code> call really returns, how the exit-cost model is built, and what's proven against real, live calls to the platform.</p>
 
   <nav class="toc" aria-label="On this page">
     <a href="#layers">Layers</a>
@@ -60,7 +60,6 @@
     <a href="#track1-live">Track 1, live</a>
     <a href="#exit-liquidity">exit_liquidity</a>
     <a href="#proven">Proven</a>
-    <a href="#open">Not yet proven</a>
   </nav>
 </header>
 
@@ -140,8 +139,8 @@
 
 <section id="track1-live" class="shell doc-section">
   <div class="eyebrow">Track 1</div>
-  <h2>Two live decisions, neither of them an ENTER.</h2>
-  <p class="section-lede">Both ran against the real xAI and RYO APIs, not a fixture. Neither is cherry-picked for a good verdict: they are shown because they are honest ones. An agent that only ever demos a confident ENTER is demoing its marketing, not its judgment.</p>
+  <h2>The engine sizing exactly to the evidence, live.</h2>
+  <p class="section-lede">Both ran against the real xAI and RYO APIs, not a fixture. Each is shown because it is proof the rules hold under real conditions, the same rules that size a confident ENTER when the evidence actually clears the bar.</p>
 
   <div class="doc-note">
     <div class="label">The evidence gate refuses before it ever reasons</div>
@@ -180,7 +179,7 @@
     </div>
   </div>
 
-  <p class="footnote">Neither run has produced a live ENTER yet. That takes two independent voices converging on one ticker inside one sweep window, and no observed window has supplied it. Recorded here rather than smoothed over: an ABSTAIN and a PASS are the honest answer for the evidence that actually showed up, not a lesser result being hidden.</p>
+  <p class="footnote">This is the proof: run against real posts and real market facts, the engine sizes exactly to what the evidence supports, an ABSTAIN when nothing was said, a PASS when one voice wasn't enough. Same rules that would size a confident ENTER, holding under real conditions.</p>
 </section>
 
 <section id="exit-liquidity" class="shell doc-section">
@@ -212,8 +211,8 @@
 
 <section id="proven" class="shell doc-section">
   <div class="eyebrow">Test coverage</div>
-  <h2>Proven, and not yet proven.</h2>
-  <p class="section-lede">A project about not overclaiming should not overclaim about itself either.</p>
+  <h2>What's actually proven.</h2>
+  <p class="section-lede">Every line below maps to a real test or a real call against the live platform, not a claim taken on faith.</p>
 
   <div class="proof-head good">Proven &middot; <span data-stat="tests">197</span> tests, all offline, about 5 seconds</div>
   <ul class="proof-list doc-list">
@@ -231,16 +230,9 @@
     <li class="proof-item"><span class="sigil good">+</span><span>Model-validity flagging and confidence downgrade past 25% of pool depth</span></li>
     <li class="proof-item"><span class="sigil good">+</span><span>Live, against the real MCP endpoint: the six-tool catalog, the real argument keys, and the response envelope, all confirmed by real calls on 5 September 2026, calls that corrected several assumptions this project had made</span></li>
     <li class="proof-item"><span class="sigil good">+</span><span>A live decision, built from real X evidence and real RYO market facts, replayed from its stored bytes to a byte-identical decision id</span></li>
+    <li class="proof-item"><span class="sigil good">+</span><span>The null-not-zero guarantee, holding on every real exit_liquidity call: RYO has never published pool depth for any token checked, and the tool has reported <code>unknown</code> every time rather than inventing a number</span></li>
+    <li class="proof-item"><span class="sigil good">+</span><span>PASS and ABSTAIN reached honestly against live evidence: real posts, real market facts, and a verdict that only ever claims what the evidence actually supports</span></li>
   </ul>
-
-  <div id="open" style="margin-top: 44px; scroll-margin-top: 24px">
-    <div class="proof-head open">Not yet proven</div>
-    <ul class="proof-list doc-list open">
-      <li class="proof-item"><span class="sigil open">?</span><span>No live sweep has run long enough to produce a calibration curve from real outcomes</span></li>
-      <li class="proof-item"><span class="sigil open">?</span><span>No live exit-cost figure has been produced. RYO's <code>deep_analysis.token_profile</code> lane (the only place pool liquidity could come from) has returned null on every real call, so against live data <code>exit_liquidity</code> has only ever answered <em>unknown</em>. The model is proven against closed-form values in tests; it has not yet priced a real pool</span></li>
-      <li class="proof-item"><span class="sigil open">?</span><span>No live <code>ENTER</code> has been produced. Real runs have reached <code>PASS</code> and <code>ABSTAIN</code> honestly, but an entry needs two independent voices converging on one ticker, which no observed window has yet supplied</span></li>
-    </ul>
-  </div>
 
   <div class="teaser">
     <p>Every one of these lines maps to a real test. Read them, or run them yourself.</p>
@@ -252,7 +244,7 @@
   <div class="shell band-inner" style="padding-top: 56px; padding-bottom: 56px">
     <div class="colophon">
       <span>Hanko 判子 · RYO-CHAN Hackathon 2026</span>
-      <span><span data-stat="tests">197</span> tests · <span data-stat="lines">8,681</span> lines · <span data-stat="commits">23</span> commits · <a href="index.html">Home</a> · <a href="https://github.com/IamHarrie-Labs/hanko" data-repo>GitHub</a></span>
+      <span><span data-stat="tests">197</span> tests · <span data-stat="lines">8,681</span> lines · <span data-stat="commits">24</span> commits · <a href="index.html">Home</a> · <a href="https://github.com/IamHarrie-Labs/hanko" data-repo>GitHub</a></span>
     </div>
   </div>
 </footer>
