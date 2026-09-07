@@ -138,6 +138,111 @@ class TestRefusals:
         assert r.verdict is Verdict.OK  # slippage is still answerable
         assert any("time to exit" in g for g in r.gaps)
 
+    def test_two_tokens_with_different_facts_do_not_print_the_same_report(self):
+        # Against the live platform every token comes back with no pool
+        # depth, so the modelled figures are all null and the reports
+        # collapsed to identical text -- the price and volume that tell
+        # them apart were fetched and traced, then never displayed.
+        src = {"price_usd": "analyze_token:p", "volume_24h_usd": "analyze_token:v"}
+        big = MarketFacts(subject="BTC", price_usd=79_951.42, volume_24h_usd=18_236_544_252.0)
+        small = MarketFacts(subject="BONK", price_usd=3.418e-06, volume_24h_usd=135_333_289.0)
+
+        a = assess("BTC", big, size_usd=50_000, sources=src).explain()
+        b = assess("BONK", small, size_usd=50_000, sources=src).explain()
+
+        assert a != b
+        assert "$79,951.42" in a
+        assert "$18,236,544,252" in a
+        # A sub-cent price must survive its own formatting rather than
+        # rounding to the $0 that whole-dollar output would print.
+        assert "$0.00000342" in b
+        assert "$0 " not in b
+
+    def test_hourly_capacity_separates_deep_and_thin_markets(self):
+        # With no pool depth published, a small position exits "under a
+        # minute" in every market, deep or thin -- the duration collapses
+        # and stops discriminating. Capacity is what still separates them.
+        src = {"volume_24h_usd": "analyze_token:v"}
+        deep = MarketFacts(subject="ETH", price_usd=2_514.17, volume_24h_usd=10_838_000_117.0)
+        thin = MarketFacts(subject="BONK", price_usd=3.4e-06, volume_24h_usd=135_630_024.0)
+
+        a = assess("ETH", deep, size_usd=5_000, sources=src)
+        b = assess("BONK", thin, size_usd=5_000, sources=src)
+
+        # Same headline duration, wildly different markets.
+        assert "exit over under a minute" in a.explain()
+        assert "exit over under a minute" in b.explain()
+        assert a.hourly_capacity_usd == pytest.approx(45_158_333.8, rel=1e-6)
+        assert b.hourly_capacity_usd == pytest.approx(565_125.1, rel=1e-6)
+        assert a.hourly_capacity_usd > b.hourly_capacity_usd * 50
+        assert "absorbs $45,158,334 per hour" in a.explain()
+
+    def test_a_slow_exit_is_priced_rather_than_treated_as_free(self):
+        # The skill's trade-off is "pay slippage now or take longer", and
+        # taking longer was costed at zero -- which is its own quiet
+        # fabrication. Volatility over the unwind window is the price.
+        from hanko.skills.exit_liquidity import model
+
+        # Volatility accumulates with the square root of time, so four
+        # times as long is twice the exposure, not four times.
+        assert model.drift_exposure(24.0, 7.12) == pytest.approx(7.12)
+        assert model.drift_exposure(96.0, 7.12) == pytest.approx(14.24)
+        assert model.drift_exposure(6.0, 7.12) == pytest.approx(3.56)
+        # No volatility figure, no claim about drift.
+        assert model.drift_exposure(24.0, 0) is None
+
+        facts = MarketFacts(
+            subject="BONK", price_usd=3.37e-06, volume_24h_usd=137_702_816.0,
+            market_cap_usd=297_082_974.0, atr_14_pct=7.12,
+        )
+        r = assess("BONK", facts, size_usd=20_000_000)
+        assert r.drift_exposure_pct == pytest.approx(8.6, abs=0.1)
+        assert r.position_pct_of_cap == pytest.approx(6.73, abs=0.01)
+        assert "8.6% price drift" in r.explain()
+        assert "6.732% of cap" in r.explain()
+
+    def test_a_near_instant_exit_does_not_print_a_fabricated_zero(self):
+        # A tiny position really is near-zero drift, but "~0.0%" reads as
+        # a computed zero rather than a measured smallness.
+        facts = MarketFacts(
+            subject="ETH", price_usd=2_510.24, volume_24h_usd=11_064_891_801.0,
+            market_cap_usd=306_471_190_214.0, atr_14_pct=3.79,
+        )
+        text = assess("ETH", facts, size_usd=50_000).explain()
+        assert "under 0.1% price drift" in text
+        assert "~0.0%" not in text
+        assert "0.0% of cap" not in text
+
+    def test_turnover_separates_markets_that_share_a_dollar_volume(self):
+        from hanko.skills.exit_liquidity import model
+
+        # Same daily volume, very different markets: one turns over half
+        # its own value a day, the other a fiftieth of it.
+        assert model.turnover(137_702_816.0, 297_082_974.0) == pytest.approx(0.4635, abs=1e-3)
+        assert model.turnover(137_702_816.0, 11_000_000_000.0) == pytest.approx(0.0125, abs=1e-3)
+        assert model.turnover(1.0, 0) is None
+
+    def test_capacity_is_the_inverse_of_time_to_exit(self):
+        from hanko.skills.exit_liquidity import model
+
+        volume, participation = 10_838_000_117.0, 0.10
+        size = model.size_for_hours(3.0, volume, participation)
+        assert model.hours_to_exit(size, volume, participation) == pytest.approx(3.0)
+
+    def test_missing_liquidity_drops_only_the_cost_estimate(self):
+        # The mirror of the case above, and the one that matters against
+        # the live platform: RYO publishes volume but no pool depth. Time
+        # to exit does not take liquidity as an input, so withholding it
+        # too would refuse a question the data can actually answer.
+        blind = MarketFacts(subject="TOKENA", price_usd=1.25, volume_24h_usd=4_200_000.0)
+        r = report(blind, size_usd=50_000)
+        assert r.estimate is None  # price impact stays refused
+        assert r.verdict is Verdict.UNKNOWN
+        assert r.hours_to_exit is not None  # time is answered
+        assert r.to_dict()["hours_to_exit"] == pytest.approx(2.86, abs=0.01)
+        assert "exit over" in r.explain()
+        assert "or exit over" not in r.explain()
+
 
 # ---- honesty about the model --------------------------------------------
 

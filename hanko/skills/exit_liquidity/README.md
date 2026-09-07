@@ -41,6 +41,10 @@ attached.
 | `estimate` | Price impact and dollar cost of exiting the size you asked about |
 | `max_size_usd` | Largest exit clearing 1%, 3%, and your own ceiling |
 | `hours_to_exit` | How long a patient exit takes instead, at a volume participation cap |
+| `hourly_capacity_usd` | What the market's own flow absorbs per hour at that cap — volume-derived, so it survives a missing depth figure |
+| `drift_exposure_pct` | Price movement the position is exposed to *while* it unwinds, from the market's own 14-day ATR |
+| `turnover_pct` | Share of the token's whole value traded per day |
+| `position_pct_of_cap` | How much of the entire market cap this position is |
 | `curve` | Cost across a size ladder scaled to the pool, not a fixed dollar ladder |
 | `model` | The model id and every assumption behind the figures |
 | `inputs` | Each number used, and the tool and key path it was read from |
@@ -74,16 +78,59 @@ routers split, other pools absorb flow, market makers step away. The tool says s
 and downgrades its own confidence rather than extrapolating a number it doesn't
 believe.
 
-**A missing input produces no number.** If liquidity is unavailable, the slippage
-fields are `null` and the verdict is `unknown`. Never zero — a zero here reads as
-*free to exit*, which is the most dangerous fabrication this particular tool could
-make.
+**A missing input silences the answer it feeds, and only that one.** If liquidity
+is unavailable, the slippage fields are `null` and the verdict is `unknown`. Never
+zero — a zero here reads as *free to exit*, which is the most dangerous fabrication
+this particular tool could make.
+
+But time to exit is a function of size, volume and participation; pool depth is not
+one of its inputs. So it is still answered:
 
 ```
 UNKNOWN  TOKENA  confidence none
+  price $1.02 · 24h volume $700,000  (analyze_token)
+  exit over 17.1h at 10% of volume
+  this market absorbs $2,917 per hour at that cap
   ? liquidity_usd unavailable; exit cost cannot be modelled and is
     reported as null rather than zero
 ```
+
+## The slow exit was never free
+
+The trade-off this skill exists to state is *pay the slippage now, or take
+longer*. For a while it costed only one side of that: taking longer was
+reported at zero, which is its own quiet fabrication. Waiting exposes the
+position to whatever the market does while it unwinds, and the catalog
+publishes a 14-day ATR for every token, so that is measurable:
+
+```
+UNKNOWN  BONK  confidence none
+  price $0.00000337 · 24h volume $137,702,816  (analyze_token)
+  exit over 34.9h at 10% of volume
+  this market absorbs $573,762 per hour at that cap
+  waiting that long is exposed to ~8.6% price drift at this market's volatility
+  turnover 46.4% of market cap per day; this position is 6.732% of cap
+```
+
+A $20m position in that market takes a day and a half to leave, is 6.7% of the
+entire token, and carries roughly 8.6% of price movement on the way out. None of
+that needed a pool depth figure. Volatility accumulates with the square root of
+time, so four times as long is twice the exposure — and it is exposure, not an
+expected loss: as likely to move for you as against you, a scale rather than a
+forecast.
+
+Capacity matters more than it first looks. Below some size every market exits
+"under a minute", deep or thin — the duration collapses and stops telling them
+apart. Capacity does not: against live data ETH absorbs about $45m an hour and
+BONK about $565k, an eighty-fold difference in how large a position either can
+hold. With no published depth anywhere in the catalog, it is the only figure
+here that separates one market from another.
+
+This matters against the real platform, where it is the normal case rather than an
+outage: RYO publishes 24h volume for every token and no pool depth for any of them.
+Withholding the time estimate too would be over-refusal — as much a reporting
+failure as inventing the number that genuinely isn't there. The tool refuses the
+question it cannot answer, and answers the one it can.
 
 ## The model
 
@@ -146,13 +193,14 @@ not get out — and said so, in those words.
 
 ## Tests
 
-28 tests, offline, no network:
+29 tests, offline, no network:
 
 - The curve against closed-form constant-product values, and the inverse
 - Time-to-exit scaling with size and volume
 - `OK` / `TIGHT` / `ILLIQUID` boundaries, and the caller's ceiling overriding them
 - Missing liquidity returning null rather than zero; zero liquidity treated as unusable
-- Missing volume dropping only the time estimate
+- Missing volume dropping only the time estimate, and missing liquidity dropping
+  only the cost estimate — each gap silencing its own answer and no other
 - Model-validity flagging and confidence downgrade past 25% of pool
 - Untraceable inputs lowering confidence
 - A deep-but-inactive pool being called out

@@ -12,6 +12,10 @@ from the exact data the agent saw.
 
 Built for the RYO-CHAN platform and the six read-only research tools confirmed live on its authenticated MCP catalog.
 
+**[tryhanko.vercel.app](https://tryhanko.vercel.app)** — the pitch, and the full
+technical writeup at `/docs`. **[/try](https://tryhanko.vercel.app/try)** runs
+the new Track 3 skill live, against the real platform, from your browser.
+
 ## The one rule
 
 ```
@@ -35,6 +39,8 @@ hanko/sources/xsearch.py X, via the xAI Responses API and its x_search tool
 hanko/sources/rss.py     RSS/Atom — free, and the only source with trustworthy timestamps
 hanko/sources/fixture.py local JSON — free development, and every failure mode in CI
 hanko/snapshot/store.py  append-only content-addressed store, replay, integrity
+hanko/ryotools/          the six RYO tools over MCP and REST; structural fact extraction
+hanko/skills/exit_liquidity/  Track 3: what it costs to exit a position, not just enter one
 hanko/review/outcome.py     grading a decision against its own commitment
 hanko/review/reliability.py calibration, per-voice and per-rule track records
 hanko/review/ledger.py      append-only reviews, one per decision
@@ -94,7 +100,7 @@ a `FAILED` snapshot saying so, rather than throwing.
 
 ## Status
 
-188 tests, all offline, ~5s. Covered at the evidence layer: canonical form and
+197 tests, all offline, ~5s. Covered at the evidence layer: canonical form and
 address stability, payload deduplication, tamper detection, adapter-version
 mismatch on replay, replay determinism, evidence identity pinned to bytes and
 position, and each failure mode (rate limit, partial window, empty result,
@@ -142,10 +148,51 @@ not a fixture. Three things that changed once the guessing stopped:
   presented as live is the one fabrication the platform says it never does.
 
 **Still unverified:** no sweep has run long enough against live data to
-produce a calibration curve from real outcomes, and `exit_liquidity`'s
-`liquidity_usd` fact has not yet been observed present on a real
-`deep_analysis` call — the one made returned `token_profile: null`, which the
-skill's "null, never zero" design is built to expect.
+produce a calibration curve from real outcomes, and no live `ENTER` has
+occurred — real runs reach `PASS` and `ABSTAIN` honestly, but an entry needs
+two independent voices converging on one ticker, which no observed window has
+supplied. `exit_liquidity`'s `liquidity_usd` fact has never been observed
+present on a real `deep_analysis` call, for any token checked — `token_profile`
+comes back `null` every time, which the skill's "null, never zero" design is
+built to expect.
+
+## exit_liquidity — the new Track 3 skill
+
+The six real tools all answer some version of *is this worth entering?*
+Nothing answers *can this position be closed, and what does closing it cost?*
+That is the number that turns research into a trade — a token can clear every
+measured signal and still be a trap if exiting the position moves the price
+double digits.
+
+```bash
+hanko exit-liquidity BONK --size 20000000
+```
+
+```
+UNKNOWN  BONK  confidence none
+  price $0.00000337 · 24h volume $137,702,816  (analyze_token)
+  exit over 34.9h at 10% of volume
+  this market absorbs $573,762 per hour at that cap
+  waiting that long is exposed to ~8.6% price drift at this market's volatility
+  turnover 46.4% of market cap per day; this position is 6.732% of cap
+  ? liquidity_usd unavailable; exit cost cannot be modelled and is
+    reported as null rather than zero
+  modelled with cpmm_v1, not observed
+```
+
+No tool in the catalog publishes pool depth, so price impact stays honestly
+`unknown` rather than a fabricated zero — but everything else here is measured
+from live data, not withheld along with it: time to exit, hourly capacity, the
+price drift a slow exit is exposed to, and how much of the whole market this
+position represents. Refusing the question it can't answer is not the same as
+refusing the ones it can.
+
+Full model, honesty conventions, and test coverage in
+[`hanko/skills/exit_liquidity/README.md`](hanko/skills/exit_liquidity/README.md).
+Runnable live, against the real platform, at
+**[tryhanko.vercel.app/try](https://tryhanko.vercel.app/try)** — restricted to
+a few tokens and a capped size, so a public page can't turn into an unbounded
+tap on a live credential.
 
 ## Decision Records
 
@@ -330,7 +377,7 @@ sweep at 2026-08-27T12:00:00+00:00
   ENTER   TOKENA  dec_6c7456f128a467d1a268742d
 ```
 
-15 tests, all offline, using a fixture stand-in for RYO tool responses
+16 tests, all offline, using a fixture stand-in for RYO tool responses
 (`FixtureFactsSource`, shaped like the live tool sources rather than the
 evidence-shaped `FixtureSource`) alongside the existing evidence fixtures.
 Covered: a failed evidence source or fact tool becoming a gap rather than an

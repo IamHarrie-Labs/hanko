@@ -98,6 +98,9 @@ h2 { font-size: 46px; line-height: 1.06; letter-spacing: -.028em; font-weight: 7
   display: flex; align-items: center; gap: 22px;
   font-size: 13.5px; letter-spacing: .02em; white-space: nowrap;
 }
+.nav-actions { display: flex; align-items: center; gap: 10px; flex: none; }
+.btn-accent { background: var(--accent); color: var(--ink); }
+.btn-accent:hover { background: var(--ink); color: var(--on-ink); }
 .btn {
   flex: none; border-radius: 2px; white-space: nowrap;
   transition: background-color .15s ease, color .15s ease, border-color .15s ease;
@@ -125,6 +128,30 @@ h1 { font-size: 62px; line-height: 1.02; letter-spacing: -.032em; font-weight: 7
   font-size: 14.5px; font-weight: 500;
 }
 .btn-outline:hover { border-color: var(--accent); }
+
+/* ---------- try it live ---------- */
+
+#try-it { scroll-margin-top: 90px; }
+.try-form {
+  display: flex; align-items: flex-end; gap: 20px; flex-wrap: wrap;
+  margin: 36px 0 28px; padding: 24px 26px; border: 1px solid var(--line-2);
+}
+.try-field { display: flex; flex-direction: column; gap: 8px; }
+.try-label {
+  font-family: var(--mono); font-size: 10.5px; letter-spacing: .1em;
+  color: var(--muted-ink); text-transform: uppercase;
+}
+.try-field select, .try-field input {
+  font-family: var(--mono); font-size: 14px; padding: 10px 12px;
+  background: var(--surface); color: var(--ink); border: 1px solid var(--line-2);
+  border-radius: 2px; min-width: 160px;
+}
+.try-field select:focus, .try-field input:focus {
+  outline: none; border-color: var(--accent);
+}
+.try-submit { border: none; cursor: pointer; }
+.try-submit:disabled { opacity: .6; cursor: progress; }
+.try-receipt pre { white-space: pre-wrap; min-height: 0; }
 
 /* ---------- receipt ---------- */
 
@@ -351,6 +378,12 @@ h1 { font-size: 62px; line-height: 1.02; letter-spacing: -.032em; font-weight: 7
   .kanji { font-size: 88px; }
   .metric-value { font-size: 58px; }
   .nav-links { display: none; }
+  .nav-actions { gap: 6px; }
+  /* 12px of vertical padding puts these near 36px tall. They are the two
+     primary calls to action and the only tap targets in the sticky nav,
+     so they clear the 24px WCAG minimum with room rather than sitting on
+     it -- at 8px they measured 28px, which is a thumb-sized miss. */
+  .nav-actions .btn { padding: 12px 10px; font-size: 9px; letter-spacing: .04em; }
   .stats { grid-template-columns: 1fr 1fr; }
   .two-col, .notes, .proof-grid, .voices, .pipeline { grid-template-columns: 1fr; }
   .stage { border-right: 1px solid var(--line-2); }

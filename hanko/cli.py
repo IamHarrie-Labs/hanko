@@ -322,12 +322,18 @@ def cmd_exit_liquidity(args: argparse.Namespace) -> int:
         payloads: dict[str, object] = {}
         for tool in ("analyze_token", "deep_analysis"):
             snap = store.collect(_tool_source(tool, args), Query(subjects=(args.token,)))
-            print(_MARK[snap.status] + "  " + tool + "  " + (snap.error or ""))
+            # Per-tool progress is a diagnostic, not the answer. On stdout it
+            # sits in front of --json's payload and stops the output being
+            # valid JSON at all, so it goes to stderr where a pipe won't see it.
+            print(
+                _MARK[snap.status] + "  " + tool + "  " + (snap.error or ""),
+                file=sys.stderr,
+            )
             if snap.has_payload:
                 payloads[tool] = store.load_payload(snap.payload_digest)
         extraction = extract_market_facts(args.token, payloads)
         facts, sources = extraction.facts, extraction.found
-        print("")
+        print("", file=sys.stderr)
 
     report = assess(
         args.token,

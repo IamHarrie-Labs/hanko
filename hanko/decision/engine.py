@@ -124,12 +124,21 @@ def decide(inputs: DecisionInputs, policy: Policy) -> DecisionRecord:
         )
         abstain.append("symmetry")
     elif readings:
+        # Three states, not two. Equal weights -- including the all-neutral
+        # case where both are zero -- lean nowhere, and saying they lean
+        # bearish would be the exact kind of unearned claim this engine
+        # exists to refuse.
+        if bull_weight > bear_weight:
+            lean = "evidence leans bullish"
+        elif bear_weight > bull_weight:
+            lean = "evidence leans bearish"
+        else:
+            lean = "evidence is directionally neutral"
         rules.append(
             RuleFiring(
                 "symmetry",
                 Outcome.SATISFIED,
-                "evidence leans "
-                + ("bullish" if bull_weight > bear_weight else "bearish")
+                lean
                 + " (" + str(round(bull_weight, 2)) + " vs "
                 + str(round(bear_weight, 2)) + ")",
             )

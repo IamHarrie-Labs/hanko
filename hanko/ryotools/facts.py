@@ -51,6 +51,12 @@ _CANDIDATES: dict[str, tuple[str, ...]] = {
         "tvl",
     ),
     "safety_score": ("safety_score", "safetyScore", "safety_rating", "safety"),
+    "market_cap_usd": ("market_cap_usd", "marketCapUsd", "market_cap", "marketCap"),
+    # Average true range over 14 days, as a percent of price. Confirmed
+    # live on every token checked, and the only volatility figure the
+    # catalog publishes -- which is what makes the cost of a slow exit
+    # measurable rather than merely acknowledged.
+    "atr_14_pct": ("atr_14_pct", "atr14Pct", "atr_pct", "atr"),
 }
 
 
@@ -166,6 +172,8 @@ def extract_market_facts(
         liquidity_usd=values.get("liquidity_usd"),
         safety_score=values.get("safety_score"),
         snapshot_id=snapshot_id,
+        market_cap_usd=values.get("market_cap_usd"),
+        atr_14_pct=values.get("atr_14_pct"),
     )
     return Extraction(
         facts=facts,

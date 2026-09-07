@@ -183,6 +183,21 @@ class TestVerdicts:
         # A trail that lists only objections does not explain the entry.
         assert len(satisfied) >= 4
 
+    def test_directionless_evidence_is_not_reported_as_bearish(self, store, x_source):
+        # Real posts that carry a ticker but no directional language score
+        # 0 against 0. Reporting that as "leans bearish" states a view the
+        # evidence does not support -- the precise failure this engine is
+        # built to make impossible.
+        inputs = build_inputs(store, x_source)
+        neutral = tuple(
+            replace(r, stance=Stance.NEUTRAL, conviction=0.0) for r in inputs.readings
+        )
+        record = decide(replace(inputs, readings=neutral), Policy())
+        symmetry = next(r for r in record.rules if r.rule_id == "symmetry")
+        assert "bearish" not in symmetry.detail
+        assert "bullish" not in symmetry.detail
+        assert "directionally neutral" in symmetry.detail
+
 
 # ---- missing data shrinks the position -----------------------------------
 

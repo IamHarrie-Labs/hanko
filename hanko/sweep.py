@@ -163,16 +163,11 @@ def _collect_facts(
                 )
             )
 
+    # Only SOURCE_FAILED gaps are raised here: a tool that never answered is
+    # something only this function saw. Missing market *fields* are derived
+    # by the engine from market.missing, which is the same source of truth --
+    # raising them here too recorded every gap twice.
     extraction = extract_market_facts(entry.token, payloads, snapshot_id=last_snapshot)
-    for missing in extraction.missing:
-        gaps.append(
-            Gap(
-                kind=GapKind.MARKET_FIELD_MISSING,
-                subject=entry.token,
-                detail=missing + " was not returned by the research tools",
-                snapshot_id=last_snapshot,
-            )
-        )
     return extraction.facts, gaps, last_snapshot
 
 

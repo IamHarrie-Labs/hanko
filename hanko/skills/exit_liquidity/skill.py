@@ -2,15 +2,16 @@
 
 THE GAP THIS FILLS
 
-The seven published tools answer whether a token is worth entering.
-`check_safety` says it is not a scam. `analyze_token` and `deep_analysis`
-say what it is doing. Nothing anywhere says whether a position can be
+The six tools on the real catalog all answer whether a token is worth
+entering. `analyze_token` and `deep_analysis` say what it is doing,
+`compare_tokens` ranks candidates, `scan_market` and `market_overview`
+survey the field. Nothing anywhere says whether a position can be
 *closed* at the size you hold, or what closing it costs.
 
-That is the number that turns research into a trade. A token can pass
-every safety check and still be a trap: a 92 safety score on a pool where
-exiting $50k moves the price 18% is not a safe position, it is a slow one.
-Position size without exit cost is a guess with a number attached.
+That is the number that turns research into a trade. A token can clear
+every measured signal and still be a trap: a pool where exiting $50k
+moves the price 18% is not a safe position, it is a slow one. Position
+size without exit cost is a guess with a number attached.
 
 WHAT IT RETURNS
 
@@ -30,10 +31,13 @@ Two rules, both stricter than the platform requires.
   never reads higher than `moderate`. The model, its assumptions, and the
   point past which it stops being valid all travel with the answer.
 
-  A missing input produces no number. If liquidity is unavailable the
-  slippage fields are null and the verdict is `unknown`. They are never
-  zero, because a zero here reads as "free to exit" -- the most dangerous
-  possible fabrication in this particular tool.
+  A missing input silences the answer it feeds, and only that one. If
+  liquidity is unavailable the slippage fields are null and the verdict
+  is `unknown`. They are never zero, because a zero here reads as "free
+  to exit" -- the most dangerous possible fabrication in this particular
+  tool. Time to exit does not take liquidity as an input, so it is still
+  answered: refusing it as well would be over-refusal, which costs a
+  caller a real answer just as surely as a fabricated one misleads them.
 """
 
 from __future__ import annotations
@@ -87,6 +91,14 @@ class Report:
     notes: tuple[str, ...]
 
     warnings: tuple[str, ...] = ()
+    # What the market's own flow absorbs in an hour at the participation
+    # cap. Volume-derived, so it survives the missing depth figure.
+    hourly_capacity_usd: float | None = None
+    # Share of the token's whole value traded per day, and the price
+    # movement the position is exposed to while it unwinds.
+    turnover_pct: float | None = None
+    position_pct_of_cap: float | None = None
+    drift_exposure_pct: float | None = None
 
     def to_dict(self) -> dict[str, Any]:
         return {
@@ -101,6 +113,24 @@ class Report:
             "max_size_usd": self.max_size_usd,
             "hours_to_exit": (
                 round(self.hours_to_exit, 2) if self.hours_to_exit is not None else None
+            ),
+            "hourly_capacity_usd": (
+                round(self.hourly_capacity_usd, 2)
+                if self.hourly_capacity_usd is not None
+                else None
+            ),
+            "turnover_pct": (
+                round(self.turnover_pct, 3) if self.turnover_pct is not None else None
+            ),
+            "position_pct_of_cap": (
+                round(self.position_pct_of_cap, 4)
+                if self.position_pct_of_cap is not None
+                else None
+            ),
+            "drift_exposure_pct": (
+                round(self.drift_exposure_pct, 2)
+                if self.drift_exposure_pct is not None
+                else None
             ),
             "curve": [e.to_dict() for e in self.curve],
             "parameters": {
@@ -119,6 +149,26 @@ class Report:
             self.verdict.value.upper() + "  " + self.token
             + "  confidence " + self.confidence.value,
         ]
+        # The facts this ran on, shown rather than merely traced. Without
+        # them two different tokens can print an identical report -- the
+        # figures that actually distinguish them were fetched, recorded
+        # with the key path they came from, and then never displayed.
+        by_field = {i.field: i.value for i in self.inputs}
+        observed = []
+        if by_field.get("price_usd") is not None:
+            observed.append("price $" + _price(by_field["price_usd"]))
+        if by_field.get("volume_24h_usd") is not None:
+            observed.append("24h volume $" + _money(by_field["volume_24h_usd"]))
+        if observed:
+            tools = sorted({
+                str(i.source).split(":", 1)[0]
+                for i in self.inputs
+                if i.value is not None and i.source
+            })
+            line = "  " + " · ".join(observed)
+            if tools:
+                line += "  (" + ", ".join(tools) + ")"
+            lines.append(line)
         if self.estimate:
             lines.append(
                 "  exiting $" + _money(self.estimate.size_usd)
@@ -136,10 +186,45 @@ class Report:
                     "  largest exit at " + labels.get(key, key) + ": $" + _money(value)
                 )
         if self.hours_to_exit is not None:
+            # "or" only reads correctly as the alternative to a cost figure
+            # printed above. With no estimate, this is the sole answer.
+            lead = "  or exit over " if self.estimate else "  exit over "
             lines.append(
-                "  or exit over " + str(round(self.hours_to_exit, 1))
-                + "h at " + str(round(self.participation * 100)) + "% of volume"
+                lead + _duration(self.hours_to_exit)
+                + " at " + str(round(self.participation * 100)) + "% of volume"
             )
+        if self.hourly_capacity_usd is not None:
+            lines.append(
+                "  this market absorbs $" + _money(self.hourly_capacity_usd)
+                + " per hour at that cap"
+            )
+        if self.drift_exposure_pct is not None:
+            # The other half of the trade-off. A slow exit was priced at
+            # zero until this line existed, which made "just take longer"
+            # look free when it is only differently expensive.
+            #
+            # A near-instant exit really is near-zero drift, but printing
+            # "~0.0%" reads as a computed zero -- a measured smallness
+            # dressed up as certainty. Said in words instead.
+            shown = (
+                "under 0.1%"
+                if self.drift_exposure_pct < 0.1
+                else "~" + str(round(self.drift_exposure_pct, 1)) + "%"
+            )
+            lines.append(
+                "  waiting that long is exposed to " + shown
+                + " price drift at this market's volatility"
+            )
+        if self.turnover_pct is not None:
+            line = "  turnover " + str(round(self.turnover_pct, 1)) + "% of market cap per day"
+            if self.position_pct_of_cap is not None:
+                share = (
+                    "under 0.01%"
+                    if self.position_pct_of_cap < 0.01
+                    else str(round(self.position_pct_of_cap, 3)) + "%"
+                )
+                line += "; this position is " + share + " of cap"
+            lines.append(line)
         for warning in self.warnings:
             lines.append("  ! " + warning)
         for gap in self.gaps:
@@ -150,6 +235,36 @@ class Report:
 
 def _money(value: float) -> str:
     return format(round(value), ",")
+
+
+def _price(value: float) -> str:
+    """Prices here span nine orders of magnitude, from BTC to a memecoin.
+
+    Rounding to whole dollars would print a real quoted price of
+    $0.0000034 as $0 -- a measured number destroyed by its own formatting.
+    """
+    if value >= 1:
+        return format(value, ",.2f")
+    if value >= 0.01:
+        return format(value, ".4f")
+    return format(value, ".8f").rstrip("0")
+
+
+def _duration(hours: float) -> str:
+    """Read a duration at the scale it actually has.
+
+    A deep pool and a modest size give a genuinely tiny number, and
+    rounding that to "0.0h" reads as no answer at all rather than as the
+    answer "immediately" -- losing real information to formatting.
+    """
+    if hours >= 48:
+        return str(round(hours / 24, 1)) + " days"
+    if hours >= 1:
+        return str(round(hours, 1)) + "h"
+    minutes = hours * 60
+    if minutes >= 1:
+        return str(round(minutes)) + " min"
+    return "under a minute"
 
 
 def assess(
@@ -174,6 +289,17 @@ def assess(
 
     liquidity = facts.liquidity_usd
     volume = facts.volume_24h_usd
+    cap = facts.market_cap_usd
+    atr = facts.atr_14_pct
+
+    turnover_pct = (
+        model.turnover(volume, cap) * 100
+        if volume is not None and cap and cap > 0
+        else None
+    )
+    position_pct_of_cap = (
+        size_usd / cap * 100 if size_usd and cap and cap > 0 else None
+    )
 
     inputs = (
         InputTrace("liquidity_usd", liquidity, sources.get("liquidity_usd")),
@@ -197,8 +323,28 @@ def assess(
     if volume is None:
         gaps.append("volume_24h_usd unavailable; time to exit cannot be estimated")
 
-    # --- no liquidity, no numbers ----------------------------------------
+    # --- no liquidity, no price-impact numbers ---------------------------
     if liquidity is None:
+        # Time-to-exit is a function of size, volume and participation --
+        # pool depth is not one of its inputs. Withholding it because a
+        # *different* input is missing would be over-refusal: as much a
+        # reporting failure as claiming a number that isn't supported.
+        # The price-impact question stays unknown; this one is answered.
+        patient_hours = (
+            model.hours_to_exit(size_usd, volume, participation)
+            if size_usd and volume
+            else None
+        )
+        capacity = (
+            model.size_for_hours(1.0, volume, participation) if volume else None
+        )
+        if patient_hours is not None or capacity is not None:
+            notes.append(
+                "time to exit and hourly capacity are measured from live 24h "
+                "volume and do not depend on pool depth; they are answered here "
+                "while price impact stays unknown"
+            )
+        notes.append("no exit cost can be modelled without pool liquidity")
         return Report(
             token=token,
             as_of=as_of,
@@ -207,13 +353,21 @@ def assess(
             requested_size_usd=size_usd,
             estimate=None,
             max_size_usd={"1pct": None, "3pct": None, "at_ceiling": None},
-            hours_to_exit=None,
+            hours_to_exit=patient_hours,
             curve=(),
             max_slippage=max_slippage,
             participation=participation,
             inputs=inputs,
             gaps=tuple(gaps),
-            notes=("no exit estimate is possible without pool liquidity",),
+            notes=tuple(notes),
+            hourly_capacity_usd=capacity,
+            turnover_pct=turnover_pct,
+            position_pct_of_cap=position_pct_of_cap,
+            drift_exposure_pct=(
+                model.drift_exposure(patient_hours, atr)
+                if patient_hours and atr
+                else None
+            ),
         )
 
     # --- the estimate ----------------------------------------------------
@@ -291,6 +445,14 @@ def assess(
         gaps=tuple(gaps),
         notes=tuple(notes),
         warnings=tuple(warnings),
+        hourly_capacity_usd=(
+            model.size_for_hours(1.0, volume, participation) if volume else None
+        ),
+        turnover_pct=turnover_pct,
+        position_pct_of_cap=position_pct_of_cap,
+        drift_exposure_pct=(
+            model.drift_exposure(hours, atr) if hours and atr else None
+        ),
     )
 
 

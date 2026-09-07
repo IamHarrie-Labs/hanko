@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hanko — try it live</title>
+<meta name="description" content="Run the real exit_liquidity skill live, against RYO's authenticated MCP endpoint. Not a canned response.">
+
+<link rel="icon" href="assets/favicon.png" sizes="32x32" type="image/png">
+<link rel="icon" href="assets/icon-512.png" sizes="512x512" type="image/png">
+<link rel="apple-touch-icon" href="assets/icon-180.png">
+<meta name="theme-color" content="#E3E2DD">
+
+<meta property="og:title" content="Hanko — try it live">
+<meta property="og:description" content="Run the real exit_liquidity skill live, against RYO's authenticated MCP endpoint. Not a canned response.">
+<meta property="og:type" content="website">
+<meta property="og:image" content="assets/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="assets/og-image.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="index.html" aria-label="Hanko — home" style="display: flex; flex: none">
+      <img class="mark mark-nav" src="assets/hanko-logo.png" width="1092" height="584" alt="">
+    </a>
+    <div class="nav-links">
+      <a href="index.html">Landing page</a>
+      <a href="docs.html">Docs</a>
+    </div>
+    <div class="nav-actions">
+      <a href="https://github.com/IamHarrie-Labs/hanko" data-repo class="btn btn-dark">GITHUB REPO</a>
+    </div>
+  </div>
+</nav>
+
+<header class="shell docs-hero">
+  <a href="index.html" class="back-link">&larr; Hanko</a>
+  <div class="eyebrow">Try it live</div>
+  <h1>Run exit_liquidity against the real platform.</h1>
+  <p class="lede">This is not a canned response, and not a fixture. Picking a token below calls the real <code>RyoMcpSource</code>, live, against RYO's authenticated MCP endpoint, then runs the exact same pure <code>assess()</code> the CLI uses. Restricted to a few tokens and a capped size, so a public endpoint doesn't turn into an unbounded tap on a live credential.</p>
+</header>
+
+<section id="try-it" class="shell">
+  <form id="try-form" class="try-form">
+    <label class="try-field">
+      <span class="try-label">Token</span>
+      <select id="try-token" name="token">
+        <option value="SOL">SOL</option>
+        <option value="BONK">BONK</option>
+        <option value="ETH">ETH</option>
+        <option value="BTC">BTC</option>
+        <option value="USDC">USDC</option>
+      </select>
+    </label>
+    <label class="try-field">
+      <span class="try-label">Position size (USD)</span>
+      <input id="try-size" name="size_usd" type="number" min="0" max="1000000000" step="1000" value="50000" inputmode="numeric">
+    </label>
+    <button type="submit" class="btn btn-solid try-submit">Run live check</button>
+  </form>
+
+  <div class="receipt try-receipt">
+    <div class="receipt-head">
+      <span id="try-heading">EXIT_LIQUIDITY · LIVE CHECK</span>
+      <span class="receipt-live">LIVE OUTPUT</span>
+    </div>
+    <pre id="try-output">Pick a token and a size, then run a live check — usually 2 to 5 seconds, since it's a real network call to RYO's MCP endpoint.</pre>
+  </div>
+
+  <p class="footnote" style="max-width: 48em">Every figure above is computed from what this call actually returned — nothing is filled in when the platform doesn't supply it. See the <a href="docs.html#exit-liquidity">exit_liquidity docs</a> for the full model.</p>
+</section>
+
+<footer class="band">
+  <div class="shell band-inner" style="padding-top: 56px; padding-bottom: 56px">
+    <div class="colophon">
+      <span>Hanko 判子 · RYO-CHAN Hackathon 2026</span>
+      <span><span data-stat="tests">197</span> tests · <span data-stat="lines">8,681</span> lines · <span data-stat="commits">19</span> commits · <a href="index.html">Home</a> · <a href="https://github.com/IamHarrie-Labs/hanko" data-repo>GitHub</a></span>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function () {
+  var form = document.getElementById('try-form');
+  var output = document.getElementById('try-output');
+  var heading = document.getElementById('try-heading');
+  if (!form || !output) return;
+
+  function money(n) {
+    return Math.round(n).toLocaleString('en-US');
+  }
+
+  function price(v) {
+    // Prices span BTC to a memecoin here; whole dollars would print a real
+    // quoted $0.0000034 as $0, destroying a measured number by formatting.
+    if (v >= 1) return v.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+    if (v >= 0.01) return v.toFixed(4);
+    return v.toFixed(8).replace(/0+$/, '');
+  }
+
+  function renderReport(body) {
+    var lines = [];
+    lines.push(body.verdict.toUpperCase() + '  ' + body.token + '  confidence ' + body.confidence);
+
+    // The live facts this ran on. Without them two tokens with wildly
+    // different prices and volumes print an identical report.
+    var by = {}, tools = {};
+    (body.inputs || []).forEach(function (i) {
+      by[i.field] = i.value;
+      if (i.value !== null && i.source) tools[String(i.source).split(':')[0]] = 1;
+    });
+    var observed = [];
+    if (by.price_usd !== null && by.price_usd !== undefined) observed.push('price $' + price(by.price_usd));
+    if (by.volume_24h_usd !== null && by.volume_24h_usd !== undefined) observed.push('24h volume $' + money(by.volume_24h_usd));
+    if (observed.length) {
+      var names = Object.keys(tools).sort();
+      lines.push('  ' + observed.join(' · ') + (names.length ? '  (' + names.join(', ') + ')' : ''));
+    }
+
+    if (body.estimate) {
+      lines.push(
+        '  exiting $' + money(body.estimate.size_usd) + ' costs '
+        + body.estimate.slippage_pct.toFixed(2) + '%  ($' + money(body.estimate.cost_usd) + ')'
+      );
+    }
+    var labels = { '1pct': '1% slippage', '3pct': '3% slippage', at_ceiling: 'the requested ceiling' };
+    Object.keys(body.max_size_usd || {}).forEach(function (key) {
+      var value = body.max_size_usd[key];
+      if (value !== null && value !== undefined) {
+        lines.push('  largest exit at ' + (labels[key] || key) + ': $' + money(value));
+      }
+    });
+    if (body.hours_to_exit !== null && body.hours_to_exit !== undefined) {
+      // Matches the CLI's own scaling: a deep pool and a modest size give a
+      // real answer of seconds, and "0.0h" would read as no answer at all.
+      var h = body.hours_to_exit, when;
+      if (h >= 48) when = (h / 24).toFixed(1) + ' days';
+      else if (h >= 1) when = h.toFixed(1) + 'h';
+      else if (h * 60 >= 1) when = Math.round(h * 60) + ' min';
+      else when = 'under a minute';
+      var pct = body.parameters ? Math.round(body.parameters.participation_pct) : 10;
+      lines.push((body.estimate ? '  or exit over ' : '  exit over ')
+        + when + ' at ' + pct + '% of volume');
+    }
+    if (body.hourly_capacity_usd !== null && body.hourly_capacity_usd !== undefined) {
+      // The figure that still separates a deep market from a thin one when
+      // no pool depth is published and the duration collapses to nothing.
+      lines.push('  this market absorbs $' + money(body.hourly_capacity_usd) + ' per hour at that cap');
+    }
+    if (body.drift_exposure_pct !== null && body.drift_exposure_pct !== undefined) {
+      // A slow exit is not a free exit. "~0.0%" would read as a computed
+      // zero, so a genuinely tiny exposure is said in words instead.
+      var d = body.drift_exposure_pct;
+      lines.push('  waiting that long is exposed to '
+        + (d < 0.1 ? 'under 0.1%' : '~' + d.toFixed(1) + '%')
+        + " price drift at this market's volatility");
+    }
+    if (body.turnover_pct !== null && body.turnover_pct !== undefined) {
+      var line = '  turnover ' + body.turnover_pct.toFixed(1) + '% of market cap per day';
+      var s = body.position_pct_of_cap;
+      if (s !== null && s !== undefined) {
+        line += '; this position is ' + (s < 0.01 ? 'under 0.01%' : s.toFixed(3) + '%') + ' of cap';
+      }
+      lines.push(line);
+    }
+    (body.warnings || []).forEach(function (w) { lines.push('  ! ' + w); });
+    (body.gaps || []).forEach(function (g) { lines.push('  ? ' + g); });
+    (body.live_warnings || []).forEach(function (w) { lines.push('  ~ ' + w); });
+    lines.push('  modelled with ' + (body.model ? body.model.id : 'cpmm_v1') + ', not observed');
+    return lines.join('\n');
+  }
+
+  form.addEventListener('submit', function (event) {
+    event.preventDefault();
+    var token = document.getElementById('try-token').value;
+    var size = document.getElementById('try-size').value;
+    var button = form.querySelector('.try-submit');
+
+    heading.textContent = 'EXIT_LIQUIDITY · ' + token;
+    output.textContent = 'Calling the live RYO MCP endpoint for ' + token + ' …';
+    button.disabled = true;
+    button.textContent = 'Running …';
+
+    var params = new URLSearchParams({ token: token, size_usd: size });
+    fetch('/api/exit_liquidity?' + params.toString())
+      .then(function (res) { return res.json().then(function (body) { return { ok: res.ok, body: body }; }); })
+      .then(function (result) {
+        if (!result.ok || result.body.error) {
+          output.textContent = 'Could not complete a live check: ' + result.body.error
+            + (result.body.allowed ? '\nAllowed tokens: ' + result.body.allowed.join(', ') : '');
+          return;
+        }
+        output.textContent = renderReport(result.body);
+      })
+      .catch(function (err) {
+        output.textContent = 'Network error reaching the live endpoint: ' + err.message;
+      })
+      .finally(function () {
+        button.disabled = false;
+        button.textContent = 'Run live check';
+      });
+  });
+})();
+</script>
+
+</body>
+</html>

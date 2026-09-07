@@ -4,13 +4,33 @@ The Hanko landing page. Static HTML, no build step required to view it, no
 framework, no dependencies — matching how the rest of the project is built.
 
 ```
-site/index.html          the landing page -- the hook, kept short
+site/index.html           the landing page -- the hook, kept short
 site/docs.html            everything the landing page used to bury in prose
-site/styles.css           shared design system for both pages
+site/try.html             runs exit_liquidity live, against the real platform
+site/api/exit_liquidity.py  the serverless function try.html calls
+site/api/_vendor/         hanko/, copied in at deploy time -- generated, gitignored
+site/requirements.txt     the function's one dependency (httpx)
+site/vercel.json          clean URLs, asset caching, function timeout
+site/styles.css           shared design system for all three pages
 site/assets/              generated images -- do not hand-edit, see below
-site/build.py             refreshes the numbers and trail on both pages
-site/make_assets.py       cuts site/assets/ from design/logo-source.jpg
+site/build.py             refreshes the numbers and trail on all three pages
+site/make_assets.py       cuts site/assets/ from design/logo-source.png
 ```
+
+The Vercel project's root is `site/`, so the function cannot import `hanko/`
+from the repo root unless it travels with the upload. `scripts/vendor_for_site.py`
+copies it into `site/api/_vendor/` — run it before every deploy. The repo-root
+package stays the one source of truth; the copy is a build artifact.
+
+```bash
+python scripts/vendor_for_site.py           # refresh the copy
+python scripts/vendor_for_site.py --check   # exit 1 if it has drifted
+```
+
+`--check` is the pre-deploy guard, and it matters more than it looks: a stale
+copy puts code on the live demo that differs from the code in the repo. On a
+project whose whole claim is that the output came from the code you can read,
+that is not a cosmetic difference.
 
 ## Landing page vs docs
 
@@ -37,13 +57,18 @@ a background-position crop of a single image, and some browsers block that over
 
 ## The numbers are generated, not typed
 
-The receipt card is labelled **LIVE OUTPUT**. `build.py` is what makes that
-label true rather than decorative — it runs the agent for real and writes the
-result into the page, along with the test count, line count, commit count and
-the GitHub URL read from `git remote`.
+The landing page's receipt is labelled **SAMPLE · FIXTURE INPUTS**, and means it:
+`build.py` runs the agent for real, but against a fixture and a fixed `--as-of`,
+so the published `decision_id` is the same one every build. Genuinely live output
+lives on `try.html`, which is the only page allowed to say **LIVE OUTPUT** — the
+distinction is the point, and blurring it would be the exact provenance claim
+this project spends its whole argument refusing to make.
+
+`build.py` also writes the test count, line count, commit count, proven-claim
+count and the GitHub URL read from `git remote`.
 
 ```bash
-python site/build.py           # rewrite index.html in place
+python site/build.py           # rewrite all three pages in place
 python site/build.py --check   # exit 1 if stale, change nothing
 ```
 

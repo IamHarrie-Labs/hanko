@@ -32,6 +32,7 @@ declared invalid past the point where they stop holding.
 
 from __future__ import annotations
 
+import math
 from dataclasses import dataclass
 from enum import Enum
 from typing import Any
@@ -108,6 +109,54 @@ def hours_to_exit(
     if volume_24h_usd <= 0 or participation <= 0 or size_usd <= 0:
         return None
     return 24.0 * size_usd / (volume_24h_usd * participation)
+
+
+def size_for_hours(
+    hours: float,
+    volume_24h_usd: float,
+    participation: float,
+) -> float | None:
+    """Largest notional that unwinds within `hours` at the same cap.
+
+    The inverse of hours_to_exit, and the only capacity figure available
+    when no pool depth is published: it asks what the market's own flow
+    can absorb rather than what a pool would charge. That makes it the
+    one number here that separates a deep market from a thin one when
+    the depth figure is missing -- $45m an hour and $500k an hour are
+    the same "under a minute" for a small enough position, and very
+    different markets to hold a real one in.
+    """
+    if volume_24h_usd <= 0 or participation <= 0 or hours <= 0:
+        return None
+    return hours * volume_24h_usd * participation / 24.0
+
+
+def turnover(volume_24h_usd: float, market_cap_usd: float) -> float | None:
+    """Share of the token's whole value that changes hands in a day.
+
+    The standard liquidity proxy, and the one measure of depth available
+    when no pool is published: a market turning over 46% of its own cap
+    daily and one turning over 3% are not the same place to hold size,
+    however similar their dollar volumes look.
+    """
+    if market_cap_usd <= 0 or volume_24h_usd < 0:
+        return None
+    return volume_24h_usd / market_cap_usd
+
+
+def drift_exposure(hours: float, atr_daily_pct: float) -> float | None:
+    """Price movement a position is exposed to while it unwinds, percent.
+
+    The skill's whole trade-off is "pay slippage now, or take longer" --
+    but taking longer was priced at zero, which is its own quiet
+    fabrication. Volatility accumulates with the square root of time, so
+    a day's ATR over T days is ATR * sqrt(T). This is exposure, not an
+    expected loss: it is as likely to move for you as against you, and
+    it is a scale, not a forecast.
+    """
+    if hours <= 0 or atr_daily_pct <= 0:
+        return None
+    return atr_daily_pct * math.sqrt(hours / 24.0)
 
 
 @dataclass(frozen=True, slots=True)

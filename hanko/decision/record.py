@@ -128,7 +128,14 @@ class MarketFacts:
     liquidity_usd: float | None = None
     safety_score: float | None = None  # 0..1
     snapshot_id: str | None = None
+    market_cap_usd: float | None = None
+    atr_14_pct: float | None = None  # average true range, 14d, percent of price
 
+    # Deliberately unchanged. These four set `missing`, which sets
+    # completeness, which sets evidence quality and therefore position
+    # size -- so adding a field here would silently move every decision
+    # and every published decision_id with it. The two fields above are
+    # context for the exit model, not new obligations on the evidence.
     REQUIRED = ("price_usd", "volume_24h_usd", "liquidity_usd", "safety_score")
 
     @property
@@ -147,6 +154,8 @@ class MarketFacts:
             "liquidity_usd": self.liquidity_usd,
             "safety_score": self.safety_score,
             "snapshot_id": self.snapshot_id,
+            "market_cap_usd": self.market_cap_usd,
+            "atr_14_pct": self.atr_14_pct,
             "missing": list(self.missing),
         }
 
@@ -159,6 +168,8 @@ class MarketFacts:
             liquidity_usd=d.get("liquidity_usd"),
             safety_score=d.get("safety_score"),
             snapshot_id=d.get("snapshot_id"),
+            market_cap_usd=d.get("market_cap_usd"),
+            atr_14_pct=d.get("atr_14_pct"),
         )
 
 

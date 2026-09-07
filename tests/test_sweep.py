@@ -147,6 +147,23 @@ class TestCollectAndDecide:
         assert degraded.size_fraction < healthy.size_fraction
         assert any("check_safety" in g.detail for g in degraded.gaps)
 
+    def test_a_missing_market_field_is_recorded_once_not_twice(self, store):
+        # The engine derives market-field gaps from market.missing, so the
+        # sweep must not raise them a second time. A live sweep used to
+        # report every gap twice, which reads as two separate findings.
+        record = collect_and_decide(
+            make_entry(),
+            store,
+            resolve=make_resolver(),
+            interpreter=KeywordInterpreter(),
+            policy=Policy(),
+            as_of=AS_OF,
+        )
+        safety_gaps = [g for g in record.gaps if "safety_score" in g.detail]
+        assert len(safety_gaps) == 1
+        details = [g.detail for g in record.gaps]
+        assert len(details) == len(set(details))
+
     def test_every_snapshot_is_recorded_even_on_a_bad_run(self, store):
         collect_and_decide(
             make_entry(), store, resolve=make_resolver(x_fixture="x_rate_limited.json"),

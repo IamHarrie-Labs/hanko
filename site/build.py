@@ -30,7 +30,7 @@ INDEX = SITE_DIR / "index.html"
 # Every page that carries the live stat spans or the GitHub link. The
 # trail substitution is index-only in effect: docs.html has no
 # <pre id="trail"> for the regex to match, so it is a safe no-op there.
-PAGES = (INDEX, SITE_DIR / "docs.html")
+PAGES = (INDEX, SITE_DIR / "docs.html", SITE_DIR / "try.html")
 
 # Fixed inputs, so the published trail is reproducible rather than
 # whatever the market happened to look like when the site was built.
@@ -139,6 +139,16 @@ def layer_count() -> str:
     return str(len(packages))
 
 
+def proven_count() -> str:
+    """Proven claims actually listed in docs.html, counted rather than typed.
+
+    The landing page cites this number and the docs list is edited far more
+    often than the sentence citing it, so it had already drifted once.
+    """
+    docs = (SITE_DIR / "docs.html").read_text(encoding="utf-8")
+    return str(len(re.findall(r'class="sigil good"', docs)))
+
+
 def repo_url() -> str | None:
     try:
         url = run(["git", "remote", "get-url", "origin"]).strip()
@@ -184,6 +194,7 @@ def main() -> int:
         "lines": line_count(),
         "commits": commit_count(),
         "layers": layer_count(),
+        "proven": proven_count(),
     }
     repo = repo_url()
 

@@ -17,5 +17,14 @@ hanko = "hanko.cli:main"
 requires = ["setuptools>=68"]
 build-backend = "setuptools.build_meta"
 
+# Only the package ships. Without this, setuptools' flat-layout discovery
+# finds site/, design/, fixtures/ and snapshots/ alongside hanko/ and
+# refuses to build at all -- which broke `pip install -e .`, the first
+# command in the README. Naming hanko* explicitly also keeps the site/
+# directory out of any distribution, where it would shadow the standard
+# library's own `site` module.
+[tool.setuptools.packages.find]
+include = ["hanko*"]
+
 [tool.pytest.ini_options]
 testpaths = ["tests"]

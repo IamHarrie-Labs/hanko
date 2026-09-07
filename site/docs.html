@@ -40,7 +40,10 @@
       <a href="#layers">Layers</a>
       <a href="#proven">Proven</a>
     </div>
-    <a href="https://github.com/IamHarrie-Labs/hanko" data-repo class="btn btn-dark">GITHUB REPO</a>
+    <div class="nav-actions">
+      <a href="https://github.com/IamHarrie-Labs/hanko" data-repo class="btn btn-dark">GITHUB REPO</a>
+      <a href="try.html" class="btn btn-dark btn-accent">TRY IT LIVE</a>
+    </div>
   </div>
 </nav>
 
@@ -142,10 +145,10 @@
   <div class="doc-note">
     <div class="label">Modelled, not measured</div>
     <p>No order book is observed anywhere in this skill, so the <code>Confidence</code> type has no <code>HIGH</code> value at all — the enum simply does not contain one. Every figure is computed from a constant-product curve (<code>slippage = f / (1 + f)</code> where <code>f</code> is the exit size as a fraction of pool depth) against reported liquidity, and the response carries the model id and its five stated assumptions alongside every number. Past 25% of the pool the model says so and downgrades its own confidence, rather than extrapolating a figure it does not believe.</p>
-    <p>A missing input produces no number: absent liquidity returns <code>null</code> and a verdict of <code>unknown</code> — never zero, which would read as "free to exit."</p>
+    <p>A missing input silences the answer it feeds, and only that one. Absent liquidity returns <code>null</code> and a verdict of <code>unknown</code> — never zero, which would read as "free to exit." Time to exit, which takes size, volume and participation and never touches pool depth, is still answered. That split is the normal case against the live platform, which publishes volume for every token and depth for none: withholding the answer it can support would be over-refusal, and costs a caller a real number just as surely as inventing one misleads them.</p>
   </div>
 
-  <p class="footnote">It is also the size gate inside the decision engine, importing the same model rather than a second copy of the arithmetic, so the number the agent sizes a position on and the number this tool publishes cannot drift apart. 28 tests, offline, no network.</p>
+  <p class="footnote">It is also the size gate inside the decision engine, importing the same model rather than a second copy of the arithmetic, so the number the agent sizes a position on and the number this tool publishes cannot drift apart. 29 tests, offline, no network.</p>
 </section>
 
 <section id="proven" class="shell doc-section">
@@ -153,7 +156,7 @@
   <h2>Proven, and not yet proven.</h2>
   <p class="section-lede">A project about not overclaiming should not overclaim about itself either.</p>
 
-  <div class="proof-head good">Proven &middot; <span data-stat="tests">188</span> tests, all offline, about 5 seconds</div>
+  <div class="proof-head good">Proven &middot; <span data-stat="tests">197</span> tests, all offline, about 5 seconds</div>
   <ul class="proof-list doc-list">
     <li class="proof-item"><span class="sigil good">+</span><span>Canonical form and address stability, payload deduplication, tamper detection</span></li>
     <li class="proof-item"><span class="sigil good">+</span><span>Replay determinism, and evidence identity pinned to bytes and position</span></li>
@@ -167,14 +170,16 @@
     <li class="proof-item"><span class="sigil good">+</span><span>MCP handshake, session handling, SSE decoding, transport-independent extraction</span></li>
     <li class="proof-item"><span class="sigil good">+</span><span>The exit-cost curve against closed-form constant-product values, and its inverse</span></li>
     <li class="proof-item"><span class="sigil good">+</span><span>Model-validity flagging and confidence downgrade past 25% of pool depth</span></li>
+    <li class="proof-item"><span class="sigil good">+</span><span>Live, against the real MCP endpoint: the six-tool catalog, the real argument keys, and the response envelope — all confirmed by real calls on 5 September 2026, which corrected several assumptions this project had made</span></li>
+    <li class="proof-item"><span class="sigil good">+</span><span>A live decision, built from real X evidence and real RYO market facts, replayed from its stored bytes to a byte-identical decision id</span></li>
   </ul>
 
   <div id="open" style="margin-top: 44px; scroll-margin-top: 24px">
     <div class="proof-head open">Not yet proven</div>
     <ul class="proof-list doc-list open">
-      <li class="proof-item"><span class="sigil open">?</span><span>The RYO MCP endpoint URL is not yet in hand, so no live tool call has run</span></li>
-      <li class="proof-item"><span class="sigil open">?</span><span>Tool argument schemas are a best guess until <code>hanko tools</code> reports the real ones</span></li>
-      <li class="proof-item"><span class="sigil open">?</span><span>No live sweep has run long enough to produce a calibration curve from real decisions</span></li>
+      <li class="proof-item"><span class="sigil open">?</span><span>No live sweep has run long enough to produce a calibration curve from real outcomes</span></li>
+      <li class="proof-item"><span class="sigil open">?</span><span>No live exit-cost figure has been produced. RYO's <code>deep_analysis.token_profile</code> lane — the only place pool liquidity could come from — has returned null on every real call, so against live data <code>exit_liquidity</code> has only ever answered <em>unknown</em>. The model is proven against closed-form values in tests; it has not yet priced a real pool</span></li>
+      <li class="proof-item"><span class="sigil open">?</span><span>No live <code>ENTER</code> has been produced. Real runs have reached <code>PASS</code> and <code>ABSTAIN</code> honestly, but an entry needs two independent voices converging on one ticker, which no observed window has yet supplied</span></li>
     </ul>
   </div>
 
@@ -188,7 +193,7 @@
   <div class="shell band-inner" style="padding-top: 56px; padding-bottom: 56px">
     <div class="colophon">
       <span>Hanko 判子 · RYO-CHAN Hackathon 2026</span>
-      <span><span data-stat="tests">188</span> tests · <span data-stat="lines">8,304</span> lines · <span data-stat="commits">18</span> commits · <a href="index.html">Home</a> · <a href="https://github.com/IamHarrie-Labs/hanko" data-repo>GitHub</a></span>
+      <span><span data-stat="tests">197</span> tests · <span data-stat="lines">8,681</span> lines · <span data-stat="commits">19</span> commits · <a href="index.html">Home</a> · <a href="https://github.com/IamHarrie-Labs/hanko" data-repo>GitHub</a></span>
     </div>
   </div>
 </footer>
