@@ -1,0 +1,11 @@
+{
+  "watchlist": [
+    {
+      "token": "BTC",
+      "sources": {
+        "x": ["CryptoKaleo"]
+      },
+      "fact_tools": ["analyze_token"]
+    }
+  ]
+}
