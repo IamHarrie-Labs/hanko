@@ -49,6 +49,15 @@ def resolve(source_id: str) -> Source:
 
         return RyoToolSource(source_id.removeprefix("ryo:"))
 
+    # A fixture capture stands in for a live source but is not one -- its
+    # payload is fixture-shaped, not the live adapter's response shape, so
+    # resolving it to that live adapter's parse() breaks replay on exactly
+    # the snapshots the fixture path exists to make replayable for free.
+    # Only parse() is ever called from here (replay reads stored bytes, it
+    # never re-fetches), so no file path is needed to resolve one.
+    if source_id.startswith("fixture:"):
+        return FixtureSource(path=None, source_id=source_id)
+
     if source_id not in _BUILDERS:
         raise KeyError(
             "no adapter registered for source_id " + repr(source_id)

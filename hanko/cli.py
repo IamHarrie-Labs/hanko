@@ -32,7 +32,7 @@ def _store(args: argparse.Namespace) -> SnapshotStore:
 
 def cmd_collect(args: argparse.Namespace) -> int:
     source = (
-        FixtureSource(args.fixture, source_id=args.source)
+        FixtureSource(args.fixture, source_id="fixture:" + args.source)
         if args.fixture
         else resolve(args.source)
     )
@@ -109,7 +109,7 @@ def cmd_decide(args: argparse.Namespace) -> int:
 
     store = _store(args)
     source = (
-        FixtureSource(args.fixture, source_id=args.source)
+        FixtureSource(args.fixture, source_id="fixture:" + args.source)
         if args.fixture
         else resolve(args.source)
     )
@@ -433,7 +433,14 @@ def cmd_sweep(args: argparse.Namespace) -> int:
             path = fixture_dir / (name + ".json")
             if source_id.startswith(("ryomcp:", "ryo:")):
                 return FixtureFactsSource(path, source_id=source_id)
-            return FixtureSource(path, source_id=source_id)
+            # Facts sources are safe under the wrong label -- their parse()
+            # is a no-op regardless of adapter, real or fixture. Evidence
+            # sources are not: their parse() reads the payload's actual
+            # shape, so a later plain resolve() (hanko audit, no
+            # --fixture-dir) must be able to tell this one apart from a
+            # live "x"/"rss" capture, or it hands the bytes to the wrong
+            # parser the same way a bare `decide --fixture` capture did.
+            return FixtureSource(path, source_id="fixture:" + source_id)
     else:
         resolve_fn = resolve  # live: already dispatches x / rss / ryomcp: / ryo: by prefix
 

@@ -33,11 +33,16 @@ from .base import Query, RawResponse
 class FixtureSource:
     adapter_version = "1.0.0"
 
-    def __init__(self, path: str | Path, source_id: str = "fixture") -> None:
-        self.path = Path(path)
+    def __init__(self, path: str | Path | None, source_id: str = "fixture") -> None:
+        # None is valid here: replay only ever calls parse() on a stored
+        # payload, never fetch(), so a FixtureSource resolved purely for
+        # replay has no file to point at and does not need one.
+        self.path = Path(path) if path is not None else None
         self.source_id = source_id
 
     def fetch(self, query: Query) -> RawResponse:
+        if self.path is None:
+            raise ValueError("FixtureSource has no path to fetch; resolved for replay only")
         doc = json.loads(self.path.read_text(encoding="utf-8"))
         status = Status(doc.get("status", "ok"))
         return RawResponse(

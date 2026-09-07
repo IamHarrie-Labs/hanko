@@ -341,6 +341,23 @@ class TestReplay:
         again = replay_decision(record, store, resolver)
         assert again.readings == record.readings
 
+    def test_a_fixture_capture_replays_through_the_real_resolver(self, store):
+        """`hanko audit` uses `hanko.sources.resolve`, not a hand-rolled
+        stand-in. Every test above supplies its own resolver that always
+        returns a FixtureSource regardless of source_id, so none of them
+        would have caught a snapshot mislabelled with the live source's
+        id: resolve("x") always returns the real XSearchSource, and
+        handing it fixture-shaped bytes broke replay for exactly the
+        captures the fixture path exists to make replayable for free.
+        """
+        from hanko.sources import resolve
+
+        source = FixtureSource(FIXTURES / "x_three_voices.json", source_id="fixture:x")
+        record = decide(build_inputs(store, source), Policy())
+
+        again = assert_reproduces(record, store, resolve)
+        assert again.decision_id == record.decision_id
+
 
 # ---- ledger --------------------------------------------------------------
 
