@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Hanko — an agent that files receipts</title>
+<title>Hanko: an agent that files receipts</title>
 <meta name="description" content="Twenty market voices go in. What comes out is a sized position, a receipt, and a written commitment to what would prove it wrong. Replayable, byte for byte.">
 
 <link rel="icon" href="assets/favicon.png" sizes="32x32" type="image/png">
@@ -11,7 +11,7 @@
 <link rel="apple-touch-icon" href="assets/icon-180.png">
 <meta name="theme-color" content="#E3E2DD">
 
-<meta property="og:title" content="Hanko — an agent that files receipts">
+<meta property="og:title" content="Hanko: an agent that files receipts">
 <meta property="og:description" content="A sized position, a receipt, and a written commitment to what would prove it wrong. Replayable, byte for byte.">
 <meta property="og:type" content="website">
 <meta property="og:image" content="assets/og-image.png">
@@ -31,7 +31,7 @@
 
 <nav class="nav nav-hero-gated">
   <div class="nav-inner">
-    <a href="#top" aria-label="Hanko — home" style="display: flex; flex: none">
+    <a href="#top" aria-label="Hanko home" style="display: flex; flex: none">
       <img class="mark mark-nav" src="assets/hanko-logo.png" width="1092" height="584" alt="">
     </a>
     <div class="nav-links">
@@ -96,7 +96,7 @@
   replayed from stored bytes: same decision id"></pre>
         <!-- trail:end -->
       </div>
-      <p class="receipt-caption">Three authors mentioned the token. Two were independent. voice_beta was demoted, with the reason attached. The last three lines are the commitment, written before the outcome is known. Real output from the real engine, run at build time against fixed inputs so the decision id on this page stays the same one every build — <a href="try.html">run it against live data here</a>.</p>
+      <p class="receipt-caption">Three authors mentioned the token. Two were independent. voice_beta was demoted, with the reason attached. The last three lines are the commitment, written before the outcome is known. Real output from the real engine, run at build time against fixed inputs so the decision id on this page stays the same one every build. <a href="try.html">Run it against live data here</a>.</p>
     </div>
   </div>
 
@@ -110,7 +110,7 @@
     <div class="stat">
       <div class="label">Lines</div>
       <div class="stat-value" data-stat="lines">8,681</div>
-      <div class="stat-note">Across <span data-stat="commits">20</span> commits</div>
+      <div class="stat-note">Across <span data-stat="commits">21</span> commits</div>
     </div>
     <div class="stat">
       <div class="label">Layers</div>
@@ -129,9 +129,9 @@
 
 <section id="missing" class="band">
   <div class="shell band-inner">
-    <div class="eyebrow">02 · Missing data shrinks the position</div>
+    <div class="eyebrow">Missing data shrinks the position</div>
     <h2 style="max-width: 22em">Nothing in the rules changed. Only what it knew.</h2>
-    <p class="section-lede" style="margin-bottom: 48px">No rule says "halve the size if the safety check is unavailable." A gap lowers completeness, completeness lowers quality, and quality sets size — combined as a geometric mean, so one component at zero takes the whole score to zero.</p>
+    <p class="section-lede" style="margin-bottom: 48px">No rule says "halve the size if the safety check is unavailable." A gap lowers completeness, completeness lowers quality, and quality sets size, combined as a geometric mean, so one component at zero takes the whole score to zero.</p>
 
     <div class="two-col">
       <div class="panel">
@@ -171,7 +171,7 @@
 </section>
 
 <section id="voices" class="shell">
-  <div class="eyebrow">03 · Independence, not agreement</div>
+  <div class="eyebrow">Independence, not agreement</div>
   <h2 style="max-width: 20em">Three voices, two opinions.</h2>
   <p class="section-lede">Three accounts quoting one thesis is one observation wearing a disguise. Reposts and near-duplicates get demoted to echoes, each tagged with the post it repeats and why.</p>
 
@@ -204,13 +204,13 @@
     </div>
   </div>
 
-  <p class="footnote">This is the easiest way for a multi-voice agent to be confidently wrong. Five outlets covering one press release look like five sources — it's one wire story.</p>
+  <p class="footnote">This is the easiest way for a multi-voice agent to be confidently wrong. Five outlets covering one press release look like five sources. It's one wire story.</p>
 </section>
 
 <section id="commitment" class="shell">
-  <div class="eyebrow">04 · Pre-registration</div>
+  <div class="eyebrow">Pre-registration</div>
   <h2 style="max-width: 22em">The commitment is sealed before the outcome is known.</h2>
-  <p class="section-lede">Move a threshold, a size, or a review date after the fact and the decision_id changes too — a new decision, not an edited one. Hindsight rationalisation becomes structurally impossible. Refusals commit too: a PASS records what would have flipped it.</p>
+  <p class="section-lede">Move a threshold, a size, or a review date after the fact and the decision_id changes too: a new decision, not an edited one. Hindsight rationalisation becomes structurally impossible. Refusals commit too: a PASS records what would have flipped it.</p>
 
   <div class="two-col">
     <div class="seal">
@@ -239,13 +239,13 @@
     </div>
   </div>
 
-  <p class="footnote">A decision can be profitable and still falsified: the price rose while the liquidity that justified the size drained away — the reasoning was wrong, the outcome was luck. Both are recorded; only one sets the grade.</p>
+  <p class="footnote">A decision can be profitable and still falsified: the price rose while the liquidity that justified the size drained away. The reasoning was wrong; the outcome was luck. Both are recorded; only one sets the grade.</p>
 </section>
 
 <section id="pipeline" class="shell">
-  <div class="eyebrow">05 · How it works</div>
+  <div class="eyebrow">How it works</div>
   <h2 style="max-width: 20em">Four stages, and one boundary that matters.</h2>
-  <p class="section-lede" style="margin-bottom: 48px">Everything before the boundary may touch the network and fail; everything after it is a pure function of recorded inputs. Determinism and honest handling of missing data aren't features to remember — they're properties the code's shape enforces.</p>
+  <p class="section-lede" style="margin-bottom: 48px">Everything before the boundary may touch the network and fail; everything after it is a pure function of recorded inputs. Determinism and honest handling of missing data aren't features to remember. They're properties the code's shape enforces.</p>
 
   <div class="pipeline">
     <div class="stage">
@@ -279,16 +279,16 @@
     </div>
   </div>
 
-  <p class="footnote" style="max-width: 48em">Interpretation is frozen, not repeated, so replaying a decision proves something specific: the reasoning is reproducible — not that the model would repeat itself, because the model isn't part of the question.</p>
+  <p class="footnote" style="max-width: 48em">Interpretation is frozen, not repeated, so replaying a decision proves something specific: the reasoning is reproducible, not that the model would repeat itself, because the model isn't part of the question.</p>
 
   <div class="teaser">
-    <p>The MCP transport, and what a live <code>x_search</code> call actually returns — confirmed against the real API, not assumed — are written up in full in the docs.</p>
+    <p>The MCP transport, and what a live <code>x_search</code> call actually returns (confirmed against the real API, not assumed), are written up in full in the docs.</p>
     <a href="docs.html#mcp-transport">Read the transport docs</a>
   </div>
 </section>
 
 <section id="proof" class="shell">
-  <div class="eyebrow">06 · Proven, and not yet proven</div>
+  <div class="eyebrow">Proven, and not yet proven</div>
   <h2 style="max-width: 22em">A project about not overclaiming should not overclaim.</h2>
 
   <div class="proof-grid">
@@ -312,7 +312,7 @@
   </div>
 
   <div class="teaser">
-    <p>The full list — <span data-stat="proven">14</span> proven claims, each mapped to a real test — is in the docs.</p>
+    <p>The full list, <span data-stat="proven">14</span> proven claims each mapped to a real test, is in the docs.</p>
     <a href="docs.html#proven">See everything that's proven</a>
   </div>
 </section>
@@ -326,13 +326,13 @@
       </div>
       <div>
         <p class="name-lede">A hanko is the seal you stamp on a document to commit to it. The mark goes on before the outcome is known, and it cannot be taken back.</p>
-        <p class="name-body">That's what this agent does with every decision: pre-registration is a hanko, hashing the commitment into the decision_id is a hanko. Stamped once at decision time. Stamped again at review — HELD or FALSIFIED, over the original.</p>
+        <p class="name-body">That's what this agent does with every decision: pre-registration is a hanko, hashing the commitment into the decision_id is a hanko. Stamped once at decision time. Stamped again at review: HELD or FALSIFIED, over the original.</p>
       </div>
     </div>
 
     <div class="colophon">
       <span>Hanko 判子 · RYO-CHAN Hackathon 2026</span>
-      <span><span data-stat="tests">197</span> tests · <span data-stat="lines">8,681</span> lines · <span data-stat="commits">20</span> commits · <a href="https://github.com/IamHarrie-Labs/hanko" data-repo>GitHub</a></span>
+      <span><span data-stat="tests">197</span> tests · <span data-stat="lines">8,681</span> lines · <span data-stat="commits">21</span> commits · <a href="https://github.com/IamHarrie-Labs/hanko" data-repo>GitHub</a></span>
     </div>
   </div>
 </footer>

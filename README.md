@@ -2,23 +2,23 @@
 
 **An agent that files receipts.**
 
-**RYO-CHAN Hackathon 2026 submission — two tracks:**
+**RYO-CHAN Hackathon 2026 submission, two tracks.**
 **Track 1 (Autonomous Agents)** is the agent itself: the evidence-to-decision-to-review
 pipeline below. **Track 3 (New Skills)** is [`exit_liquidity`](hanko/skills/exit_liquidity/README.md),
-a new tool contributed back to the platform's surface, not a second project —
-it is also the size gate this same agent runs internally.
+a new tool contributed back to the platform's surface, not a second project.
+It's also the size gate this same agent runs internally.
 
 A 判子 is the seal a person stamps on a document to commit to it. The mark goes
-on before the outcome is known and cannot be taken back — which is exactly what
+on before the outcome is known and can't be taken back, which is exactly what
 this agent does with every decision it makes.
 
 Twenty market voices go in. What comes out is a sized position, a receipt, and a
-written commitment to what would prove it wrong — replayable, byte for byte,
+written commitment to what would prove it wrong, replayable byte for byte
 from the exact data the agent saw.
 
 Built for the RYO-CHAN platform and the six read-only research tools confirmed live on its authenticated MCP catalog.
 
-**[tryhanko.vercel.app](https://tryhanko.vercel.app)** — the pitch, and the full
+**[tryhanko.vercel.app](https://tryhanko.vercel.app)** has the pitch, plus the full
 technical writeup at `/docs`. **[/try](https://tryhanko.vercel.app/try)** runs
 the new Track 3 skill live, against the real platform, from your browser.
 
@@ -32,18 +32,18 @@ parse()  touches nothing, and is a pure function of its payload
 The agent only ever sees the output of `parse()`. Because `parse()` is pure and
 payloads are content-addressed, any past decision can be re-derived from stored
 bytes and must reach the same verdict. Put a network call inside `parse()` and
-the reasoning trail stops being reproducible — which is the property the whole
-submission rests on.
+the reasoning trail stops being reproducible, and that property is what the
+whole submission rests on.
 
 ## Layout
 
 ```
 hanko/provenance.py      canonical JSON, sha256 addressing, Status, Coverage
-hanko/evidence.py        Evidence + Provenance — the source-agnostic unit
+hanko/evidence.py        Evidence + Provenance: the source-agnostic unit
 hanko/sources/base.py    the adapter contract
 hanko/sources/xsearch.py X, via the xAI Responses API and its x_search tool
-hanko/sources/rss.py     RSS/Atom — free, and the only source with trustworthy timestamps
-hanko/sources/fixture.py local JSON — free development, and every failure mode in CI
+hanko/sources/rss.py     RSS/Atom: free, and the only source with trustworthy timestamps
+hanko/sources/fixture.py local JSON: free development, and every failure mode in CI
 hanko/snapshot/store.py  append-only content-addressed store, replay, integrity
 hanko/ryotools/          the six RYO tools over MCP and REST; structural fact extraction
 hanko/skills/exit_liquidity/  Track 3: what it costs to exit a position, not just enter one
@@ -63,7 +63,7 @@ day 9, nothing else moves.
 **Failure is data, not an exception.** A source that was asked and did not
 answer produces a `FAILED` snapshot with the reason attached. An adapter that
 raises produces one too. Silence is the single outcome this store cannot
-represent — which is what lets position sizing respond honestly to missing
+represent, which is what lets position sizing respond honestly to missing
 evidence instead of quietly proceeding as if the data were there.
 
 **Three different kinds of nothing stay distinct.** `FAILED` (the source did not
@@ -78,7 +78,7 @@ precisely the lie that would inflate a convergence count across KOLs.
 **Collect once, develop free.** Real snapshots are captured once and everything
 afterwards runs against stored bytes. Development and CI cost nothing and hit no
 rate limit. At an hourly sweep over 20 handles, live collection runs about
-$0.005/call — roughly $25–35 for the whole build.
+$0.005/call, roughly $25 to $35 for the whole build.
 
 ## Use
 
@@ -127,7 +127,7 @@ payload are identical to facts extracted from a REST payload.
 structured post objects. It returns the model's *prose* rendering of the posts
 plus an array of URL citations. Prose cannot be attributed to a specific post,
 so the adapter requests a JSON schema and then verifies every returned post id
-against the tool's own citations — cited posts are kept, uncited posts are
+against the tool's own citations: cited posts are kept, uncited posts are
 dropped. That check proves a post exists and that the tool saw it; it does not
 prove the model transcribed the text or timestamp faithfully, so those fields
 are flagged as model-transcribed on every item.
@@ -139,34 +139,34 @@ not a fixture. Three things that changed once the guessing stopped:
   The catalog is six tools, not the seven the hackathon's own public tool list
   names. `check_safety` and `supported_tokens` are not on the authenticated
   catalog; `monitor_market_sentiment_shift` is, and wasn't guessed at all.
-  There is no numeric safety score anywhere in the six — `safety_score` on
+  There is no numeric safety score anywhere in the six, so `safety_score` on
   `MarketFacts` now stays `None` every time, honestly, rather than sometimes.
 
   Argument keys are `symbol` (`analyze_token`, `deep_analysis`) and `symbols`
-  as one comma-separated string (`compare_tokens`), not `token` — both
+  as one comma-separated string (`compare_tokens`), not `token`. Both
   transports were built guessing the latter and are now fixed to match.
 
   The response is `{"tool": ..., "result": {envelope}, "latency_ms": ...}`
   over REST, and the envelope's own `status` (`ok` / `partial` /
   `unavailable`) and `data_mode` (`live` / `mixed` / `simulated` / `unknown`)
-  are what `_degraded()` now reads — a response that admits to being
+  are what `_degraded()` now reads. A response that admits to being
   `simulated` is treated exactly like a partial one, since simulated data
   presented as live is the one fabrication the platform says it never does.
 
 **Still unverified:** no sweep has run long enough against live data to
 produce a calibration curve from real outcomes, and no live `ENTER` has
-occurred — real runs reach `PASS` and `ABSTAIN` honestly, but an entry needs
+occurred. Real runs reach `PASS` and `ABSTAIN` honestly, but an entry needs
 two independent voices converging on one ticker, which no observed window has
 supplied. `exit_liquidity`'s `liquidity_usd` fact has never been observed
-present on a real `deep_analysis` call, for any token checked — `token_profile`
+present on a real `deep_analysis` call, for any token checked. `token_profile`
 comes back `null` every time, which the skill's "null, never zero" design is
 built to expect.
 
-## exit_liquidity — the new Track 3 skill
+## exit_liquidity, the new Track 3 skill
 
 The six real tools all answer some version of *is this worth entering?*
 Nothing answers *can this position be closed, and what does closing it cost?*
-That is the number that turns research into a trade — a token can clear every
+That's the number that turns research into a trade. A token can clear every
 measured signal and still be a trap if exiting the position moves the price
 double digits.
 
@@ -187,7 +187,7 @@ UNKNOWN  BONK  confidence none
 ```
 
 No tool in the catalog publishes pool depth, so price impact stays honestly
-`unknown` rather than a fabricated zero — but everything else here is measured
+`unknown` rather than a fabricated zero. But everything else here is measured
 from live data, not withheld along with it: time to exit, hourly capacity, the
 price drift a slow exit is exposed to, and how much of the whole market this
 position represents. Refusing the question it can't answer is not the same as
@@ -196,11 +196,11 @@ refusing the ones it can.
 Full model, honesty conventions, and test coverage in
 [`hanko/skills/exit_liquidity/README.md`](hanko/skills/exit_liquidity/README.md).
 Runnable live, against the real platform, at
-**[tryhanko.vercel.app/try](https://tryhanko.vercel.app/try)** — restricted to
+**[tryhanko.vercel.app/try](https://tryhanko.vercel.app/try)**, restricted to
 a few tokens and a capped size, so a public page can't turn into an unbounded
 tap on a live credential.
 
-## Decision Records
+## Decision records
 
 A record states, at the moment of the decision: what was concluded, on what
 evidence, by what reasoning, what was missing, and **what would prove it wrong**.
@@ -228,8 +228,8 @@ had.
 **Missing data shrinks the position, mechanically.** No rule says "if safety is
 unavailable then halve". A gap lowers completeness, completeness lowers evidence
 quality, and quality sets size. The four quality components combine as a
-weighted *geometric* mean, so a component at zero takes the whole score to zero
-— enthusiasm cannot average away an absent safety check.
+weighted *geometric* mean, so a component at zero takes the whole score to zero.
+Enthusiasm can't average away an absent safety check.
 
 **Agreement is checked for independence.** Three accounts quoting one thesis is
 one observation in disguise, and counting it as three is the easiest way for a
@@ -239,7 +239,7 @@ repeats and the reason it was demoted.
 **Every decision pre-registers its own falsification.** Falsifiers are written
 before the outcome is known, evaluate mechanically, and are hashed into the
 `decision_id`. Move a threshold, a size, or a review date after the fact and you
-get a different id — a new decision, not an edited one. Refusals commit too: a
+get a different id: a new decision, not an edited one. Refusals commit too: a
 `PASS` records what would flip it.
 
 ### Seeing it
@@ -264,7 +264,7 @@ ENTER TOKENA  size 3.28%  confidence 0.66
 
 Three authors mentioned the token; two of them were independent. Swap in the
 market fixture with no safety score and the same evidence sizes at 3.08%
-instead of 3.28% — nothing in the rules changed, only what was known.
+instead of 3.28%. Nothing in the rules changed, only what was known.
 
 `hanko audit` re-derives every recorded decision from stored bytes and insists it
 reproduces. That is the CI gate that turns "preserves a repeatable reasoning
@@ -273,7 +273,7 @@ trail" from a README claim into a failing build.
 ## The review loop
 
 At `review_at`, each falsifier is evaluated against observed facts and the
-decision is graded **against what it committed to** — not against whether it
+decision is graded **against what it committed to**, not against whether it
 happened to make money.
 
 Those come apart more often than is comfortable. An entry can be profitable and
@@ -283,7 +283,7 @@ facts are recorded and reported separately. Grading on profit alone is how an
 agent learns to repeat lucky mistakes.
 
 **The third outcome carries the weight.** When the metric a falsifier names is
-unavailable at review time, the check is `UNCHECKABLE` — never quietly counted
+unavailable at review time, the check is `UNCHECKABLE`, never quietly counted
 as passing. A decision that could not be checked is not a decision that was
 right. Inconclusive reviews are excluded from every rate and reported as their
 own number, because an agent that silently drops what it could not verify is
@@ -331,12 +331,12 @@ rules satisfied on decisions that later
   conviction              50.0% held
 ```
 
-Said 0.7, was right 50% of the time — the agent is overconfident, and says so.
+Said 0.7, was right 50% of the time. The agent is overconfident, and says so.
 
 Per-voice reliability is **earned from the agent's own audited history**, not
 asserted from follower counts, and echoes earn neither credit nor blame. A voice
-with no scored decisions gets `None`, not 0% — reporting it as zero would defame
-it, reporting it as 100% would promote it. Per-rule reliability answers the
+with no scored decisions gets `None`, not 0%. Reporting it as zero would defame
+it; reporting it as 100% would promote it. Per-rule reliability answers the
 uncomfortable question: a rule that is always satisfied on losers is not a
 filter, it is decoration.
 
@@ -364,12 +364,12 @@ than a new one just because the retry landed a second later.
 
 **Review uses a fresh look, not the frozen one.** `fresh_observations()`
 re-collects evidence and re-derives `independent_voices` at review time
-rather than reusing the original decision's numbers — the whole point of a
-review is what's true *now*, and a stale copy of "true then" would grade a
+rather than reusing the original decision's numbers. The whole point of a
+review is what's true *now*; a stale copy of "true then" would grade a
 decision against itself.
 
-Meant to be invoked by something that already knows how to schedule things —
-cron, a scheduled GitHub Action, Windows Task Scheduler — one pass and exit,
+Meant to be invoked by something that already knows how to schedule things:
+cron, a scheduled GitHub Action, Windows Task Scheduler. One pass and exit,
 not a loop that sleeps in-process. A failed run is a failed invocation, not a
 process to go find and kill.
 

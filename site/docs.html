@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Hanko — docs</title>
+<title>Hanko: docs</title>
 <meta name="description" content="How Hanko actually works: the layer boundaries, the MCP transport, what a live x_search call really returns, the exit_liquidity skill, and what is proven versus not yet proven.">
 
 <link rel="icon" href="assets/favicon.png" sizes="32x32" type="image/png">
@@ -11,7 +11,7 @@
 <link rel="apple-touch-icon" href="assets/icon-180.png">
 <meta name="theme-color" content="#E3E2DD">
 
-<meta property="og:title" content="Hanko — docs">
+<meta property="og:title" content="Hanko: docs">
 <meta property="og:description" content="The layer boundaries, the MCP transport, what a live x_search call really returns, and what is proven versus not yet proven.">
 <meta property="og:type" content="website">
 <meta property="og:image" content="assets/og-image.png">
@@ -31,7 +31,7 @@
 
 <nav class="nav">
   <div class="nav-inner">
-    <a href="index.html" aria-label="Hanko — home" style="display: flex; flex: none">
+    <a href="index.html" aria-label="Hanko home" style="display: flex; flex: none">
       <img class="mark mark-nav" src="assets/hanko-logo.png" width="1092" height="584" alt="">
     </a>
     <div class="nav-links">
@@ -112,40 +112,40 @@
 <section id="mcp-transport" class="shell doc-section">
   <div class="eyebrow">02 · Transport</div>
   <h2>The MCP transport, in full.</h2>
-  <p class="section-lede">The hackathon issues an MCP credential, so MCP — not REST — is the path known to exist. This is a small, dependency-free JSON-RPC 2.0 client over Streamable HTTP, covering exactly the handshake the six read-only tools need.</p>
+  <p class="section-lede">The hackathon issues an MCP credential, so MCP, not REST, is the path known to exist. This is a small, dependency-free JSON-RPC 2.0 client over Streamable HTTP, covering exactly the handshake the six read-only tools need.</p>
 
   <div class="doc-note">
     <div class="label">initialize &rarr; notifications/initialized &rarr; tools/list | tools/call</div>
-    <p>It accepts both plain JSON and server-sent-event responses, because assuming one and failing on a server that streams would be a guess about someone else's implementation. It honours the published 60-per-minute rate limit by spacing calls rather than discovering the limit through 429s. And it records which of the three possible result shapes each payload arrived in — <code>structuredContent</code>, JSON embedded in a text block, or plain text — rather than assuming one, because a server can change shape between versions and a snapshot should say which shape it was captured in.</p>
+    <p>It accepts both plain JSON and server-sent-event responses, because assuming one and failing on a server that streams would be a guess about someone else's implementation. It honours the published 60-per-minute rate limit by spacing calls rather than discovering the limit through 429s. And it records which of the three possible result shapes each payload arrived in (<code>structuredContent</code>, JSON embedded in a text block, or plain text) rather than assuming one, because a server can change shape between versions and a snapshot should say which shape it was captured in.</p>
     <p>The transport stops at the source boundary. A handshake failure, a rate limit, a protocol error, and an <code>isError</code> tool result all become a recorded snapshot with the reason attached, never an exception that escapes and turns a recordable fact into a lost one.</p>
-    <p>A test asserts that facts extracted from an MCP payload are byte-identical to facts extracted from a REST payload for the same data. Swapping transport touches no line of reasoning code — the six tools, the decision engine, and the review loop cannot tell which one supplied a number.</p>
+    <p>A test asserts that facts extracted from an MCP payload are byte-identical to facts extracted from a REST payload for the same data. Swapping transport touches no line of reasoning code: the six tools, the decision engine, and the review loop cannot tell which one supplied a number.</p>
   </div>
 </section>
 
 <section id="x-search" class="shell doc-section">
   <div class="eyebrow">03 · Evidence</div>
   <h2>What a live x_search call actually returns.</h2>
-  <p class="section-lede">Confirmed against the real xAI API on 28 August 2026, not assumed — and it changed the adapter's design.</p>
+  <p class="section-lede">Confirmed against the real xAI API on 28 August 2026, not assumed, and it changed the adapter's design.</p>
 
   <div class="doc-note">
     <div class="label">Prose plus citations, not structured posts</div>
-    <p>A plain call to <code>x_search</code> does not hand back structured post objects. It returns a message whose text is the model's <strong>prose</strong> rendering of the posts it found — no per-post boundaries, no separated authors, no separated timestamps — plus an <code>annotations</code> array of <code>url_citation</code> entries, one post URL each, from which a numeric post id can be read.</p>
-    <p>Prose is useless as evidence: it cannot be attributed to a specific post, and re-running the model would silently rewrite it. So the adapter asks for a JSON schema instead, which makes the model emit per-post fields, and then <strong>verifies what comes back against the tool's own citations</strong>. A post whose id appears in the citations is kept. A post whose id does not is dropped, never trusted. In the verification probe all five returned ids were cited — the point is that when one is not, it does not enter the evidence set.</p>
-    <div class="limit">The honest limit: this check proves a post exists and that the tool actually saw it. It does not prove the model transcribed the text or the timestamp faithfully — those fields are model-transcribed, and are marked as such in every item's <code>extra</code>. Downstream code that treats a transcribed timestamp as authoritative is overreading it. The raw payload is stored either way, so a better extraction can be applied to old snapshots without re-fetching.</div>
+    <p>A plain call to <code>x_search</code> does not hand back structured post objects. It returns a message whose text is the model's <strong>prose</strong> rendering of the posts it found (no per-post boundaries, no separated authors, no separated timestamps), plus an <code>annotations</code> array of <code>url_citation</code> entries, one post URL each, from which a numeric post id can be read.</p>
+    <p>Prose is useless as evidence: it cannot be attributed to a specific post, and re-running the model would silently rewrite it. So the adapter asks for a JSON schema instead, which makes the model emit per-post fields, and then <strong>verifies what comes back against the tool's own citations</strong>. A post whose id appears in the citations is kept. A post whose id does not is dropped, never trusted. In the verification probe all five returned ids were cited. The point is that when one is not, it does not enter the evidence set.</p>
+    <div class="limit">The honest limit: this check proves a post exists and that the tool actually saw it. It does not prove the model transcribed the text or the timestamp faithfully. Those fields are model-transcribed, and are marked as such in every item's <code>extra</code>. Downstream code that treats a transcribed timestamp as authoritative is overreading it. The raw payload is stored either way, so a better extraction can be applied to old snapshots without re-fetching.</div>
   </div>
 
-  <p class="footnote">Cost: about $0.012 per call at grok-4.3 (roughly $0.005 of that is the tool invocation, the rest tokens). Batching handles into one query — <code>from:a OR from:b</code> — costs one tool call, not two.</p>
+  <p class="footnote">Cost: about $0.012 per call at grok-4.3 (roughly $0.005 of that is the tool invocation, the rest tokens). Batching handles into one query (<code>from:a OR from:b</code>) costs one tool call, not two.</p>
 </section>
 
 <section id="exit-liquidity" class="shell doc-section">
   <div class="eyebrow">04 · Track 3</div>
   <h2>exit_liquidity: can you actually get out?</h2>
-  <p class="section-lede">Confirmed against the real, authenticated catalog: six tools, all answering some version of "is this worth entering?" <code>analyze_token</code> and <code>deep_analysis</code> say what a token is doing; there is no safety tool at all, only a qualitative risks list. None of the six answer whether a position can be <em>closed</em>, or what closing it costs — and a token can clear every measured signal and still be a position you cannot exit without giving back a tenth of it.</p>
+  <p class="section-lede">Confirmed against the real, authenticated catalog: six tools, all answering some version of "is this worth entering?" <code>analyze_token</code> and <code>deep_analysis</code> say what a token is doing; there is no safety tool at all, only a qualitative risks list. None of the six answer whether a position can be <em>closed</em>, or what closing it costs, and a token can clear every measured signal and still be a position you cannot exit without giving back a tenth of it.</p>
 
   <div class="doc-note">
     <div class="label">Modelled, not measured</div>
-    <p>No order book is observed anywhere in this skill, so the <code>Confidence</code> type has no <code>HIGH</code> value at all — the enum simply does not contain one. Every figure is computed from a constant-product curve (<code>slippage = f / (1 + f)</code> where <code>f</code> is the exit size as a fraction of pool depth) against reported liquidity, and the response carries the model id and its five stated assumptions alongside every number. Past 25% of the pool the model says so and downgrades its own confidence, rather than extrapolating a figure it does not believe.</p>
-    <p>A missing input silences the answer it feeds, and only that one. Absent liquidity returns <code>null</code> and a verdict of <code>unknown</code> — never zero, which would read as "free to exit." Time to exit, which takes size, volume and participation and never touches pool depth, is still answered. That split is the normal case against the live platform, which publishes volume for every token and depth for none: withholding the answer it can support would be over-refusal, and costs a caller a real number just as surely as inventing one misleads them.</p>
+    <p>No order book is observed anywhere in this skill, so the <code>Confidence</code> type has no <code>HIGH</code> value at all. The enum simply does not contain one. Every figure is computed from a constant-product curve (<code>slippage = f / (1 + f)</code> where <code>f</code> is the exit size as a fraction of pool depth) against reported liquidity, and the response carries the model id and its five stated assumptions alongside every number. Past 25% of the pool the model says so and downgrades its own confidence, rather than extrapolating a figure it does not believe.</p>
+    <p>A missing input silences the answer it feeds, and only that one. Absent liquidity returns <code>null</code> and a verdict of <code>unknown</code>, never zero, which would read as "free to exit." Time to exit, which takes size, volume and participation and never touches pool depth, is still answered. That split is the normal case against the live platform, which publishes volume for every token and depth for none: withholding the answer it can support would be over-refusal, and costs a caller a real number just as surely as inventing one misleads them.</p>
   </div>
 
   <p class="footnote">It is also the size gate inside the decision engine, importing the same model rather than a second copy of the arithmetic, so the number the agent sizes a position on and the number this tool publishes cannot drift apart. 29 tests, offline, no network.</p>
@@ -170,7 +170,7 @@
     <li class="proof-item"><span class="sigil good">+</span><span>MCP handshake, session handling, SSE decoding, transport-independent extraction</span></li>
     <li class="proof-item"><span class="sigil good">+</span><span>The exit-cost curve against closed-form constant-product values, and its inverse</span></li>
     <li class="proof-item"><span class="sigil good">+</span><span>Model-validity flagging and confidence downgrade past 25% of pool depth</span></li>
-    <li class="proof-item"><span class="sigil good">+</span><span>Live, against the real MCP endpoint: the six-tool catalog, the real argument keys, and the response envelope — all confirmed by real calls on 5 September 2026, which corrected several assumptions this project had made</span></li>
+    <li class="proof-item"><span class="sigil good">+</span><span>Live, against the real MCP endpoint: the six-tool catalog, the real argument keys, and the response envelope, all confirmed by real calls on 5 September 2026, calls that corrected several assumptions this project had made</span></li>
     <li class="proof-item"><span class="sigil good">+</span><span>A live decision, built from real X evidence and real RYO market facts, replayed from its stored bytes to a byte-identical decision id</span></li>
   </ul>
 
@@ -178,7 +178,7 @@
     <div class="proof-head open">Not yet proven</div>
     <ul class="proof-list doc-list open">
       <li class="proof-item"><span class="sigil open">?</span><span>No live sweep has run long enough to produce a calibration curve from real outcomes</span></li>
-      <li class="proof-item"><span class="sigil open">?</span><span>No live exit-cost figure has been produced. RYO's <code>deep_analysis.token_profile</code> lane — the only place pool liquidity could come from — has returned null on every real call, so against live data <code>exit_liquidity</code> has only ever answered <em>unknown</em>. The model is proven against closed-form values in tests; it has not yet priced a real pool</span></li>
+      <li class="proof-item"><span class="sigil open">?</span><span>No live exit-cost figure has been produced. RYO's <code>deep_analysis.token_profile</code> lane (the only place pool liquidity could come from) has returned null on every real call, so against live data <code>exit_liquidity</code> has only ever answered <em>unknown</em>. The model is proven against closed-form values in tests; it has not yet priced a real pool</span></li>
       <li class="proof-item"><span class="sigil open">?</span><span>No live <code>ENTER</code> has been produced. Real runs have reached <code>PASS</code> and <code>ABSTAIN</code> honestly, but an entry needs two independent voices converging on one ticker, which no observed window has yet supplied</span></li>
     </ul>
   </div>
@@ -193,7 +193,7 @@
   <div class="shell band-inner" style="padding-top: 56px; padding-bottom: 56px">
     <div class="colophon">
       <span>Hanko 判子 · RYO-CHAN Hackathon 2026</span>
-      <span><span data-stat="tests">197</span> tests · <span data-stat="lines">8,681</span> lines · <span data-stat="commits">20</span> commits · <a href="index.html">Home</a> · <a href="https://github.com/IamHarrie-Labs/hanko" data-repo>GitHub</a></span>
+      <span><span data-stat="tests">197</span> tests · <span data-stat="lines">8,681</span> lines · <span data-stat="commits">21</span> commits · <a href="index.html">Home</a> · <a href="https://github.com/IamHarrie-Labs/hanko" data-repo>GitHub</a></span>
     </div>
   </div>
 </footer>
