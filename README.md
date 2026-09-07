@@ -60,6 +60,13 @@ evidence came from. Swapping X for Telegram, or Grok for a direct API, changes
 one adapter and nothing downstream. If `x_search` is deprecated or priced out on
 day 9, nothing else moves.
 
+That swap is a real, considered option, not a hypothetical one: X's own API
+returns structured posts directly, with no model paraphrasing a prose summary
+in between, at the cost of a separate paid tier and a different credential
+than the one this build already has. Worth doing later; not worth the rewrite
+risk this close to submission when the adapter boundary already makes it
+cheap whenever it happens.
+
 **Failure is data, not an exception.** A source that was asked and did not
 answer produces a `FAILED` snapshot with the reason attached. An adapter that
 raises produces one too. Silence is the single outcome this store cannot
