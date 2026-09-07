@@ -2,6 +2,12 @@
 
 **An agent that files receipts.**
 
+**RYO-CHAN Hackathon 2026 submission — two tracks:**
+**Track 1 (Autonomous Agents)** is the agent itself: the evidence-to-decision-to-review
+pipeline below. **Track 3 (New Skills)** is [`exit_liquidity`](hanko/skills/exit_liquidity/README.md),
+a new tool contributed back to the platform's surface, not a second project —
+it is also the size gate this same agent runs internally.
+
 A 判子 is the seal a person stamps on a document to commit to it. The mark goes
 on before the outcome is known and cannot be taken back — which is exactly what
 this agent does with every decision it makes.
