@@ -57,6 +57,7 @@
     <a href="#layers">Layers</a>
     <a href="#mcp-transport">MCP transport</a>
     <a href="#x-search">x_search</a>
+    <a href="#track1-live">Track 1, live</a>
     <a href="#exit-liquidity">exit_liquidity</a>
     <a href="#proven">Proven</a>
     <a href="#open">Not yet proven</a>
@@ -64,7 +65,7 @@
 </header>
 
 <section id="layers" class="shell doc-section">
-  <div class="eyebrow">01 · Layers</div>
+  <div class="eyebrow">Layers</div>
   <h2>Six packages, each owning one guarantee.</h2>
   <p class="section-lede">The codebase is organised around what each layer promises, not around what it happens to import. Read top to bottom, the guarantees compose: a decision cannot cite evidence that was not stored, and cannot be sized on a market fact that was fabricated.</p>
 
@@ -110,7 +111,7 @@
 </section>
 
 <section id="mcp-transport" class="shell doc-section">
-  <div class="eyebrow">02 · Transport</div>
+  <div class="eyebrow">Transport</div>
   <h2>The MCP transport, in full.</h2>
   <p class="section-lede">The hackathon issues an MCP credential, so MCP, not REST, is the path known to exist. This is a small, dependency-free JSON-RPC 2.0 client over Streamable HTTP, covering exactly the handshake the six read-only tools need.</p>
 
@@ -123,7 +124,7 @@
 </section>
 
 <section id="x-search" class="shell doc-section">
-  <div class="eyebrow">03 · Evidence</div>
+  <div class="eyebrow">Evidence</div>
   <h2>What a live x_search call actually returns.</h2>
   <p class="section-lede">Confirmed against the real xAI API on 28 August 2026, not assumed, and it changed the adapter's design.</p>
 
@@ -137,8 +138,53 @@
   <p class="footnote">Cost: about $0.012 per call at grok-4.3 (roughly $0.005 of that is the tool invocation, the rest tokens). Batching handles into one query (<code>from:a OR from:b</code>) costs one tool call, not two.</p>
 </section>
 
+<section id="track1-live" class="shell doc-section">
+  <div class="eyebrow">Track 1</div>
+  <h2>Two live decisions, neither of them an ENTER.</h2>
+  <p class="section-lede">Both ran against the real xAI and RYO APIs, not a fixture. Neither is cherry-picked for a good verdict: they are shown because they are honest ones. An agent that only ever demos a confident ENTER is demoing its marketing, not its judgment.</p>
+
+  <div class="doc-note">
+    <div class="label">The evidence gate refuses before it ever reasons</div>
+    <p><code>hanko decide x --token SOL --subject elonmusk</code>, run live on 6 September 2026. The account's recent posts were fetched for real, and none of them mentioned SOL by its cashtag, so the decision stops at the first gate rather than guessing from a name that sounds related.</p>
+    <div class="doc-live">
+      <div class="doc-live-head"><span>ABSTAIN SOL &middot; dec_dc9abf2850fcd5a76df9ae34</span><span class="live-tag">LIVE OUTPUT</span></div>
+      <pre>ABSTAIN SOL  size 0.0%  confidence 0.0
+  evidence quality 0.0  (completeness 0.0, freshness 0.0, corroboration 0.0, independence 0.0)
+  x evidence_present: no readings reference SOL
+  x quality_floor: evidence quality 0.0 is below the floor of 0.4
+  x independent_voices: 0 independent voice(s) of 0 author(s); 0 echo(es) discounted; policy requires 2
+  x direction: evidence does not argue for entry
+  . exit_liquidity: no pool liquidity available; exit cost at size is unknown and is not assumed to be zero
+  ? gap market_field_missing: liquidity_usd, price_usd, safety_score, volume_24h_usd
+  review at 2026-09-09T20:23:33Z</pre>
+    </div>
+  </div>
+
+  <div class="doc-note">
+    <div class="label">Evidence found, and still not enough to act on</div>
+    <p><code>hanko sweep</code> against a one-token watchlist (<code>BTC</code>, source <code>CryptoKaleo</code>), run live on 7 September 2026. This time a reading was produced, real RYO market facts came back too, and the decision still lands on <code>PASS</code>: one voice is not the two independence requires, and a neutral-leaning post does not argue for entry either way.</p>
+    <div class="doc-live">
+      <div class="doc-live-head"><span>PASS BTC &middot; dec_40ffc8b5e8c5a892ced98a82</span><span class="live-tag">LIVE OUTPUT</span></div>
+      <pre>PASS BTC  size 0.0%  confidence 0.0
+  evidence quality 0.486  (completeness 0.5, freshness 0.23, corroboration 0.33, independence 1.0)
+  + evidence_present: 1 reading(s) reference BTC
+  + symmetry: evidence is directionally neutral (0 vs 0)
+  + quality_floor: evidence quality 0.486 clears 0.4
+  x independent_voices: 1 independent voice(s) of 1 author(s); 0 echo(es) discounted; policy requires 2
+  x direction: evidence does not argue for entry
+  . exit_liquidity: no pool liquidity available; exit cost at size is unknown and is not assumed to be zero
+  ? gap market_field_missing: liquidity_usd, safety_score
+  ! wrong if independent_voices &gt; 1.0 within 72.0h (verdict flips if another independent voice converges)
+  ! wrong if volume_24h_usd &gt; 31998332596.12 within 72.0h (verdict is worth revisiting if volume rises 50%)
+  review at 2026-09-10T04:30:04Z</pre>
+    </div>
+  </div>
+
+  <p class="footnote">Neither run has produced a live ENTER yet. That takes two independent voices converging on one ticker inside one sweep window, and no observed window has supplied it. Recorded here rather than smoothed over: an ABSTAIN and a PASS are the honest answer for the evidence that actually showed up, not a lesser result being hidden.</p>
+</section>
+
 <section id="exit-liquidity" class="shell doc-section">
-  <div class="eyebrow">04 · Track 3</div>
+  <div class="eyebrow">Track 3</div>
   <h2>exit_liquidity: can you actually get out?</h2>
   <p class="section-lede">Confirmed against the real, authenticated catalog: six tools, all answering some version of "is this worth entering?" <code>analyze_token</code> and <code>deep_analysis</code> say what a token is doing; there is no safety tool at all, only a qualitative risks list. None of the six answer whether a position can be <em>closed</em>, or what closing it costs, and a token can clear every measured signal and still be a position you cannot exit without giving back a tenth of it.</p>
 
@@ -148,11 +194,24 @@
     <p>A missing input silences the answer it feeds, and only that one. Absent liquidity returns <code>null</code> and a verdict of <code>unknown</code>, never zero, which would read as "free to exit." Time to exit, which takes size, volume and participation and never touches pool depth, is still answered. That split is the normal case against the live platform, which publishes volume for every token and depth for none: withholding the answer it can support would be over-refusal, and costs a caller a real number just as surely as inventing one misleads them.</p>
   </div>
 
-  <p class="footnote">It is also the size gate inside the decision engine, importing the same model rather than a second copy of the arithmetic, so the number the agent sizes a position on and the number this tool publishes cannot drift apart. 29 tests, offline, no network.</p>
+  <div class="doc-live">
+    <div class="doc-live-head"><span>UNKNOWN BONK &middot; a $20m position, live RYO data</span><span class="live-tag">LIVE OUTPUT</span></div>
+    <pre>UNKNOWN  BONK  confidence none
+  price $0.00000337 &middot; 24h volume $137,702,816  (analyze_token)
+  exit over 34.9h at 10% of volume
+  this market absorbs $573,762 per hour at that cap
+  waiting that long is exposed to ~8.6% price drift at this market's volatility
+  turnover 46.4% of market cap per day; this position is 6.732% of cap
+  ? liquidity_usd unavailable; exit cost cannot be modelled and is
+    reported as null rather than zero
+  modelled with cpmm_v1, not observed</pre>
+  </div>
+
+  <p class="footnote">It is also the size gate inside the decision engine, importing the same model rather than a second copy of the arithmetic, so the number the agent sizes a position on and the number this tool publishes cannot drift apart. 29 tests, offline, no network. Run it yourself at <a href="try.html">/try</a>.</p>
 </section>
 
 <section id="proven" class="shell doc-section">
-  <div class="eyebrow">05 · Test coverage</div>
+  <div class="eyebrow">Test coverage</div>
   <h2>Proven, and not yet proven.</h2>
   <p class="section-lede">A project about not overclaiming should not overclaim about itself either.</p>
 
@@ -193,7 +252,7 @@
   <div class="shell band-inner" style="padding-top: 56px; padding-bottom: 56px">
     <div class="colophon">
       <span>Hanko 判子 · RYO-CHAN Hackathon 2026</span>
-      <span><span data-stat="tests">197</span> tests · <span data-stat="lines">8,681</span> lines · <span data-stat="commits">22</span> commits · <a href="index.html">Home</a> · <a href="https://github.com/IamHarrie-Labs/hanko" data-repo>GitHub</a></span>
+      <span><span data-stat="tests">197</span> tests · <span data-stat="lines">8,681</span> lines · <span data-stat="commits">23</span> commits · <a href="index.html">Home</a> · <a href="https://github.com/IamHarrie-Labs/hanko" data-repo>GitHub</a></span>
     </div>
   </div>
 </footer>

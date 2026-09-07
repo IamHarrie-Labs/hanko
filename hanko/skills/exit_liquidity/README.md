@@ -11,7 +11,7 @@ Confirmed against the real, authenticated catalog (`GET /api/mcp/tools`), not
 the hackathon's own public tool list: six tools exist, and every one of them
 answers a version of the entry question. `analyze_token` and `deep_analysis`
 say what a token is doing. `compare_tokens` ranks candidates. There is no
-safety tool on the real catalog at all — the closest thing to a risk signal
+safety tool on the real catalog at all. The closest thing to a risk signal
 is a qualitative `intelligence.risks` list, not a score.
 
 None of the six answer *can this position be closed, and what does closing it
@@ -41,7 +41,7 @@ attached.
 | `estimate` | Price impact and dollar cost of exiting the size you asked about |
 | `max_size_usd` | Largest exit clearing 1%, 3%, and your own ceiling |
 | `hours_to_exit` | How long a patient exit takes instead, at a volume participation cap |
-| `hourly_capacity_usd` | What the market's own flow absorbs per hour at that cap — volume-derived, so it survives a missing depth figure |
+| `hourly_capacity_usd` | What the market's own flow absorbs per hour at that cap, volume-derived, so it survives a missing depth figure |
 | `drift_exposure_pct` | Price movement the position is exposed to *while* it unwinds, from the market's own 14-day ATR |
 | `turnover_pct` | Share of the token's whole value traded per day |
 | `position_pct_of_cap` | How much of the entire market cap this position is |
@@ -57,7 +57,7 @@ particular way of being dangerous.
 
 **Modelled is not measured.** No order book is observed anywhere in this skill,
 so nothing it returns is presented as observed, and `confidence` has no `HIGH`
-value at all — the enum simply doesn't contain one. The model, its assumptions,
+value at all: the enum simply doesn't contain one. The model, its assumptions,
 and the point past which it stops being valid all travel with the answer:
 
 ```json
@@ -73,14 +73,14 @@ and the point past which it stops being valid all travel with the answer:
 }
 ```
 
-Past 25% of the pool a constant-product curve stops describing a real venue —
+Past 25% of the pool a constant-product curve stops describing a real venue:
 routers split, other pools absorb flow, market makers step away. The tool says so
 and downgrades its own confidence rather than extrapolating a number it doesn't
 believe.
 
 **A missing input silences the answer it feeds, and only that one.** If liquidity
 is unavailable, the slippage fields are `null` and the verdict is `unknown`. Never
-zero — a zero here reads as *free to exit*, which is the most dangerous fabrication
+zero: a zero here reads as *free to exit*, which is the most dangerous fabrication
 this particular tool could make.
 
 But time to exit is a function of size, volume and participation; pool depth is not
@@ -115,12 +115,12 @@ UNKNOWN  BONK  confidence none
 A $20m position in that market takes a day and a half to leave, is 6.7% of the
 entire token, and carries roughly 8.6% of price movement on the way out. None of
 that needed a pool depth figure. Volatility accumulates with the square root of
-time, so four times as long is twice the exposure — and it is exposure, not an
+time, so four times as long is twice the exposure. And it is exposure, not an
 expected loss: as likely to move for you as against you, a scale rather than a
 forecast.
 
 Capacity matters more than it first looks. Below some size every market exits
-"under a minute", deep or thin — the duration collapses and stops telling them
+"under a minute", deep or thin, and the duration collapses and stops telling them
 apart. Capacity does not: against live data ETH absorbs about $45m an hour and
 BONK about $565k, an eighty-fold difference in how large a position either can
 hold. With no published depth anywhere in the catalog, it is the only figure
@@ -128,7 +128,7 @@ here that separates one market from another.
 
 This matters against the real platform, where it is the normal case rather than an
 outage: RYO publishes 24h volume for every token and no pool depth for any of them.
-Withholding the time estimate too would be over-refusal — as much a reporting
+Withholding the time estimate too would be over-refusal, as much a reporting
 failure as inventing the number that genuinely isn't there. The tool refuses the
 question it cannot answer, and answers the one it can.
 
@@ -171,7 +171,7 @@ As a library:
 from hanko.skills.exit_liquidity import assess, call, describe
 ```
 
-`assess()` is pure — same facts and parameters in, same report out — so it is
+`assess()` is pure: same facts and parameters in, same report out. So it is
 fully testable offline and its output can be replayed rather than re-fetched.
 
 ## Composing with an agent
@@ -189,7 +189,7 @@ ABSTAIN TOKENA  size 0.0%
 ```
 
 Every measured evidence check passed. The agent declined because it could
-not get out — and said so, in those words.
+not get out, and said so, in those words.
 
 ## Tests
 
@@ -200,7 +200,7 @@ not get out — and said so, in those words.
 - `OK` / `TIGHT` / `ILLIQUID` boundaries, and the caller's ceiling overriding them
 - Missing liquidity returning null rather than zero; zero liquidity treated as unusable
 - Missing volume dropping only the time estimate, and missing liquidity dropping
-  only the cost estimate — each gap silencing its own answer and no other
+  only the cost estimate: each gap silencing its own answer and no other
 - Model-validity flagging and confidence downgrade past 25% of pool
 - Untraceable inputs lowering confidence
 - A deep-but-inactive pool being called out
