@@ -6,6 +6,7 @@
 [![Tests: 198 passing](https://img.shields.io/badge/tests-198_passing-555555)](tests/)
 [![RYO tools confirmed live: 6](https://img.shields.io/badge/RYO_tools_confirmed_live-6-555555)](ARCHITECTURE.md#transport-mcp-and-rest-reach-the-same-facts)
 [![Tracks entered: 2](https://img.shields.io/badge/tracks_entered-2-8b6a27)](#submission)
+[![License: MIT](https://img.shields.io/badge/license-MIT-555555)](LICENSE)
 
 </div>
 
@@ -142,10 +143,12 @@ site/            static landing page, /docs, /try -- the live web demo
   api/exit_liquidity.py    the /try endpoint, real assess() call, no fixture
 tests/           198 tests, one file per hanko/ package
 fixtures/        evidence and market fixtures used offline and in CI
-.github/workflows/ci.yml   pytest on every push
+.github/workflows/ci.yml       pytest on every push, Python 3.11 and 3.12
+.claude/skills/hanko-exit-liquidity/SKILL.md   packages exit_liquidity as a Claude Skill
 ARCHITECTURE.md  the one rule, the pipeline, the layers
 DECISIONS.md     engineering decisions and the bugs that shaped them
 LIMITATIONS.md   what hasn't been shown yet, and why
+LICENSE          MIT
 ```
 
 ## Why it is built this way
@@ -307,6 +310,16 @@ Runnable live, against the real platform, at
 **[tryhanko.vercel.app/try](https://tryhanko.vercel.app/try)**, restricted to
 a few tokens and a capped size, so a public page can't turn into an unbounded
 tap on a live credential.
+
+### Claude Skill
+
+[`.claude/skills/hanko-exit-liquidity/SKILL.md`](.claude/skills/hanko-exit-liquidity/SKILL.md)
+packages this exact command as a Claude Skill: point Claude Code at this repo
+and it can answer "what does it cost to exit this position" directly, scoped
+by an explicit rule that every number in the answer has to come from the
+command's own output, never invented or rounded by the model. The same
+honesty convention the tool enforces on itself, extended to whoever is
+running it.
 
 ## Decision records
 
