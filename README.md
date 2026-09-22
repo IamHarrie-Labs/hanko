@@ -1,5 +1,14 @@
 # hanko
 
+<div align="center">
+
+[![CI](https://github.com/IamHarrie-Labs/hanko/actions/workflows/ci.yml/badge.svg)](https://github.com/IamHarrie-Labs/hanko/actions/workflows/ci.yml)
+[![Tests: 198 passing](https://img.shields.io/badge/tests-198_passing-555555)](tests/)
+[![RYO tools confirmed live: 6](https://img.shields.io/badge/RYO_tools_confirmed_live-6-555555)](ARCHITECTURE.md#transport-mcp-and-rest-reach-the-same-facts)
+[![Tracks entered: 2](https://img.shields.io/badge/tracks_entered-2-8b6a27)](#submission)
+
+</div>
+
 **An agent that files receipts.**
 
 **RYO-CHAN Hackathon 2026 submission, two tracks.**
@@ -27,6 +36,65 @@ the new Track 3 skill live, against the real platform, from your browser.
 - **[Project Submission Form](RYOCHAN-Project-Submission-Form.pdf)** (PDF, this repo)
 - **[Demo video](https://drive.google.com/file/d/1nVfAE-yO4b4ni2CXKxa0DtAsWnY5Zpfx/view?usp=drivesdk)**
 - **[Announcement post on X](https://x.com/IamHarrie/status/2096908693967179844?s=20)**
+
+## Contents
+
+- [Verify it yourself in 60 seconds](#verify-it-yourself-in-60-seconds)
+- [Who this is for](#who-this-is-for)
+- [Explore without running anything](#explore-without-running-anything)
+- [The one rule](#the-one-rule)
+- [Layout](#layout)
+- [Why it is built this way](#why-it-is-built-this-way)
+- [Use](#use)
+- [Status](#status)
+- [exit_liquidity, the new Track 3 skill](#exit_liquidity-the-new-track-3-skill)
+- [Decision records](#decision-records)
+- [The review loop](#the-review-loop)
+- [The sweep](#the-sweep)
+- [Architecture, decisions, limitations](#architecture-decisions-limitations)
+
+## Verify it yourself in 60 seconds
+
+No live credential, no account, no network. Every number below regenerates
+from fixtures committed in this repository:
+
+```bash
+git clone https://github.com/IamHarrie-Labs/hanko && cd hanko
+pip install -e ".[dev]"
+
+pytest                                          # 198 tests, offline, ~5s
+
+# make a decision, then prove it replays from stored bytes
+hanko decide x --token TOKENA --subject voice_alpha --subject voice_beta \
+  --subject voice_gamma --market fixtures/market_tokena.json \
+  --as-of 2026-08-27T12:00:00Z --fixture fixtures/x_three_voices.json
+hanko audit                                     # re-derives it, insists it reproduces
+
+# the Track 3 skill, against the same fixture, no network
+hanko exit-liquidity TOKENA --size 50000 --market fixtures/market_tokena.json
+```
+
+## Who this is for
+
+Builders and traders who want an agent's reasoning to be auditable rather
+than taken on faith. Someone who has been burned by a bot that says
+"strong buy signal" with nothing behind it, and wants to see the evidence,
+the falsifiers, and the honest gaps instead. Also the judges reviewing this
+submission, who can replay any decision from the exact stored bytes it saw
+rather than trusting a claim in this README.
+
+Not built for anyone who wants the agent to execute trades. It doesn't, and
+by the hackathon's own rules, none of the RYO tools it's built on can either.
+Everything here researches and sizes a position; nothing here moves funds.
+
+## Explore without running anything
+
+| Open | What it shows |
+|---|---|
+| [tryhanko.vercel.app](https://tryhanko.vercel.app) | The pitch, and a real fixture-based decision receipt, typed out live |
+| [/try](https://tryhanko.vercel.app/try) | `exit_liquidity` running live against the real RYO platform, from a browser |
+| [/docs#track1-live](https://tryhanko.vercel.app/docs#track1-live) | Two real decisions, live X evidence and live RYO facts, neither cherry-picked |
+| [/docs#mcp-transport](https://tryhanko.vercel.app/docs#mcp-transport) | What a live MCP handshake and a live `x_search` call actually return |
 
 ## The one rule
 
@@ -57,6 +125,27 @@ hanko/review/outcome.py     grading a decision against its own commitment
 hanko/review/reliability.py calibration, per-voice and per-rule track records
 hanko/review/ledger.py      append-only reviews, one per decision
 hanko/cli.py             collect / decide / review / scorecard / audit / verify
+```
+
+Full tree:
+
+```
+hanko/
+  sources/       X, RSS, fixtures -- fetch() impure, parse() pure
+  snapshot/       append-only content-addressed store
+  ryotools/       the six RYO tools, MCP + REST
+  decision/       evidence quality, verdicts, falsifiers, the ledger
+  review/         falsifier checking, calibration, reliability
+  skills/exit_liquidity/   Track 3: exit cost, capacity, drift, turnover
+  sweep.py, cli.py, config.py, provenance.py, evidence.py
+site/            static landing page, /docs, /try -- the live web demo
+  api/exit_liquidity.py    the /try endpoint, real assess() call, no fixture
+tests/           198 tests, one file per hanko/ package
+fixtures/        evidence and market fixtures used offline and in CI
+.github/workflows/ci.yml   pytest on every push
+ARCHITECTURE.md  the one rule, the pipeline, the layers
+DECISIONS.md     engineering decisions and the bugs that shaped them
+LIMITATIONS.md   what hasn't been shown yet, and why
 ```
 
 ## Why it is built this way
@@ -166,14 +255,20 @@ not a fixture. Three things that changed once the guessing stopped:
   `simulated` is treated exactly like a partial one, since simulated data
   presented as live is the one fabrication the platform says it never does.
 
-**Still unverified:** no sweep has run long enough against live data to
-produce a calibration curve from real outcomes, and no live `ENTER` has
-occurred. Real runs reach `PASS` and `ABSTAIN` honestly, but an entry needs
-two independent voices converging on one ticker, which no observed window has
-supplied. `exit_liquidity`'s `liquidity_usd` fact has never been observed
-present on a real `deep_analysis` call, for any token checked. `token_profile`
-comes back `null` every time, which the skill's "null, never zero" design is
-built to expect.
+> **Correction, 22 Sep 2026.** A routine `hanko audit` crashed outright with
+> `PayloadShapeError: no message item in the response output`. The cause was
+> a labelling bug: a decision built from local fixture data had been tagged
+> with the *live* X source's own id instead of anything marking it as a
+> fixture, so replay handed the real adapter bytes it was never built to
+> read. Every existing replay test had missed it, because each one supplied
+> its own resolver that returned a fixture unconditionally rather than going
+> through the same lookup `hanko audit` actually uses. Full write-up, the
+> fix, and the regression test that proves it, in
+> [`DECISIONS.md`](DECISIONS.md) D-07.
+
+Not yet shown: a calibration curve from real outcomes, a live `ENTER`, and a
+real priced pool. Stated plainly, with why, in
+[`LIMITATIONS.md`](LIMITATIONS.md).
 
 ## exit_liquidity, the new Track 3 skill
 
@@ -404,6 +499,18 @@ exception, one bad token not cancelling the rest of the sweep, a decision
 already in the ledger being skipped rather than duplicated, a token dropped
 from the watchlist still getting reviewed, and review pulling fresh
 observations rather than the ones frozen into the original decision.
+
+## Architecture, decisions, limitations
+
+- **[`ARCHITECTURE.md`](ARCHITECTURE.md)**: the one rule, the pipeline as a
+  diagram, what each package owns, and how `exit_liquidity` sizes itself as
+  the same size gate `decide()` runs internally.
+- **[`DECISIONS.md`](DECISIONS.md)**: eleven engineering decisions in the
+  order they happened, including the two real bugs found and fixed during
+  this build and what each one actually broke.
+- **[`LIMITATIONS.md`](LIMITATIONS.md)**: what hasn't been shown yet, a
+  calibration curve from real outcomes, a live `ENTER`, a real priced pool.
+  Stated plainly, not folded into a status paragraph.
 
 ## Next
 
