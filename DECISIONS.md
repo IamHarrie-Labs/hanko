@@ -120,3 +120,25 @@ seconds to exit, which the CLI was rounding to `0.0h` and the web widget was
 about to print as an unqualified zero, indistinguishable from a missing
 value. Both now scale the unit to the duration: minutes, "under a minute," or
 days, so a genuinely fast exit reads as fast rather than as absent.
+
+## D-12: D-04's fix only half worked
+
+A test failed intermittently, not on every run: `test_identical_payloads_are_stored_once`
+occasionally produced two snapshots with the same id from two back-to-back
+`collect()` calls. D-04's fix was supposed to make exactly that impossible.
+
+The cause: `SnapshotStore._sequence` is set once in `__init__`, from the
+index file's line count, and was never incremented after a successful
+write. Every `put()` inside one store instance's lifetime reused the same
+sequence number, so it only disambiguated two writes across separate store
+instances, never two writes through the same one. Two collects landing in
+the same clock tick, with the sequence also identical, produced the exact
+collision D-04 documented as solved.
+
+Fixed by incrementing `_sequence` after each write actually succeeds, so a
+crash mid-write cannot skip a number ahead of what is genuinely recorded.
+The regression test that had only caught this by luck was replaced with one
+that forces an identical `requested_at` on both collects, removing the
+clock as a disambiguator entirely and isolating the sequence number as the
+only thing left that can tell two snapshots apart, confirmed to fail
+without the fix and pass with it.

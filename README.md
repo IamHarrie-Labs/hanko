@@ -548,8 +548,8 @@ observations rather than the ones frozen into the original decision.
 - **[`ARCHITECTURE.md`](ARCHITECTURE.md)**: the one rule, the pipeline as a
   diagram, what each package owns, and how `exit_liquidity` sizes itself as
   the same size gate `decide()` runs internally.
-- **[`DECISIONS.md`](DECISIONS.md)**: eleven engineering decisions in the
-  order they happened, including the two real bugs found and fixed during
+- **[`DECISIONS.md`](DECISIONS.md)**: twelve engineering decisions in the
+  order they happened, including several real bugs found and fixed during
   this build and what each one actually broke.
 - **[`LIMITATIONS.md`](LIMITATIONS.md)**: what hasn't been shown yet, a
   calibration curve from real outcomes, a live `ENTER`, a real priced pool.
