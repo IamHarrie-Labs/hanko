@@ -10,27 +10,44 @@
 
 </div>
 
-**An agent that files receipts.**
+**Hanko turns crypto market chatter into a sized position, or an honest
+refusal, with the evidence attached, and can prove that same decision
+byte for byte, years later.**
 
-**RYO-CHAN Hackathon 2026 submission, two tracks.**
-**Track 1 (Autonomous Agents)** is the agent itself: the evidence-to-decision-to-review
-pipeline below. **Track 3 (New Skills)** is [`exit_liquidity`](hanko/skills/exit_liquidity/README.md),
-a new tool contributed back to the platform's surface, not a second project.
-It's also the size gate this same agent runs internally.
+Point it at a token and a handful of X accounts. It reads what each account
+actually said, checks whether they're independent voices or one thesis
+repeated three times, and decides:
 
-A 判子 is the seal a person stamps on a document to commit to it. The mark goes
-on before the outcome is known and can't be taken back, which is exactly what
-this agent does with every decision it makes.
+```
+ENTER TOKENA  size 3.28%  confidence 0.66
+  + independent_voices: 2 independent voice(s): voice_alpha, voice_gamma
+  ~ echo voice_beta: marked as a repost or quote by the source
+  ! wrong if price_usd < 1.0625 within 72.0h (thesis fails if price falls 15% from entry)
+  review at 2026-08-30T12:00:00Z
+```
 
-Twenty market voices go in. What comes out is a sized position, a receipt, and a
-written commitment to what would prove it wrong, replayable byte for byte
-from the exact data the agent saw.
+Run that same input again in a year and it produces the identical decision
+id, because nothing about deciding touches the network, a clock, or a model.
+It only ever reads what was actually stored. That's the whole project: an
+architecture that makes "prove it" a command you can run, not a promise in
+this README.
 
-Built for the RYO-CHAN platform and the six read-only research tools confirmed live on its authenticated MCP catalog.
+**[tryhanko.vercel.app](https://tryhanko.vercel.app)** has the pitch and a live
+receipt. **[/try](https://tryhanko.vercel.app/try)** runs a piece of it, live,
+from your browser, no install. Full technical detail is at `/docs`.
 
-**[tryhanko.vercel.app](https://tryhanko.vercel.app)** has the pitch, plus the full
-technical writeup at `/docs`. **[/try](https://tryhanko.vercel.app/try)** runs
-the new Track 3 skill live, against the real platform, from your browser.
+---
+
+**RYO-CHAN Hackathon 2026 submission, two tracks.** **Track 1 (Autonomous
+Agents)** is the agent above. **Track 3 (New Skills)** is
+[`exit_liquidity`](hanko/skills/exit_liquidity/README.md), a new tool
+contributed back to the platform's surface, not a second project. It's also
+the size gate the same agent runs internally before committing to a position.
+
+A 判子 is the seal a person stamps on a document to commit to it. The mark
+goes on before the outcome is known and can't be taken back, which is exactly
+what this agent does with every decision it makes: sizes it, commits to it,
+and states in advance what would prove it wrong.
 
 ## Submission
 
