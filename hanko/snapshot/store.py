@@ -197,6 +197,13 @@ class SnapshotStore:
         )
         with self.index_path.open("a", encoding="utf-8") as fh:
             fh.write(json.dumps(snap.to_dict(), ensure_ascii=False) + "\n")
+        # Advances only after the write succeeds, so a crash mid-write
+        # cannot skip a sequence number ahead of what is actually recorded.
+        # Without this, every put() in one store instance's lifetime reused
+        # the sequence read at __init__, and two collects landing in the
+        # same clock tick (Windows' timer resolution is coarse) produced
+        # the identical snapshot id the sequence number exists to prevent.
+        self._sequence += 1
         return snap
 
     def collect(

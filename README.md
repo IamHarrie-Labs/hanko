@@ -36,6 +36,8 @@ this README.
 receipt. **[/try](https://tryhanko.vercel.app/try)** runs a piece of it, live,
 from your browser, no install. Full technical detail is at `/docs`.
 
+![The landing page: the receipt above, typed out live by the real engine against fixed inputs](.github/images/landing.png)
+
 ---
 
 **RYO-CHAN Hackathon 2026 submission, two tracks.** **Track 1 (Autonomous
@@ -113,6 +115,17 @@ Everything here researches and sizes a position; nothing here moves funds.
 | [/try](https://tryhanko.vercel.app/try) | `exit_liquidity` running live against the real RYO platform, from a browser |
 | [/docs#track1-live](https://tryhanko.vercel.app/docs#track1-live) | Two real decisions, live X evidence and live RYO facts, neither cherry-picked |
 | [/docs#mcp-transport](https://tryhanko.vercel.app/docs#mcp-transport) | What a live MCP handshake and a live `x_search` call actually return |
+
+<table>
+<tr>
+<td width="50%"><img src=".github/images/try.png" alt="The /try page: pick a token and a size, run a live exit_liquidity check against the real RYO platform"></td>
+<td width="50%"><img src=".github/images/docs.png" alt="The /docs page: the six-package layer table and the purity boundary, in full"></td>
+</tr>
+<tr>
+<td align="center"><code>/try</code>, live against the real platform</td>
+<td align="center"><code>/docs</code>, the full technical writeup</td>
+</tr>
+</table>
 
 ## The one rule
 

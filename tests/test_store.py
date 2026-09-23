@@ -69,6 +69,24 @@ def test_identical_payloads_are_stored_once(store, x_source):
     assert len(objects) == 1
 
 
+def test_two_collects_at_the_identical_instant_still_get_distinct_ids(store, x_source):
+    """The scenario the previous test only caught by luck.
+
+    Two back-to-back collects can land inside the same clock tick --
+    Windows' timer resolution is coarse enough that this is not rare, not
+    hypothetical. Forcing the same `requested_at` explicitly removes the
+    clock as a disambiguator entirely and isolates the sequence number as
+    the only thing left that can tell these two snapshots apart.
+    """
+    q = Query(subjects=("voice_alpha",))
+    same_instant = datetime(2026, 1, 1, tzinfo=timezone.utc)
+    a = store.collect(x_source, q, requested_at=same_instant)
+    b = store.collect(x_source, q, requested_at=same_instant)
+    assert a.requested_at == b.requested_at
+    assert a.sequence != b.sequence
+    assert a.snapshot_id != b.snapshot_id
+
+
 # ---- honest failure -----------------------------------------------------
 
 
