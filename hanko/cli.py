@@ -359,6 +359,43 @@ _METRICS = (
 )
 
 
+def _parse_iso(s: str):
+    from datetime import datetime
+
+    return datetime.fromisoformat(s.replace("Z", "+00:00"))
+
+
+def _subject_observations(doc: dict, subject: str, default_at, default_snapshot_id):
+    """One subject's reading(s) from an observations file.
+
+    A subject's value is either a flat dict of metrics (one reading, at the
+    file's top-level `at`) or a list of `{"at", "metrics", "snapshot_id"}`
+    objects -- several readings taken between the decision and the review,
+    which is what an ANY_POINT_IN_WINDOW falsifier (D-13) needs to check a
+    breach that happened and recovered before this file was written.
+    """
+    from .review import Observations, Sample
+
+    entry = doc.get("subjects", {}).get(subject, {})
+    if isinstance(entry, list):
+        samples = tuple(
+            Sample(
+                at=_parse_iso(s["at"]) if "at" in s else default_at,
+                metrics={m: s.get("metrics", {}).get(m) for m in _METRICS},
+                snapshot_id=s.get("snapshot_id", default_snapshot_id),
+            )
+            for s in entry
+        )
+        if samples:
+            return Observations(samples=samples)
+        entry = {}
+    return Observations.single(
+        default_at,
+        {m: entry.get(m) for m in _METRICS},
+        default_snapshot_id,
+    )
+
+
 def cmd_review(args: argparse.Namespace) -> int:
     """Grade every decision whose pre-registered review date has passed.
 
@@ -369,15 +406,11 @@ def cmd_review(args: argparse.Namespace) -> int:
     from datetime import datetime, timezone
 
     from .decision import DecisionLedger
-    from .review import Observations, ReviewLedger, due_decisions, review_decision
+    from .review import ReviewLedger, due_decisions, review_decision
 
     doc = json.loads(Path(args.observations).read_text(encoding="utf-8"))
-    at = datetime.fromisoformat(doc["at"].replace("Z", "+00:00"))
-    now = (
-        datetime.fromisoformat(args.now.replace("Z", "+00:00"))
-        if args.now
-        else datetime.now(timezone.utc)
-    )
+    at = _parse_iso(doc["at"])
+    now = _parse_iso(args.now) if args.now else datetime.now(timezone.utc)
 
     decisions = DecisionLedger(args.ledger)
     reviews = ReviewLedger(args.reviews)
@@ -387,17 +420,8 @@ def cmd_review(args: argparse.Namespace) -> int:
         return 0
 
     for record in due:
-        observed = doc.get("subjects", {}).get(record.subject, {})
-        review = reviews.append(
-            review_decision(
-                record,
-                Observations(
-                    at=at,
-                    metrics={m: observed.get(m) for m in _METRICS},
-                    snapshot_id=doc.get("snapshot_id"),
-                ),
-            )
-        )
+        obs = _subject_observations(doc, record.subject, at, doc.get("snapshot_id"))
+        review = reviews.append(review_decision(record, obs))
         print(review.explain())
         print("")
     return 0
@@ -414,7 +438,7 @@ def cmd_sweep(args: argparse.Namespace) -> int:
     from datetime import datetime, timezone
 
     from .decision import DecisionLedger, KeywordInterpreter, Policy
-    from .review import ReviewLedger
+    from .review import ReviewLedger, SampleTrail
     from .ryotools import FixtureFactsSource
     from .sweep import load_watchlist, run_sweep
 
@@ -453,6 +477,7 @@ def cmd_sweep(args: argparse.Namespace) -> int:
         interpreter=KeywordInterpreter(),
         resolve=resolve_fn,
         as_of=as_of,
+        samples=SampleTrail(args.samples) if args.samples else None,
     )
     print(report.explain())
     return 1 if report.failures else 0
@@ -533,6 +558,12 @@ def build_parser() -> argparse.ArgumentParser:
     sweep.add_argument("--as-of", dest="as_of", help="RFC3339, for reproducible runs")
     sweep.add_argument("--ledger", type=Path, default=Path("decisions.jsonl"))
     sweep.add_argument("--reviews", type=Path, default=Path("reviews.jsonl"))
+    sweep.add_argument(
+        "--samples", type=Path, default=None,
+        help="append market readings here each pass, for ANY_POINT_IN_WINDOW "
+        "falsifiers (D-13) to check against by review time; omit to keep the "
+        "single end-of-window reading this had before",
+    )
     sweep.add_argument(
         "--fixture-dir", type=Path,
         help="read every source from <dir>/<name>.json instead of live transports",

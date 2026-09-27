@@ -142,3 +142,52 @@ that forces an identical `requested_at` on both collects, removing the
 clock as a disambiguator entirely and isolating the sequence number as the
 only thing left that can tell two snapshots apart, confirmed to fail
 without the fix and pass with it.
+
+## D-13: A falsifier said "within 72h" and only checked the last tick
+
+Every receipt prints its falsifiers as `price_usd < X within 72.0h`. The
+grader did not check "within." `review_decision()` compared one reading,
+taken at review time, against the threshold. A price that fell through the
+15%-drawdown line at hour 30 and recovered by hour 72 would be graded HELD,
+even though the falsifier's own words promised otherwise -- the exact
+scenario a pre-registered falsifier exists to catch, missed by the one
+component meant to enforce it.
+
+Not every falsifier has this problem. `independent_voices` asks whether the
+convergence an entry rested on still holds -- a question about now, correctly
+answered by the latest reading alone. Only `price_usd` and `liquidity_usd`
+name a condition that, once true at any moment, makes the thesis wrong for
+good even if the metric later recovers.
+
+Fixed with two changes. First, every `Falsifier` now states its own window
+explicitly: `AT_REVIEW_TIME` for a state check, `ANY_POINT_IN_WINDOW` for a
+thesis-invalidating breach. No default -- every falsifier the engine writes
+picks one, on purpose, rather than inheriting a behaviour nobody chose.
+Second, `Observations` became a series of samples instead of one reading, so
+an `ANY_POINT_IN_WINDOW` falsifier can be checked against every sample that
+reports its metric, not just the last one. A single sample still works --
+it is graded as the one instant it is, and the review's own wording says so
+("1 sample ... no intermediate readings") rather than implying coverage of
+a window it never actually watched.
+
+`hanko sweep --samples` is what actually fills that series in practice: it
+appends one market reading per watched token every pass, reusing facts the
+sweep already fetched, so a decision graded weeks from now has real
+intra-window history instead of one more single point pretending to be the
+whole window. Omitting `--samples` keeps the narrower, honest, pre-D-13
+behaviour -- one reading, and only an `AT_REVIEW_TIME` falsifier can be
+fully answered by it.
+
+Because the falsifier's shape changed, `engine_version` moved to `1.1.0`
+and every decision's `commitment_digest` -- and therefore its `decision_id`
+-- changed with it. Nothing published under the old shape existed yet, so
+this was the last free moment to fix it before a sealed receipt would have
+had to carry a promise the grader could not keep.
+
+A regression test forces a breach at hour 30 and a recovery by hour 72
+across two samples, confirmed to report HELD without the window-aware
+check and FALSIFIED with it. A second test checks the boundary the other
+way: `independent_voices`, an `AT_REVIEW_TIME` falsifier, is fed the same
+kind of mid-window dip and must not fire on it -- only the reading at
+review time is its business, or the fix would just be moving which
+falsifiers lie about their own window.

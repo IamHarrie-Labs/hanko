@@ -16,7 +16,7 @@ from hanko.decision import (
     Policy,
     Verdict,
 )
-from hanko.review import ReviewLedger, ReviewResult
+from hanko.review import ReviewLedger, ReviewResult, SampleTrail
 from hanko.ryotools import FixtureFactsSource
 from hanko.snapshot import SnapshotStore
 from hanko.sweep import (
@@ -296,6 +296,67 @@ class TestRunSweep:
         review = report.reviews[0].review
         assert review is not None
         assert review.observations.metrics["price_usd"] is None
+
+    def test_a_logged_mid_window_dip_falsifies_even_after_recovery(self, tmp_path, store):
+        """D-13: a sweep's own sample trail catches what one end-of-window
+        reading missed. The price dips through the 15%-drawdown threshold
+        between passes and recovers by the time the decision is due.
+        """
+        decisions = DecisionLedger(tmp_path / "decisions.jsonl")
+        reviews = ReviewLedger(tmp_path / "reviews.jsonl")
+        trail = SampleTrail(tmp_path / "samples.jsonl")
+        watchlist = (make_entry(),)
+
+        run_sweep(
+            watchlist, store, decisions, reviews, Policy(),
+            interpreter=KeywordInterpreter(), resolve=make_resolver(), as_of=AS_OF,
+            samples=trail,
+        )
+        run_sweep(
+            watchlist, store, decisions, reviews, Policy(),
+            interpreter=KeywordInterpreter(),
+            resolve=make_resolver(analyze="ryo_analyze_tokena_dip.json"),
+            as_of=AS_OF + timedelta(hours=30),
+            samples=trail,
+        )
+        report = run_sweep(
+            watchlist, store, decisions, reviews, Policy(),
+            interpreter=KeywordInterpreter(), resolve=make_resolver(),
+            as_of=AS_OF + timedelta(hours=73),
+            samples=trail,
+        )
+        reviewed = next(r for r in report.reviews if r.review is not None)
+        assert reviewed.review.result is ReviewResult.FALSIFIED
+        price_check = next(c for c in reviewed.review.checks if c.falsifier.metric == "price_usd")
+        assert price_check.outcome.value == "met"
+        assert price_check.observed == 1.00
+
+    def test_without_a_trail_the_same_dip_goes_unseen(self, tmp_path, store):
+        """The honest counterpart to the test above: omitting `samples`
+        keeps exactly the old, narrower behaviour -- a single end-of-window
+        reading, which cannot see a breach that already recovered.
+        """
+        decisions = DecisionLedger(tmp_path / "decisions.jsonl")
+        reviews = ReviewLedger(tmp_path / "reviews.jsonl")
+        watchlist = (make_entry(),)
+
+        run_sweep(
+            watchlist, store, decisions, reviews, Policy(),
+            interpreter=KeywordInterpreter(), resolve=make_resolver(), as_of=AS_OF,
+        )
+        run_sweep(
+            watchlist, store, decisions, reviews, Policy(),
+            interpreter=KeywordInterpreter(),
+            resolve=make_resolver(analyze="ryo_analyze_tokena_dip.json"),
+            as_of=AS_OF + timedelta(hours=30),
+        )
+        report = run_sweep(
+            watchlist, store, decisions, reviews, Policy(),
+            interpreter=KeywordInterpreter(), resolve=make_resolver(),
+            as_of=AS_OF + timedelta(hours=73),
+        )
+        reviewed = next(r for r in report.reviews if r.review is not None)
+        assert reviewed.review.result is ReviewResult.HELD
 
     def test_explain_reads_as_a_trail(self, tmp_path, store):
         decisions = DecisionLedger(tmp_path / "decisions.jsonl")

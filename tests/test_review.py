@@ -23,6 +23,7 @@ from hanko.review import (
     Observations,
     ReviewLedger,
     ReviewResult,
+    Sample,
     build_scorecard,
     due_decisions,
     review_decision,
@@ -83,7 +84,7 @@ def observe(**metrics) -> Observations:
         "independent_voices": None,
     }
     base.update(metrics)
-    return Observations(at=LATER, metrics=base)
+    return Observations.single(LATER, base)
 
 
 # ---- grading against the commitment --------------------------------------
@@ -144,6 +145,96 @@ class TestGrading:
         record = make_decision(store, x_source)
         obs = observe(price_usd=1.40, liquidity_usd=880_000.0, independent_voices=3.0)
         assert review_decision(record, obs).to_dict() == review_decision(record, obs).to_dict()
+
+
+# ---- window semantics (D-13) ----------------------------------------------
+
+
+class TestFalsifierWindow:
+    def test_a_price_breach_that_recovers_is_still_falsified(self, store, x_source):
+        """The scenario D-13 found the grader missing.
+
+        The price falls through the 15%-drawdown threshold at hour 30 and
+        recovers by hour 72. Grading only the last reading -- 1.40, above
+        the threshold -- would call this HELD. The falsifier's own words
+        promise "at any point in the window," and a mid-window breach that
+        later recovers is exactly the case that promise exists to catch.
+        """
+        record = make_decision(store, x_source)
+        obs = Observations(
+            samples=(
+                Sample(at=AS_OF + timedelta(hours=30), metrics={"price_usd": 1.00}),
+                Sample(
+                    at=LATER,
+                    metrics={
+                        "price_usd": 1.40,
+                        "liquidity_usd": 880_000.0,
+                        "independent_voices": 3.0,
+                    },
+                ),
+            )
+        )
+        review = review_decision(record, obs)
+        assert review.result is ReviewResult.FALSIFIED
+        met = [c for c in review.checks if c.outcome is CheckOutcome.MET]
+        assert [c.falsifier.metric for c in met] == ["price_usd"]
+
+    def test_a_liquidity_breach_that_recovers_is_still_falsified(self, store, x_source):
+        record = make_decision(store, x_source)
+        obs = Observations(
+            samples=(
+                Sample(at=AS_OF + timedelta(hours=10), metrics={"liquidity_usd": 100_000.0}),
+                Sample(
+                    at=LATER,
+                    metrics={
+                        "price_usd": 1.40,
+                        "liquidity_usd": 900_000.0,
+                        "independent_voices": 3.0,
+                    },
+                ),
+            )
+        )
+        review = review_decision(record, obs)
+        assert review.result is ReviewResult.FALSIFIED
+        met = [c for c in review.checks if c.outcome is CheckOutcome.MET]
+        assert [c.falsifier.metric for c in met] == ["liquidity_usd"]
+
+    def test_a_single_sample_says_so_rather_than_implying_full_coverage(self, store, x_source):
+        record = make_decision(store, x_source)
+        review = review_decision(
+            record,
+            observe(price_usd=1.40, liquidity_usd=880_000.0, independent_voices=3.0),
+        )
+        price_check = next(c for c in review.checks if c.falsifier.metric == "price_usd")
+        assert price_check.outcome is CheckOutcome.NOT_MET
+        assert "no intermediate readings" in price_check.detail
+
+    def test_independent_voices_is_a_state_check_not_a_window_check(self, store, x_source):
+        """AT_REVIEW_TIME falsifiers only ask about the latest reading.
+
+        A mid-window dip in independent voices is not what this falsifier
+        is about -- "does the convergence still hold" is a question about
+        now, and an intermediate sample that never happened at review time
+        must not be able to trip it.
+        """
+        record = make_decision(store, x_source)
+        obs = Observations(
+            samples=(
+                Sample(at=AS_OF + timedelta(hours=5), metrics={"independent_voices": 0.0}),
+                Sample(
+                    at=LATER,
+                    metrics={
+                        "price_usd": 1.40,
+                        "liquidity_usd": 880_000.0,
+                        "independent_voices": 3.0,
+                    },
+                ),
+            )
+        )
+        review = review_decision(record, obs)
+        voices_check = next(c for c in review.checks if c.falsifier.metric == "independent_voices")
+        assert voices_check.outcome is CheckOutcome.NOT_MET
+        assert voices_check.observed == 3.0
 
 
 # ---- the honest third outcome --------------------------------------------
@@ -356,7 +447,7 @@ def test_early_review_is_flagged(store, x_source):
     record = make_decision(store, x_source)
     review = review_decision(
         record,
-        Observations(at=AS_OF + timedelta(hours=1), metrics={"price_usd": 1.40}),
+        Observations.single(AS_OF + timedelta(hours=1), {"price_usd": 1.40}),
     )
     assert review.early is True
     assert "reviewed early" in review.explain()

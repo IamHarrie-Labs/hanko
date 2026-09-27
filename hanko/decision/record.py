@@ -73,6 +73,25 @@ class RuleFiring:
         )
 
 
+class FalsifierWindow(str, Enum):
+    """When a falsifier's condition counts as having fired.
+
+    AT_REVIEW_TIME: only the metric's value at the moment of review matters.
+    Right for a state check -- "does the convergence this entry rested on
+    still hold" is a question about now, not about every instant since.
+
+    ANY_POINT_IN_WINDOW: the condition firing at any moment between the
+    decision and the review means the thesis was wrong, even if the metric
+    later recovers. A price crash and rebound inside the window still means
+    the 15%-drawdown thesis failed; grading only the value at hour 72 would
+    let a decision that was wrong for a day get called HELD because the
+    clock happened to catch it on a good tick.
+    """
+
+    AT_REVIEW_TIME = "at_review_time"
+    ANY_POINT_IN_WINDOW = "any_point_in_window"
+
+
 @dataclass(frozen=True, slots=True)
 class Falsifier:
     """A condition that, if met, means this decision was wrong.
@@ -87,6 +106,7 @@ class Falsifier:
     horizon_hours: float
     note: str
     raised_by: str  # rule_id that committed to it
+    window: FalsifierWindow  # required: every falsifier states its own semantics
 
     def to_dict(self) -> dict[str, Any]:
         return {
@@ -96,6 +116,7 @@ class Falsifier:
             "horizon_hours": self.horizon_hours,
             "note": self.note,
             "raised_by": self.raised_by,
+            "window": self.window.value,
         }
 
     @classmethod
@@ -107,6 +128,7 @@ class Falsifier:
             horizon_hours=float(d["horizon_hours"]),
             note=d["note"],
             raised_by=d["raised_by"],
+            window=FalsifierWindow(d["window"]),
         )
 
     def is_met(self, observed: float) -> bool:
@@ -320,9 +342,13 @@ class DecisionRecord:
         for echo in self.convergence.echoes:
             lines.append("  ~ echo " + echo.author + ": " + echo.reason)
         for f in self.falsifiers:
+            when = (
+                "at any point within " if f.window is FalsifierWindow.ANY_POINT_IN_WINDOW
+                else "at review, within "
+            )
             lines.append(
                 "  ! wrong if " + f.metric + " " + f.comparator + " "
-                + str(f.threshold) + " within " + str(f.horizon_hours) + "h"
+                + str(f.threshold) + " " + when + str(f.horizon_hours) + "h"
                 + " (" + f.note + ")"
             )
         lines.append("  review at " + to_iso(self.review_at))

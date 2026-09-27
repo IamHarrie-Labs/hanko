@@ -40,7 +40,16 @@ from .decision import (
 )
 from .decision.quality import Gap, GapKind
 from .provenance import Status
-from .review import DuplicateReview, Observations, Review, ReviewLedger, due_decisions, review_decision
+from .review import (
+    DuplicateReview,
+    Observations,
+    Review,
+    ReviewLedger,
+    Sample,
+    SampleTrail,
+    due_decisions,
+    review_decision,
+)
 from .ryotools import extract_market_facts
 from .snapshot import SnapshotStore
 from .sources.base import Query, Source
@@ -226,6 +235,8 @@ def fresh_observations(
     policy: Policy,
     as_of: datetime,
     tool_prefix: str = "ryomcp:",
+    trail: SampleTrail | None = None,
+    since: datetime | None = None,
 ) -> Observations:
     """What review needs: a fresh look, not the frozen decision-time one.
 
@@ -233,6 +244,13 @@ def fresh_observations(
     rather than copied from the original decision -- the whole point of a
     review is to ask what is true now, and a stale copy of "true then"
     would grade a decision against itself.
+
+    `trail` and `since` (the decision's own `decided_at`) pull in every
+    market reading this token has had logged between the decision and now.
+    Without them, this returns the single point-in-time reading it always
+    returned before D-13 -- correct for an AT_REVIEW_TIME falsifier, but the
+    only thing an ANY_POINT_IN_WINDOW falsifier can check is that one
+    instant, and its own review will say so rather than imply otherwise.
     """
     evidence, _, _ = _collect_evidence(entry, store, resolve, as_of=as_of)
     facts, _, _ = _collect_facts(entry, store, resolve, tool_prefix=tool_prefix, as_of=as_of)
@@ -241,9 +259,13 @@ def fresh_observations(
     convergence = assess_convergence(
         entry.token.upper(), readings, {e.evidence_id: e for e in evidence}, policy
     )
-    return Observations.from_market(
+    latest = Observations.from_market(
         facts, as_of, independent_voices=convergence.independent_voices
     )
+    if trail is None:
+        return latest
+    history = trail.for_subject(entry.token, since=since, until=as_of)
+    return Observations(samples=history + latest.samples)
 
 
 @dataclass(frozen=True, slots=True)
@@ -334,6 +356,7 @@ def run_sweep(
     resolve: Resolver,
     as_of: datetime,
     tool_prefix: str = "ryomcp:",
+    samples: SampleTrail | None = None,
 ) -> SweepReport:
     """One pass: decide on everything watched, then grade what's due.
 
@@ -343,6 +366,12 @@ def run_sweep(
     due in the ledger, not just this sweep's own entries, so a token
     dropped from the watchlist still gets its outstanding decisions
     graded rather than orphaned.
+
+    `samples`, if given, gets one market reading appended per watched token
+    per pass -- reusing the facts this sweep already fetched, no extra
+    calls -- so that a decision due for review several passes from now has
+    real intra-window coverage instead of the single end-of-window reading
+    D-13 found was silently standing in for the whole window.
     """
     by_token = {e.token.upper(): e for e in watchlist}
 
@@ -363,6 +392,21 @@ def run_sweep(
                 SweepEntryResult(entry.token, None, error=type(exc).__name__ + ": " + str(exc))
             )
             continue
+
+        if samples is not None:
+            samples.append(
+                entry.token,
+                Sample(
+                    at=as_of,
+                    metrics={
+                        "price_usd": record.market.price_usd,
+                        "volume_24h_usd": record.market.volume_24h_usd,
+                        "liquidity_usd": record.market.liquidity_usd,
+                        "safety_score": record.market.safety_score,
+                    },
+                    snapshot_id=record.market.snapshot_id,
+                ),
+            )
 
         try:
             decisions.append(record)
@@ -392,6 +436,8 @@ def run_sweep(
                 policy=policy,
                 as_of=as_of,
                 tool_prefix=tool_prefix,
+                trail=samples,
+                since=due_record.decided_at,
             )
             review = reviews.append(review_decision(due_record, obs))
             review_results.append(ReviewResult(due_record.decision_id, due_record.subject, review))

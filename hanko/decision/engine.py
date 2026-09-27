@@ -31,13 +31,16 @@ from .reading import Reading, Stance
 from .record import (
     DecisionRecord,
     Falsifier,
+    FalsifierWindow,
     MarketFacts,
     Outcome,
     RuleFiring,
     Verdict,
 )
 
-ENGINE_VERSION = "1.0.0"
+# 1.1.0: falsifiers now state a window (D-13) -- a decision built under 1.0.0
+# has no such field and cannot be replayed against this engine.
+ENGINE_VERSION = "1.1.0"
 
 
 @dataclass(frozen=True, slots=True)
@@ -427,6 +430,11 @@ def _falsifiers(
                     horizon_hours=hours,
                     note="thesis fails if price falls 15% from entry",
                     raised_by="conviction",
+                    # A crash-and-recover inside the window still means the
+                    # thesis was wrong for part of it. Checked at review time
+                    # only, this would let a bad day disappear because the
+                    # clock happened to land on a recovered tick.
+                    window=FalsifierWindow.ANY_POINT_IN_WINDOW,
                 )
             )
         if market.liquidity_usd is not None:
@@ -438,6 +446,7 @@ def _falsifiers(
                     horizon_hours=hours,
                     note="exit assumption fails if depth drops 30%",
                     raised_by="exit_liquidity",
+                    window=FalsifierWindow.ANY_POINT_IN_WINDOW,
                 )
             )
         out.append(
@@ -448,6 +457,9 @@ def _falsifiers(
                 horizon_hours=hours,
                 note="entry rested on convergence that no longer holds",
                 raised_by="independent_voices",
+                # A state check -- "does convergence hold" is a question
+                # about now, not about every instant since entry.
+                window=FalsifierWindow.AT_REVIEW_TIME,
             )
         )
     else:
@@ -459,6 +471,7 @@ def _falsifiers(
                 horizon_hours=hours,
                 note="verdict flips if another independent voice converges",
                 raised_by="independent_voices",
+                window=FalsifierWindow.AT_REVIEW_TIME,
             )
         )
         if market.volume_24h_usd is not None:
@@ -470,6 +483,7 @@ def _falsifiers(
                     horizon_hours=hours,
                     note="verdict is worth revisiting if volume rises 50%",
                     raised_by="quality_floor",
+                    window=FalsifierWindow.AT_REVIEW_TIME,
                 )
             )
 

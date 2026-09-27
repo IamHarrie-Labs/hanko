@@ -23,7 +23,14 @@ from datetime import datetime
 from enum import Enum
 from typing import Any
 
-from ..decision.record import DecisionRecord, Falsifier, MarketFacts, Outcome, Verdict
+from ..decision.record import (
+    DecisionRecord,
+    Falsifier,
+    FalsifierWindow,
+    MarketFacts,
+    Outcome,
+    Verdict,
+)
 from ..provenance import digest, from_iso, to_iso
 
 
@@ -42,12 +49,57 @@ class ReviewResult(str, Enum):
 
 
 @dataclass(frozen=True, slots=True)
-class Observations:
-    """Metric values at review time, with missing values kept as None."""
+class Sample:
+    """Metric values read at one instant, with missing values kept as None."""
 
     at: datetime
     metrics: dict[str, float | None]
     snapshot_id: str | None = None
+
+    def to_dict(self) -> dict[str, Any]:
+        return {
+            "at": to_iso(self.at),
+            "metrics": self.metrics,
+            "snapshot_id": self.snapshot_id,
+        }
+
+    @classmethod
+    def from_dict(cls, d: dict[str, Any]) -> "Sample":
+        return cls(
+            at=from_iso(d["at"]),
+            metrics=d["metrics"],
+            snapshot_id=d.get("snapshot_id"),
+        )
+
+
+@dataclass(frozen=True, slots=True)
+class Observations:
+    """One or more readings taken between a decision and its review.
+
+    A single sample reproduces the old point-in-time behaviour: whatever it
+    reports is treated as true "at review." A falsifier whose window is
+    ANY_POINT_IN_WINDOW (D-13) is checked against every sample that reports
+    its metric, not only the last one -- a single sample there is still
+    honoured, but it can only ever prove "held for this one instant," and
+    the review's own wording says so rather than implying full coverage of
+    the window it never actually watched.
+    """
+
+    samples: tuple[Sample, ...]
+
+    def __post_init__(self) -> None:
+        if not self.samples:
+            raise ValueError("Observations needs at least one sample")
+        object.__setattr__(self, "samples", tuple(sorted(self.samples, key=lambda s: s.at)))
+
+    @classmethod
+    def single(
+        cls,
+        at: datetime,
+        metrics: dict[str, float | None],
+        snapshot_id: str | None = None,
+    ) -> "Observations":
+        return cls(samples=(Sample(at=at, metrics=metrics, snapshot_id=snapshot_id),))
 
     @classmethod
     def from_market(
@@ -57,9 +109,9 @@ class Observations:
         *,
         independent_voices: int | None = None,
     ) -> "Observations":
-        return cls(
-            at=at,
-            metrics={
+        return cls.single(
+            at,
+            {
                 "price_usd": market.price_usd,
                 "volume_24h_usd": market.volume_24h_usd,
                 "liquidity_usd": market.liquidity_usd,
@@ -71,20 +123,33 @@ class Observations:
             snapshot_id=market.snapshot_id,
         )
 
+    # ---- the latest reading, for callers that only ever want "as of now" --
+
+    @property
+    def at(self) -> datetime:
+        return self.samples[-1].at
+
+    @property
+    def metrics(self) -> dict[str, float | None]:
+        return self.samples[-1].metrics
+
+    @property
+    def snapshot_id(self) -> str | None:
+        return self.samples[-1].snapshot_id
+
+    def readings_for(self, metric: str) -> tuple[Sample, ...]:
+        """Samples that actually report this metric, oldest first."""
+        return tuple(s for s in self.samples if s.metrics.get(metric) is not None)
+
     def to_dict(self) -> dict[str, Any]:
-        return {
-            "at": to_iso(self.at),
-            "metrics": self.metrics,
-            "snapshot_id": self.snapshot_id,
-        }
+        return {"samples": [s.to_dict() for s in self.samples]}
 
     @classmethod
     def from_dict(cls, d: dict[str, Any]) -> "Observations":
-        return cls(
-            at=from_iso(d["at"]),
-            metrics=d["metrics"],
-            snapshot_id=d.get("snapshot_id"),
-        )
+        if "samples" in d:
+            return cls(samples=tuple(Sample.from_dict(s) for s in d["samples"]))
+        # Pre-D-13 shape: one bare reading, no series.
+        return cls.single(from_iso(d["at"]), d["metrics"], d.get("snapshot_id"))
 
 
 @dataclass(frozen=True, slots=True)
@@ -219,6 +284,15 @@ class Review:
         return "\n".join(lines)
 
 
+def _span(samples: tuple[Sample, ...]) -> str:
+    if len(samples) == 1:
+        return "1 sample at " + to_iso(samples[0].at) + " -- no intermediate readings"
+    return (
+        str(len(samples)) + " samples between " + to_iso(samples[0].at)
+        + " and " + to_iso(samples[-1].at)
+    )
+
+
 def review_decision(
     record: DecisionRecord,
     observations: Observations,
@@ -230,8 +304,8 @@ def review_decision(
 
     checks: list[FalsifierCheck] = []
     for falsifier in record.falsifiers:
-        observed = observations.metrics.get(falsifier.metric)
-        if observed is None:
+        samples = observations.readings_for(falsifier.metric)
+        if not samples:
             checks.append(
                 FalsifierCheck(
                     falsifier=falsifier,
@@ -246,6 +320,45 @@ def review_decision(
             )
             continue
 
+        if falsifier.window is FalsifierWindow.ANY_POINT_IN_WINDOW:
+            # A breach that recovers before review time still falsifies the
+            # thesis -- checked against every sample that reports this
+            # metric, not just the last one. See D-13.
+            breach = next((s for s in samples if falsifier.is_met(s.metrics[falsifier.metric])), None)
+            if breach is not None:
+                observed = breach.metrics[falsifier.metric]
+                checks.append(
+                    FalsifierCheck(
+                        falsifier=falsifier,
+                        outcome=CheckOutcome.MET,
+                        observed=observed,
+                        detail=(
+                            falsifier.metric + " observed at " + str(observed)
+                            + " at " + to_iso(breach.at)
+                            + "; committed to being wrong if " + falsifier.comparator
+                            + " " + str(falsifier.threshold) + " at any point in the"
+                            " window -- " + falsifier.note
+                        ),
+                    )
+                )
+            else:
+                observed = samples[-1].metrics[falsifier.metric]
+                checks.append(
+                    FalsifierCheck(
+                        falsifier=falsifier,
+                        outcome=CheckOutcome.NOT_MET,
+                        observed=observed,
+                        detail=(
+                            falsifier.metric + " held against " + falsifier.comparator
+                            + " " + str(falsifier.threshold) + " across " + _span(samples)
+                            + "; last observed " + str(observed)
+                        ),
+                    )
+                )
+            continue
+
+        # AT_REVIEW_TIME: only the latest reading is asked.
+        observed = samples[-1].metrics[falsifier.metric]
         met = falsifier.is_met(observed)
         checks.append(
             FalsifierCheck(

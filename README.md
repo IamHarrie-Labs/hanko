@@ -401,13 +401,13 @@ hanko decide x --token TOKENA --subject voice_alpha --subject voice_beta --subje
 
 ```
 ENTER TOKENA  size 3.28%  confidence 0.66
-  dec_0074a4b93cc07a2a0d799a9b
+  dec_303b323b282605ea4d861a25
   evidence quality 0.82  (completeness 1.0, freshness 0.75, corroboration 1.0, independence 0.67)
   + independent_voices: 2 independent voice(s): voice_alpha, voice_gamma
   + safety: safety score 0.82
   ~ echo voice_beta: marked as a repost or quote by the source
-  ! wrong if price_usd < 1.0625 within 72.0h (thesis fails if price falls 15% from entry)
-  ! wrong if independent_voices < 2.0 within 72.0h (entry rested on convergence that no longer holds)
+  ! wrong if price_usd < 1.0625 at any point within 72.0h (thesis fails if price falls 15% from entry)
+  ! wrong if independent_voices < 2.0 at review, within 72.0h (entry rested on convergence that no longer holds)
   review at 2026-08-30T12:00:00Z
 
   replayed from stored bytes: same decision id
@@ -453,12 +453,20 @@ hanko review --observations fixtures/observations_day3.json --now 2026-08-30T12:
 
 ```
 FALSIFIED  TOKENA  (enter at confidence 0.66)
-  dec_dc6b3d83c289b886b2097e39 -> rev_8a7fe39dcabbfbf95ddff178
-  x price_usd observed at 1.02; committed to being wrong if < 1.0625 -- thesis fails if price falls 15% from entry
-  + liquidity_usd observed at 880000.0; holds against < 630000.0
+  dec_303b323b282605ea4d861a25 -> rev_3508881c4db712c3a908e919
+  x price_usd observed at 1.02 at 2026-08-30T12:00:00Z; committed to being wrong if < 1.0625 at any point in the window -- thesis fails if price falls 15% from entry
+  + liquidity_usd held against < 630000.0 across 1 sample at 2026-08-30T12:00:00Z -- no intermediate readings; last observed 880000.0
   + independent_voices observed at 2.0; holds against < 2.0
   realised return -18.4%  (recorded, not used to grade)
 ```
+
+The `liquidity_usd` line says exactly what it checked: one reading, no
+intermediate ones. `price_usd` and `liquidity_usd` are graded against every
+sample `hanko sweep --samples` logs between the decision and the review
+([D-13](DECISIONS.md#d-13-a-falsifier-said-within-72h-and-only-checked-the-last-tick)) --
+a breach that recovers before review time still falsifies the thesis it
+broke, and a review built from a single end-of-window reading says so
+rather than implying it watched the whole window.
 
 ### The scorecard
 
@@ -519,6 +527,16 @@ rather than reusing the original decision's numbers. The whole point of a
 review is what's true *now*; a stale copy of "true then" would grade a
 decision against itself.
 
+**`--samples samples.jsonl` gives the window something to actually check.**
+Every pass appends one market reading per watched token, reusing the facts
+that pass already fetched. A decision that becomes due later is graded
+against every reading logged since it was made, not just the one taken at
+review time -- which is what lets an `ANY_POINT_IN_WINDOW` falsifier
+([D-13](DECISIONS.md#d-13-a-falsifier-said-within-72h-and-only-checked-the-last-tick))
+catch a price or liquidity breach that recovers before the clock gets there.
+Omit it and `hanko sweep` keeps the single end-of-window reading it always
+took; the review says which of the two it used.
+
 Meant to be invoked by something that already knows how to schedule things:
 cron, a scheduled GitHub Action, Windows Task Scheduler. One pass and exit,
 not a loop that sleeps in-process. A failed run is a failed invocation, not a
@@ -531,7 +549,7 @@ hanko sweep --watchlist fixtures/sweep_demo/watchlist.json \
 
 ```
 sweep at 2026-08-27T12:00:00+00:00
-  ENTER   TOKENA  dec_6c7456f128a467d1a268742d
+  ENTER   TOKENA  dec_a30db3a0aa46b141d4c48343
 ```
 
 16 tests, all offline, using a fixture stand-in for RYO tool responses
@@ -548,7 +566,7 @@ observations rather than the ones frozen into the original decision.
 - **[`ARCHITECTURE.md`](ARCHITECTURE.md)**: the one rule, the pipeline as a
   diagram, what each package owns, and how `exit_liquidity` sizes itself as
   the same size gate `decide()` runs internally.
-- **[`DECISIONS.md`](DECISIONS.md)**: twelve engineering decisions in the
+- **[`DECISIONS.md`](DECISIONS.md)**: thirteen engineering decisions in the
   order they happened, including several real bugs found and fixed during
   this build and what each one actually broke.
 - **[`LIMITATIONS.md`](LIMITATIONS.md)**: what hasn't been shown yet, a

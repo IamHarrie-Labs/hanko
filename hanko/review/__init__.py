@@ -7,9 +7,11 @@ from .outcome import (
     Observations,
     Review,
     ReviewResult,
+    Sample,
     review_decision,
 )
 from .reliability import CalibrationBucket, Reliability, Scorecard, build_scorecard
+from .trail import SampleTrail
 
 __all__ = [
     "CalibrationBucket",
@@ -21,6 +23,8 @@ __all__ = [
     "Review",
     "ReviewLedger",
     "ReviewResult",
+    "Sample",
+    "SampleTrail",
     "Scorecard",
     "build_scorecard",
     "due_decisions",

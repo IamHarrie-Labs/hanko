@@ -51,6 +51,18 @@ exactly the same way, but swapping it in was out of scope for this build, and wo
 trade determinism at the interpretation step for whatever the model actually
 returns.
 
+**An `ANY_POINT_IN_WINDOW` falsifier is only as good as the samples it was
+actually given.** `hanko sweep --samples` (added with the D-13 fix) logs one
+reading per pass, which means its actual resolution is however often the
+sweep runs -- hourly if the schedule calling it is hourly, and a breach
+shorter than the gap between two passes can still land between samples and
+go unseen. This is not hidden: the review states exactly how many samples
+it checked and the span they cover, so "1 sample, no intermediate readings"
+and "6 samples across 71 hours" are visibly different claims. What it does
+not yet do is refuse to grade a coverage gap that is wide relative to the
+falsifier's own horizon; it reports NOT_MET on what it saw and trusts the
+reader to look at the span before treating that as "held throughout."
+
 **Reported evidence quality has an unmeasured floor.** The geometric-mean
 score components (completeness, freshness, corroboration, independence) are
 each computed from what the sources actually returned. None of them measure

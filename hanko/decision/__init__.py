@@ -15,6 +15,7 @@ from .reading import Interpreter, KeywordInterpreter, Reading, Stance, read_all
 from .record import (
     DecisionRecord,
     Falsifier,
+    FalsifierWindow,
     MarketFacts,
     Outcome,
     RuleFiring,
@@ -31,6 +32,7 @@ __all__ = [
     "Echo",
     "EvidenceQuality",
     "Falsifier",
+    "FalsifierWindow",
     "Gap",
     "GapKind",
     "Interpreter",
