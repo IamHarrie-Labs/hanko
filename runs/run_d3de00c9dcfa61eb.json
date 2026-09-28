@@ -1,0 +1,19 @@
+{
+  "run_id": "run_d3de00c9dcfa61eb",
+  "as_of": "2026-09-28T06:54:04.787575Z",
+  "watchlist_digest": "sha256:77196633078e96ced7625de7c5e40def54fccd5cae7262820d7d66c5112d042f",
+  "policy_digest": "sha256:2ecd23937ae4b96296baac76fcfdcffbc3c96006739d14698842edc4cb300fa7",
+  "entries": [
+    {
+      "seq": 1,
+      "token": "BTC",
+      "verdict": "abstain",
+      "decision_id": "dec_60f1f98dd159f2ab7ba372d5",
+      "commitment_digest": "sha256:60f1f98dd159f2ab7ba372d5645649c8a7c280cd223f567fa1359b7079d2d88f",
+      "skipped_duplicate": false,
+      "error": null
+    }
+  ],
+  "manifest_digest": "sha256:4e0e6414d5b09b53b9e8aeac77c4723dd9e278fe097a5310a70c9adce49bdd08",
+  "notes": {}
+}
