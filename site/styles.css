@@ -507,3 +507,47 @@ h1 { font-size: 62px; line-height: 1.02; letter-spacing: -.032em; font-weight: 7
   .doc-section h2 { font-size: 26px; }
   .layer-table { display: block; overflow-x: auto; }
 }
+
+/* ---------- workbench ---------- */
+
+.wb-section { padding-top: 56px; scroll-margin-top: 90px; }
+.wb-voice-post {
+  font-size: 13.5px; line-height: 1.55; color: var(--body); margin: 8px 0 12px;
+}
+.wb-check {
+  display: flex; align-items: flex-start; gap: 10px; font-family: var(--mono);
+  font-size: 11px; letter-spacing: .04em; cursor: pointer; margin-top: 14px;
+}
+.wb-check input { margin-top: 2px; flex: none; }
+.wb-controls {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px;
+  border: 1px solid var(--line-2); padding: 24px 26px; margin: 28px 0;
+}
+.wb-field { display: flex; flex-direction: column; gap: 8px; }
+.wb-field .try-label { margin-bottom: 0; }
+.wb-field input[type="number"] {
+  font-family: var(--mono); font-size: 14px; padding: 10px 12px;
+  background: var(--surface); color: var(--ink); border: 1px solid var(--line-2);
+  border-radius: 2px; width: 100%;
+}
+.wb-hint { font-size: 12px; color: var(--muted); margin-top: 2px; }
+.wb-run-row { display: flex; align-items: center; gap: 16px; margin: 8px 0 32px; }
+.wb-error { color: var(--accent-deep); font-family: var(--mono); font-size: 13px; }
+
+.wb-diff {
+  border: 1px solid var(--accent-deep); background: rgba(227, 87, 174, .06);
+  padding: 22px 26px; margin: 0 0 32px;
+}
+.wb-diff .label { color: var(--accent-deep); }
+.wb-diff-verdict { font-size: 22px; font-weight: 700; margin: 10px 0 14px; }
+.wb-diff-verdict .arrow { color: var(--muted); margin: 0 10px; font-weight: 400; }
+.wb-diff-rule {
+  font-family: var(--mono); font-size: 12.5px; line-height: 1.7; color: var(--body);
+  padding: 8px 0; border-top: 1px solid var(--line);
+}
+.wb-diff-rule .rule-id { color: var(--accent-deep); }
+.wb-unchanged { color: var(--muted); font-family: var(--mono); font-size: 13px; }
+
+.seal-body .rule-blocked { color: var(--accent-deep); }
+.seal-body .rule-satisfied { color: var(--good); }
+.seal-body .rule-noted { color: var(--muted); }

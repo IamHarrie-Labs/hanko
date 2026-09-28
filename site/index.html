@@ -39,6 +39,7 @@
       <a href="#missing">Missing data</a>
       <a href="#commitment">Commitment</a>
       <a href="#pipeline">Pipeline</a>
+      <a href="workbench.html">Workbench</a>
       <a href="docs.html">Docs</a>
     </div>
     <div class="nav-actions">
@@ -71,7 +72,7 @@
         </div>
         <!-- trail:start -->
         <pre id="trail" data-trail="ENTER TOKENA  size 3.28%  confidence 0.66
-  dec_1c8fd049468fddbb25cdd623
+  dec_40bf0f1b0698c991a2efc4b7
   evidence quality 0.82  (completeness 1.0, freshness 0.75,
   corroboration 1.0, independence 0.67)
   + evidence_present: 3 reading(s) reference TOKENA
@@ -85,12 +86,12 @@
     0.72%, inside the 3.0% ceiling
   ~ echo voice_beta: marked as a repost or quote by the
     source
-  ! wrong if price_usd &lt; 1.0625 within 72.0h (thesis fails
-    if price falls 15% from entry)
-  ! wrong if liquidity_usd &lt; 630000.0 within 72.0h (exit
-    assumption fails if depth drops 30%)
-  ! wrong if independent_voices &lt; 2.0 within 72.0h (entry
-    rested on convergence that no longer holds)
+  ! wrong if price_usd &lt; 1.0625 at any point within 72.0h
+    (thesis fails if price falls 15% from entry)
+  ! wrong if liquidity_usd &lt; 630000.0 at any point within
+    72.0h (exit assumption fails if depth drops 30%)
+  ! wrong if independent_voices &lt; 2.0 at review, within
+    72.0h (entry rested on convergence that no longer holds)
   review at 2026-08-30T12:00:00Z
 
   replayed from stored bytes: same decision id"></pre>
@@ -104,13 +105,13 @@
   <div class="stats">
     <div class="stat">
       <div class="label">Tests</div>
-      <div class="stat-value" data-stat="tests">198</div>
+      <div class="stat-value" data-stat="tests">233</div>
       <div class="stat-note">All offline, about 5s</div>
     </div>
     <div class="stat">
       <div class="label">Lines</div>
-      <div class="stat-value" data-stat="lines">8,719</div>
-      <div class="stat-note">Across <span data-stat="commits">33</span> commits</div>
+      <div class="stat-value" data-stat="lines">10,123</div>
+      <div class="stat-note">Across <span data-stat="commits">40</span> commits</div>
     </div>
     <div class="stat">
       <div class="label">Layers</div>
@@ -240,6 +241,11 @@
   </div>
 
   <p class="footnote">A decision can be profitable and still falsified: the price rose while the liquidity that justified the size drained away. The reasoning was wrong; the outcome was luck. Both are recorded; only one sets the grade.</p>
+
+  <div class="teaser">
+    <p>Don't take the rule list on faith. Remove a voice or tighten a threshold yourself and watch this exact decision's verdict move, live, in the workbench.</p>
+    <a href="workbench.html">Open the decision workbench</a>
+  </div>
 </section>
 
 <section id="pipeline" class="shell">
@@ -291,7 +297,7 @@
   <div class="eyebrow">Test coverage</div>
   <h2 style="max-width: 22em">What's actually proven.</h2>
 
-  <div class="proof-head good">Proven · <span data-stat="tests">198</span> tests, all offline</div>
+  <div class="proof-head good">Proven · <span data-stat="tests">233</span> tests, all offline</div>
   <ul class="proof-list" style="max-width: 46em">
     <li class="proof-item"><span class="sigil good">+</span><span>Every failure mode: rate limit, partial window, empty result, raising adapter, malformed feed, unreadable payload</span></li>
     <li class="proof-item"><span class="sigil good">+</span><span>Size shrinking under missing safety data, a failed source, and stale evidence</span></li>
@@ -321,7 +327,7 @@
 
     <div class="colophon">
       <span>Hanko 判子 · RYO-CHAN Hackathon 2026</span>
-      <span><span data-stat="tests">198</span> tests · <span data-stat="lines">8,719</span> lines · <span data-stat="commits">33</span> commits · <a href="https://github.com/IamHarrie-Labs/hanko" data-repo>GitHub</a></span>
+      <span><span data-stat="tests">233</span> tests · <span data-stat="lines">10,123</span> lines · <span data-stat="commits">40</span> commits · <a href="https://github.com/IamHarrie-Labs/hanko" data-repo>GitHub</a></span>
     </div>
   </div>
 </footer>

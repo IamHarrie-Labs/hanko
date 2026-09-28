@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hanko: decision workbench</title>
+<meta name="description" content="Open a real, sealed decision, remove a source or tighten a threshold, and watch the actual decide() engine's verdict move -- and which rule caused it.">
+
+<link rel="icon" href="assets/favicon.png" sizes="32x32" type="image/png">
+<link rel="icon" href="assets/icon-512.png" sizes="512x512" type="image/png">
+<link rel="apple-touch-icon" href="assets/icon-180.png">
+<meta name="theme-color" content="#E3E2DD">
+
+<meta property="og:title" content="Hanko: decision workbench">
+<meta property="og:description" content="Remove a source, tighten a threshold, watch the real decision engine's verdict move -- and which rule caused it.">
+<meta property="og:type" content="website">
+<meta property="og:image" content="assets/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="assets/og-image.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="index.html" aria-label="Hanko home" style="display: flex; flex: none">
+      <img class="mark mark-nav" src="assets/hanko-logo.png" width="1092" height="584" alt="">
+    </a>
+    <div class="nav-links">
+      <a href="index.html">Landing page</a>
+      <a href="try.html">Try it live</a>
+      <a href="docs.html">Docs</a>
+    </div>
+    <div class="nav-actions">
+      <a href="https://github.com/IamHarrie-Labs/hanko" data-repo class="btn btn-dark">GITHUB REPO</a>
+    </div>
+  </div>
+</nav>
+
+<header class="shell docs-hero">
+  <a href="index.html" class="back-link">&larr; Hanko</a>
+  <div class="eyebrow">Decision workbench</div>
+  <h1>Remove a source. Tighten a threshold. Watch the verdict move.</h1>
+  <p class="lede">This is the real, sealed decision printed throughout this project's README (<code id="wb-decid">loading…</code>), re-derived by the same <code>decide()</code> the CLI and the sealing pipeline use. Nothing below touches X or RYO -- every post and every market figure is the exact captured fixture this decision was built from. Changing an input below computes a fresh, clearly labelled hypothetical; the original decision is never altered.</p>
+</header>
+
+<section id="wb-baseline" class="shell wb-section">
+  <div class="label">The sealed decision</div>
+  <div class="seal" id="wb-baseline-seal">
+    <div class="seal-head"><span>BASELINE</span><span>Unchanged, always</span></div>
+    <div class="seal-verdict" id="wb-baseline-verdict">loading…</div>
+    <div class="seal-body" id="wb-baseline-body"></div>
+  </div>
+</section>
+
+<section id="wb-evidence" class="shell wb-section">
+  <div class="label">The evidence</div>
+  <p class="section-lede">Three accounts mentioned $TOKENA. Uncheck one to simulate it never having posted -- the same effect a quiet source or a rate-limited call has on a real sweep.</p>
+  <div class="voices" id="wb-voices"></div>
+</section>
+
+<section id="wb-controls" class="shell wb-section">
+  <div class="label">Change the inputs</div>
+  <p class="section-lede">Simulate a market field going dark, or move a policy threshold the same way a real operator would tune it. Every one of these is a real field the live engine reads.</p>
+  <div class="wb-controls">
+    <div class="wb-field">
+      <span class="try-label">Market field unavailable</span>
+      <label class="wb-check"><input type="checkbox" data-missing="price_usd"> price_usd</label>
+      <label class="wb-check"><input type="checkbox" data-missing="volume_24h_usd"> volume_24h_usd</label>
+      <label class="wb-check"><input type="checkbox" data-missing="liquidity_usd"> liquidity_usd</label>
+      <label class="wb-check"><input type="checkbox" data-missing="safety_score"> safety_score</label>
+    </div>
+    <div class="wb-field">
+      <span class="try-label">min_independent_voices</span>
+      <input type="number" id="wb-min-voices" value="2" min="0" max="10" step="1">
+      <span class="wb-hint">Policy default: 2</span>
+    </div>
+    <div class="wb-field">
+      <span class="try-label">echo_similarity</span>
+      <input type="number" id="wb-echo-sim" value="0.6" min="0" max="1" step="0.05">
+      <span class="wb-hint">Policy default: 0.6. A repost tagged by the source is caught regardless of this value.</span>
+    </div>
+    <div class="wb-field">
+      <span class="try-label">min_evidence_quality</span>
+      <input type="number" id="wb-min-quality" value="0.4" min="0" max="1" step="0.05">
+      <span class="wb-hint">Policy default: 0.4</span>
+    </div>
+  </div>
+  <div class="wb-run-row">
+    <button id="wb-run" class="btn btn-solid">Run experiment</button>
+    <span class="wb-error" id="wb-error"></span>
+  </div>
+</section>
+
+<section id="wb-result" class="shell wb-section" style="display:none">
+  <div class="label">What changed, and which rule caused it</div>
+  <div class="wb-diff" id="wb-diff"></div>
+
+  <div class="two-col">
+    <div class="seal">
+      <div class="seal-head"><span>BASELINE</span><span id="wb-baseline-id2" class="faint"></span></div>
+      <div class="seal-verdict" id="wb-result-baseline-verdict"></div>
+      <div class="seal-body" id="wb-result-baseline-body"></div>
+    </div>
+    <div class="seal seal-graded">
+      <div class="seal-head"><span>HYPOTHETICAL EXPERIMENT</span><span class="faint">not written anywhere</span></div>
+      <div class="seal-verdict" id="wb-result-experiment-verdict"></div>
+      <div class="seal-body" id="wb-result-experiment-body"></div>
+    </div>
+  </div>
+  <p class="footnote">This branch is computed fresh from the same pure inputs every time and is never appended to a decision ledger. It proves the engine's cause and effect, not a new fact about $TOKENA -- the sealed decision above is the only one that ever committed to anything.</p>
+</section>
+
+<footer class="band">
+  <div class="shell band-inner" style="padding-top: 56px; padding-bottom: 56px">
+    <div class="colophon">
+      <span>Hanko 判子 · RYO-CHAN Hackathon 2026</span>
+      <span><span data-stat="tests">219</span> tests · <a href="index.html">Home</a> · <a href="https://github.com/IamHarrie-Labs/hanko" data-repo>GitHub</a></span>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function () {
+  var baseline = null; // last API response, so "run experiment" can diff against it
+
+  function money(n) { return Math.round(n).toLocaleString('en-US'); }
+  function pct(n) { return (n * 100).toFixed(2) + '%'; }
+
+  function ruleClass(outcome) {
+    return outcome === 'blocked' ? 'rule-blocked' : outcome === 'noted' ? 'rule-noted' : 'rule-satisfied';
+  }
+  function ruleMark(outcome) {
+    return outcome === 'blocked' ? 'x' : outcome === 'noted' ? '.' : '+';
+  }
+
+  function renderSealBody(record) {
+    var lines = [];
+    lines.push('<div>' + record.decision_id + '</div>');
+    lines.push(
+      '<div class="faint" style="margin-top:8px">size ' + pct(record.size_fraction)
+      + ' &middot; confidence ' + record.confidence.toFixed(2)
+      + ' &middot; evidence quality ' + record.quality.overall.toFixed(3) + '</div>'
+    );
+    record.rules.forEach(function (r) {
+      lines.push(
+        '<div class="' + ruleClass(r.outcome) + '" style="margin-top:6px">'
+        + ruleMark(r.outcome) + ' ' + r.rule_id + ': ' + r.detail + '</div>'
+      );
+    });
+    record.gaps.forEach(function (g) {
+      lines.push('<div class="faint" style="margin-top:6px">? gap ' + g.kind + ': ' + g.detail + '</div>');
+    });
+    return lines.join('');
+  }
+
+  function renderVoices(evidence) {
+    var el = document.getElementById('wb-voices');
+    el.innerHTML = '';
+    var counted = 0;
+    evidence.forEach(function (item, i) {
+      var initial = item.author.replace('voice_', '')[0].toUpperCase();
+      var card = document.createElement('div');
+      card.className = 'voice' + (item.is_echo ? ' voice-echo' : '');
+      var status = item.is_echo
+        ? '<div class="voice-status demoted">DEMOTED TO ECHO</div>'
+        : '<div class="voice-status counted">COUNTED</div>';
+      if (!item.is_echo) counted++;
+      card.innerHTML =
+        '<label class="wb-check" style="margin-top:0">'
+        + '<input type="checkbox" data-exclude="' + item.author + '" checked> include</label>'
+        + '<div class="avatar' + (item.is_echo ? ' avatar-echo' : '') + '" style="margin-top:12px">' + initial + '</div>'
+        + '<div class="voice-name">' + item.author + '</div>'
+        + '<div class="wb-voice-post">&ldquo;' + item.text.replace(/</g, '&lt;') + '&rdquo;</div>'
+        + (item.is_echo ? '<div class="voice-note">' + item.echo_reason + '</div>' : '')
+        + status;
+      el.appendChild(card);
+    });
+    var tally = document.createElement('div');
+    tally.className = 'voice-tally';
+    tally.innerHTML = '<div class="label">Independent voices</div>'
+      + '<div class="tally-value" id="wb-voice-count">' + counted + '</div>'
+      + '<div class="tally-note">of ' + evidence.length + ' mentions</div>';
+    el.appendChild(tally);
+  }
+
+  function renderBaseline(data) {
+    document.getElementById('wb-decid').textContent = data.baseline.decision_id;
+    document.getElementById('wb-baseline-verdict').textContent =
+      data.baseline.verdict.toUpperCase() + ' ' + data.token;
+    document.getElementById('wb-baseline-body').innerHTML = renderSealBody(data.baseline);
+    renderVoices(data.baseline.evidence);
+  }
+
+  function currentParams() {
+    var exclude = Array.prototype.slice.call(document.querySelectorAll('[data-exclude]'))
+      .filter(function (c) { return !c.checked; })
+      .map(function (c) { return c.getAttribute('data-exclude'); });
+    var missing = Array.prototype.slice.call(document.querySelectorAll('[data-missing]'))
+      .filter(function (c) { return c.checked; })
+      .map(function (c) { return c.getAttribute('data-missing'); });
+    var params = new URLSearchParams();
+    if (exclude.length) params.set('exclude', exclude.join(','));
+    if (missing.length) params.set('missing', missing.join(','));
+    var minVoices = document.getElementById('wb-min-voices').value;
+    var echoSim = document.getElementById('wb-echo-sim').value;
+    var minQuality = document.getElementById('wb-min-quality').value;
+    if (minVoices !== '2') params.set('min_independent_voices', minVoices);
+    if (echoSim !== '0.6') params.set('echo_similarity', echoSim);
+    if (minQuality !== '0.4') params.set('min_evidence_quality', minQuality);
+    return params;
+  }
+
+  function renderDiff(diff) {
+    var el = document.getElementById('wb-diff');
+    if (!diff.verdict_changed && diff.rule_changes.length === 0) {
+      el.innerHTML = '<div class="label">No change</div><div class="wb-unchanged">Every rule reached the same outcome. Try excluding a second voice, or raising min_independent_voices to 3.</div>';
+      return;
+    }
+    var html = '<div class="label">' + (diff.verdict_changed ? 'Verdict changed' : 'Verdict held, but a rule moved') + '</div>';
+    html += '<div class="wb-diff-verdict">' + diff.verdict_before.toUpperCase()
+      + '<span class="arrow">&rarr;</span>' + diff.verdict_after.toUpperCase() + '</div>';
+    diff.rule_changes.forEach(function (c) {
+      var before = c.before ? c.before.outcome + ' (' + c.before.detail + ')' : 'not raised';
+      var after = c.after ? c.after.outcome + ' (' + c.after.detail + ')' : 'not raised';
+      html += '<div class="wb-diff-rule"><span class="rule-id">' + c.rule_id + '</span>: '
+        + before + ' &rarr; ' + after + '</div>';
+    });
+    el.innerHTML = html;
+  }
+
+  function runExperiment() {
+    var button = document.getElementById('wb-run');
+    var errorEl = document.getElementById('wb-error');
+    errorEl.textContent = '';
+    button.disabled = true;
+    button.textContent = 'Running…';
+
+    var params = currentParams();
+    fetch('/api/workbench?' + params.toString())
+      .then(function (res) { return res.json().then(function (body) { return { ok: res.ok, body: body }; }); })
+      .then(function (result) {
+        if (!result.ok || result.body.error && !result.body.baseline) {
+          errorEl.textContent = result.body.error || 'request failed';
+          return;
+        }
+        var data = result.body;
+        document.getElementById('wb-result').style.display = '';
+        document.getElementById('wb-baseline-id2').textContent = data.baseline.decision_id;
+        document.getElementById('wb-result-baseline-verdict').textContent =
+          data.baseline.verdict.toUpperCase() + ' ' + data.token;
+        document.getElementById('wb-result-baseline-body').innerHTML = renderSealBody(data.baseline);
+        document.getElementById('wb-result-experiment-verdict').textContent =
+          data.experiment.verdict.toUpperCase() + ' ' + data.token;
+        document.getElementById('wb-result-experiment-body').innerHTML = renderSealBody(data.experiment);
+        renderDiff(data.diff);
+        document.getElementById('wb-result').scrollIntoView({ behavior: 'smooth', block: 'start' });
+      })
+      .catch(function (err) { errorEl.textContent = 'Network error: ' + err.message; })
+      .finally(function () {
+        button.disabled = false;
+        button.textContent = 'Run experiment';
+      });
+  }
+
+  document.getElementById('wb-run').addEventListener('click', runExperiment);
+
+  fetch('/api/workbench')
+    .then(function (res) { return res.json(); })
+    .then(renderBaseline)
+    .catch(function (err) {
+      document.getElementById('wb-baseline-verdict').textContent = 'Could not load: ' + err.message;
+    });
+})();
+</script>
+
+</body>
+</html>

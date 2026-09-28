@@ -7,7 +7,9 @@ framework, no dependencies — matching how the rest of the project is built.
 site/index.html           the landing page -- the hook, kept short
 site/docs.html            everything the landing page used to bury in prose
 site/try.html             runs exit_liquidity live, against the real platform
+site/workbench.html       exclude a source, tighten a threshold, watch decide() move
 site/api/exit_liquidity.py  the serverless function try.html calls
+site/api/workbench.py       the serverless function workbench.html calls -- fixture-only, no live call, no cost
 site/api/_vendor/         hanko/, copied in at deploy time -- generated, gitignored
 site/requirements.txt     the function's one dependency (httpx)
 site/vercel.json          clean URLs, asset caching, function timeout

@@ -113,6 +113,7 @@ Everything here researches and sizes a position; nothing here moves funds.
 |---|---|
 | [tryhanko.vercel.app](https://tryhanko.vercel.app) | The pitch, and a real fixture-based decision receipt, typed out live |
 | [/try](https://tryhanko.vercel.app/try) | `exit_liquidity` running live against the real RYO platform, from a browser |
+| [/workbench](https://tryhanko.vercel.app/workbench) | Remove a voice or tighten a threshold on a real, sealed decision and watch the actual `decide()` verdict move, and which rule caused it |
 | [/docs#track1-live](https://tryhanko.vercel.app/docs#track1-live) | Two real decisions, live X evidence and live RYO facts, neither cherry-picked |
 | [/docs#mcp-transport](https://tryhanko.vercel.app/docs#mcp-transport) | What a live MCP handshake and a live `x_search` call actually return |
 

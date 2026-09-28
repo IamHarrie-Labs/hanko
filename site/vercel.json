@@ -14,6 +14,9 @@
   "functions": {
     "api/exit_liquidity.py": {
       "maxDuration": 30
+    },
+    "api/workbench.py": {
+      "maxDuration": 10
     }
   }
 }

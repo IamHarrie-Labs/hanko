@@ -15,7 +15,13 @@ from http.server import BaseHTTPRequestHandler
 from pathlib import Path
 from urllib.parse import parse_qs, urlparse
 
-sys.path.insert(0, str(Path(__file__).resolve().parent / "_vendor"))
+# Vercel uploads only site/, so the vendored copy is how the function sees
+# hanko/ at all there. Locally the real package is already installed
+# editable; only prepend the vendored path when it actually exists, so a
+# fresh clone that hasn't run vendor_for_site.py yet still imports fine.
+_vendor = Path(__file__).resolve().parent / "_vendor"
+if _vendor.is_dir():
+    sys.path.insert(0, str(_vendor))
 
 from hanko.ryotools import RyoMcpSource, extract_market_facts  # noqa: E402
 from hanko.skills.exit_liquidity import assess  # noqa: E402
