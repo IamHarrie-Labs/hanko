@@ -3,9 +3,41 @@
     {
       "token": "BTC",
       "sources": {
-        "x": ["CryptoKaleo"]
-      },
-      "fact_tools": ["analyze_token"]
+        "x": [
+          "CryptoKaleo",
+          "WatcherGuru"
+        ]
+      }
+    },
+    {
+      "token": "SOL",
+      "sources": {
+        "x": [
+          "CryptoKaleo",
+          "AltcoinGordon"
+        ]
+      }
+    },
+    {
+      "token": "ETH",
+      "sources": {
+        "x": [
+          "inversebrah",
+          "WatcherGuru"
+        ]
+      }
+    },
+    {
+      "token": "BONK",
+      "sources": {
+        "x": [
+          "AltcoinGordon",
+          "CryptoKaleo"
+        ],
+        "rss": [
+          "https://www.coindesk.com/arc/outboundfeeds/rss/"
+        ]
+      }
     }
   ]
 }
