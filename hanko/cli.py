@@ -427,6 +427,46 @@ def cmd_review(args: argparse.Namespace) -> int:
     return 0
 
 
+def _sweep_as_of(args: argparse.Namespace):
+    from datetime import datetime, timezone
+
+    return (
+        datetime.fromisoformat(args.as_of.replace("Z", "+00:00"))
+        if args.as_of
+        else datetime.now(timezone.utc)
+    )
+
+
+def _sweep_resolver(args: argparse.Namespace):
+    """Live by default; a fixture directory swaps in fixture-backed sources.
+
+    Used by both `hanko sweep` and `hanko seal`, so the two commands cannot
+    quietly drift on how a source id gets resolved.
+    """
+    from .ryotools import FixtureFactsSource
+
+    if not args.fixture_dir:
+        return resolve  # live: already dispatches x / rss / ryomcp: / ryo: by prefix
+
+    fixture_dir = args.fixture_dir
+
+    def resolve_fn(source_id: str):
+        name = source_id.removeprefix("ryomcp:").removeprefix("ryo:")
+        path = fixture_dir / (name + ".json")
+        if source_id.startswith(("ryomcp:", "ryo:")):
+            return FixtureFactsSource(path, source_id=source_id)
+        # Facts sources are safe under the wrong label -- their parse()
+        # is a no-op regardless of adapter, real or fixture. Evidence
+        # sources are not: their parse() reads the payload's actual
+        # shape, so a later plain resolve() (hanko audit, no
+        # --fixture-dir) must be able to tell this one apart from a
+        # live "x"/"rss" capture, or it hands the bytes to the wrong
+        # parser the same way a bare `decide --fixture` capture did.
+        return FixtureSource(path, source_id="fixture:" + source_id)
+
+    return resolve_fn
+
+
 def cmd_sweep(args: argparse.Namespace) -> int:
     """One pass over a watchlist: decide on everything, grade what's due.
 
@@ -435,51 +475,102 @@ def cmd_sweep(args: argparse.Namespace) -> int:
     failed run is just a failed invocation, not a process to find and
     kill.
     """
-    from datetime import datetime, timezone
-
     from .decision import DecisionLedger, KeywordInterpreter, Policy
     from .review import ReviewLedger, SampleTrail
-    from .ryotools import FixtureFactsSource
     from .sweep import load_watchlist, run_sweep
 
-    watchlist = load_watchlist(args.watchlist)
-    as_of = (
-        datetime.fromisoformat(args.as_of.replace("Z", "+00:00"))
-        if args.as_of
-        else datetime.now(timezone.utc)
-    )
-
-    if args.fixture_dir:
-        fixture_dir = args.fixture_dir
-
-        def resolve_fn(source_id: str):
-            name = source_id.removeprefix("ryomcp:").removeprefix("ryo:")
-            path = fixture_dir / (name + ".json")
-            if source_id.startswith(("ryomcp:", "ryo:")):
-                return FixtureFactsSource(path, source_id=source_id)
-            # Facts sources are safe under the wrong label -- their parse()
-            # is a no-op regardless of adapter, real or fixture. Evidence
-            # sources are not: their parse() reads the payload's actual
-            # shape, so a later plain resolve() (hanko audit, no
-            # --fixture-dir) must be able to tell this one apart from a
-            # live "x"/"rss" capture, or it hands the bytes to the wrong
-            # parser the same way a bare `decide --fixture` capture did.
-            return FixtureSource(path, source_id="fixture:" + source_id)
-    else:
-        resolve_fn = resolve  # live: already dispatches x / rss / ryomcp: / ryo: by prefix
-
     report = run_sweep(
-        watchlist,
+        load_watchlist(args.watchlist),
         _store(args),
         DecisionLedger(args.ledger),
         ReviewLedger(args.reviews),
         Policy(),
         interpreter=KeywordInterpreter(),
-        resolve=resolve_fn,
-        as_of=as_of,
+        resolve=_sweep_resolver(args),
+        as_of=_sweep_as_of(args),
         samples=SampleTrail(args.samples) if args.samples else None,
     )
     print(report.explain())
+    return 1 if report.failures else 0
+
+
+def cmd_ots_status(args: argparse.Namespace) -> int:
+    """A stamped proof starts pending; report whether it has confirmed yet.
+
+    Confirmation means a Bitcoin block, already mined after this proof was
+    submitted, now includes it -- usually a few hours after stamping, never
+    instant. Re-run this later; there is nothing to upgrade in-process.
+    """
+    try:
+        from .otstamp import is_confirmed, load_proof
+    except ImportError:
+        print("needs the 'sealing' extra: pip install -e .[sealing]")
+        return 1
+
+    proof = load_proof(args.path)
+    if is_confirmed(proof):
+        print("confirmed: " + str(args.path))
+        return 0
+    print("pending: " + str(args.path) + " (not yet confirmed by a Bitcoin block; check again later)")
+    return 0
+
+
+def cmd_seal(args: argparse.Namespace) -> int:
+    """Run the watchlist, then publish a numbered manifest of everything it did.
+
+    A sealed decision only proves its own commitment predates its outcome.
+    It says nothing about what else happened that run. `hanko seal` runs
+    the same sweep `hanko sweep` does, then writes one manifest listing
+    every watchlist entry by its position, whether it entered, passed,
+    abstained, skipped as a duplicate, or errored -- so nothing published
+    from this run can later be shown to have left something out.
+    """
+    from .decision import DecisionLedger, KeywordInterpreter, Policy
+    from .review import ReviewLedger, SampleTrail
+    from .sealing import build_manifest, save_manifest
+    from .sweep import load_watchlist, run_sweep
+
+    watchlist = load_watchlist(args.watchlist)
+    policy = Policy()
+    report = run_sweep(
+        watchlist,
+        _store(args),
+        DecisionLedger(args.ledger),
+        ReviewLedger(args.reviews),
+        policy,
+        interpreter=KeywordInterpreter(),
+        resolve=_sweep_resolver(args),
+        as_of=_sweep_as_of(args),
+        samples=SampleTrail(args.samples) if args.samples else None,
+    )
+    manifest = build_manifest(report, watchlist, policy)
+    path = save_manifest(manifest, args.manifest_dir)
+
+    print(manifest.explain())
+    print("")
+    print("written to " + str(path))
+    if manifest.verify():
+        print("MANIFEST PROBLEM: " + "; ".join(manifest.verify()))
+        return 1
+
+    if args.ots:
+        try:
+            from .otstamp import StampFailed, stamp_and_save
+
+            ots_path = stamp_and_save(
+                manifest.manifest_digest.removeprefix("sha256:"), str(path) + ".ots"
+            )
+            print("OpenTimestamps proof (pending until a Bitcoin block confirms it): " + str(ots_path))
+        except ImportError:
+            print("--ots needs the 'sealing' extra: pip install -e .[sealing]")
+            return 1
+        except StampFailed as exc:
+            print("OTS stamping failed: " + str(exc))
+            return 1
+
+    print("")
+    print("--- post text ---")
+    print(manifest.post_text(repo_url=args.repo_url or ""))
     return 1 if report.failures else 0
 
 
@@ -569,6 +660,26 @@ def build_parser() -> argparse.ArgumentParser:
         help="read every source from <dir>/<name>.json instead of live transports",
     )
     sweep.set_defaults(func=cmd_sweep)
+
+    seal = sub.add_parser("seal", help="run the watchlist, publish a numbered manifest of everything it did")
+    seal.add_argument("--watchlist", type=Path, required=True)
+    seal.add_argument("--as-of", dest="as_of", help="RFC3339, for reproducible runs")
+    seal.add_argument("--ledger", type=Path, default=Path("decisions.jsonl"))
+    seal.add_argument("--reviews", type=Path, default=Path("reviews.jsonl"))
+    seal.add_argument("--samples", type=Path, default=None)
+    seal.add_argument("--fixture-dir", type=Path)
+    seal.add_argument("--manifest-dir", type=Path, default=Path("runs"))
+    seal.add_argument("--repo-url", default="", help="appended to the printed post text")
+    seal.add_argument(
+        "--ots", action="store_true",
+        help="anchor manifest_digest to public OpenTimestamps calendars "
+        "(needs the 'sealing' extra: pip install -e .[sealing])",
+    )
+    seal.set_defaults(func=cmd_seal)
+
+    ots_status = sub.add_parser("ots-status", help="check whether a .ots proof has a Bitcoin confirmation yet")
+    ots_status.add_argument("path", type=Path)
+    ots_status.set_defaults(func=cmd_ots_status)
 
     scorecard = sub.add_parser("scorecard", help="calibration and per-voice track record")
     scorecard.add_argument("--reviews", type=Path, default=Path("reviews.jsonl"))

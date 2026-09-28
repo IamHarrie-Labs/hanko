@@ -1,6 +1,7 @@
 snapshots/
 decisions.jsonl
 reviews.jsonl
+samples.jsonl
 __pycache__/
 *.pyc
 .pytest_cache/

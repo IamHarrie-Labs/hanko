@@ -9,6 +9,11 @@ dependencies = [
 
 [project.optional-dependencies]
 dev = ["pytest>=8.0"]
+# The core proof library only -- not opentimestamps-client, whose `ots` CLI
+# imports python-bitcoinlib's RPC module unconditionally, which fails at
+# import time on a Windows Python with no system OpenSSL on PATH, even for
+# calendar-only stamping that never touches a node (see hanko/otstamp.py).
+sealing = ["opentimestamps>=0.4"]
 
 [project.scripts]
 hanko = "hanko.cli:main"

@@ -572,6 +572,9 @@ observations rather than the ones frozen into the original decision.
 - **[`LIMITATIONS.md`](LIMITATIONS.md)**: what hasn't been shown yet, a
   calibration curve from real outcomes, a live `ENTER`, a real priced pool.
   Stated plainly, not folded into a status paragraph.
+- **[`SEALING.md`](SEALING.md)**: `hanko seal` -- a numbered manifest of an
+  entire watchlist run (nothing omitted, not even the errors), anchored to
+  public OpenTimestamps calendars, published before the outcome is known.
 
 ## Next
 
