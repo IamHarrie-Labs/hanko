@@ -1,0 +1,80 @@
+{
+ "recorded_at": "2026-10-23T17:23:31Z",
+ "url": "https://lite-api.jup.ag/swap/v1/quote",
+ "params": {
+  "inputMint": "DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263",
+  "outputMint": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+  "amount": "3000000000",
+  "slippageBps": 300
+ },
+ "payload": {
+  "inputMint": "DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263",
+  "inAmount": "3000000000",
+  "outputMint": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+  "outAmount": "98214",
+  "otherAmountThreshold": "95268",
+  "swapMode": "ExactIn",
+  "slippageBps": 300,
+  "platformFee": null,
+  "priceImpactPct": "0.0014286189952234807048751002",
+  "routePlan": [
+   {
+    "swapInfo": {
+     "ammKey": "HxhY3cDvaHDnsv7JhdeVPNYPjDSeTcKhnpLuZyfPXYwc",
+     "label": "Bonkswap",
+     "inputMint": "DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263",
+     "outputMint": "bSo13r4TkiE4KumL71LsHTPpL2euBYLFx6h9HP3piy1",
+     "inAmount": "3000000000",
+     "outAmount": "711194",
+     "updateContextSlot": "460526318"
+    },
+    "percent": 100,
+    "bps": null
+   },
+   {
+    "swapInfo": {
+     "ammKey": "7SanaZyHJVdcr56szAJb1Vezsi491bqs4sU8bLLef1YG",
+     "label": "Manifest",
+     "inputMint": "bSo13r4TkiE4KumL71LsHTPpL2euBYLFx6h9HP3piy1",
+     "outputMint": "So11111111111111111111111111111111111111112",
+     "inAmount": "711194",
+     "outAmount": "939324",
+     "updateContextSlot": "460526681"
+    },
+    "percent": 100,
+    "bps": null
+   },
+   {
+    "swapInfo": {
+     "ammKey": "2SgUGxYDczrB6wUzXHPJH65pNhWkEzNMEx3km4xTYUTC",
+     "label": "Invariant",
+     "inputMint": "So11111111111111111111111111111111111111112",
+     "outputMint": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+     "inAmount": "939324",
+     "outAmount": "98214",
+     "updateContextSlot": "460526652"
+    },
+    "percent": 100,
+    "bps": null
+   }
+  ],
+  "contextSlot": 460526696,
+  "timeTaken": 0.003797349,
+  "swapUsdValue": "0.098178145954325240682",
+  "mostReliableAmmsQuoteReport": {
+   "info": {
+    "bSo13r4TkiE4KumL71LsHTPpL2euBYLFx6h9HP3piy1": "No MRP",
+    "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v": "No MRP",
+    "DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263": "No MRP",
+    "So11111111111111111111111111111111111111112": "No MRP"
+   }
+  },
+  "longtailMarketQuoteReport": null,
+  "useIncurredSlippageForQuoting": null,
+  "useRewards": null,
+  "otherRoutePlans": null,
+  "loadedLongtailToken": false,
+  "instructionVersion": null,
+  "transactionVersion": 0
+ }
+}

@@ -49,7 +49,7 @@
   <a href="index.html" class="back-link">&larr; Hanko</a>
   <div class="eyebrow">Try it live</div>
   <h1>Run exit_liquidity against the real platform.</h1>
-  <p class="lede">This is not a canned response, and not a fixture. Picking a token below calls the real <code>RyoMcpSource</code>, live, against RYO's authenticated MCP endpoint, then runs the exact same pure <code>assess()</code> the CLI uses. Restricted to a few tokens and a capped size, so a public endpoint doesn't turn into an unbounded tap on a live credential.</p>
+  <p class="lede">Not a canned response and not a fixture. Each check makes three live calls: RYO's <code>analyze_token</code> for market facts, DexScreener for the depth of every pool trading the token's canonical contract, and Jupiter for an <strong>executable quote</strong> to sell your exact size. Then it runs the same pure <code>assess()</code> the CLI uses. When a quote exists, the verdict rests on it and the model's own figure is shown beside it, error and all. If any of the three is down, the answer comes back from the others and says which one failed. The response is RYO's own public envelope, so RYO's clients can read it unchanged.</p>
 </header>
 
 <section id="try-it" class="shell">
@@ -59,9 +59,10 @@
       <select id="try-token" name="token">
         <option value="SOL">SOL</option>
         <option value="BONK">BONK</option>
-        <option value="ETH">ETH</option>
-        <option value="BTC">BTC</option>
-        <option value="USDC">USDC</option>
+        <option value="JUP">JUP</option>
+        <option value="WIF">WIF</option>
+        <option value="ETH">ETH (via WETH)</option>
+        <option value="BTC">BTC (via WBTC)</option>
       </select>
     </label>
     <label class="try-field">
@@ -76,17 +77,17 @@
       <span id="try-heading">EXIT_LIQUIDITY · LIVE CHECK</span>
       <span class="receipt-live">LIVE OUTPUT</span>
     </div>
-    <pre id="try-output">Pick a token and a size, then run a live check. Usually 2 to 5 seconds, since it's a real network call to RYO's MCP endpoint.</pre>
+    <pre id="try-output">Pick a token and a size, then run a live check. Usually 2 to 8 seconds: three real network calls.</pre>
   </div>
 
-  <p class="footnote" style="max-width: 48em">Every figure above is computed from what this call actually returned. Nothing is filled in when the platform doesn't supply it. See the <a href="docs.html#exit-liquidity">exit_liquidity docs</a> for the full model.</p>
+  <p class="footnote" style="max-width: 48em">Every figure above is computed from what this call actually returned. Nothing is filled in when a source doesn't supply it. Solana tokens get an executable quote; ETH and BTC are measured through their wrapped forms on Ethereum, where no keyless quote venue exists, so their cost is modelled and labelled as such. Also callable the way RYO's own tools are: <code>POST /api/tools/exit_liquidity/call</code>, or as an MCP server at <code>/api/mcp</code>. See the <a href="docs.html#exit-liquidity">exit_liquidity docs</a>.</p>
 </section>
 
 <footer class="band">
   <div class="shell band-inner" style="padding-top: 56px; padding-bottom: 56px">
     <div class="colophon">
       <span>Hanko 判子 · RYO-CHAN Hackathon 2026</span>
-      <span><span data-stat="tests">234</span> tests · <span data-stat="lines">10,138</span> lines · <span data-stat="commits">43</span> commits · <a href="index.html">Home</a> · <a href="https://github.com/IamHarrie-Labs/hanko" data-repo>GitHub</a></span>
+      <span><span data-stat="tests">277</span> tests · <span data-stat="lines">11,544</span> lines · <span data-stat="commits">44</span> commits · <a href="index.html">Home</a> · <a href="https://github.com/IamHarrie-Labs/hanko" data-repo>GitHub</a></span>
     </div>
   </div>
 </footer>
@@ -110,12 +111,17 @@
     return v.toFixed(8).replace(/0+$/, '');
   }
 
-  function renderReport(body) {
-    var lines = [];
-    lines.push(body.verdict.toUpperCase() + '  ' + body.token + '  confidence ' + body.confidence);
+  function pctText(v) { return v.toFixed(2) + '%'; }
 
-    // The live facts this ran on. Without them two tokens with wildly
-    // different prices and volumes print an identical report.
+  function renderReport(env) {
+    // The envelope is RYO's own public response contract; the skill's
+    // figures live under env.data, its availability per section beside it.
+    var body = env.data || {};
+    var lines = [];
+    lines.push(body.verdict.toUpperCase() + '  ' + body.token + '  confidence ' + body.confidence
+      + '  ·  status ' + env.status + ', ' + env.data_mode);
+
+    // The live facts this ran on, and which source supplied each.
     var by = {}, tools = {};
     (body.inputs || []).forEach(function (i) {
       by[i.field] = i.value;
@@ -129,56 +135,59 @@
       lines.push('  ' + observed.join(' · ') + (names.length ? '  (' + names.join(', ') + ')' : ''));
     }
 
+    var q = body.venue_quote;
+    if (q) {
+      lines.push('  quoted: selling ~$' + money(q.size_usd) + ' on ' + q.venue + ' returns $' + money(q.out_usd)
+        + ', ' + pctText(q.effective_cost_pct) + ' under its own near-mid rate (impact plus fees, '
+        + q.route_hops + '-hop route)');
+    }
     if (body.estimate) {
-      lines.push(
-        '  exiting $' + money(body.estimate.size_usd) + ' costs '
-        + body.estimate.slippage_pct.toFixed(2) + '%  ($' + money(body.estimate.cost_usd) + ')'
-      );
+      lines.push(q
+        ? '  model said ' + pctText(body.estimate.slippage_pct) + ' from on-chain depth'
+        : '  exiting $' + money(body.estimate.size_usd) + ' costs ' + pctText(body.estimate.slippage_pct)
+          + '  ($' + money(body.estimate.cost_usd) + ', modelled)');
+    }
+    var mc = body.model_check;
+    if (mc && mc.model_over_quote !== null && mc.model_over_quote !== undefined) {
+      var r = mc.model_over_quote;
+      lines.push(r >= 1.25
+        ? '  the model overstates this exit ' + r.toFixed(1) + 'x: the route reaches concentrated liquidity a constant-product curve cannot see'
+        : r <= 0.8
+          ? '  the model understates this exit ' + (1 / r).toFixed(1) + 'x: the venue is thinner than its TVL says'
+          : '  the model and the quote agree within 25%');
+    }
+    var dp = body.pool_depth;
+    if (dp && dp.deepest_pool) {
+      lines.push('  depth: ' + dp.pools_used + ' pools on ' + dp.chain + (dp.via ? ' (' + dp.via + ')' : '')
+        + ', deepest $' + money(dp.deepest_pool.liquidity_usd)
+        + (dp.pools_rejected.length ? ', ' + dp.pools_rejected.length + ' rejected' : ''));
     }
     var labels = { '1pct': '1% slippage', '3pct': '3% slippage', at_ceiling: 'the requested ceiling' };
     Object.keys(body.max_size_usd || {}).forEach(function (key) {
       var value = body.max_size_usd[key];
       if (value !== null && value !== undefined) {
-        lines.push('  largest exit at ' + (labels[key] || key) + ': $' + money(value));
+        lines.push('  largest exit at ' + (labels[key] || key) + (q ? ' (modelled, conservative)' : '') + ': $' + money(value));
       }
     });
     if (body.hours_to_exit !== null && body.hours_to_exit !== undefined) {
-      // Matches the CLI's own scaling: a deep pool and a modest size give a
-      // real answer of seconds, and "0.0h" would read as no answer at all.
+      // Same scaling as the CLI: "0.0h" would read as no answer at all.
       var h = body.hours_to_exit, when;
       if (h >= 48) when = (h / 24).toFixed(1) + ' days';
       else if (h >= 1) when = h.toFixed(1) + 'h';
       else if (h * 60 >= 1) when = Math.round(h * 60) + ' min';
       else when = 'under a minute';
       var pct = body.parameters ? Math.round(body.parameters.participation_pct) : 10;
-      lines.push((body.estimate ? '  or exit over ' : '  exit over ')
-        + when + ' at ' + pct + '% of volume');
-    }
-    if (body.hourly_capacity_usd !== null && body.hourly_capacity_usd !== undefined) {
-      // The figure that still separates a deep market from a thin one when
-      // no pool depth is published and the duration collapses to nothing.
-      lines.push('  this market absorbs $' + money(body.hourly_capacity_usd) + ' per hour at that cap');
+      lines.push(((q || body.estimate) ? '  or exit over ' : '  exit over ') + when + ' at ' + pct + '% of volume');
     }
     if (body.drift_exposure_pct !== null && body.drift_exposure_pct !== undefined) {
-      // A slow exit is not a free exit. "~0.0%" would read as a computed
-      // zero, so a genuinely tiny exposure is said in words instead.
       var d = body.drift_exposure_pct;
-      lines.push('  waiting that long is exposed to '
-        + (d < 0.1 ? 'under 0.1%' : '~' + d.toFixed(1) + '%')
+      lines.push('  waiting that long is exposed to ' + (d < 0.1 ? 'under 0.1%' : '~' + d.toFixed(1) + '%')
         + " price drift at this market's volatility");
     }
-    if (body.turnover_pct !== null && body.turnover_pct !== undefined) {
-      var line = '  turnover ' + body.turnover_pct.toFixed(1) + '% of market cap per day';
-      var s = body.position_pct_of_cap;
-      if (s !== null && s !== undefined) {
-        line += '; this position is ' + (s < 0.01 ? 'under 0.01%' : s.toFixed(3) + '%') + ' of cap';
-      }
-      lines.push(line);
-    }
-    (body.warnings || []).forEach(function (w) { lines.push('  ! ' + w); });
-    (body.gaps || []).forEach(function (g) { lines.push('  ? ' + g); });
-    (body.live_warnings || []).forEach(function (w) { lines.push('  ~ ' + w); });
-    lines.push('  modelled with ' + (body.model ? body.model.id : 'cpmm_v1') + ', not observed');
+    (env.warnings || []).forEach(function (w) { lines.push('  ! ' + w); });
+    lines.push(body.basis === 'quoted'
+      ? '  verdict from an executable ' + q.venue + ' quote; quotes move with the market'
+      : '  modelled with ' + (body.model ? body.model.id : 'cpmm_v1') + ', not observed');
     return lines.join('\n');
   }
 
@@ -189,7 +198,7 @@
     var button = form.querySelector('.try-submit');
 
     heading.textContent = 'EXIT_LIQUIDITY · ' + token;
-    output.textContent = 'Calling the live RYO MCP endpoint for ' + token + ' …';
+    output.textContent = 'Calling RYO, DexScreener and Jupiter live for ' + token + ' …';
     button.disabled = true;
     button.textContent = 'Running …';
 
@@ -197,9 +206,10 @@
     fetch('/api/exit_liquidity?' + params.toString())
       .then(function (res) { return res.json().then(function (body) { return { ok: res.ok, body: body }; }); })
       .then(function (result) {
-        if (!result.ok || result.body.error) {
-          output.textContent = 'Could not complete a live check: ' + result.body.error
-            + (result.body.allowed ? '\nAllowed tokens: ' + result.body.allowed.join(', ') : '');
+        if (!result.ok || !result.body.data) {
+          var b = result.body || {};
+          output.textContent = 'Could not complete a live check: ' + (b.message || b.error || 'unknown error')
+            + (b.details && b.details.allowed ? ' Allowed tokens: ' + b.details.allowed.join(', ') : '');
           return;
         }
         output.textContent = renderReport(result.body);

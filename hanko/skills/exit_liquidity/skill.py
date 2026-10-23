@@ -24,12 +24,17 @@ WHAT IT RETURNS
 
 HONESTY CONVENTION
 
-Two rules, both stricter than the platform requires.
+Three rules, all stricter than the platform requires.
 
-  Modelled is not measured. No order book is observed anywhere in this
-  skill, so no figure it returns is presented as observed and confidence
-  never reads higher than `moderate`. The model, its assumptions, and the
-  point past which it stops being valid all travel with the answer.
+  Modelled is not measured. A figure from the constant-product model is
+  labelled `modelled`, carries its assumptions and the point past which it
+  stops being valid, and never reads higher than `moderate` confidence.
+
+  Measured beats modelled, and the gap is published. When venues.py
+  supplies an executable quote for the exact size, the verdict comes from
+  the quote (`basis: quoted`, the only case that reaches `high`), and the
+  model's own figure is kept beside it with the ratio between them -- so a
+  model that is wrong is seen to be wrong, rather than silently replaced.
 
   A missing input silences the answer it feeds, and only that one. If
   liquidity is unavailable the slippage fields are null and the verdict
@@ -50,9 +55,13 @@ from ...decision.record import MarketFacts
 from ...provenance import to_iso, utcnow
 from . import model
 from .model import ASSUMPTIONS, MODEL_ID, Confidence, Estimate, Verdict
+from .venues import PoolDepth, VenueEvidence, VenueQuote
 
 SKILL_NAME = "exit_liquidity"
-SKILL_VERSION = "1.0.0"
+# 2.0.0: venue evidence (pool depth, executable quote) and RYO's public
+# response envelope. 1.x answered `unknown` on every live call.
+SKILL_VERSION = "2.0.0"
+ENVELOPE_SCHEMA_VERSION = "1.0"
 
 DEFAULT_MAX_SLIPPAGE = 0.03
 DEFAULT_PARTICIPATION = 0.10
@@ -100,6 +109,14 @@ class Report:
     position_pct_of_cap: float | None = None
     drift_exposure_pct: float | None = None
 
+    # Venue evidence. `basis` says what the verdict rests on: "quoted" (an
+    # executable quote for this size), "modelled" (cpmm_v1), or None.
+    basis: str | None = None
+    quote: VenueQuote | None = None
+    depth: PoolDepth | None = None
+    model_check: dict[str, Any] | None = None
+    venue_failures: tuple[str, ...] = ()
+
     def to_dict(self) -> dict[str, Any]:
         return {
             "skill": SKILL_NAME,
@@ -108,9 +125,17 @@ class Report:
             "as_of": to_iso(self.as_of),
             "verdict": self.verdict.value,
             "confidence": self.confidence.value,
+            "basis": self.basis,
+            "venue_quote": self.quote.to_dict() if self.quote else None,
+            "pool_depth": self.depth.to_dict() if self.depth else None,
+            "model_check": self.model_check,
+            "venue_failures": list(self.venue_failures),
             "requested_size_usd": self.requested_size_usd,
             "estimate": self.estimate.to_dict() if self.estimate else None,
             "max_size_usd": self.max_size_usd,
+            "max_size_basis": (
+                "modelled" if any(v is not None for v in self.max_size_usd.values()) else None
+            ),
             "hours_to_exit": (
                 round(self.hours_to_exit, 2) if self.hours_to_exit is not None else None
             ),
@@ -169,21 +194,56 @@ class Report:
             if tools:
                 line += "  (" + ", ".join(tools) + ")"
             lines.append(line)
-        if self.estimate:
+        if self.quote:
             lines.append(
-                "  exiting $" + _money(self.estimate.size_usd)
-                + " costs " + str(round(self.estimate.slippage * 100, 2)) + "%"
-                + "  ($" + _money(self.estimate.cost_usd) + ")"
+                "  quoted: selling ~$" + _money(self.quote.size_usd) + " on "
+                + self.quote.venue + " returns $" + _money(self.quote.out_usd)
+                + ", " + str(round(self.quote.effective_cost * 100, 2))
+                + "% under its own near-mid rate (price impact plus fees, "
+                + str(self.quote.route_hops) + "-hop route)"
+            )
+        if self.estimate:
+            prefix = "  model said " if self.quote else "  exiting $" + _money(self.estimate.size_usd) + " costs "
+            lines.append(
+                prefix + str(round(self.estimate.slippage * 100, 2)) + "%"
+                + ("" if self.quote else "  ($" + _money(self.estimate.cost_usd) + ")")
+                + (" from $" + _money(self._liquidity_used()) + " of on-chain depth"
+                   if self.quote and self._liquidity_used() is not None else "")
+            )
+        if self.model_check and self.model_check.get("model_over_quote") is not None:
+            ratio = self.model_check["model_over_quote"]
+            if ratio >= 1.25:
+                lines.append(
+                    "  the model overstates this exit's cost " + str(round(ratio, 1))
+                    + "x: the route reaches concentrated liquidity a constant-product "
+                    "curve cannot see"
+                )
+            elif ratio <= 0.8:
+                lines.append(
+                    "  the model understates this exit's cost by "
+                    + str(round(1 / ratio, 1)) + "x: the venue is thinner than its TVL says"
+                )
+            else:
+                lines.append("  the model and the quote agree within 25%")
+        if self.depth and self.depth.deepest:
+            lines.append(
+                "  depth: " + str(len(self.depth.pools_used)) + " pools on "
+                + self.depth.chain + (" (" + self.depth.via + ")" if self.depth.via else "")
+                + ", deepest $" + _money(self.depth.deepest.liquidity_usd)
+                + (", " + str(len(self.depth.rejected)) + " rejected" if self.depth.rejected else "")
             )
         labels = {
             "1pct": "1% slippage",
             "3pct": "3% slippage",
             "at_ceiling": "your " + str(round(self.max_slippage * 100, 2)) + "% ceiling",
         }
+        # The ceilings come from the model. Beside a quote that just priced
+        # a bigger exit cheaper, unlabelled they read as a contradiction.
+        qualifier = " (modelled, conservative)" if self.quote else ""
         for key, value in self.max_size_usd.items():
             if value is not None:
                 lines.append(
-                    "  largest exit at " + labels.get(key, key) + ": $" + _money(value)
+                    "  largest exit at " + labels.get(key, key) + qualifier + ": $" + _money(value)
                 )
         if self.hours_to_exit is not None:
             # "or" only reads correctly as the alternative to a cost figure
@@ -229,8 +289,121 @@ class Report:
             lines.append("  ! " + warning)
         for gap in self.gaps:
             lines.append("  ? " + gap)
-        lines.append("  modelled with " + MODEL_ID + ", not observed")
+        for failure in self.venue_failures:
+            lines.append("  ~ " + failure)
+        if self.basis == "quoted":
+            lines.append(
+                "  verdict from an executable " + self.quote.venue + " quote at "
+                + to_iso(self.as_of) + "; quotes move with the market"
+            )
+        else:
+            lines.append("  modelled with " + MODEL_ID + ", not observed")
         return "\n".join(lines)
+
+    def _liquidity_used(self) -> float | None:
+        for trace in self.inputs:
+            if trace.field == "liquidity_usd":
+                return trace.value
+        return None
+
+    # ---- RYO's public response contract ------------------------------------
+
+    def to_envelope(
+        self,
+        *,
+        request: dict[str, Any],
+        data_mode: str,
+        extra_warnings: tuple[str, ...] = (),
+    ) -> dict[str, Any]:
+        """The same top-level fields every RYO tool returns.
+
+        Published at ryobuild.com/docs/MCP-Builder-Guide.md ("Public response
+        contract"): schema_version, tool, status, data_mode, as_of, request,
+        data, summary, availability, warnings. A client written against RYO's
+        six tools reads this one without a special case.
+
+        The tool's two primary sections are price impact (quoted or modelled)
+        and time to exit. Both answered is `ok`, one is `partial`, neither is
+        `unavailable` -- RYO's own definitions, applied to this tool.
+        """
+        impact = "available" if (self.quote or self.estimate) else "unavailable"
+        timing = "available" if self.hours_to_exit is not None else "unavailable"
+        primary = [impact, timing] if self.requested_size_usd else [
+            "available" if self.max_size_usd.get("at_ceiling") is not None else "unavailable",
+            "available" if self.hourly_capacity_usd is not None else "unavailable",
+        ]
+        status = (
+            "ok" if all(p == "available" for p in primary)
+            else "unavailable" if all(p == "unavailable" for p in primary)
+            else "partial"
+        )
+        availability = {
+            "price_impact": impact,
+            "venue_quote": "available" if self.quote else "unavailable",
+            "pool_depth": "available" if (self.depth and self.depth.deepest) else "unavailable",
+            "modelled_estimate": "available" if self.estimate else "unavailable",
+            "time_to_exit": timing,
+            "drift_exposure": "available" if self.drift_exposure_pct is not None else "unavailable",
+        }
+        return {
+            "schema_version": ENVELOPE_SCHEMA_VERSION,
+            "tool": SKILL_NAME,
+            "status": status,
+            "data_mode": data_mode,
+            "as_of": to_iso(self.as_of),
+            "request": request,
+            "data": self.to_dict(),
+            "summary": {"headline": self.headline(), "key_points": self.key_points()},
+            "availability": availability,
+            "warnings": list(self.warnings) + list(self.gaps) + list(self.venue_failures) + list(extra_warnings),
+        }
+
+    def headline(self) -> str:
+        if self.verdict is Verdict.UNKNOWN:
+            if self.requested_size_usd is None and self.max_size_usd.get("at_ceiling") is not None:
+                return (
+                    self.token + ": largest exit inside a " + str(round(self.max_slippage * 100, 2))
+                    + "% ceiling is $" + _money(self.max_size_usd["at_ceiling"]) + " (modelled)."
+                )
+            return self.token + ": exit cost unknown; the inputs to price it were not available."
+        cost = (
+            self.quote.effective_cost if self.basis == "quoted" and self.quote
+            else self.estimate.slippage if self.estimate else None
+        )
+        size = self.requested_size_usd or 0
+        return (
+            self.token + ": exiting $" + _money(size) + " costs "
+            + (str(round(cost * 100, 2)) + "%" if cost is not None else "an unknown amount")
+            + " (" + (self.basis or "unpriced") + "), verdict " + self.verdict.value.upper() + "."
+        )
+
+    def key_points(self) -> list[str]:
+        points = []
+        if self.quote:
+            points.append(
+                "Executable " + self.quote.venue + " quote: selling this size returns $"
+                + _money(self.quote.out_usd) + ", " + str(round(self.quote.effective_cost * 100, 2))
+                + "% under the venue's own near-mid rate (impact plus fees)."
+            )
+        if self.model_check and self.model_check.get("model_over_quote") is not None:
+            points.append(
+                "Constant-product model: " + str(round(self.model_check["modelled_cost_pct"], 2))
+                + "% against the quote's " + str(round(self.model_check["quoted_cost_pct"], 2)) + "%."
+            )
+        if self.hours_to_exit is not None:
+            points.append(
+                "Patient exit: " + _duration(self.hours_to_exit) + " at "
+                + str(round(self.participation * 100)) + "% of 24h volume."
+            )
+        if self.depth and self.depth.deepest:
+            points.append(
+                str(len(self.depth.pools_used)) + " pools used, deepest $"
+                + _money(self.depth.deepest.liquidity_usd) + ", "
+                + str(len(self.depth.rejected)) + " rejected."
+            )
+        if self.gaps:
+            points.append("Missing: " + "; ".join(self.gaps))
+        return points
 
 
 def _money(value: float) -> str:
@@ -276,21 +449,51 @@ def assess(
     participation: float = DEFAULT_PARTICIPATION,
     sources: dict[str, str] | None = None,
     as_of: datetime | None = None,
+    venue: VenueEvidence | None = None,
 ) -> Report:
-    """Pure. Same facts and parameters in, same report out.
+    """Pure. Same facts, venue evidence and parameters in, same report out.
 
     `sources` maps a fact name to the tool and key path it was read from,
     so every number in the report can be traced to a payload rather than
     taken on trust.
+
+    `venue` (from venues.py) fills what RYO's facts leave empty -- pool depth
+    above all, which RYO has never returned -- and may carry an executable
+    quote for the size. RYO's own figures win wherever both exist; a venue
+    figure is only ever a fallback, and its source path says which it was.
     """
     as_of = as_of or utcnow()
-    sources = sources or {}
+    sources = dict(sources or {})
     token = token.upper()
+    venue = venue or VenueEvidence()
+    depth = venue.depth if venue.depth and venue.depth.deepest else None
 
     liquidity = facts.liquidity_usd
     volume = facts.volume_24h_usd
+    price = facts.price_usd
     cap = facts.market_cap_usd
     atr = facts.atr_14_pct
+    fallback_notes: list[str] = []
+
+    if liquidity is None and depth and depth.total_liquidity_usd:
+        liquidity = depth.total_liquidity_usd
+        sources["liquidity_usd"] = depth.source + ":total_liquidity_usd"
+        fallback_notes.append(
+            "pool depth is the sum of " + str(len(depth.pools_used)) + " on-chain pools for the "
+            "canonical contract (" + depth.source + "); RYO did not supply it"
+        )
+    if volume is None and depth and depth.total_volume_24h_usd:
+        volume = depth.total_volume_24h_usd
+        sources["volume_24h_usd"] = depth.source + ":total_volume_24h_usd"
+        fallback_notes.append(
+            "24h volume is on-chain only (RYO did not supply it); centralized-exchange "
+            "volume is not included, so time to exit reads conservatively long"
+        )
+    if price is None and depth and depth.price_usd:
+        price = depth.price_usd
+        sources["price_usd"] = depth.source + ":volume_weighted_median_price"
+
+    quote = venue.quote if venue.quote and size_usd else None
 
     turnover_pct = (
         model.turnover(volume, cap) * 100
@@ -304,12 +507,12 @@ def assess(
     inputs = (
         InputTrace("liquidity_usd", liquidity, sources.get("liquidity_usd")),
         InputTrace("volume_24h_usd", volume, sources.get("volume_24h_usd")),
-        InputTrace("price_usd", facts.price_usd, sources.get("price_usd")),
+        InputTrace("price_usd", price, sources.get("price_usd")),
     )
 
     gaps: list[str] = []
     warnings: list[str] = []
-    notes: list[str] = []
+    notes: list[str] = list(fallback_notes)
 
     if liquidity is None:
         gaps.append(
@@ -323,8 +526,8 @@ def assess(
     if volume is None:
         gaps.append("volume_24h_usd unavailable; time to exit cannot be estimated")
 
-    # --- no liquidity, no price-impact numbers ---------------------------
-    if liquidity is None:
+    # --- no liquidity and no quote: no price-impact numbers --------------
+    if liquidity is None and quote is None:
         # Time-to-exit is a function of size, volume and participation --
         # pool depth is not one of its inputs. Withholding it because a
         # *different* input is missing would be over-refusal: as much a
@@ -368,16 +571,22 @@ def assess(
                 if patient_hours and atr
                 else None
             ),
+            depth=depth,
+            venue_failures=venue.failures,
         )
 
-    # --- the estimate ----------------------------------------------------
-    estimate = model.estimate(size_usd, liquidity) if size_usd else None
+    # --- the modelled estimate (needs depth) -----------------------------
+    estimate = model.estimate(size_usd, liquidity) if size_usd and liquidity else None
 
-    max_sizes = {
-        "1pct": round(model.size_for_slippage(0.01, liquidity), 2),
-        "3pct": round(model.size_for_slippage(0.03, liquidity), 2),
-        "at_ceiling": round(model.size_for_slippage(max_slippage, liquidity), 2),
-    }
+    max_sizes = (
+        {
+            "1pct": round(model.size_for_slippage(0.01, liquidity), 2),
+            "3pct": round(model.size_for_slippage(0.03, liquidity), 2),
+            "at_ceiling": round(model.size_for_slippage(max_slippage, liquidity), 2),
+        }
+        if liquidity
+        else {"1pct": None, "3pct": None, "at_ceiling": None}
+    )
 
     hours = (
         model.hours_to_exit(size_usd, volume, participation)
@@ -385,37 +594,67 @@ def assess(
         else None
     )
 
-    ladder = model.default_ladder(liquidity)
-    curve = model.curve(liquidity, ladder)
+    curve = model.curve(liquidity, model.default_ladder(liquidity)) if liquidity else ()
 
-    # --- verdict ---------------------------------------------------------
-    if estimate is None:
-        verdict = Verdict.UNKNOWN
-        notes.append("no size requested; the curve and ceilings still apply")
-    elif estimate.slippage <= max_slippage:
-        verdict = Verdict.OK
-    elif estimate.slippage <= max_slippage * 2:
-        verdict = Verdict.TIGHT
+    def grade(cost: float) -> Verdict:
+        if cost <= max_slippage:
+            return Verdict.OK
+        if cost <= max_slippage * 2:
+            return Verdict.TIGHT
+        return Verdict.ILLIQUID
+
+    # --- verdict: a quote, when there is one, outranks the model ---------
+    model_check: dict[str, Any] | None = None
+    if quote is not None:
+        verdict = grade(quote.effective_cost)
+        basis = "quoted"
+        if estimate is not None and quote.effective_cost > 0:
+            model_check = {
+                "modelled_cost_pct": round(estimate.slippage * 100, 4),
+                "quoted_cost_pct": round(quote.effective_cost * 100, 4),
+                "model_over_quote": round(estimate.slippage / quote.effective_cost, 3),
+                "depth_used_usd": round(liquidity, 2),
+                "note": (
+                    "the constant-product model is kept beside the quote so its error "
+                    "is visible; the verdict rests on the quote"
+                ),
+            }
+    elif estimate is not None:
+        verdict = grade(estimate.slippage)
+        basis = "modelled"
     else:
-        verdict = Verdict.ILLIQUID
+        verdict = Verdict.UNKNOWN
+        basis = None
+        notes.append("no size requested; the curve and ceilings still apply")
 
     # --- confidence ------------------------------------------------------
-    confidence = Confidence.MODERATE
+    if basis == "quoted":
+        confidence = Confidence.HIGH
+        notes.append(
+            "confidence is 'high' only because an executable quote for this exact size "
+            "was observed; it holds for this moment and this venue, not for the future"
+        )
+    else:
+        confidence = Confidence.MODERATE
+        if estimate and not estimate.within_model:
+            confidence = Confidence.LOW
+        if liquidity is not None and not sources.get("liquidity_usd"):
+            confidence = Confidence.LOW
+            notes.append(
+                "the liquidity figure carries no source path, so it could not be "
+                "traced back to a specific tool response"
+            )
+        notes.append(
+            "confidence never exceeds 'moderate' for a modelled figure: no venue "
+            "quote was observed for this size"
+        )
 
     if estimate and not estimate.within_model:
-        confidence = Confidence.LOW
         warnings.append(
             "this exit is " + str(round(estimate.pool_fraction * 100, 1))
             + "% of the pool, past the " + str(round(model.MODEL_VALIDITY_LIMIT * 100))
             + "% point where a constant-product curve stops describing a real "
-            "venue; treat the figure as a floor on the true cost"
-        )
-
-    if not sources.get("liquidity_usd"):
-        confidence = Confidence.LOW
-        notes.append(
-            "the liquidity figure carries no source path, so it could not be "
-            "traced back to a specific tool response"
+            "venue; treat the modelled figure as a floor on the true cost"
         )
 
     if volume and liquidity and volume < liquidity * 0.02:
@@ -423,11 +662,6 @@ def assess(
             "24h volume is under 2% of pool liquidity; the pool may be deep but "
             "inactive, and a patient exit could take far longer than modelled"
         )
-
-    notes.append(
-        "confidence never exceeds 'moderate': no venue order book is observed "
-        "anywhere in this skill"
-    )
 
     return Report(
         token=token,
@@ -453,6 +687,11 @@ def assess(
         drift_exposure_pct=(
             model.drift_exposure(hours, atr) if hours and atr else None
         ),
+        basis=basis,
+        quote=quote,
+        depth=depth,
+        model_check=model_check,
+        venue_failures=venue.failures,
     )
 
 
@@ -498,10 +737,11 @@ INPUT_SCHEMA: dict[str, Any] = {
 }
 
 DESCRIPTION = (
-    "Estimate what it costs to exit a position and the largest size that "
-    "clears a given slippage ceiling. Returns a modelled figure with its "
-    "assumptions attached, never an observed one, and returns null rather "
-    "than zero when pool liquidity is unavailable."
+    "What it costs to exit a position at a given size, and the largest size "
+    "that clears a slippage ceiling. Uses an executable venue quote when one "
+    "exists (basis: quoted) and a constant-product model otherwise (basis: "
+    "modelled), shows the gap between the two, and returns null rather than "
+    "zero when an input is unavailable. Returns RYO's public response envelope."
 )
 
 
@@ -515,7 +755,7 @@ def describe() -> dict[str, Any]:
 
 
 def call(arguments: dict[str, Any], facts: MarketFacts, **kwargs: Any) -> dict[str, Any]:
-    """Tool-call entry point: schema arguments in, JSON-serialisable out."""
+    """Tool-call entry point: schema arguments in, the report's data out."""
     return assess(
         arguments["token"],
         facts,
@@ -524,3 +764,32 @@ def call(arguments: dict[str, Any], facts: MarketFacts, **kwargs: Any) -> dict[s
         participation=arguments.get("participation_pct", DEFAULT_PARTICIPATION * 100) / 100,
         **kwargs,
     ).to_dict()
+
+
+def call_envelope(
+    arguments: dict[str, Any],
+    facts: MarketFacts,
+    *,
+    data_mode: str,
+    extra_warnings: tuple[str, ...] = (),
+    **kwargs: Any,
+) -> dict[str, Any]:
+    """Tool-call entry point in RYO's public response envelope.
+
+    `request` echoes the normalised arguments, as RYO's own tools do.
+    """
+    request = {
+        "token": str(arguments["token"]).upper(),
+        "size_usd": arguments.get("size_usd"),
+        "max_slippage_pct": arguments.get("max_slippage_pct", DEFAULT_MAX_SLIPPAGE * 100),
+        "participation_pct": arguments.get("participation_pct", DEFAULT_PARTICIPATION * 100),
+    }
+    report = assess(
+        request["token"],
+        facts,
+        size_usd=request["size_usd"],
+        max_slippage=request["max_slippage_pct"] / 100,
+        participation=request["participation_pct"] / 100,
+        **kwargs,
+    )
+    return report.to_envelope(request=request, data_mode=data_mode, extra_warnings=extra_warnings)

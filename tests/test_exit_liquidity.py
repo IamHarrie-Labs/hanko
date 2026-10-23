@@ -248,10 +248,13 @@ class TestRefusals:
 
 
 class TestModelHonesty:
-    def test_confidence_never_reaches_high(self):
-        # No order book is observed anywhere in this skill.
-        assert not hasattr(Confidence, "HIGH")
-        assert report(size_usd=1_000).confidence is Confidence.MODERATE
+    def test_a_modelled_figure_never_reaches_high(self):
+        # HIGH exists only for an observed executable quote (see
+        # test_exit_venues.py). However good the inputs, a model of a venue
+        # is not the venue.
+        r = report(size_usd=1_000)
+        assert r.basis == "modelled"
+        assert r.confidence is Confidence.MODERATE
 
     def test_every_figure_is_labelled_modelled(self):
         payload = report(size_usd=5_000).to_dict()

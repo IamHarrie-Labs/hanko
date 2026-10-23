@@ -1,0 +1,92 @@
+{
+ "recorded_at": "2026-10-23T17:23:31Z",
+ "url": "https://lite-api.jup.ag/swap/v1/quote",
+ "params": {
+  "inputMint": "DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263",
+  "outputMint": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+  "amount": "3000000000000000",
+  "slippageBps": 300
+ },
+ "payload": {
+  "inputMint": "DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263",
+  "inAmount": "3000000000000000",
+  "outputMint": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+  "outAmount": "93826586926",
+  "otherAmountThreshold": "91011789319",
+  "swapMode": "ExactIn",
+  "slippageBps": 300,
+  "platformFee": null,
+  "priceImpactPct": "0.0460367719300656799555282072",
+  "routePlan": [
+   {
+    "swapInfo": {
+     "ammKey": "5zpyutJu9ee6jFymDGoK7F6S5Kczqtc9FomP3ueKuyA9",
+     "label": "Whirlpool",
+     "inputMint": "DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263",
+     "outputMint": "So11111111111111111111111111111111111111112",
+     "inAmount": "810000000000000",
+     "outAmount": "242192958126",
+     "updateContextSlot": "460526684"
+    },
+    "percent": 27,
+    "bps": null
+   },
+   {
+    "swapInfo": {
+     "ammKey": "AtcGozT6i1GR3wJAjVwRwmt7qbHqZrBUqKs2DcMAKoVe",
+     "label": "Meteora DLMM",
+     "inputMint": "DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263",
+     "outputMint": "So11111111111111111111111111111111111111112",
+     "inAmount": "600000000000000",
+     "outAmount": "179082350300",
+     "updateContextSlot": "460524708"
+    },
+    "percent": 20,
+    "bps": null
+   },
+   {
+    "swapInfo": {
+     "ammKey": "7yD7gfXv49SFxhx9uTc11dEd7Nj98rGWeYMdZJgheZbG",
+     "label": "Kipseli",
+     "inputMint": "So11111111111111111111111111111111111111112",
+     "outputMint": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+     "inAmount": "421275308426",
+     "outAmount": "44033287920",
+     "updateContextSlot": "460526702"
+    },
+    "percent": 100,
+    "bps": null
+   },
+   {
+    "swapInfo": {
+     "ammKey": "31p1hptjhFo6ZD8oBqkfutNXQKGGPyi7YcEAfsyKW777",
+     "label": "Meteora DLMM",
+     "inputMint": "DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263",
+     "outputMint": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+     "inAmount": "1590000000000000",
+     "outAmount": "49793299006",
+     "updateContextSlot": "460526597"
+    },
+    "percent": 53,
+    "bps": null
+   }
+  ],
+  "contextSlot": 460526702,
+  "timeTaken": 0.059495877,
+  "swapUsdValue": "93792.334551255548297855138",
+  "mostReliableAmmsQuoteReport": {
+   "info": {
+    "So11111111111111111111111111111111111111112": "No MRP",
+    "DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263": "No MRP",
+    "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v": "No MRP"
+   }
+  },
+  "longtailMarketQuoteReport": null,
+  "useIncurredSlippageForQuoting": null,
+  "useRewards": null,
+  "otherRoutePlans": null,
+  "loadedLongtailToken": false,
+  "instructionVersion": null,
+  "transactionVersion": 0
+ }
+}

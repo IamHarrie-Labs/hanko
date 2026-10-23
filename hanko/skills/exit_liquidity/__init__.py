@@ -10,8 +10,10 @@ from .skill import (
     Report,
     assess,
     call,
+    call_envelope,
     describe,
 )
+from .venues import PoolDepth, VenueEvidence, VenueQuote, gather
 
 __all__ = [
     "Confidence",
@@ -19,11 +21,16 @@ __all__ = [
     "Estimate",
     "INPUT_SCHEMA",
     "InputTrace",
+    "PoolDepth",
     "Report",
     "SKILL_NAME",
     "SKILL_VERSION",
+    "VenueEvidence",
+    "VenueQuote",
     "Verdict",
     "assess",
     "call",
+    "call_envelope",
     "describe",
+    "gather",
 ]

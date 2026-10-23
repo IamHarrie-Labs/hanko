@@ -310,30 +310,27 @@ def cmd_exit_liquidity(args: argparse.Namespace) -> int:
         print(json.dumps(describe(), indent=2))
         return 0
 
+    from .skills.exit_liquidity import VenueEvidence
+
+    extra_warnings: tuple[str, ...] = ()
     if args.market:
+        # A file of facts is not a live reading, whatever its contents.
         facts = MarketFacts.from_dict(
             json.loads(Path(args.market).read_text(encoding="utf-8"))
         )
         sources = {"liquidity_usd": "file:" + Path(args.market).name}
+        venue, data_mode = VenueEvidence(), "simulated"
     else:
-        from .ryotools import extract_market_facts
+        from .skills.exit_liquidity.live import collect_live
 
-        store = _store(args)
-        payloads: dict[str, object] = {}
-        for tool in ("analyze_token", "deep_analysis"):
-            snap = store.collect(_tool_source(tool, args), Query(subjects=(args.token,)))
-            # Per-tool progress is a diagnostic, not the answer. On stdout it
-            # sits in front of --json's payload and stops the output being
-            # valid JSON at all, so it goes to stderr where a pipe won't see it.
-            print(
-                _MARK[snap.status] + "  " + tool + "  " + (snap.error or ""),
-                file=sys.stderr,
-            )
-            if snap.has_payload:
-                payloads[tool] = store.load_payload(snap.payload_digest)
-        extraction = extract_market_facts(args.token, payloads)
-        facts, sources = extraction.facts, extraction.found
-        print("", file=sys.stderr)
+        facts, sources, venue, ryo_warnings, live = collect_live(args.token, args.size)
+        extra_warnings = tuple(ryo_warnings)
+        # Per-source progress is a diagnostic, not the answer. On stdout it
+        # would sit in front of --json's payload and stop it being valid
+        # JSON, so it goes to stderr where a pipe won't see it.
+        for line in ryo_warnings + list(venue.failures):
+            print("  ~ " + line, file=sys.stderr)
+        data_mode = "live" if live else "unknown"
 
     report = assess(
         args.token,
@@ -342,9 +339,15 @@ def cmd_exit_liquidity(args: argparse.Namespace) -> int:
         max_slippage=args.max_slippage / 100,
         participation=args.participation / 100,
         sources=sources,
+        venue=venue,
     )
     if args.json:
-        print(json.dumps(report.to_dict(), indent=2))
+        request = {
+            "token": args.token.upper(), "size_usd": args.size,
+            "max_slippage_pct": args.max_slippage, "participation_pct": args.participation,
+        }
+        print(json.dumps(report.to_envelope(request=request, data_mode=data_mode,
+                                            extra_warnings=extra_warnings), indent=2))
     else:
         print(report.explain())
     return 0

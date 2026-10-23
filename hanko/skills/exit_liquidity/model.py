@@ -55,8 +55,11 @@ ASSUMPTIONS = (
 
 
 class Confidence(str, Enum):
-    # Deliberately has no HIGH. No venue-level order book is observed
-    # anywhere in this skill, so nothing it returns has earned that word.
+    # HIGH is reserved for one case: an executable quote for this exact
+    # size was observed at a real venue (see venues.py). A modelled figure
+    # never earns it, however good its inputs, because a model of a venue
+    # is not the venue.
+    HIGH = "high"
     MODERATE = "moderate"
     LOW = "low"
     NONE = "none"

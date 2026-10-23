@@ -4,11 +4,21 @@
   "headers": [
     {
       "source": "/assets/(.*)",
-      "headers": [{ "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }]
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
     },
     {
       "source": "/api/(.*)",
-      "headers": [{ "key": "Cache-Control", "value": "no-store, max-age=0" }]
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-store, max-age=0"
+        }
+      ]
     }
   ],
   "functions": {
@@ -17,6 +27,12 @@
     },
     "api/workbench.py": {
       "maxDuration": 10
+    },
+    "api/tools/exit_liquidity/call.py": {
+      "maxDuration": 30
+    },
+    "api/mcp.py": {
+      "maxDuration": 30
     }
   }
 }
