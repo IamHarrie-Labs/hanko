@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hanko: for judges</title>
+<meta name="description" content="Every line of the RYO-CHAN judging rubric, mapped to the one page or command that answers it. Each one you can check yourself in under a minute.">
+<link rel="icon" href="assets/favicon.png" sizes="32x32" type="image/png">
+<link rel="icon" href="assets/icon-512.png" sizes="512x512" type="image/png">
+<link rel="apple-touch-icon" href="assets/icon-180.png">
+<meta name="theme-color" content="#E3E2DD">
+<meta property="og:title" content="Hanko: for judges">
+<meta property="og:description" content="Every rubric line mapped to a check you can run yourself.">
+<meta property="og:type" content="website">
+<meta property="og:image" content="assets/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="assets/og-image.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+<a class="skip-link" href="#judges-main">Skip to the rubric</a>
+
+<nav class="nav" aria-label="Site">
+  <div class="nav-inner">
+    <a href="index.html" aria-label="Hanko home" style="display: flex; flex: none">
+      <img class="mark mark-nav" src="assets/hanko-logo.png" width="1092" height="584" alt="">
+    </a>
+    <div class="nav-links">
+      <a href="try.html">Try it live</a>
+      <a href="workbench.html">Workbench</a>
+      <a href="drill.html">Drill</a>
+      <a href="echo.html">Echo Index</a>
+      <a href="judges.html">For judges</a>
+      <a href="docs.html">Docs</a>
+    </div>
+    <div class="nav-actions">
+      <a href="https://github.com/IamHarrie-Labs/hanko" data-repo class="btn btn-dark">GITHUB REPO</a>
+    </div>
+  </div>
+</nav>
+
+<header class="shell docs-hero">
+  <a href="index.html" class="back-link">&larr; Hanko</a>
+  <div class="eyebrow">For judges</div>
+  <h1>Every rubric line, and where to check it yourself.</h1>
+  <p class="lede">Hanko enters <strong>Track 1</strong> (the agent), <strong>Track 3</strong> (<code>exit_liquidity</code>) and <strong>Track 2</strong> (the workbench, the drill and the Echo Index screens). Each row below is one line of the published rubric, the place that answers it, and what to look for. Nothing here asks you to take a claim on trust: every row ends at something you can run.</p>
+</header>
+
+<main id="judges-main" class="shell wb-section">
+
+  <section aria-labelledby="j-start">
+    <h2 id="j-start" class="label">Two minutes, if that is all you have</h2>
+    <ol class="judge-steps">
+      <li><a href="drill.html">Failure drill</a>: nine real failures injected into the real code, each defence computed live. One broke the first time it ran (D-18, now fixed).</li>
+      <li><a href="try.html">Try it live</a>: <code>exit_liquidity</code> on BONK, $50,000. An executable venue quote, the model's own figure beside it, and the model's error, while RYO's market data is down.</li>
+      <li><a href="echo.html">Echo Index</a>: 2,094 real posts, Hanko's own echo check, a result published as found, and the bug it found in Hanko first.</li>
+      <li>From a clone, no keys: <code>pip install -e ".[dev]" &amp;&amp; pytest</code>, then <code>hanko verify-run runs/run_836b976720f63dc0.json</code>. This is the first live ENTER (BTC, 23 Oct). It is replayed decision by decision from the committed bundle, and its manifest is anchored on Bitcoin.</li>
+    </ol>
+  </section>
+
+  <section aria-labelledby="j-common">
+    <h2 id="j-common" class="label">Common score (40), every track</h2>
+    <div class="table-wrap"><table class="judge-table">
+      <caption class="sr-only">Common rubric lines and where each is answered</caption>
+      <thead><tr><th scope="col">Rubric line</th><th scope="col">Open</th><th scope="col">What to look for</th></tr></thead>
+      <tbody>
+        <tr><th scope="row">Combining sources (20)</th><td><a href="try.html">/try</a>, <code>hanko/sweep.py</code></td><td>Each decision combines X, Telegram and RSS voices (Bluesky supported) with RYO's facts and DexScreener's canonical pools. Each <code>exit_liquidity</code> answer combines RYO, DexScreener and a Jupiter quote. Every figure names the source it came from.</td></tr>
+        <tr><th scope="row">Coping with failure (20)</th><td><a href="drill.html">/drill</a></td><td>RYO down, every source down, a 429 from the quote venue, the model down, a prompt injection, tampered evidence, an edited sealed run, a source dying mid-sweep, a restart. Nine held. Missing data shrinks a position instead of defaulting to zero.</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <section aria-labelledby="j-t1">
+    <h2 id="j-t1" class="label">Track 1 (60): the agent</h2>
+    <div class="table-wrap"><table class="judge-table">
+      <caption class="sr-only">Track 1 rubric lines and where each is answered</caption>
+      <thead><tr><th scope="col">Rubric line</th><th scope="col">Open</th><th scope="col">What to look for</th></tr></thead>
+      <tbody>
+        <tr><th scope="row">Real thinking (25)</th><td><code>--interpreter llm</code>, <code>tests/test_llm_interpreter.py</code></td><td>A model reads posts, including tokens named without cashtags, sarcasm and negation, and quotes the words its reading rests on. Code then checks every reading: a token the post never names is dropped, a quote that isn't verbatim is discarded, and an injected instruction produces nothing. The decision itself stays mechanical: evidence quality as a geometric mean, independence, the exit gate.</td></tr>
+        <tr><th scope="row">Cause and effect (20)</th><td><a href="workbench.html?exclude=voice_gamma">/workbench</a></td><td>Remove one voice and the verdict flips from ENTER to PASS. The page names the rule that caused it, and shows every rule whose outcome moved, most important first.</td></tr>
+        <tr><th scope="row">Repeatability (10)</th><td><code>hanko audit</code>, <code>hanko verify-run</code></td><td>A decision re-derives from stored bytes to the identical id, with no cache and no model call. Each sealed run carries its own bundle and verifies from a bare clone. Its manifest is anchored on Bitcoin through OpenTimestamps.</td></tr>
+        <tr><th scope="row">Advanced execution (5)</th><td><a href="echo.html">/echo</a>, <code>DECISIONS.md</code></td><td>A reproducible study on real data that audited the agent's own echo detector. 18 recorded engineering decisions, several of them bugs found by the project's own checks.</td></tr>
+      </tbody>
+    </table></div>
+    <p class="footnote">Spotlight brief (Multi-KOL Narrative Agent): voices from X, Telegram and Bluesky; per-token stance, conviction and urgency; convergence counted on independent voices only, so a repost, forward, quote or padded copy is one voice, not two; a practice position sized under user-defined limits (<code>Policy</code>), with the falsifiers committed before the outcome.</p>
+  </section>
+
+  <section aria-labelledby="j-t3">
+    <h2 id="j-t3" class="label">Track 3 (60): exit_liquidity</h2>
+    <div class="table-wrap"><table class="judge-table">
+      <caption class="sr-only">Track 3 rubric lines and where each is answered</caption>
+      <thead><tr><th scope="col">Rubric line</th><th scope="col">Open</th><th scope="col">What to look for</th></tr></thead>
+      <tbody>
+        <tr><th scope="row">Fills a gap (25)</th><td><a href="try.html">/try</a></td><td>None of RYO's six tools says whether a position can be closed at its size, or what closing it costs. This one does, from an executable quote where one exists, and reports null rather than zero where it can't.</td></tr>
+        <tr><th scope="row">Follows the spec (15)</th><td><code>POST /api/tools/exit_liquidity/call</code></td><td>RYO's public response envelope, field for field (schema_version, tool, status, data_mode, as_of, request, data, summary, availability, warnings), on RYO's own REST route shape, with RYO's error shape. <code>tests/test_exit_venues.py</code> checks the envelope.</td></tr>
+        <tr><th scope="row">Could we use it (20)</th><td><code>/api/mcp</code>, <code>hanko/skills/exit_liquidity/http.py</code></td><td>Adopting it is a route registration, not a port. It is also a live MCP server any MCP host can add. Arguments are validated against the tool's input schema, and the handlers are tested offline.</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <section aria-labelledby="j-t2">
+    <h2 id="j-t2" class="label">Track 2 (60): the screens</h2>
+    <div class="table-wrap"><table class="judge-table">
+      <caption class="sr-only">Track 2 rubric lines and where each is answered</caption>
+      <thead><tr><th scope="col">Rubric line</th><th scope="col">Open</th><th scope="col">What to look for</th></tr></thead>
+      <tbody>
+        <tr><th scope="row">Easy to read (25)</th><td><a href="workbench.html?exclude=voice_gamma">/workbench</a></td><td>What changed first (ENTER → PASS), then why, in one sentence per rule. Every sample input is labelled as sample.</td></tr>
+        <tr><th scope="row">Sorted by importance (25)</th><td><a href="workbench.html?exclude=voice_gamma">/workbench</a>, <a href="echo.html">/echo</a></td><td>The rule that decided the verdict comes first, then the rules that changed outcome, then those whose detail moved. Echoes are listed most similar first.</td></tr>
+        <tr><th scope="row">Works for everyone (10)</th><td>any page, keyboard only</td><td>A skip link and a visible focus ring, results announced through live regions, native controls only, tables with headers and captions, no information carried by colour alone (HELD and BROKE are words), and reduced-motion respected.</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <section aria-labelledby="j-limits">
+    <h2 id="j-limits" class="label">What is not proven yet</h2>
+    <p class="section-lede">In full in <a href="https://github.com/IamHarrie-Labs/hanko" data-repo-path>LIMITATIONS.md</a>. In short: RYO's market data has failed on every live call made with this key since 2026-09-28 (a ticket is open), so live decisions run on venue facts and lack RYO's safety and technical fields. There is no calibration curve from a long live record yet. And the first two sealed runs predate replay bundles, so they can no longer be replayed (D-17).</p>
+  </section>
+</main>
+
+<footer class="band">
+  <div class="shell band-inner" style="padding-top: 56px; padding-bottom: 56px">
+    <div class="colophon">
+      <span>Hanko 判子 · RYO-CHAN Hackathon 2026</span>
+      <span><span data-stat="tests">335</span> tests · <a href="index.html">Home</a> · <a href="https://github.com/IamHarrie-Labs/hanko" data-repo>GitHub</a></span>
+    </div>
+  </div>
+</footer>
+</body>
+</html>

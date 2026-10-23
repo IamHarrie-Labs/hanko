@@ -28,15 +28,19 @@
 </head>
 
 <body>
+<a class="skip-link" href="#try-it">Skip to content</a>
 
-<nav class="nav">
+<nav class="nav" aria-label="Site">
   <div class="nav-inner">
     <a href="index.html" aria-label="Hanko home" style="display: flex; flex: none">
       <img class="mark mark-nav" src="assets/hanko-logo.png" width="1092" height="584" alt="">
     </a>
     <div class="nav-links">
-      <a href="index.html">Landing page</a>
+      <a href="try.html">Try it live</a>
       <a href="workbench.html">Workbench</a>
+      <a href="drill.html">Drill</a>
+      <a href="echo.html">Echo Index</a>
+      <a href="judges.html">For judges</a>
       <a href="docs.html">Docs</a>
     </div>
     <div class="nav-actions">
@@ -77,7 +81,7 @@
       <span id="try-heading">EXIT_LIQUIDITY · LIVE CHECK</span>
       <span class="receipt-live">LIVE OUTPUT</span>
     </div>
-    <pre id="try-output">Pick a token and a size, then run a live check. Usually 2 to 8 seconds: three real network calls.</pre>
+    <pre id="try-output" role="status" aria-live="polite">Pick a token and a size, then run a live check. Usually 2 to 8 seconds: three real network calls.</pre>
   </div>
 
   <p class="footnote" style="max-width: 48em">Every figure above is computed from what this call actually returned. Nothing is filled in when a source doesn't supply it. Solana tokens get an executable quote; ETH and BTC are measured through their wrapped forms on Ethereum, where no keyless quote venue exists, so their cost is modelled and labelled as such. Also callable the way RYO's own tools are: <code>POST /api/tools/exit_liquidity/call</code>, or as an MCP server at <code>/api/mcp</code>. See the <a href="docs.html#exit-liquidity">exit_liquidity docs</a>.</p>
@@ -87,7 +91,7 @@
   <div class="shell band-inner" style="padding-top: 56px; padding-bottom: 56px">
     <div class="colophon">
       <span>Hanko 判子 · RYO-CHAN Hackathon 2026</span>
-      <span><span data-stat="tests">321</span> tests · <span data-stat="lines">13,396</span> lines · <span data-stat="commits">48</span> commits · <a href="index.html">Home</a> · <a href="https://github.com/IamHarrie-Labs/hanko" data-repo>GitHub</a></span>
+      <span><span data-stat="tests">335</span> tests · <span data-stat="lines">13,943</span> lines · <span data-stat="commits">52</span> commits · <a href="index.html">Home</a> · <a href="https://github.com/IamHarrie-Labs/hanko" data-repo>GitHub</a></span>
     </div>
   </div>
 </footer>

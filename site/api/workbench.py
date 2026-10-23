@@ -169,13 +169,29 @@ def _rule_map(record) -> dict[str, dict]:
     return {r.rule_id: {"outcome": r.outcome.value, "detail": r.detail} for r in record.rules}
 
 
+def _importance(before: dict | None, after: dict | None) -> int:
+    """0: decides the verdict (a block appears or disappears), 1: outcome
+    changed, 2: only the detail moved."""
+    b = (before or {}).get("outcome")
+    a = (after or {}).get("outcome")
+    if b != a and "blocked" in (a, b):
+        return 0
+    if b != a:
+        return 1
+    return 2
+
+
 def _diff(baseline, experiment) -> dict:
     base_rules, exp_rules = _rule_map(baseline), _rule_map(experiment)
     changed = []
     for rule_id in sorted(set(base_rules) | set(exp_rules)):
         b, e = base_rules.get(rule_id), exp_rules.get(rule_id)
         if b != e:
-            changed.append({"rule_id": rule_id, "before": b, "after": e})
+            changed.append({"rule_id": rule_id, "before": b, "after": e,
+                            "importance": _importance(b, e)})
+    # Most important first: a rule that now blocks (or no longer blocks)
+    # decided the verdict; then any change of outcome; then detail only.
+    changed.sort(key=lambda c: (c["importance"], c["rule_id"]))
     return {
         "verdict_changed": baseline.verdict != experiment.verdict,
         "verdict_before": baseline.verdict.value,

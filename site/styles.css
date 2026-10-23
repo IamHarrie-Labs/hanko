@@ -551,3 +551,68 @@ h1 { font-size: 62px; line-height: 1.02; letter-spacing: -.032em; font-weight: 7
 .seal-body .rule-blocked { color: var(--accent-deep); }
 .seal-body .rule-satisfied { color: var(--good); }
 .seal-body .rule-noted { color: var(--muted); }
+
+/* ---------- accessibility, shared ---------- */
+
+.skip-link {
+  position: absolute; left: 12px; top: -48px; z-index: 100;
+  background: var(--ink); color: var(--on-ink); padding: 10px 16px; border-radius: 2px;
+  font-family: var(--mono); font-size: 13px;
+}
+.skip-link:focus { top: 12px; color: var(--on-ink); }
+button:focus-visible, input:focus-visible, select:focus-visible, summary:focus-visible {
+  outline: 2px solid var(--accent-deep); outline-offset: 3px;
+}
+@media (prefers-reduced-motion: reduce) {
+  * { scroll-behavior: auto !important; animation: none !important; transition: none !important; }
+}
+
+/* ---------- drill ---------- */
+
+.drill-summary { font-size: 20px; font-weight: 600; margin-bottom: 18px; }
+.drill-list { list-style: none; padding: 0; margin: 24px 0 0; display: grid; gap: 18px; }
+.drill-card { border: 1px solid var(--line-2); background: var(--surface); padding: 22px 24px; }
+.drill-card.drill-broke { border-color: var(--accent-deep); }
+.drill-head { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; }
+.drill-title { font-size: 20px; margin: 0; }
+.drill-badge {
+  font-family: var(--mono); font-size: 12px; letter-spacing: .1em; padding: 4px 10px;
+  border: 1.5px solid currentColor; border-radius: 2px; flex: none;
+}
+.drill-held { color: var(--good); }
+.drill-failed { color: var(--accent-deep); }
+.drill-facts { display: grid; grid-template-columns: 7em 1fr; gap: 6px 14px; margin: 14px 0; font-size: 14.5px; }
+.drill-facts dt { font-family: var(--mono); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); padding-top: 3px; }
+.drill-facts dd { margin: 0; color: var(--body); }
+.drill-trail {
+  background: var(--ink); color: #DCD8D2; border-radius: 3px; padding: 14px 16px; margin: 0 0 14px;
+  font-family: var(--mono); font-size: 12px; line-height: 1.65; white-space: pre-wrap; overflow-x: auto;
+}
+@media (max-width: 760px) { .drill-facts { grid-template-columns: 1fr; } }
+
+/* ---------- echo index ---------- */
+
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.echo-stats { margin-top: 18px; }
+.echo-list { list-style: none; padding: 0; display: grid; gap: 16px; }
+.echo-item { border: 1px solid var(--line-2); background: var(--surface); padding: 18px 22px; }
+.echo-head { display: flex; gap: 16px; font-family: var(--mono); font-size: 12px; color: var(--muted); flex-wrap: wrap; }
+.echo-sim { color: var(--accent-deep); }
+.echo-who { font-weight: 600; margin: 10px 0 6px; }
+.echo-quote { margin: 0 0 10px; padding-left: 14px; border-left: 3px solid var(--line-2); color: var(--body); font-size: 14.5px; white-space: pre-wrap; }
+.table-wrap { overflow-x: auto; }
+.echo-table { border-collapse: collapse; font-family: var(--mono); font-size: 13px; }
+.echo-table th, .echo-table td { border: 1px solid var(--line-2); padding: 8px 14px; text-align: left; }
+.echo-table thead th { background: var(--surface); }
+.echo-default { outline: 2px solid var(--accent-deep); outline-offset: -2px; font-weight: 700; }
+
+/* ---------- judges ---------- */
+
+.judge-steps { padding-left: 1.3em; display: grid; gap: 10px; font-size: 16px; line-height: 1.55; max-width: 52em; margin-bottom: 40px; }
+.judge-table { border-collapse: collapse; width: 100%; margin: 12px 0 32px; font-size: 14.5px; }
+.judge-table th, .judge-table td { border: 1px solid var(--line-2); padding: 12px 14px; text-align: left; vertical-align: top; line-height: 1.55; }
+.judge-table thead th { background: var(--surface); font-family: var(--mono); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; }
+.judge-table tbody th { width: 16em; font-weight: 600; }
+.judge-table td:nth-child(2) { width: 15em; font-family: var(--mono); font-size: 12.5px; }
+.wb-fieldset { border: none; margin: 0; padding: 0; min-width: 0; }
+.wb-fieldset legend { padding: 0; margin-bottom: 8px; }

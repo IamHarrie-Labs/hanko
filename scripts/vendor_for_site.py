@@ -16,16 +16,20 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 SRC = ROOT / "hanko"
 DEST = ROOT / "site" / "api" / "_vendor" / "hanko"
+# The recorded responses /api/drill and /api/workbench replay. Small (~1 MB)
+# and copied whole, so a fixture a scenario needs can never be left behind.
+FIXTURES_SRC = ROOT / "fixtures"
+FIXTURES_DEST = ROOT / "site" / "api" / "_vendor" / "fixtures"
 
 
 def _ignore(_dir: str, names: list[str]) -> list[str]:
     return [n for n in names if n == "__pycache__"]
 
 
-def _sources(root: Path) -> dict[str, str]:
+def _sources(root: Path, pattern: str = "*.py") -> dict[str, str]:
     return {
         str(p.relative_to(root)).replace("\\", "/"): p.read_text(encoding="utf-8")
-        for p in sorted(root.rglob("*.py"))
+        for p in sorted(root.rglob(pattern))
         if "__pycache__" not in p.parts
     }
 
@@ -34,10 +38,13 @@ def stale() -> list[str]:
     """Vendored files that differ from the package, or are missing."""
     if not DEST.exists():
         return ["<not vendored at all>"]
-    src, dest = _sources(SRC), _sources(DEST)
-    return sorted(
-        name for name in set(src) | set(dest) if src.get(name) != dest.get(name)
-    )
+    drift = []
+    for src_root, dest_root, pattern in ((SRC, DEST, "*.py"), (FIXTURES_SRC, FIXTURES_DEST, "*.*")):
+        if not dest_root.exists():
+            return ["<" + dest_root.name + " not vendored>"]
+        src, dest = _sources(src_root, pattern), _sources(dest_root, pattern)
+        drift += sorted(name for name in set(src) | set(dest) if src.get(name) != dest.get(name))
+    return drift
 
 
 def main() -> None:
@@ -58,7 +65,8 @@ def main() -> None:
         shutil.rmtree(DEST.parent)
     DEST.parent.mkdir(parents=True, exist_ok=True)
     shutil.copytree(SRC, DEST, ignore=_ignore)
-    print("vendored", SRC, "->", DEST)
+    shutil.copytree(FIXTURES_SRC, FIXTURES_DEST, ignore=_ignore)
+    print("vendored", SRC, "and", FIXTURES_SRC, "->", DEST.parent)
 
 
 if __name__ == "__main__":

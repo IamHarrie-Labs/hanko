@@ -16,6 +16,7 @@ from __future__ import annotations
 
 import argparse
 import html
+import json
 import re
 import shutil
 import subprocess
@@ -30,7 +31,8 @@ INDEX = SITE_DIR / "index.html"
 # Every page that carries the live stat spans or the GitHub link. The
 # trail substitution is index-only in effect: docs.html has no
 # <pre id="trail"> for the regex to match, so it is a safe no-op there.
-PAGES = (INDEX, SITE_DIR / "docs.html", SITE_DIR / "try.html", SITE_DIR / "workbench.html")
+PAGES = (INDEX, SITE_DIR / "docs.html", SITE_DIR / "try.html", SITE_DIR / "workbench.html",
+         SITE_DIR / "drill.html", SITE_DIR / "judges.html", SITE_DIR / "echo.html")
 
 # Fixed inputs, so the published trail is reproducible rather than
 # whatever the market happened to look like when the site was built.
@@ -178,6 +180,26 @@ def apply(source: str, *, trail: str, stats: dict[str, str], repo: str | None) -
     return source
 
 
+
+def study_data() -> dict[str, str]:
+    """Published study results the site displays, copied verbatim.
+
+    The /echo page reads this copy rather than holding numbers of its own,
+    so it can never show a figure the committed data does not support.
+    """
+    src = ROOT / "study" / "echo-index"
+    if not (src / "results.json").exists():
+        return {}
+    results = json.loads((src / "results.json").read_text(encoding="utf-8"))
+    payload = {
+        "results": {k: v for k, v in results.items() if k != "events"},
+        "echo_events": [e for e in results["events"] if e["echoes"]],
+        "sensitivity": json.loads((src / "sensitivity.json").read_text(encoding="utf-8")),
+        "collection": json.loads((src / "collection.json").read_text(encoding="utf-8")),
+    }
+    return {"data/echo-index.json": json.dumps(payload, indent=1, ensure_ascii=False) + chr(10)}
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--check", action="store_true", help="fail if the site is stale")
@@ -199,6 +221,11 @@ def main() -> int:
     repo = repo_url()
 
     stale = []
+    for rel, content in study_data().items():
+        target = SITE_DIR / rel
+        current = target.read_text(encoding="utf-8") if target.exists() else None
+        if current != content:
+            stale.append((target, content))
     for page in PAGES:
         if not page.exists():
             continue
@@ -218,6 +245,7 @@ def main() -> int:
         return 1
 
     for page, updated in stale:
+        page.parent.mkdir(parents=True, exist_ok=True)
         page.write_text(updated, encoding="utf-8")
         print("rewrote " + str(page.relative_to(ROOT)))
     return 0

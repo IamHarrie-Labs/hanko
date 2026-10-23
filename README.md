@@ -3,9 +3,9 @@
 <div align="center">
 
 [![CI](https://github.com/IamHarrie-Labs/hanko/actions/workflows/ci.yml/badge.svg)](https://github.com/IamHarrie-Labs/hanko/actions/workflows/ci.yml)
-[![Tests: 234 passing](https://img.shields.io/badge/tests-234_passing-555555)](tests/)
+[![Tests: 335 passing](https://img.shields.io/badge/tests-335_passing-555555)](tests/)
 [![RYO tools confirmed live: 6](https://img.shields.io/badge/RYO_tools_confirmed_live-6-555555)](ARCHITECTURE.md#transport-mcp-and-rest-reach-the-same-facts)
-[![Tracks entered: 2](https://img.shields.io/badge/tracks_entered-2-8b6a27)](#submission)
+[![Tracks entered: 3](https://img.shields.io/badge/tracks_entered-3-8b6a27)](https://tryhanko.vercel.app/judges)
 [![License: MIT](https://img.shields.io/badge/license-MIT-555555)](LICENSE)
 
 </div>
@@ -14,9 +14,9 @@
 refusal, with the evidence attached, and can prove that same decision
 byte for byte, years later.**
 
-Point it at a token and a handful of X accounts. It reads what each account
-actually said, checks whether they're independent voices or one thesis
-repeated three times, and decides:
+Point it at a token and the voices you trust, on X, Telegram or Bluesky. It
+reads what each one actually said, checks whether they're independent voices
+or one thesis repeated three times, and decides:
 
 ```
 ENTER TOKENA  size 3.28%  confidence 0.66
@@ -34,6 +34,8 @@ It only ever reads what was actually stored. That's the whole project: an
 architecture that makes "prove it" a command you can run, not a promise in
 this README.
 
+**Judging? Start at [/judges](https://tryhanko.vercel.app/judges)**: every line of
+the published rubric, mapped to a page or command you can check yourself.
 **[tryhanko.vercel.app](https://tryhanko.vercel.app)** has the pitch and a sample
 receipt (synthetic inputs, labelled). **[/try](https://tryhanko.vercel.app/try)** runs a piece of it, live,
 from your browser, no install. Full technical detail is at `/docs`.
@@ -42,11 +44,37 @@ from your browser, no install. Full technical detail is at `/docs`.
 
 ---
 
-**RYO-CHAN Hackathon 2026 submission, two tracks.** **Track 1 (Autonomous
-Agents)** is the agent above. **Track 3 (New Skills)** is
-[`exit_liquidity`](hanko/skills/exit_liquidity/README.md), a new tool
-contributed back to the platform's surface, not a second project. It's also
-the size gate the same agent runs internally before committing to a position.
+**RYO-CHAN Hackathon 2026 submission, three tracks.** **Track 1 (Autonomous
+Agents)** is the agent above, built to the Multi-KOL Narrative Agent spotlight.
+**Track 3 (New Skills)** is [`exit_liquidity`](hanko/skills/exit_liquidity/README.md):
+what it costs to get *out* of a position, from an executable venue quote where
+one exists, in RYO's own response envelope. It is also the size gate the agent
+runs before committing. **Track 2 (Dashboards & Interfaces)** is three screens:
+the [workbench](https://tryhanko.vercel.app/workbench), the
+[failure drill](https://tryhanko.vercel.app/drill) and the
+[Echo Index](https://tryhanko.vercel.app/echo).
+
+### What it has shown, live
+
+- **A sealed live ENTER that anyone can re-derive.** BTC, 2026-10-23,
+  `runs/run_836b976720f63dc0.json`. The manifest lists every watchlist entry,
+  including the PASS and both ABSTAINs. It is anchored on Bitcoin through
+  OpenTimestamps, and `hanko verify-run` replays all four decisions from the
+  committed bundle with no network and no key.
+- **An exit cost measured, not modelled.** BONK, $50,000: the Jupiter quote
+  says 2.3%. The skill's own constant-product model said 7.2%, and the report
+  prints the 3.1x gap instead of hiding it.
+- **A study that audited the agent.** The [Echo Index](study/echo-index/REPORT.md)
+  ran Hanko's echo check over 2,094 real posts from 15 crypto channels. Echo
+  inflation was 1.005x, published as found. First, though, it found that
+  Hanko's own detector missed verbatim copies padded with an ad or a footer
+  (D-14, fixed).
+- **Nine failures injected on purpose.** RYO down, every source down, a
+  rate-limited quote venue, the model down, a prompt injection the model
+  actually obeyed, tampered evidence, an edited sealed run, a source dying
+  mid-sweep, a restart. All nine hold, computed live on
+  [/drill](https://tryhanko.vercel.app/drill). The restart scenario broke the
+  first time it ran (D-18, fixed).
 
 A 判子 is the seal a person stamps on a document to commit to it. The mark
 goes on before the outcome is known and can't be taken back, which is exactly
@@ -85,7 +113,7 @@ and a fictional token, written for testing, not captured from real accounts):
 git clone https://github.com/IamHarrie-Labs/hanko && cd hanko
 pip install -e ".[dev]"
 
-pytest                                          # 234 tests, offline, ~8s
+pytest                                          # 335 tests, offline, ~20s
 
 # make a decision, then prove it replays from stored bytes
 hanko decide x --token TOKENA --subject voice_alpha --subject voice_beta \
@@ -95,6 +123,15 @@ hanko audit                                     # re-derives it, insists it repr
 
 # the Track 3 skill, against the same fixture, no network
 hanko exit-liquidity TOKENA --size 50000 --market fixtures/market_tokena.json
+
+# the first live ENTER, re-derived from its committed bundle
+hanko verify-run runs/run_836b976720f63dc0.json
+
+# break it on purpose: nine failure scenarios, offline
+python -c "from hanko.drill import run; print([r['held'] for r in run()])"
+
+# re-derive every number in the Echo Index
+hanko echo-index publish
 ```
 
 ## Who this is for
@@ -115,8 +152,11 @@ Everything here researches and sizes a position; nothing here moves funds.
 | Open | What it shows |
 |---|---|
 | [tryhanko.vercel.app](https://tryhanko.vercel.app) | The pitch, and a sample decision receipt (real engine, synthetic fixture inputs, labelled as such) |
-| [/try](https://tryhanko.vercel.app/try) | `exit_liquidity` running live against the real RYO platform, from a browser |
+| [/try](https://tryhanko.vercel.app/try) | `exit_liquidity` live: RYO facts, DexScreener depth, a Jupiter quote, in RYO's envelope |
+| [/judges](https://tryhanko.vercel.app/judges) | Every rubric line, mapped to where to check it |
 | [/workbench](https://tryhanko.vercel.app/workbench) | Remove a voice or tighten a threshold on the sample decision (synthetic inputs, labelled as such) and watch the actual `decide()` verdict move, and which rule caused it |
+| [/drill](https://tryhanko.vercel.app/drill) | Nine real failures injected into the real code, each defence computed live |
+| [/echo](https://tryhanko.vercel.app/echo) | The Echo Index: how much crypto consensus is one voice repeated, on 2,094 real posts |
 | [/docs#track1-live](https://tryhanko.vercel.app/docs#track1-live) | Two real decisions, live X evidence and live RYO facts, neither cherry-picked |
 | [/docs#mcp-transport](https://tryhanko.vercel.app/docs#mcp-transport) | What a live MCP handshake and a live `x_search` call actually return |
 
@@ -175,7 +215,7 @@ hanko/
   sweep.py, cli.py, config.py, provenance.py, evidence.py
 site/            static landing page, /docs, /try -- the live web demo
   api/exit_liquidity.py    the /try endpoint, real assess() call, no fixture
-tests/           234 tests, one file per hanko/ package
+tests/           335 tests, one file per hanko/ package
 fixtures/        evidence and market fixtures used offline and in CI
 .github/workflows/ci.yml       pytest on every push, Python 3.11 and 3.12
 .claude/skills/hanko-exit-liquidity/SKILL.md   packages exit_liquidity as a Claude Skill
@@ -245,7 +285,7 @@ a `FAILED` snapshot saying so, rather than throwing.
 
 ## Status
 
-234 tests, all offline, ~8s. Covered at the evidence layer: canonical form and
+335 tests, all offline, ~20s. Covered at the evidence layer: canonical form and
 address stability, payload deduplication, tamper detection, adapter-version
 mismatch on replay, replay determinism, evidence identity pinned to bytes and
 position, and each failure mode (rate limit, partial window, empty result,
@@ -316,27 +356,29 @@ measured signal and still be a trap if exiting the position moves the price
 double digits.
 
 ```bash
-hanko exit-liquidity BONK --size 20000000
+hanko exit-liquidity BONK --size 50000
 ```
 
 ```
-UNKNOWN  BONK  confidence none
-  price $0.00000337 · 24h volume $137,702,816  (analyze_token)
-  exit over 34.9h at 10% of volume
-  this market absorbs $573,762 per hour at that cap
-  waiting that long is exposed to ~8.6% price drift at this market's volatility
-  turnover 46.4% of market cap per day; this position is 6.732% of cap
-  ? liquidity_usd unavailable; exit cost cannot be modelled and is
-    reported as null rather than zero
-  modelled with cpmm_v1, not observed
+OK  BONK  confidence high
+  price $0.00000331 · 24h volume $1,395,538  (dexscreener)
+  quoted: selling ~$50,000 on jupiter returns $48,886, 2.34% under its own near-mid rate (price impact plus fees, 5-hop route)
+  model said 7.15% from $1,299,172 of on-chain depth
+  the model overstates this exit's cost 3.1x: the route reaches concentrated liquidity a constant-product curve cannot see
+  depth: 29 pools on solana, deepest $327,472, 1 rejected
+  or exit over 8.6h at 10% of volume
+  verdict from an executable jupiter quote; quotes move with the market
 ```
 
-No tool in the catalog publishes pool depth, so price impact stays honestly
-`unknown` rather than a fabricated zero. But everything else here is measured
-from live data, not withheld along with it: time to exit, hourly capacity, the
-price drift a slow exit is exposed to, and how much of the whole market this
-position represents. Refusing the question it can't answer is not the same as
-refusing the ones it can.
+Live output from 2026-10-23, while RYO's own market tools were failing. RYO
+has never published pool depth, so version 2.0 asks two keyless venues.
+DexScreener supplies pools for the token's canonical contract: never searched
+by symbol, because that returns impostor pools. Jupiter supplies an executable
+quote for the exact size. A measured quote outranks the model, and the
+model's error is printed beside it. Where neither venue answers, cost fields
+are null, never zero. Every answer is RYO's public response envelope, also
+served on RYO's own REST route shape (`POST /api/tools/exit_liquidity/call`)
+and as an MCP server (`/api/mcp`).
 
 Full model, honesty conventions, and test coverage in
 [`hanko/skills/exit_liquidity/README.md`](hanko/skills/exit_liquidity/README.md).

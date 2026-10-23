@@ -87,7 +87,7 @@ For each post, and for each token its author takes a view on, return one reading
 - urgency: 0 to 1, how time-sensitive the claim is.
 - rationale: the shortest exact quote from the post that shows the stance, copied character for character.
 
-Skip posts that take no view on any token. A token merely listed, or mentioned only as context, gets no reading. Read sarcasm for what it means."""
+Skip posts that take no view on any token. A token merely listed, or mentioned only as context, gets no reading. A bare price, volume or percentage print ("Ethereum: $2,398 -1.18%") states no view: neutral, conviction at most 0.2. Read sarcasm for what it means."""
 
 PROMPT_VERSION = "p1-" + digest(SYSTEM_PROMPT).removeprefix("sha256:")[:8]
 

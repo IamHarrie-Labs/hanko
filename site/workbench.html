@@ -28,15 +28,19 @@
 </head>
 
 <body>
+<a class="skip-link" href="#wb-baseline">Skip to content</a>
 
-<nav class="nav">
+<nav class="nav" aria-label="Site">
   <div class="nav-inner">
     <a href="index.html" aria-label="Hanko home" style="display: flex; flex: none">
       <img class="mark mark-nav" src="assets/hanko-logo.png" width="1092" height="584" alt="">
     </a>
     <div class="nav-links">
-      <a href="index.html">Landing page</a>
       <a href="try.html">Try it live</a>
+      <a href="workbench.html">Workbench</a>
+      <a href="drill.html">Drill</a>
+      <a href="echo.html">Echo Index</a>
+      <a href="judges.html">For judges</a>
       <a href="docs.html">Docs</a>
     </div>
     <div class="nav-actions">
@@ -71,38 +75,38 @@
   <div class="label">Change the inputs</div>
   <p class="section-lede">Simulate a market field going dark, or move a policy threshold the same way a real operator would tune it. Every one of these is a real field the live engine reads.</p>
   <div class="wb-controls">
-    <div class="wb-field">
-      <span class="try-label">Market field unavailable</span>
+    <fieldset class="wb-field wb-fieldset">
+      <legend class="try-label">Market field unavailable</legend>
       <label class="wb-check"><input type="checkbox" data-missing="price_usd"> price_usd</label>
       <label class="wb-check"><input type="checkbox" data-missing="volume_24h_usd"> volume_24h_usd</label>
       <label class="wb-check"><input type="checkbox" data-missing="liquidity_usd"> liquidity_usd</label>
       <label class="wb-check"><input type="checkbox" data-missing="safety_score"> safety_score</label>
+    </fieldset>
+    <div class="wb-field">
+      <label class="try-label" for="wb-min-voices">min_independent_voices</label>
+      <input type="number" id="wb-min-voices" aria-describedby="wb-min-voices-hint" value="2" min="0" max="10" step="1">
+      <span class="wb-hint" id="wb-min-voices-hint">Policy default: 2</span>
     </div>
     <div class="wb-field">
-      <span class="try-label">min_independent_voices</span>
-      <input type="number" id="wb-min-voices" value="2" min="0" max="10" step="1">
-      <span class="wb-hint">Policy default: 2</span>
+      <label class="try-label" for="wb-echo-sim">echo_similarity</label>
+      <input type="number" id="wb-echo-sim" aria-describedby="wb-echo-sim-hint" value="0.6" min="0" max="1" step="0.05">
+      <span class="wb-hint" id="wb-echo-sim-hint">Policy default: 0.6. A repost tagged by the source is caught regardless of this value.</span>
     </div>
     <div class="wb-field">
-      <span class="try-label">echo_similarity</span>
-      <input type="number" id="wb-echo-sim" value="0.6" min="0" max="1" step="0.05">
-      <span class="wb-hint">Policy default: 0.6. A repost tagged by the source is caught regardless of this value.</span>
-    </div>
-    <div class="wb-field">
-      <span class="try-label">min_evidence_quality</span>
-      <input type="number" id="wb-min-quality" value="0.4" min="0" max="1" step="0.05">
-      <span class="wb-hint">Policy default: 0.4</span>
+      <label class="try-label" for="wb-min-quality">min_evidence_quality</label>
+      <input type="number" id="wb-min-quality" aria-describedby="wb-min-quality-hint" value="0.4" min="0" max="1" step="0.05">
+      <span class="wb-hint" id="wb-min-quality-hint">Policy default: 0.4</span>
     </div>
   </div>
   <div class="wb-run-row">
     <button id="wb-run" class="btn btn-solid">Run experiment</button>
-    <span class="wb-error" id="wb-error"></span>
+    <span class="wb-error" id="wb-error" role="alert"></span>
   </div>
 </section>
 
 <section id="wb-result" class="shell wb-section" style="display:none">
   <div class="label">What changed, and which rule caused it · sample inputs, real engine</div>
-  <div class="wb-diff" id="wb-diff"></div>
+  <div class="wb-diff" id="wb-diff" role="status" aria-live="polite" tabindex="-1"></div>
 
   <div class="two-col">
     <div class="seal">
@@ -123,7 +127,7 @@
   <div class="shell band-inner" style="padding-top: 56px; padding-bottom: 56px">
     <div class="colophon">
       <span>Hanko 判子 · RYO-CHAN Hackathon 2026</span>
-      <span><span data-stat="tests">321</span> tests · <a href="index.html">Home</a> · <a href="https://github.com/IamHarrie-Labs/hanko" data-repo>GitHub</a></span>
+      <span><span data-stat="tests">335</span> tests · <a href="index.html">Home</a> · <a href="https://github.com/IamHarrie-Labs/hanko" data-repo>GitHub</a></span>
     </div>
   </div>
 </footer>
@@ -262,7 +266,8 @@
           data.experiment.verdict.toUpperCase() + ' ' + data.token;
         document.getElementById('wb-result-experiment-body').innerHTML = renderSealBody(data.experiment);
         renderDiff(data.diff);
-        document.getElementById('wb-result').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        document.getElementById('wb-result').scrollIntoView({ block: 'start' });
+        document.getElementById('wb-diff').focus({ preventScroll: true });
       })
       .catch(function (err) { errorEl.textContent = 'Network error: ' + err.message; })
       .finally(function () {

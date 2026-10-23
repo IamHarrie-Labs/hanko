@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hanko: failure drill</title>
+<meta name="description" content="Break Hanko on purpose: RYO down, every source down, a prompt injection, tampered evidence, an edited sealed run. Each defence is checked live against the real code.">
+
+<link rel="icon" href="assets/favicon.png" sizes="32x32" type="image/png">
+<link rel="icon" href="assets/icon-512.png" sizes="512x512" type="image/png">
+<link rel="apple-touch-icon" href="assets/icon-180.png">
+<meta name="theme-color" content="#E3E2DD">
+<meta property="og:title" content="Hanko: failure drill">
+<meta property="og:description" content="Nine real failures, injected into the real code. Each defence is computed, not asserted.">
+<meta property="og:type" content="website">
+<meta property="og:image" content="assets/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="assets/og-image.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+<a class="skip-link" href="#drill-main">Skip to the drill</a>
+
+<nav class="nav" aria-label="Site">
+  <div class="nav-inner">
+    <a href="index.html" aria-label="Hanko home" style="display: flex; flex: none">
+      <img class="mark mark-nav" src="assets/hanko-logo.png" width="1092" height="584" alt="">
+    </a>
+    <div class="nav-links">
+      <a href="try.html">Try it live</a>
+      <a href="workbench.html">Workbench</a>
+      <a href="drill.html">Drill</a>
+      <a href="echo.html">Echo Index</a>
+      <a href="judges.html">For judges</a>
+      <a href="docs.html">Docs</a>
+    </div>
+    <div class="nav-actions">
+      <a href="https://github.com/IamHarrie-Labs/hanko" data-repo class="btn btn-dark">GITHUB REPO</a>
+    </div>
+  </div>
+</nav>
+
+<header class="shell docs-hero">
+  <a href="index.html" class="back-link">&larr; Hanko</a>
+  <div class="eyebrow">Failure drill</div>
+  <h1>Break it on purpose. Watch what holds.</h1>
+  <p class="lede">Each scenario injects one real failure into Hanko's real code: not a mock of Hanko, a mock of the world around it. Then it computes whether the promise held, so a scenario can come back <strong>BROKE</strong>. One did, the first time it ran: a restarted sweep recorded the same decision twice. The fix is D-18 in the decision log. Everything runs offline against recorded responses, so pressing a button here costs nothing and calls no one.</p>
+</header>
+
+<main id="drill-main" class="shell wb-section">
+  <div class="drill-summary" role="status" aria-live="polite" id="drill-summary">Loading the drill…</div>
+  <div class="wb-run-row">
+    <button type="button" id="drill-run-all" class="btn btn-solid">Run all nine again</button>
+  </div>
+  <ol class="drill-list" id="drill-list"></ol>
+  <p class="footnote">The scenarios live in <code>hanko/drill.py</code> and run in the test suite on every change (<code>tests/test_drill.py</code>), so a defence that stops holding fails the build before it reaches this page.</p>
+</main>
+
+<footer class="band">
+  <div class="shell band-inner" style="padding-top: 56px; padding-bottom: 56px">
+    <div class="colophon">
+      <span>Hanko 判子 · RYO-CHAN Hackathon 2026</span>
+      <span><span data-stat="tests">335</span> tests · <a href="index.html">Home</a> · <a href="https://github.com/IamHarrie-Labs/hanko" data-repo>GitHub</a></span>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function () {
+  var list = document.getElementById('drill-list');
+  var summary = document.getElementById('drill-summary');
+  var runAll = document.getElementById('drill-run-all');
+
+  function el(tag, cls, text) {
+    var n = document.createElement(tag);
+    if (cls) n.className = cls;
+    if (text !== undefined) n.textContent = text;
+    return n;
+  }
+
+  function card(r) {
+    var li = el('li', 'drill-card' + (r.held ? '' : ' drill-broke'));
+    li.id = 'scenario-' + r.id;
+    var head = el('div', 'drill-head');
+    var title = el('h2', 'drill-title', r.title);
+    var badge = el('span', 'drill-badge ' + (r.held ? 'drill-held' : 'drill-failed'), r.held ? 'HELD' : 'BROKE');
+    head.appendChild(title);
+    head.appendChild(badge);
+    li.appendChild(head);
+    var dl = el('dl', 'drill-facts');
+    [['Injected', r.injected], ['Promise', r.promise]].forEach(function (pair) {
+      dl.appendChild(el('dt', null, pair[0]));
+      dl.appendChild(el('dd', null, pair[1]));
+    });
+    li.appendChild(dl);
+    if (r.trail && r.trail.length) {
+      var pre = el('pre', 'drill-trail', r.trail.join('\n'));
+      pre.setAttribute('aria-label', 'What actually happened');
+      li.appendChild(pre);
+    }
+    var again = el('button', 'btn btn-outline drill-again', 'Run this one again');
+    again.type = 'button';
+    again.addEventListener('click', function () { load(r.id, again); });
+    li.appendChild(again);
+    return li;
+  }
+
+  function render(data, only) {
+    if (!only) {
+      list.innerHTML = '';
+      data.results.forEach(function (r) { list.appendChild(card(r)); });
+      summary.textContent = data.held + ' of ' + data.total + ' defences held, computed just now against the real code.';
+      return;
+    }
+    var fresh = card(data.results[0]);
+    var old = document.getElementById('scenario-' + only);
+    if (old) old.replaceWith(fresh);
+    summary.textContent = data.results[0].title + ': ' + (data.results[0].held ? 'held' : 'broke') + ', just re-run.';
+    var btn = fresh.querySelector('.drill-again');
+    if (btn) btn.focus();
+  }
+
+  function load(scenario, button) {
+    if (button) { button.disabled = true; button.textContent = 'Running…'; }
+    summary.textContent = scenario ? 'Running ' + scenario + '…' : 'Running all nine scenarios…';
+    fetch('/api/drill' + (scenario ? '?scenario=' + encodeURIComponent(scenario) : ''))
+      .then(function (res) { return res.json(); })
+      .then(function (data) { render(data, scenario); })
+      .catch(function (err) { summary.textContent = 'Could not reach the drill: ' + err.message; })
+      .finally(function () {
+        if (button && document.body.contains(button)) { button.disabled = false; button.textContent = scenario ? 'Run this one again' : 'Run all nine again'; }
+      });
+  }
+
+  runAll.addEventListener('click', function () { load(null, runAll); });
+  load(null);
+})();
+</script>
+</body>
+</html>

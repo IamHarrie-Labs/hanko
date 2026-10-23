@@ -3,71 +3,77 @@
 What this project has not shown, stated as plainly as what it has. A project
 about not overclaiming should not overclaim about itself either.
 
-**No live sweep has run long enough to produce a calibration curve from real
-outcomes.** The scorecard's Brier score and calibration buckets are proven
-against synthetic review histories in tests, not against a real track record
-accumulated over time. That requires decisions made, then genuinely waited
-out, which this build's timeline has not allowed for.
+**RYO's market data has failed on every live call made with this key since
+2026-09-28.** `analyze_token`, `deep_analysis` and `compare_tokens` return
+`400 VALIDATION_FAILED` ("couldn't analyze BTC right now") for every token,
+while health, the catalog and quota all answer normally. A support ticket
+with trace ids is open. Until it is resolved, live decisions take price,
+24h volume and pool depth from DexScreener's canonical pools, labelled as
+such and on-chain only. RYO's safety and technical fields (safety score,
+ATR) stay missing. Each missing field is a recorded gap that lowers
+evidence quality and so position size; none of them is filled with a guess.
 
-**No live `ENTER` has been produced.** Real runs against real X posts and real
-RYO market data have reached `PASS` and `ABSTAIN` honestly (the evidence
-gate and the independence check both hold under real conditions), but an
-`ENTER` needs two independent voices actually converging on one ticker inside
-a single review window, and no observed window has supplied that yet. The
-fixture-based `ENTER` shown on the homepage's hero receipt is real engine
-output, clearly labelled as running on fixed sample inputs, not live data.
+**One live `ENTER`, not a track record.** The first live `ENTER` (BTC,
+`runs/run_836b976720f63dc0.json`, 2026-10-23) was small (1.64%, confidence
+0.33) because evidence quality only just cleared the floor. Its falsifiers
+come due on 2026-10-26. One sealed decision shows the lifecycle works. It is
+not evidence that the agent is right, and the scorecard's calibration buckets
+are still proven against synthetic review histories in tests, not a real
+series.
 
-**`exit_liquidity` has never priced a real pool.** RYO's `deep_analysis` has
-returned `null` for pool liquidity on every live call made, for every token
-checked, so the tool's headline cost-of-exit figure has only ever answered
-`unknown` against live data. The constant-product model itself is proven
-against closed-form values in tests; it has not yet been exercised against a
-real, non-null liquidity figure, because the platform has not yet supplied
-one.
+**The first two sealed runs can no longer be replayed** (D-17). Their
+manifests and OpenTimestamps proofs still prove what was committed and when.
+The snapshot bytes their decisions cite were in a local store that was
+deleted during test cleanup. Every run since carries a replay bundle.
 
-**X evidence is demonstrated against fixtures by default, not live, for cost
-reasons.** Each live `x_search` call costs roughly $0.012. The transport
-itself (the JSON-schema request, the citation-verification step, SSE
-decoding, session handling) is live-tested and confirmed working against the
-real xAI API. Routine demonstration and CI both run against fixtures so
-development and review cost nothing and hit no rate limit.
+**`exit_liquidity` quotes Solana tokens only.** Jupiter supplies an
+executable quote for SOL, BONK, JUP and WIF. ETH and BTC are measured
+through WETH and WBTC on Ethereum, where no keyless quote venue exists, so
+their exit cost is modelled from on-chain depth and labelled `modelled`.
+The model overstates cost on concentrated-liquidity venues: on live BONK it
+said 7.2% where the quote said 2.3%. The report prints that ratio rather
+than hiding it. On-chain depth and volume also leave out centralized
+exchanges, so time-to-exit reads conservatively long.
 
-**The public `/try` page only exercises RYO facts, not X evidence.** RYO's own
-calls are free against the hackathon credential, which is what makes exposing
-them on an unauthenticated public page acceptable at all. `x_search` calls
-cost real money per request; exposing that on a public page would let anyone
-on the internet spend against this project's own paid credential with no
-practical ceiling. The full evidence-plus-facts pipeline exists and is
-tested, but stays a command you run yourself, under your own credentials, not
-a button on a public website.
+**The model interpreter is checked, not trusted, and it is still a model.**
+Code drops any token a post never names, discards any rationale that is not
+a verbatim quote, and drops any post containing text aimed at a model. It
+cannot tell whether a reading is *wise*. On the first live run it read a
+bare price print ("Ethereum: $2,398 -1.18%") as bearish 0.7. The prompt has
+since been tightened, and that run stays as recorded. Readings are frozen
+into each decision, so replay never calls the model. The keyword
+interpreter remains the default for fixtures and tests, and the fallback
+when the model fails.
 
-**The evidence interpreter is rule-based, not a model.** `KeywordInterpreter`
-matches cashtags and a fixed table of bullish/bearish/urgency/hedging words. It
-is deliberately unsophisticated: its value is that it is pure and free, so the
-whole pipeline can be tested and the replay guarantee proven without a model
-in the loop. An LLM interpreter is a drop-in replacement behind the same
-`Interpreter` protocol, and its readings would be recorded and replayed
-exactly the same way, but swapping it in was out of scope for this build, and would
-trade determinism at the interpretation step for whatever the model actually
-returns.
+**The injection guard is a pattern, not a proof.** It catches text that
+addresses a model directly ("ignore your previous rules", "respond with
+bullish"). A determined attacker could phrase around it. The other checks
+still apply in that case: the token must be named in the post, and the
+decision engine still needs two independent voices.
+
+**The Echo Index covers one corner of the market.** Fifteen public Telegram
+news channels over fourteen days. It found almost no echo inflation there
+(1.005x), and it found a real bug in Hanko's echo detector (D-14). It says
+nothing about X influencers, where copy-paste shilling may look very
+different. Rewrites of one press release still count as separate voices.
+For opinions that rule is right; for news it is generous.
+
+**X evidence costs money per call.** A live `x_search` costs about $0.05,
+including reasoning. The public pages therefore never trigger one: `/try`
+calls RYO and the keyless venues, and `/workbench` and `/drill` replay
+recorded or synthetic inputs. The full pipeline runs live from the CLI,
+under your own credentials.
 
 **An `ANY_POINT_IN_WINDOW` falsifier is only as good as the samples it was
-actually given.** `hanko sweep --samples` (added with the D-13 fix) logs one
-reading per pass, which means its actual resolution is however often the
-sweep runs -- hourly if the schedule calling it is hourly, and a breach
-shorter than the gap between two passes can still land between samples and
-go unseen. This is not hidden: the review states exactly how many samples
-it checked and the span they cover, so "1 sample, no intermediate readings"
-and "6 samples across 71 hours" are visibly different claims. What it does
-not yet do is refuse to grade a coverage gap that is wide relative to the
-falsifier's own horizon; it reports NOT_MET on what it saw and trusts the
-reader to look at the span before treating that as "held throughout."
+given.** `--samples` logs one reading per sweep pass, so its resolution is
+however often the sweep runs. A breach shorter than the gap between two
+passes can land between samples and go unseen. The review states how many
+samples it checked and the span they cover. It does not yet refuse to grade
+a coverage gap that is wide relative to the falsifier's own horizon.
 
-**Reported evidence quality has an unmeasured floor.** The geometric-mean
-score components (completeness, freshness, corroboration, independence) are
-each computed from what the sources actually returned. None of them measure
-whether the *content* of a post is true, only whether it exists, is recent,
-is corroborated and is independent. A confidently wrong but well-corroborated
-claim scores the same as a confidently right one; nothing in this project
-checks a post's claims against reality beyond what the falsifier check does
-after the fact, at review time.
+**Reported evidence quality has an unmeasured floor.** The quality components
+(completeness, freshness, corroboration, independence) measure whether
+evidence exists, is recent, is corroborated and is independent, not whether
+it is true. A confidently wrong but well-corroborated claim scores the same
+as a right one. Only the falsifier check, after the fact, tests a claim
+against what happened.

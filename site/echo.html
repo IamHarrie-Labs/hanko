@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hanko: the Echo Index</title>
+<meta name="description" content="How much crypto 'consensus' is one voice repeated? Measured on 2,094 real posts from 15 public channels, with Hanko's own echo check. It found a bug in Hanko first.">
+
+<link rel="icon" href="assets/favicon.png" sizes="32x32" type="image/png">
+<link rel="icon" href="assets/icon-512.png" sizes="512x512" type="image/png">
+<link rel="apple-touch-icon" href="assets/icon-180.png">
+<meta name="theme-color" content="#E3E2DD">
+<meta property="og:title" content="Hanko: the Echo Index">
+<meta property="og:description" content="How much crypto consensus is one voice repeated? Measured on real posts. It found a bug in Hanko first.">
+<meta property="og:type" content="website">
+<meta property="og:image" content="assets/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="assets/og-image.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+<a class="skip-link" href="#echo-main">Skip to the result</a>
+
+<nav class="nav" aria-label="Site">
+  <div class="nav-inner">
+    <a href="index.html" aria-label="Hanko home" style="display: flex; flex: none">
+      <img class="mark mark-nav" src="assets/hanko-logo.png" width="1092" height="584" alt="">
+    </a>
+    <div class="nav-links">
+      <a href="try.html">Try it live</a>
+      <a href="workbench.html">Workbench</a>
+      <a href="drill.html">Drill</a>
+      <a href="echo.html">Echo Index</a>
+      <a href="judges.html">For judges</a>
+      <a href="docs.html">Docs</a>
+    </div>
+    <div class="nav-actions">
+      <a href="https://github.com/IamHarrie-Labs/hanko" data-repo class="btn btn-dark">GITHUB REPO</a>
+    </div>
+  </div>
+</nav>
+
+<header class="shell docs-hero">
+  <a href="index.html" class="back-link">&larr; Hanko</a>
+  <div class="eyebrow">Study · the Echo Index</div>
+  <h1>How much crypto "consensus" is one voice repeated?</h1>
+  <p class="lede">A narrative agent trusts agreement between voices. Agreement only carries information if the voices are independent. So we measured it, on real public posts, with exactly the echo check Hanko's decision engine runs. The answer was not the one we expected, and the study found a bug in Hanko before it found anything else.</p>
+</header>
+
+<main id="echo-main">
+  <section class="shell wb-section" aria-labelledby="echo-result-h">
+    <h2 id="echo-result-h" class="label">The result</h2>
+    <div class="stats echo-stats" id="echo-stats" aria-live="polite"></div>
+    <p class="section-lede" id="echo-says" style="margin-top: 28px"></p>
+  </section>
+
+  <section class="shell wb-section" aria-labelledby="echo-bug-h">
+    <h2 id="echo-bug-h" class="label">What it found in Hanko first</h2>
+    <div class="note-card">
+      <p class="note-body">Before this study, Hanko's echo detector missed every one of the copies below. Channels append their own boilerplate (an ad, a "News | Markets | YouTube" footer), and every added word dilutes a Jaccard similarity score. A verbatim headline scored 0.53 against the 0.6 line, so one headline counted as two voices. The fix (D-14) also compares containment, which padding cannot dilute, and can only ever demote more voices, never fewer. The regression test is built on two of these real posts.</p>
+    </div>
+  </section>
+
+  <section class="shell wb-section" aria-labelledby="echo-list-h">
+    <h2 id="echo-list-h" class="label">Every echo found, most similar first</h2>
+    <ol class="echo-list" id="echo-list"></ol>
+  </section>
+
+  <section class="shell wb-section" aria-labelledby="echo-sens-h">
+    <h2 id="echo-sens-h" class="label">Is the number an artefact of the thresholds?</h2>
+    <p class="section-lede">Re-run at every combination of echo window and similarity threshold. Even at the loosest setting, few events collapse.</p>
+    <div class="table-wrap"><table class="echo-table" id="echo-sens">
+      <caption class="sr-only">Share of events collapsing to one voice, by echo window and similarity threshold</caption>
+    </table></div>
+  </section>
+
+  <section class="shell wb-section" aria-labelledby="echo-limits-h">
+    <h2 id="echo-limits-h" class="label">What it does not show</h2>
+    <ul class="proof-list" style="max-width: 46em">
+      <li class="proof-item"><span class="sigil">–</span><span>Rewrites of one press release still count as separate voices. The Swiss spot Bitcoin ETF approval was covered by several of these channels in their own words within hours. For opinions that rule is right; for news it is generous, so echo inflation here is if anything undercounted.</span></li>
+      <li class="proof-item"><span class="sigil">–</span><span>Naming the same token is not converging on the same narrative. In a six-hour window, two channels mentioning BTC are usually telling two different stories.</span></li>
+      <li class="proof-item"><span class="sigil">–</span><span>Fifteen Telegram news channels over fourteen days, not X influencers. Copy-paste shilling on X may look very different. This measures one corner of the market, and says so.</span></li>
+    </ul>
+    <p class="footnote">Re-derive every number: <code>hanko echo-index publish</code>, from the committed <code>study/echo-index/posts.jsonl</code>. The full report, with method, is <a href="https://github.com/IamHarrie-Labs/hanko" data-repo-path>in the repository</a>.</p>
+  </section>
+</main>
+
+<footer class="band">
+  <div class="shell band-inner" style="padding-top: 56px; padding-bottom: 56px">
+    <div class="colophon">
+      <span>Hanko 判子 · RYO-CHAN Hackathon 2026</span>
+      <span><span data-stat="tests">335</span> tests · <a href="index.html">Home</a> · <a href="https://github.com/IamHarrie-Labs/hanko" data-repo>GitHub</a></span>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function () {
+  function el(tag, cls, text) {
+    var n = document.createElement(tag);
+    if (cls) n.className = cls;
+    if (text !== undefined) n.textContent = text;
+    return n;
+  }
+  function stat(label, value, note) {
+    var box = el('div', 'stat');
+    box.appendChild(el('div', 'label', label));
+    box.appendChild(el('div', 'stat-value', value));
+    if (note) box.appendChild(el('div', 'stat-note', note));
+    return box;
+  }
+  fetch('data/echo-index.json').then(function (r) { return r.json(); }).then(function (d) {
+    var r = d.results, c = d.collection;
+    var stats = document.getElementById('echo-stats');
+    stats.appendChild(stat('Real posts', r.posts.toLocaleString('en-US'),
+      c.channels.length + ' public channels, ' + c.window.days + ' days'));
+    stats.appendChild(stat('Apparent consensus', String(r.apparent_convergence_events),
+      'a token named by 2+ channels in one ' + r.method.window_hours + 'h window'));
+    stats.appendChild(stat('Collapsed to one voice', r.collapsed_events + ' (' + r.collapsed_pct + '%)',
+      r.inflated_events + ' more inflated by an echo'));
+    stats.appendChild(stat('Echo inflation', r.inflation_ratio + 'x',
+      r.channels_counted + ' channels, ' + r.independent_voices_counted + ' independent voices'));
+    document.getElementById('echo-says').textContent =
+      'On these channels, apparent consensus is almost never one voice repeated: they rewrite stories rather '
+      + 'than copy or forward each other. Of ' + r.apparent_convergence_events + ' times two or more channels '
+      + 'converged on a token, ' + r.collapsed_events + ' collapsed to a single voice once copies and forwards '
+      + 'were removed. Published as found, not as hoped.';
+
+    var echoes = [];
+    d.echo_events.forEach(function (ev) {
+      ev.echoes.forEach(function (e) {
+        var m = /similarity ([0-9.]+)/.exec(e.reason);
+        echoes.push({ev: ev, e: e, sim: m ? parseFloat(m[1]) : 0});
+      });
+    });
+    echoes.sort(function (a, b) { return b.sim - a.sim; });
+    var list = document.getElementById('echo-list');
+    echoes.forEach(function (x) {
+      var li = el('li', 'echo-item');
+      var head = el('div', 'echo-head');
+      head.appendChild(el('span', 'echo-sim', 'similarity ' + x.sim.toFixed(2)));
+      head.appendChild(el('span', null, x.ev.token + ' · ' + x.ev.window_start.slice(0, 16).replace('T', ' ') + ' UTC'));
+      li.appendChild(head);
+      li.appendChild(el('p', 'echo-who', x.e.channel + ' repeated ' + x.e.echoes_channel));
+      li.appendChild(el('blockquote', 'echo-quote', x.e.text));
+      if (x.e.url) {
+        var a = el('a', null, 'Open the post on Telegram');
+        a.href = x.e.url; a.rel = 'noopener';
+        li.appendChild(a);
+      }
+      list.appendChild(li);
+    });
+
+    var table = document.getElementById('echo-sens');
+    var windows = [], sims = [];
+    d.sensitivity.forEach(function (row) {
+      if (windows.indexOf(row.echo_window_minutes) < 0) windows.push(row.echo_window_minutes);
+      if (sims.indexOf(row.echo_similarity) < 0) sims.push(row.echo_similarity);
+    });
+    var thead = el('thead'), hr = el('tr');
+    var corner = el('th', null, 'echo window ↓ / similarity →'); corner.scope = 'col';
+    hr.appendChild(corner);
+    sims.forEach(function (s) { var th = el('th', null, String(s)); th.scope = 'col'; hr.appendChild(th); });
+    thead.appendChild(hr); table.appendChild(thead);
+    var tbody = el('tbody');
+    windows.forEach(function (w) {
+      var tr = el('tr'); var th = el('th', null, w + ' min'); th.scope = 'row'; tr.appendChild(th);
+      sims.forEach(function (s) {
+        var row = d.sensitivity.filter(function (x) { return x.echo_window_minutes === w && x.echo_similarity === s; })[0];
+        var td = el('td', row && w === r.method.echo_window_minutes && s === r.method.echo_similarity ? 'echo-default' : null,
+          row ? row.collapsed_pct + '% · ' + row.inflation_ratio + 'x' : '–');
+        tr.appendChild(td);
+      });
+      tbody.appendChild(tr);
+    });
+    table.appendChild(tbody);
+  }).catch(function (err) {
+    document.getElementById('echo-stats').textContent = 'Could not load the study data: ' + err.message;
+  });
+})();
+</script>
+</body>
+</html>

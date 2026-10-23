@@ -185,3 +185,11 @@ class TestHTTPHandler:
         h = _make_fake_handler(wb, "/api/workbench")
         h.do_GET()
         assert h.headers_sent.get("Cache-Control") == "no-store, max-age=0"
+
+
+def test_rule_changes_are_sorted_by_importance(wb):
+    """Track 2's 'sorted by importance': the rule that decided the verdict first."""
+    changes = wb._run_workbench({"voice_gamma"}, set(), {})["diff"]["rule_changes"]
+    assert changes[0]["rule_id"] == "independent_voices"
+    assert changes[0]["importance"] == 0
+    assert [c["importance"] for c in changes] == sorted(c["importance"] for c in changes)
