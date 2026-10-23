@@ -1,0 +1,1752 @@
+{
+ "recorded_at": "2026-10-23T17:45:20Z",
+ "actor": "unusualwhales.bsky.social",
+ "payload": {
+  "feed": [
+   {
+    "post": {
+     "uri": "at://did:plc:7l75ck5g4b5k6gxqaq5rejit/app.bsky.feed.post/3mykm27vao223",
+     "cid": "bafyreia4i32lg63ywd4kgsz4d42ipjd76i2wx6gf4n7dqsqegoznvwgcea",
+     "author": {
+      "did": "did:plc:7l75ck5g4b5k6gxqaq5rejit",
+      "handle": "unusualwhales.bsky.social",
+      "displayName": "Unusual Whales",
+      "avatar": "https://cdn.bsky.app/img/avatar/plain/did:plc:7l75ck5g4b5k6gxqaq5rejit/bafkreia2gyds76c6uk5szzdxvsfcvnm4nh5nvudchuu3tqc6nlkwetcjai",
+      "associated": {
+       "chat": {
+        "allowIncoming": "following"
+       },
+       "activitySubscription": {
+        "allowSubscriptions": "followers"
+       }
+      },
+      "labels": [],
+      "createdAt": "2023-04-10T20:29:02.895Z"
+     },
+     "record": {
+      "$type": "app.bsky.feed.post",
+      "createdAt": "2026-10-23T16:30:42.574Z",
+      "langs": [
+       "en"
+      ],
+      "text": "BREAKING: Central banks around the world are quietly stockpiling four times as much gold as usual and are moving it out of the US, per FORTUNE"
+     },
+     "bookmarkCount": 4,
+     "replyCount": 8,
+     "repostCount": 17,
+     "likeCount": 79,
+     "quoteCount": 7,
+     "indexedAt": "2026-10-23T16:30:42.848Z",
+     "labels": []
+    }
+   },
+   {
+    "post": {
+     "uri": "at://did:plc:7l75ck5g4b5k6gxqaq5rejit/app.bsky.feed.post/3mykikinhtk2q",
+     "cid": "bafyreiakjbuyvn6r25b5rricgdevuciwolnqw2peo6paokumyl3wscq65q",
+     "author": {
+      "did": "did:plc:7l75ck5g4b5k6gxqaq5rejit",
+      "handle": "unusualwhales.bsky.social",
+      "displayName": "Unusual Whales",
+      "avatar": "https://cdn.bsky.app/img/avatar/plain/did:plc:7l75ck5g4b5k6gxqaq5rejit/bafkreia2gyds76c6uk5szzdxvsfcvnm4nh5nvudchuu3tqc6nlkwetcjai",
+      "associated": {
+       "chat": {
+        "allowIncoming": "following"
+       },
+       "activitySubscription": {
+        "allowSubscriptions": "followers"
+       }
+      },
+      "labels": [],
+      "createdAt": "2023-04-10T20:29:02.895Z"
+     },
+     "record": {
+      "$type": "app.bsky.feed.post",
+      "createdAt": "2026-10-23T15:28:13.661Z",
+      "langs": [
+       "en"
+      ],
+      "text": "BREAKING: The White House says Melania Trump has brokered a ceasefire between Russia and Ukraine \"localised to the city of Oleshky\"."
+     },
+     "bookmarkCount": 0,
+     "replyCount": 20,
+     "repostCount": 2,
+     "likeCount": 18,
+     "quoteCount": 5,
+     "indexedAt": "2026-10-23T15:28:14.046Z",
+     "labels": []
+    }
+   },
+   {
+    "post": {
+     "uri": "at://did:plc:7l75ck5g4b5k6gxqaq5rejit/app.bsky.feed.post/3myitilq4mc2w",
+     "cid": "bafyreidtqufgssouajmb6k7qvhsvnwnk6jn3shn7pomgdgbtewtkjjnpay",
+     "author": {
+      "did": "did:plc:7l75ck5g4b5k6gxqaq5rejit",
+      "handle": "unusualwhales.bsky.social",
+      "displayName": "Unusual Whales",
+      "avatar": "https://cdn.bsky.app/img/avatar/plain/did:plc:7l75ck5g4b5k6gxqaq5rejit/bafkreia2gyds76c6uk5szzdxvsfcvnm4nh5nvudchuu3tqc6nlkwetcjai",
+      "associated": {
+       "chat": {
+        "allowIncoming": "following"
+       },
+       "activitySubscription": {
+        "allowSubscriptions": "followers"
+       }
+      },
+      "labels": [],
+      "createdAt": "2023-04-10T20:29:02.895Z"
+     },
+     "record": {
+      "$type": "app.bsky.feed.post",
+      "createdAt": "2026-10-22T23:38:41.468Z",
+      "facets": [
+       {
+        "features": [
+         {
+          "$type": "app.bsky.richtext.facet#tag",
+          "tag": "$SPCX"
+         }
+        ],
+        "index": {
+         "byteEnd": 23,
+         "byteStart": 18
+        }
+       }
+      ],
+      "langs": [
+       "en"
+      ],
+      "text": "BREAKING: SpaceX, $SPCX, is seeking access to at least 80,000 US cell tower sites as it prepares to launch a nationwide wireless carrier, per Bloomberg"
+     },
+     "bookmarkCount": 4,
+     "replyCount": 19,
+     "repostCount": 29,
+     "likeCount": 63,
+     "quoteCount": 20,
+     "indexedAt": "2026-10-22T23:38:41.739Z",
+     "labels": []
+    }
+   },
+   {
+    "post": {
+     "uri": "at://did:plc:7l75ck5g4b5k6gxqaq5rejit/app.bsky.feed.post/3myigrx4z722w",
+     "cid": "bafyreiaygo67nrbzwmvdv5ix5furyuenoznay5hy2nkzod55lxwfn472nm",
+     "author": {
+      "did": "did:plc:7l75ck5g4b5k6gxqaq5rejit",
+      "handle": "unusualwhales.bsky.social",
+      "displayName": "Unusual Whales",
+      "avatar": "https://cdn.bsky.app/img/avatar/plain/did:plc:7l75ck5g4b5k6gxqaq5rejit/bafkreia2gyds76c6uk5szzdxvsfcvnm4nh5nvudchuu3tqc6nlkwetcjai",
+      "associated": {
+       "chat": {
+        "allowIncoming": "following"
+       },
+       "activitySubscription": {
+        "allowSubscriptions": "followers"
+       }
+      },
+      "labels": [],
+      "createdAt": "2023-04-10T20:29:02.895Z"
+     },
+     "record": {
+      "$type": "app.bsky.feed.post",
+      "createdAt": "2026-10-22T19:51:16.773Z",
+      "langs": [
+       "en"
+      ],
+      "text": "BREAKING: Iran says it will strike oil facilities, undersea cables, datacentres and AI facilities across as many as seven countries in the Gulf in the event of a fresh US-Israeli attack"
+     },
+     "bookmarkCount": 3,
+     "replyCount": 10,
+     "repostCount": 30,
+     "likeCount": 115,
+     "quoteCount": 5,
+     "indexedAt": "2026-10-22T19:51:17.145Z",
+     "labels": []
+    }
+   },
+   {
+    "post": {
+     "uri": "at://did:plc:7l75ck5g4b5k6gxqaq5rejit/app.bsky.feed.post/3myi6tgq4zs2w",
+     "cid": "bafyreibi3j6cj7g6othpa7qhx5arjuwd5nobbwmwrxjmri56cm44v2xtkq",
+     "author": {
+      "did": "did:plc:7l75ck5g4b5k6gxqaq5rejit",
+      "handle": "unusualwhales.bsky.social",
+      "displayName": "Unusual Whales",
+      "avatar": "https://cdn.bsky.app/img/avatar/plain/did:plc:7l75ck5g4b5k6gxqaq5rejit/bafkreia2gyds76c6uk5szzdxvsfcvnm4nh5nvudchuu3tqc6nlkwetcjai",
+      "associated": {
+       "chat": {
+        "allowIncoming": "following"
+       },
+       "activitySubscription": {
+        "allowSubscriptions": "followers"
+       }
+      },
+      "labels": [],
+      "createdAt": "2023-04-10T20:29:02.895Z"
+     },
+     "record": {
+      "$type": "app.bsky.feed.post",
+      "createdAt": "2026-10-22T17:28:56.744Z",
+      "langs": [
+       "en"
+      ],
+      "text": "BREAKING: Major U.S. banks are detecting unauthorized third-party AI agents operating inside customer accounts, with some agents attempting to take actions that appear to be independent of user instructions, per Axios"
+     },
+     "bookmarkCount": 9,
+     "replyCount": 25,
+     "repostCount": 50,
+     "likeCount": 157,
+     "quoteCount": 21,
+     "indexedAt": "2026-10-22T17:28:57.044Z",
+     "labels": []
+    }
+   },
+   {
+    "post": {
+     "uri": "at://did:plc:7l75ck5g4b5k6gxqaq5rejit/app.bsky.feed.post/3mygduduy7s2m",
+     "cid": "bafyreifxa7e7xretluwhuku56wac4ugprft3pd6y232a4def7ikg64lysm",
+     "author": {
+      "did": "did:plc:7l75ck5g4b5k6gxqaq5rejit",
+      "handle": "unusualwhales.bsky.social",
+      "displayName": "Unusual Whales",
+      "avatar": "https://cdn.bsky.app/img/avatar/plain/did:plc:7l75ck5g4b5k6gxqaq5rejit/bafkreia2gyds76c6uk5szzdxvsfcvnm4nh5nvudchuu3tqc6nlkwetcjai",
+      "associated": {
+       "chat": {
+        "allowIncoming": "following"
+       },
+       "activitySubscription": {
+        "allowSubscriptions": "followers"
+       }
+      },
+      "labels": [],
+      "createdAt": "2023-04-10T20:29:02.895Z"
+     },
+     "record": {
+      "$type": "app.bsky.feed.post",
+      "createdAt": "2026-10-21T23:53:36.544Z",
+      "langs": [
+       "en"
+      ],
+      "text": "BREAKING: The U.S. and Israel have plans for new strikes on Iran after the midterms, per NYT"
+     },
+     "bookmarkCount": 1,
+     "replyCount": 8,
+     "repostCount": 19,
+     "likeCount": 63,
+     "quoteCount": 3,
+     "indexedAt": "2026-10-21T23:53:36.943Z",
+     "labels": []
+    }
+   },
+   {
+    "post": {
+     "uri": "at://did:plc:7l75ck5g4b5k6gxqaq5rejit/app.bsky.feed.post/3myfy2hpqak2x",
+     "cid": "bafyreiaxudwpk4sot4slgyqyc54zi3vohhgskmpfsus64xcj2br77iiu4q",
+     "author": {
+      "did": "did:plc:7l75ck5g4b5k6gxqaq5rejit",
+      "handle": "unusualwhales.bsky.social",
+      "displayName": "Unusual Whales",
+      "avatar": "https://cdn.bsky.app/img/avatar/plain/did:plc:7l75ck5g4b5k6gxqaq5rejit/bafkreia2gyds76c6uk5szzdxvsfcvnm4nh5nvudchuu3tqc6nlkwetcjai",
+      "associated": {
+       "chat": {
+        "allowIncoming": "following"
+       },
+       "activitySubscription": {
+        "allowSubscriptions": "followers"
+       }
+      },
+      "labels": [],
+      "createdAt": "2023-04-10T20:29:02.895Z"
+     },
+     "record": {
+      "$type": "app.bsky.feed.post",
+      "createdAt": "2026-10-21T20:22:16.993Z",
+      "langs": [
+       "en"
+      ],
+      "text": "BREAKING: \"US embassy staff and families ordered to leave Saudi Arabia, with families of embassy staff in the United Arab Emirates, Jordan, Qatar and Bahrain also ordered to leave,\" per AFP"
+     },
+     "bookmarkCount": 4,
+     "replyCount": 17,
+     "repostCount": 39,
+     "likeCount": 120,
+     "quoteCount": 14,
+     "indexedAt": "2026-10-21T20:22:17.346Z",
+     "labels": []
+    }
+   },
+   {
+    "post": {
+     "uri": "at://did:plc:7l75ck5g4b5k6gxqaq5rejit/app.bsky.feed.post/3myfrueb7ns2z",
+     "cid": "bafyreicfqfdnqnui52v2skcqnpryti746i7ngo7l63bjnlhkriauphmkki",
+     "author": {
+      "did": "did:plc:7l75ck5g4b5k6gxqaq5rejit",
+      "handle": "unusualwhales.bsky.social",
+      "displayName": "Unusual Whales",
+      "avatar": "https://cdn.bsky.app/img/avatar/plain/did:plc:7l75ck5g4b5k6gxqaq5rejit/bafkreia2gyds76c6uk5szzdxvsfcvnm4nh5nvudchuu3tqc6nlkwetcjai",
+      "associated": {
+       "chat": {
+        "allowIncoming": "following"
+       },
+       "activitySubscription": {
+        "allowSubscriptions": "followers"
+       }
+      },
+      "labels": [],
+      "createdAt": "2023-04-10T20:29:02.895Z"
+     },
+     "record": {
+      "$type": "app.bsky.feed.post",
+      "createdAt": "2026-10-21T18:31:29.595Z",
+      "langs": [
+       "en"
+      ],
+      "text": "Trump: \"If you elected a Republican House and Senate on November 3, you're gonna get $5,000. And if we lose, you get nothing. You're gonna get nothing! If we lose, you get nothing. Make it a lot easier vote.\""
+     },
+     "bookmarkCount": 0,
+     "replyCount": 16,
+     "repostCount": 2,
+     "likeCount": 61,
+     "quoteCount": 3,
+     "indexedAt": "2026-10-21T18:31:30.040Z",
+     "labels": []
+    }
+   },
+   {
+    "post": {
+     "uri": "at://did:plc:7l75ck5g4b5k6gxqaq5rejit/app.bsky.feed.post/3myfl3d2j4s2z",
+     "cid": "bafyreigvnbntea56bpe342smealh3dyeiefjomagb2vufosdpjvqgya2wu",
+     "author": {
+      "did": "did:plc:7l75ck5g4b5k6gxqaq5rejit",
+      "handle": "unusualwhales.bsky.social",
+      "displayName": "Unusual Whales",
+      "avatar": "https://cdn.bsky.app/img/avatar/plain/did:plc:7l75ck5g4b5k6gxqaq5rejit/bafkreia2gyds76c6uk5szzdxvsfcvnm4nh5nvudchuu3tqc6nlkwetcjai",
+      "associated": {
+       "chat": {
+        "allowIncoming": "following"
+       },
+       "activitySubscription": {
+        "allowSubscriptions": "followers"
+       }
+      },
+      "labels": [],
+      "createdAt": "2023-04-10T20:29:02.895Z"
+     },
+     "record": {
+      "$type": "app.bsky.feed.post",
+      "createdAt": "2026-10-21T16:30:07.007Z",
+      "langs": [
+       "en"
+      ],
+      "text": "BREAKING: Two critical security flaws in PHP, the programming language behind much of the internet, are forcing governments to take websites offline, per the BBC.\n\nThe flaws were found by AI. Security firm Wiz called them the \u201cmost severe vulnerabilities ever discovered\u201d by the technology."
+     },
+     "bookmarkCount": 8,
+     "replyCount": 5,
+     "repostCount": 28,
+     "likeCount": 94,
+     "quoteCount": 5,
+     "indexedAt": "2026-10-21T16:30:07.344Z",
+     "labels": []
+    }
+   },
+   {
+    "post": {
+     "uri": "at://did:plc:7l75ck5g4b5k6gxqaq5rejit/app.bsky.feed.post/3mye3jwpqf22r",
+     "cid": "bafyreid6vj4eehwtqzdwacm4korqagkzwigq4z6f3vfaaeulimzhhaka3y",
+     "author": {
+      "did": "did:plc:7l75ck5g4b5k6gxqaq5rejit",
+      "handle": "unusualwhales.bsky.social",
+      "displayName": "Unusual Whales",
+      "avatar": "https://cdn.bsky.app/img/avatar/plain/did:plc:7l75ck5g4b5k6gxqaq5rejit/bafkreia2gyds76c6uk5szzdxvsfcvnm4nh5nvudchuu3tqc6nlkwetcjai",
+      "associated": {
+       "chat": {
+        "allowIncoming": "following"
+       },
+       "activitySubscription": {
+        "allowSubscriptions": "followers"
+       }
+      },
+      "labels": [],
+      "createdAt": "2023-04-10T20:29:02.895Z"
+     },
+     "record": {
+      "$type": "app.bsky.feed.post",
+      "createdAt": "2026-10-21T02:19:17.772Z",
+      "langs": [
+       "en"
+      ],
+      "reply": {
+       "parent": {
+        "cid": "bafyreieimvijtgdgkepxtvmm5c2yapzct7xq67xspsuryo3hw5vr2zea3m",
+        "uri": "at://did:plc:7l75ck5g4b5k6gxqaq5rejit/app.bsky.feed.post/3mye3jwppfs2r"
+       },
+       "root": {
+        "cid": "bafyreigqnp6rbclr2halnoezsekk6gjnys5bxgyzs4fxjy74qx2iqjle6e",
+        "uri": "at://did:plc:7l75ck5g4b5k6gxqaq5rejit/app.bsky.feed.post/3mye3jwp7rs2r"
+       }
+      },
+      "text": "Neither tastytrade nor any of its affiliated companies is responsible for the privacy practices of Marketing Agent. tastytrade does not warrant the accuracy or content of the products or services offered by Marketing Agent.\n\nMarketing Agent is independent and is not an affiliate of tastytrade."
+     },
+     "bookmarkCount": 1,
+     "replyCount": 0,
+     "repostCount": 0,
+     "likeCount": 3,
+     "quoteCount": 0,
+     "indexedAt": "2026-10-21T02:19:20.048Z",
+     "labels": []
+    },
+    "reply": {
+     "root": {
+      "uri": "at://did:plc:7l75ck5g4b5k6gxqaq5rejit/app.bsky.feed.post/3mye3jwp7rs2r",
+      "cid": "bafyreigqnp6rbclr2halnoezsekk6gjnys5bxgyzs4fxjy74qx2iqjle6e",
+      "author": {
+       "did": "did:plc:7l75ck5g4b5k6gxqaq5rejit",
+       "handle": "unusualwhales.bsky.social",
+       "displayName": "Unusual Whales",
+       "avatar": "https://cdn.bsky.app/img/avatar/plain/did:plc:7l75ck5g4b5k6gxqaq5rejit/bafkreia2gyds76c6uk5szzdxvsfcvnm4nh5nvudchuu3tqc6nlkwetcjai",
+       "associated": {
+        "chat": {
+         "allowIncoming": "following"
+        },
+        "activitySubscription": {
+         "allowSubscriptions": "followers"
+        }
+       },
+       "labels": [],
+       "createdAt": "2023-04-10T20:29:02.895Z"
+      },
+      "record": {
+       "$type": "app.bsky.feed.post",
+       "createdAt": "2026-10-21T02:19:17.769Z",
+       "embed": {
+        "$type": "app.bsky.embed.video",
+        "aspectRatio": {
+         "height": 1920,
+         "width": 1080
+        },
+        "presentation": "default",
+        "video": {
+         "$type": "blob",
+         "ref": {
+          "$link": "bafkreigikyfypgb2ygbl3yoe3qsgibb4qkergfqtw2ra5nnbvldmxuc3jy"
+         },
+         "mimeType": "video/mp4",
+         "size": 19878778
+        }
+       },
+       "facets": [
+        {
+         "features": [
+          {
+           "$type": "app.bsky.richtext.facet#link",
+           "uri": "https://youtube.com/@UnusualWhales/streams"
+          }
+         ],
+         "index": {
+          "byteEnd": 214,
+          "byteStart": 180
+         }
+        },
+        {
+         "features": [
+          {
+           "$type": "app.bsky.richtext.facet#link",
+           "uri": "https://x.com/WhaleWatch_UW"
+          }
+         ],
+         "index": {
+          "byteEnd": 263,
+          "byteStart": 244
+         }
+        }
+       ],
+       "langs": [
+        "en"
+       ],
+       "text": "Negative gamma is a great place to be short\u2026 right up until it isn't.\n\nOur hosts waited all morning for this one.\n\nCatch WhaleWatch live every Monday and Wednesday at 9:20am ET: youtube.com/@UnusualWhales/streams\n\nFollow @WhaleWatch_UW on X: x.com/WhaleWatch_UW"
+      },
+      "embed": {
+       "cid": "bafkreigikyfypgb2ygbl3yoe3qsgibb4qkergfqtw2ra5nnbvldmxuc3jy",
+       "playlist": "https://video.bsky.app/watch/did%3Aplc%3A7l75ck5g4b5k6gxqaq5rejit/bafkreigikyfypgb2ygbl3yoe3qsgibb4qkergfqtw2ra5nnbvldmxuc3jy/playlist.m3u8",
+       "thumbnail": "https://video.bsky.app/watch/did%3Aplc%3A7l75ck5g4b5k6gxqaq5rejit/bafkreigikyfypgb2ygbl3yoe3qsgibb4qkergfqtw2ra5nnbvldmxuc3jy/thumbnail.jpg",
+       "aspectRatio": {
+        "height": 1920,
+        "width": 1080
+       },
+       "presentation": "default",
+       "$type": "app.bsky.embed.video#view"
+      },
+      "bookmarkCount": 1,
+      "replyCount": 2,
+      "repostCount": 0,
+      "likeCount": 9,
+      "quoteCount": 0,
+      "indexedAt": "2026-10-21T02:19:20.045Z",
+      "labels": [],
+      "$type": "app.bsky.feed.defs#postView"
+     },
+     "parent": {
+      "uri": "at://did:plc:7l75ck5g4b5k6gxqaq5rejit/app.bsky.feed.post/3mye3jwppfs2r",
+      "cid": "bafyreieimvijtgdgkepxtvmm5c2yapzct7xq67xspsuryo3hw5vr2zea3m",
+      "author": {
+       "did": "did:plc:7l75ck5g4b5k6gxqaq5rejit",
+       "handle": "unusualwhales.bsky.social",
+       "displayName": "Unusual Whales",
+       "avatar": "https://cdn.bsky.app/img/avatar/plain/did:plc:7l75ck5g4b5k6gxqaq5rejit/bafkreia2gyds76c6uk5szzdxvsfcvnm4nh5nvudchuu3tqc6nlkwetcjai",
+       "associated": {
+        "chat": {
+         "allowIncoming": "following"
+        },
+        "activitySubscription": {
+         "allowSubscriptions": "followers"
+        }
+       },
+       "labels": [],
+       "createdAt": "2023-04-10T20:29:02.895Z"
+      },
+      "record": {
+       "$type": "app.bsky.feed.post",
+       "createdAt": "2026-10-21T02:19:17.771Z",
+       "langs": [
+        "en"
+       ],
+       "reply": {
+        "parent": {
+         "cid": "bafyreiderykhbyqwntyu4c7ye6m7qvfclz6ph32j6o6ctfaq5sgesc267q",
+         "uri": "at://did:plc:7l75ck5g4b5k6gxqaq5rejit/app.bsky.feed.post/3mye3jwpogk2r"
+        },
+        "root": {
+         "cid": "bafyreigqnp6rbclr2halnoezsekk6gjnys5bxgyzs4fxjy74qx2iqjle6e",
+         "uri": "at://did:plc:7l75ck5g4b5k6gxqaq5rejit/app.bsky.feed.post/3mye3jwp7rs2r"
+        }
+       },
+       "text": "The existence of this Marketing Agreement should not be deemed as an endorsement or recommendation of Marketing Agent by tastytrade and/or any of its affiliated companies."
+      },
+      "bookmarkCount": 0,
+      "replyCount": 1,
+      "repostCount": 0,
+      "likeCount": 3,
+      "quoteCount": 0,
+      "indexedAt": "2026-10-21T02:19:20.047Z",
+      "labels": [],
+      "$type": "app.bsky.feed.defs#postView"
+     },
+     "grandparentAuthor": {
+      "did": "did:plc:7l75ck5g4b5k6gxqaq5rejit",
+      "handle": "unusualwhales.bsky.social",
+      "displayName": "Unusual Whales",
+      "avatar": "https://cdn.bsky.app/img/avatar/plain/did:plc:7l75ck5g4b5k6gxqaq5rejit/bafkreia2gyds76c6uk5szzdxvsfcvnm4nh5nvudchuu3tqc6nlkwetcjai",
+      "associated": {
+       "chat": {
+        "allowIncoming": "following"
+       },
+       "activitySubscription": {
+        "allowSubscriptions": "followers"
+       }
+      },
+      "labels": [],
+      "createdAt": "2023-04-10T20:29:02.895Z"
+     }
+    },
+    "opThreadPostIndex": 4,
+    "opThreadPostCount": 4
+   },
+   {
+    "post": {
+     "uri": "at://did:plc:7l75ck5g4b5k6gxqaq5rejit/app.bsky.feed.post/3mye3jwppfs2r",
+     "cid": "bafyreieimvijtgdgkepxtvmm5c2yapzct7xq67xspsuryo3hw5vr2zea3m",
+     "author": {
+      "did": "did:plc:7l75ck5g4b5k6gxqaq5rejit",
+      "handle": "unusualwhales.bsky.social",
+      "displayName": "Unusual Whales",
+      "avatar": "https://cdn.bsky.app/img/avatar/plain/did:plc:7l75ck5g4b5k6gxqaq5rejit/bafkreia2gyds76c6uk5szzdxvsfcvnm4nh5nvudchuu3tqc6nlkwetcjai",
+      "associated": {
+       "chat": {
+        "allowIncoming": "following"
+       },
+       "activitySubscription": {
+        "allowSubscriptions": "followers"
+       }
+      },
+      "labels": [],
+      "createdAt": "2023-04-10T20:29:02.895Z"
+     },
+     "record": {
+      "$type": "app.bsky.feed.post",
+      "createdAt": "2026-10-21T02:19:17.771Z",
+      "langs": [
+       "en"
+      ],
+      "reply": {
+       "parent": {
+        "cid": "bafyreiderykhbyqwntyu4c7ye6m7qvfclz6ph32j6o6ctfaq5sgesc267q",
+        "uri": "at://did:plc:7l75ck5g4b5k6gxqaq5rejit/app.bsky.feed.post/3mye3jwpogk2r"
+       },
+       "root": {
+        "cid": "bafyreigqnp6rbclr2halnoezsekk6gjnys5bxgyzs4fxjy74qx2iqjle6e",
+        "uri": "at://did:plc:7l75ck5g4b5k6gxqaq5rejit/app.bsky.feed.post/3mye3jwp7rs2r"
+       }
+      },
+      "text": "The existence of this Marketing Agreement should not be deemed as an endorsement or recommendation of Marketing Agent by tastytrade and/or any of its affiliated companies."
+     },
+     "bookmarkCount": 0,
+     "replyCount": 1,
+     "repostCount": 0,
+     "likeCount": 3,
+     "quoteCount": 0,
+     "indexedAt": "2026-10-21T02:19:20.047Z",
+     "labels": []
+    },
+    "reply": {
+     "root": {
+      "uri": "at://did:plc:7l75ck5g4b5k6gxqaq5rejit/app.bsky.feed.post/3mye3jwp7rs2r",
+      "cid": "bafyreigqnp6rbclr2halnoezsekk6gjnys5bxgyzs4fxjy74qx2iqjle6e",
+      "author": {
+       "did": "did:plc:7l75ck5g4b5k6gxqaq5rejit",
+       "handle": "unusualwhales.bsky.social",
+       "displayName": "Unusual Whales",
+       "avatar": "https://cdn.bsky.app/img/avatar/plain/did:plc:7l75ck5g4b5k6gxqaq5rejit/bafkreia2gyds76c6uk5szzdxvsfcvnm4nh5nvudchuu3tqc6nlkwetcjai",
+       "associated": {
+        "chat": {
+         "allowIncoming": "following"
+        },
+        "activitySubscription": {
+         "allowSubscriptions": "followers"
+        }
+       },
+       "labels": [],
+       "createdAt": "2023-04-10T20:29:02.895Z"
+      },
+      "record": {
+       "$type": "app.bsky.feed.post",
+       "createdAt": "2026-10-21T02:19:17.769Z",
+       "embed": {
+        "$type": "app.bsky.embed.video",
+        "aspectRatio": {
+         "height": 1920,
+         "width": 1080
+        },
+        "presentation": "default",
+        "video": {
+         "$type": "blob",
+         "ref": {
+          "$link": "bafkreigikyfypgb2ygbl3yoe3qsgibb4qkergfqtw2ra5nnbvldmxuc3jy"
+         },
+         "mimeType": "video/mp4",
+         "size": 19878778
+        }
+       },
+       "facets": [
+        {
+         "features": [
+          {
+           "$type": "app.bsky.richtext.facet#link",
+           "uri": "https://youtube.com/@UnusualWhales/streams"
+          }
+         ],
+         "index": {
+          "byteEnd": 214,
+          "byteStart": 180
+         }
+        },
+        {
+         "features": [
+          {
+           "$type": "app.bsky.richtext.facet#link",
+           "uri": "https://x.com/WhaleWatch_UW"
+          }
+         ],
+         "index": {
+          "byteEnd": 263,
+          "byteStart": 244
+         }
+        }
+       ],
+       "langs": [
+        "en"
+       ],
+       "text": "Negative gamma is a great place to be short\u2026 right up until it isn't.\n\nOur hosts waited all morning for this one.\n\nCatch WhaleWatch live every Monday and Wednesday at 9:20am ET: youtube.com/@UnusualWhales/streams\n\nFollow @WhaleWatch_UW on X: x.com/WhaleWatch_UW"
+      },
+      "embed": {
+       "cid": "bafkreigikyfypgb2ygbl3yoe3qsgibb4qkergfqtw2ra5nnbvldmxuc3jy",
+       "playlist": "https://video.bsky.app/watch/did%3Aplc%3A7l75ck5g4b5k6gxqaq5rejit/bafkreigikyfypgb2ygbl3yoe3qsgibb4qkergfqtw2ra5nnbvldmxuc3jy/playlist.m3u8",
+       "thumbnail": "https://video.bsky.app/watch/did%3Aplc%3A7l75ck5g4b5k6gxqaq5rejit/bafkreigikyfypgb2ygbl3yoe3qsgibb4qkergfqtw2ra5nnbvldmxuc3jy/thumbnail.jpg",
+       "aspectRatio": {
+        "height": 1920,
+        "width": 1080
+       },
+       "presentation": "default",
+       "$type": "app.bsky.embed.video#view"
+      },
+      "bookmarkCount": 1,
+      "replyCount": 2,
+      "repostCount": 0,
+      "likeCount": 9,
+      "quoteCount": 0,
+      "indexedAt": "2026-10-21T02:19:20.045Z",
+      "labels": [],
+      "$type": "app.bsky.feed.defs#postView"
+     },
+     "parent": {
+      "uri": "at://did:plc:7l75ck5g4b5k6gxqaq5rejit/app.bsky.feed.post/3mye3jwpogk2r",
+      "cid": "bafyreiderykhbyqwntyu4c7ye6m7qvfclz6ph32j6o6ctfaq5sgesc267q",
+      "author": {
+       "did": "did:plc:7l75ck5g4b5k6gxqaq5rejit",
+       "handle": "unusualwhales.bsky.social",
+       "displayName": "Unusual Whales",
+       "avatar": "https://cdn.bsky.app/img/avatar/plain/did:plc:7l75ck5g4b5k6gxqaq5rejit/bafkreia2gyds76c6uk5szzdxvsfcvnm4nh5nvudchuu3tqc6nlkwetcjai",
+       "associated": {
+        "chat": {
+         "allowIncoming": "following"
+        },
+        "activitySubscription": {
+         "allowSubscriptions": "followers"
+        }
+       },
+       "labels": [],
+       "createdAt": "2023-04-10T20:29:02.895Z"
+      },
+      "record": {
+       "$type": "app.bsky.feed.post",
+       "createdAt": "2026-10-21T02:19:17.770Z",
+       "facets": [
+        {
+         "features": [
+          {
+           "$type": "app.bsky.richtext.facet#link",
+           "uri": "https://tastytrade.com/whales/"
+          }
+         ],
+         "index": {
+          "byteEnd": 96,
+          "byteStart": 74
+         }
+        }
+       ],
+       "langs": [
+        "en"
+       ],
+       "reply": {
+        "parent": {
+         "cid": "bafyreigqnp6rbclr2halnoezsekk6gjnys5bxgyzs4fxjy74qx2iqjle6e",
+         "uri": "at://did:plc:7l75ck5g4b5k6gxqaq5rejit/app.bsky.feed.post/3mye3jwp7rs2r"
+        },
+        "root": {
+         "cid": "bafyreigqnp6rbclr2halnoezsekk6gjnys5bxgyzs4fxjy74qx2iqjle6e",
+         "uri": "at://did:plc:7l75ck5g4b5k6gxqaq5rejit/app.bsky.feed.post/3mye3jwp7rs2r"
+        }
+       },
+       "text": "WhaleWatch is sponsored by tastytrade! Use referral code UNUSUALWHALES at tastytrade.com/whales/ !\n\ntastytrade, Inc. (\u201ctastytrade\u201d) has entered into a Marketing Agreement with Unusual Whales, Inc. (\u201cMarketing Agent\u201d) whereby tastytrade pays compensation to Marketing Agent for tastytrade's services."
+      },
+      "bookmarkCount": 0,
+      "replyCount": 1,
+      "repostCount": 0,
+      "likeCount": 0,
+      "quoteCount": 0,
+      "indexedAt": "2026-10-21T02:19:20.046Z",
+      "labels": [],
+      "$type": "app.bsky.feed.defs#postView"
+     },
+     "grandparentAuthor": {
+      "did": "did:plc:7l75ck5g4b5k6gxqaq5rejit",
+      "handle": "unusualwhales.bsky.social",
+      "displayName": "Unusual Whales",
+      "avatar": "https://cdn.bsky.app/img/avatar/plain/did:plc:7l75ck5g4b5k6gxqaq5rejit/bafkreia2gyds76c6uk5szzdxvsfcvnm4nh5nvudchuu3tqc6nlkwetcjai",
+      "associated": {
+       "chat": {
+        "allowIncoming": "following"
+       },
+       "activitySubscription": {
+        "allowSubscriptions": "followers"
+       }
+      },
+      "labels": [],
+      "createdAt": "2023-04-10T20:29:02.895Z"
+     }
+    },
+    "opThreadPostIndex": 3,
+    "opThreadPostCount": 4
+   },
+   {
+    "post": {
+     "uri": "at://did:plc:7l75ck5g4b5k6gxqaq5rejit/app.bsky.feed.post/3mye3jwpogk2r",
+     "cid": "bafyreiderykhbyqwntyu4c7ye6m7qvfclz6ph32j6o6ctfaq5sgesc267q",
+     "author": {
+      "did": "did:plc:7l75ck5g4b5k6gxqaq5rejit",
+      "handle": "unusualwhales.bsky.social",
+      "displayName": "Unusual Whales",
+      "avatar": "https://cdn.bsky.app/img/avatar/plain/did:plc:7l75ck5g4b5k6gxqaq5rejit/bafkreia2gyds76c6uk5szzdxvsfcvnm4nh5nvudchuu3tqc6nlkwetcjai",
+      "associated": {
+       "chat": {
+        "allowIncoming": "following"
+       },
+       "activitySubscription": {
+        "allowSubscriptions": "followers"
+       }
+      },
+      "labels": [],
+      "createdAt": "2023-04-10T20:29:02.895Z"
+     },
+     "record": {
+      "$type": "app.bsky.feed.post",
+      "createdAt": "2026-10-21T02:19:17.770Z",
+      "facets": [
+       {
+        "features": [
+         {
+          "$type": "app.bsky.richtext.facet#link",
+          "uri": "https://tastytrade.com/whales/"
+         }
+        ],
+        "index": {
+         "byteEnd": 96,
+         "byteStart": 74
+        }
+       }
+      ],
+      "langs": [
+       "en"
+      ],
+      "reply": {
+       "parent": {
+        "cid": "bafyreigqnp6rbclr2halnoezsekk6gjnys5bxgyzs4fxjy74qx2iqjle6e",
+        "uri": "at://did:plc:7l75ck5g4b5k6gxqaq5rejit/app.bsky.feed.post/3mye3jwp7rs2r"
+       },
+       "root": {
+        "cid": "bafyreigqnp6rbclr2halnoezsekk6gjnys5bxgyzs4fxjy74qx2iqjle6e",
+        "uri": "at://did:plc:7l75ck5g4b5k6gxqaq5rejit/app.bsky.feed.post/3mye3jwp7rs2r"
+       }
+      },
+      "text": "WhaleWatch is sponsored by tastytrade! Use referral code UNUSUALWHALES at tastytrade.com/whales/ !\n\ntastytrade, Inc. (\u201ctastytrade\u201d) has entered into a Marketing Agreement with Unusual Whales, Inc. (\u201cMarketing Agent\u201d) whereby tastytrade pays compensation to Marketing Agent for tastytrade's services."
+     },
+     "bookmarkCount": 0,
+     "replyCount": 1,
+     "repostCount": 0,
+     "likeCount": 0,
+     "quoteCount": 0,
+     "indexedAt": "2026-10-21T02:19:20.046Z",
+     "labels": []
+    },
+    "reply": {
+     "root": {
+      "uri": "at://did:plc:7l75ck5g4b5k6gxqaq5rejit/app.bsky.feed.post/3mye3jwp7rs2r",
+      "cid": "bafyreigqnp6rbclr2halnoezsekk6gjnys5bxgyzs4fxjy74qx2iqjle6e",
+      "author": {
+       "did": "did:plc:7l75ck5g4b5k6gxqaq5rejit",
+       "handle": "unusualwhales.bsky.social",
+       "displayName": "Unusual Whales",
+       "avatar": "https://cdn.bsky.app/img/avatar/plain/did:plc:7l75ck5g4b5k6gxqaq5rejit/bafkreia2gyds76c6uk5szzdxvsfcvnm4nh5nvudchuu3tqc6nlkwetcjai",
+       "associated": {
+        "chat": {
+         "allowIncoming": "following"
+        },
+        "activitySubscription": {
+         "allowSubscriptions": "followers"
+        }
+       },
+       "labels": [],
+       "createdAt": "2023-04-10T20:29:02.895Z"
+      },
+      "record": {
+       "$type": "app.bsky.feed.post",
+       "createdAt": "2026-10-21T02:19:17.769Z",
+       "embed": {
+        "$type": "app.bsky.embed.video",
+        "aspectRatio": {
+         "height": 1920,
+         "width": 1080
+        },
+        "presentation": "default",
+        "video": {
+         "$type": "blob",
+         "ref": {
+          "$link": "bafkreigikyfypgb2ygbl3yoe3qsgibb4qkergfqtw2ra5nnbvldmxuc3jy"
+         },
+         "mimeType": "video/mp4",
+         "size": 19878778
+        }
+       },
+       "facets": [
+        {
+         "features": [
+          {
+           "$type": "app.bsky.richtext.facet#link",
+           "uri": "https://youtube.com/@UnusualWhales/streams"
+          }
+         ],
+         "index": {
+          "byteEnd": 214,
+          "byteStart": 180
+         }
+        },
+        {
+         "features": [
+          {
+           "$type": "app.bsky.richtext.facet#link",
+           "uri": "https://x.com/WhaleWatch_UW"
+          }
+         ],
+         "index": {
+          "byteEnd": 263,
+          "byteStart": 244
+         }
+        }
+       ],
+       "langs": [
+        "en"
+       ],
+       "text": "Negative gamma is a great place to be short\u2026 right up until it isn't.\n\nOur hosts waited all morning for this one.\n\nCatch WhaleWatch live every Monday and Wednesday at 9:20am ET: youtube.com/@UnusualWhales/streams\n\nFollow @WhaleWatch_UW on X: x.com/WhaleWatch_UW"
+      },
+      "embed": {
+       "cid": "bafkreigikyfypgb2ygbl3yoe3qsgibb4qkergfqtw2ra5nnbvldmxuc3jy",
+       "playlist": "https://video.bsky.app/watch/did%3Aplc%3A7l75ck5g4b5k6gxqaq5rejit/bafkreigikyfypgb2ygbl3yoe3qsgibb4qkergfqtw2ra5nnbvldmxuc3jy/playlist.m3u8",
+       "thumbnail": "https://video.bsky.app/watch/did%3Aplc%3A7l75ck5g4b5k6gxqaq5rejit/bafkreigikyfypgb2ygbl3yoe3qsgibb4qkergfqtw2ra5nnbvldmxuc3jy/thumbnail.jpg",
+       "aspectRatio": {
+        "height": 1920,
+        "width": 1080
+       },
+       "presentation": "default",
+       "$type": "app.bsky.embed.video#view"
+      },
+      "bookmarkCount": 1,
+      "replyCount": 2,
+      "repostCount": 0,
+      "likeCount": 9,
+      "quoteCount": 0,
+      "indexedAt": "2026-10-21T02:19:20.045Z",
+      "labels": [],
+      "$type": "app.bsky.feed.defs#postView"
+     },
+     "parent": {
+      "uri": "at://did:plc:7l75ck5g4b5k6gxqaq5rejit/app.bsky.feed.post/3mye3jwp7rs2r",
+      "cid": "bafyreigqnp6rbclr2halnoezsekk6gjnys5bxgyzs4fxjy74qx2iqjle6e",
+      "author": {
+       "did": "did:plc:7l75ck5g4b5k6gxqaq5rejit",
+       "handle": "unusualwhales.bsky.social",
+       "displayName": "Unusual Whales",
+       "avatar": "https://cdn.bsky.app/img/avatar/plain/did:plc:7l75ck5g4b5k6gxqaq5rejit/bafkreia2gyds76c6uk5szzdxvsfcvnm4nh5nvudchuu3tqc6nlkwetcjai",
+       "associated": {
+        "chat": {
+         "allowIncoming": "following"
+        },
+        "activitySubscription": {
+         "allowSubscriptions": "followers"
+        }
+       },
+       "labels": [],
+       "createdAt": "2023-04-10T20:29:02.895Z"
+      },
+      "record": {
+       "$type": "app.bsky.feed.post",
+       "createdAt": "2026-10-21T02:19:17.769Z",
+       "embed": {
+        "$type": "app.bsky.embed.video",
+        "aspectRatio": {
+         "height": 1920,
+         "width": 1080
+        },
+        "presentation": "default",
+        "video": {
+         "$type": "blob",
+         "ref": {
+          "$link": "bafkreigikyfypgb2ygbl3yoe3qsgibb4qkergfqtw2ra5nnbvldmxuc3jy"
+         },
+         "mimeType": "video/mp4",
+         "size": 19878778
+        }
+       },
+       "facets": [
+        {
+         "features": [
+          {
+           "$type": "app.bsky.richtext.facet#link",
+           "uri": "https://youtube.com/@UnusualWhales/streams"
+          }
+         ],
+         "index": {
+          "byteEnd": 214,
+          "byteStart": 180
+         }
+        },
+        {
+         "features": [
+          {
+           "$type": "app.bsky.richtext.facet#link",
+           "uri": "https://x.com/WhaleWatch_UW"
+          }
+         ],
+         "index": {
+          "byteEnd": 263,
+          "byteStart": 244
+         }
+        }
+       ],
+       "langs": [
+        "en"
+       ],
+       "text": "Negative gamma is a great place to be short\u2026 right up until it isn't.\n\nOur hosts waited all morning for this one.\n\nCatch WhaleWatch live every Monday and Wednesday at 9:20am ET: youtube.com/@UnusualWhales/streams\n\nFollow @WhaleWatch_UW on X: x.com/WhaleWatch_UW"
+      },
+      "embed": {
+       "cid": "bafkreigikyfypgb2ygbl3yoe3qsgibb4qkergfqtw2ra5nnbvldmxuc3jy",
+       "playlist": "https://video.bsky.app/watch/did%3Aplc%3A7l75ck5g4b5k6gxqaq5rejit/bafkreigikyfypgb2ygbl3yoe3qsgibb4qkergfqtw2ra5nnbvldmxuc3jy/playlist.m3u8",
+       "thumbnail": "https://video.bsky.app/watch/did%3Aplc%3A7l75ck5g4b5k6gxqaq5rejit/bafkreigikyfypgb2ygbl3yoe3qsgibb4qkergfqtw2ra5nnbvldmxuc3jy/thumbnail.jpg",
+       "aspectRatio": {
+        "height": 1920,
+        "width": 1080
+       },
+       "presentation": "default",
+       "$type": "app.bsky.embed.video#view"
+      },
+      "bookmarkCount": 1,
+      "replyCount": 2,
+      "repostCount": 0,
+      "likeCount": 9,
+      "quoteCount": 0,
+      "indexedAt": "2026-10-21T02:19:20.045Z",
+      "labels": [],
+      "$type": "app.bsky.feed.defs#postView"
+     }
+    },
+    "opThreadPostIndex": 2,
+    "opThreadPostCount": 4
+   },
+   {
+    "post": {
+     "uri": "at://did:plc:7l75ck5g4b5k6gxqaq5rejit/app.bsky.feed.post/3mye3jwp7rs2r",
+     "cid": "bafyreigqnp6rbclr2halnoezsekk6gjnys5bxgyzs4fxjy74qx2iqjle6e",
+     "author": {
+      "did": "did:plc:7l75ck5g4b5k6gxqaq5rejit",
+      "handle": "unusualwhales.bsky.social",
+      "displayName": "Unusual Whales",
+      "avatar": "https://cdn.bsky.app/img/avatar/plain/did:plc:7l75ck5g4b5k6gxqaq5rejit/bafkreia2gyds76c6uk5szzdxvsfcvnm4nh5nvudchuu3tqc6nlkwetcjai",
+      "associated": {
+       "chat": {
+        "allowIncoming": "following"
+       },
+       "activitySubscription": {
+        "allowSubscriptions": "followers"
+       }
+      },
+      "labels": [],
+      "createdAt": "2023-04-10T20:29:02.895Z"
+     },
+     "record": {
+      "$type": "app.bsky.feed.post",
+      "createdAt": "2026-10-21T02:19:17.769Z",
+      "embed": {
+       "$type": "app.bsky.embed.video",
+       "aspectRatio": {
+        "height": 1920,
+        "width": 1080
+       },
+       "presentation": "default",
+       "video": {
+        "$type": "blob",
+        "ref": {
+         "$link": "bafkreigikyfypgb2ygbl3yoe3qsgibb4qkergfqtw2ra5nnbvldmxuc3jy"
+        },
+        "mimeType": "video/mp4",
+        "size": 19878778
+       }
+      },
+      "facets": [
+       {
+        "features": [
+         {
+          "$type": "app.bsky.richtext.facet#link",
+          "uri": "https://youtube.com/@UnusualWhales/streams"
+         }
+        ],
+        "index": {
+         "byteEnd": 214,
+         "byteStart": 180
+        }
+       },
+       {
+        "features": [
+         {
+          "$type": "app.bsky.richtext.facet#link",
+          "uri": "https://x.com/WhaleWatch_UW"
+         }
+        ],
+        "index": {
+         "byteEnd": 263,
+         "byteStart": 244
+        }
+       }
+      ],
+      "langs": [
+       "en"
+      ],
+      "text": "Negative gamma is a great place to be short\u2026 right up until it isn't.\n\nOur hosts waited all morning for this one.\n\nCatch WhaleWatch live every Monday and Wednesday at 9:20am ET: youtube.com/@UnusualWhales/streams\n\nFollow @WhaleWatch_UW on X: x.com/WhaleWatch_UW"
+     },
+     "embed": {
+      "cid": "bafkreigikyfypgb2ygbl3yoe3qsgibb4qkergfqtw2ra5nnbvldmxuc3jy",
+      "playlist": "https://video.bsky.app/watch/did%3Aplc%3A7l75ck5g4b5k6gxqaq5rejit/bafkreigikyfypgb2ygbl3yoe3qsgibb4qkergfqtw2ra5nnbvldmxuc3jy/playlist.m3u8",
+      "thumbnail": "https://video.bsky.app/watch/did%3Aplc%3A7l75ck5g4b5k6gxqaq5rejit/bafkreigikyfypgb2ygbl3yoe3qsgibb4qkergfqtw2ra5nnbvldmxuc3jy/thumbnail.jpg",
+      "aspectRatio": {
+       "height": 1920,
+       "width": 1080
+      },
+      "presentation": "default",
+      "$type": "app.bsky.embed.video#view"
+     },
+     "bookmarkCount": 1,
+     "replyCount": 2,
+     "repostCount": 0,
+     "likeCount": 9,
+     "quoteCount": 0,
+     "indexedAt": "2026-10-21T02:19:20.045Z",
+     "labels": []
+    },
+    "opThreadPostIndex": 1,
+    "opThreadPostCount": 4
+   },
+   {
+    "post": {
+     "uri": "at://did:plc:7l75ck5g4b5k6gxqaq5rejit/app.bsky.feed.post/3mydpzqcqs22i",
+     "cid": "bafyreid7ze6ueu2zvirgmzojmpzf5ekjmkzjqu6hqn2zkbzme6xr52ortq",
+     "author": {
+      "did": "did:plc:7l75ck5g4b5k6gxqaq5rejit",
+      "handle": "unusualwhales.bsky.social",
+      "displayName": "Unusual Whales",
+      "avatar": "https://cdn.bsky.app/img/avatar/plain/did:plc:7l75ck5g4b5k6gxqaq5rejit/bafkreia2gyds76c6uk5szzdxvsfcvnm4nh5nvudchuu3tqc6nlkwetcjai",
+      "associated": {
+       "chat": {
+        "allowIncoming": "following"
+       },
+       "activitySubscription": {
+        "allowSubscriptions": "followers"
+       }
+      },
+      "labels": [],
+      "createdAt": "2023-04-10T20:29:02.895Z"
+     },
+     "record": {
+      "$type": "app.bsky.feed.post",
+      "createdAt": "2026-10-20T22:53:23.038Z",
+      "facets": [
+       {
+        "features": [
+         {
+          "$type": "app.bsky.richtext.facet#tag",
+          "tag": "$SPCX"
+         }
+        ],
+        "index": {
+         "byteEnd": 28,
+         "byteStart": 23
+        }
+       }
+      ],
+      "langs": [
+       "en"
+      ],
+      "text": "Elon Musk says he sees $SPCX annual recurring revenue to land between $500 billion and $1 trillion by the end of 2027."
+     },
+     "bookmarkCount": 2,
+     "replyCount": 34,
+     "repostCount": 3,
+     "likeCount": 31,
+     "quoteCount": 3,
+     "indexedAt": "2026-10-20T22:53:23.250Z",
+     "labels": []
+    }
+   },
+   {
+    "post": {
+     "uri": "at://did:plc:7l75ck5g4b5k6gxqaq5rejit/app.bsky.feed.post/3mydgmyq6vc2b",
+     "cid": "bafyreid5zphd6bjnqc5mw2lj6jprbzp7slb5hxgwqw4xtbpqg36xywr4om",
+     "author": {
+      "did": "did:plc:7l75ck5g4b5k6gxqaq5rejit",
+      "handle": "unusualwhales.bsky.social",
+      "displayName": "Unusual Whales",
+      "avatar": "https://cdn.bsky.app/img/avatar/plain/did:plc:7l75ck5g4b5k6gxqaq5rejit/bafkreia2gyds76c6uk5szzdxvsfcvnm4nh5nvudchuu3tqc6nlkwetcjai",
+      "associated": {
+       "chat": {
+        "allowIncoming": "following"
+       },
+       "activitySubscription": {
+        "allowSubscriptions": "followers"
+       }
+      },
+      "labels": [],
+      "createdAt": "2023-04-10T20:29:02.895Z"
+     },
+     "record": {
+      "$type": "app.bsky.feed.post",
+      "createdAt": "2026-10-20T20:05:11.985Z",
+      "langs": [
+       "en"
+      ],
+      "text": "BREAKING: Anthropic\u2019s draft IPO filing shows red-hot growth, big risks and massive computing costs, per The Wall Street Journal.\n\nThe company posted an $80.7 billion net loss in the first half of 2026."
+     },
+     "bookmarkCount": 0,
+     "replyCount": 5,
+     "repostCount": 14,
+     "likeCount": 77,
+     "quoteCount": 9,
+     "indexedAt": "2026-10-20T20:05:12.339Z",
+     "labels": []
+    }
+   },
+   {
+    "post": {
+     "uri": "at://did:plc:7l75ck5g4b5k6gxqaq5rejit/app.bsky.feed.post/3mydg72kj5k2b",
+     "cid": "bafyreiamwzrwbnlq2xk3lcd3d4rrt6ganj45ixrxyzw3somanl53vdijta",
+     "author": {
+      "did": "did:plc:7l75ck5g4b5k6gxqaq5rejit",
+      "handle": "unusualwhales.bsky.social",
+      "displayName": "Unusual Whales",
+      "avatar": "https://cdn.bsky.app/img/avatar/plain/did:plc:7l75ck5g4b5k6gxqaq5rejit/bafkreia2gyds76c6uk5szzdxvsfcvnm4nh5nvudchuu3tqc6nlkwetcjai",
+      "associated": {
+       "chat": {
+        "allowIncoming": "following"
+       },
+       "activitySubscription": {
+        "allowSubscriptions": "followers"
+       }
+      },
+      "labels": [],
+      "createdAt": "2023-04-10T20:29:02.895Z"
+     },
+     "record": {
+      "$type": "app.bsky.feed.post",
+      "createdAt": "2026-10-20T19:57:24.132Z",
+      "langs": [
+       "en"
+      ],
+      "text": "BREAKING: Trump has revealed his new anti-fraud program set up to reward people who expose fraud with a 1% commission on the money uncovered.  \"If you turn somebody in and you, let's say report and you find $1 billion, we are giving a commission to that person of 1%.\""
+     },
+     "bookmarkCount": 1,
+     "replyCount": 20,
+     "repostCount": 8,
+     "likeCount": 31,
+     "quoteCount": 7,
+     "indexedAt": "2026-10-20T19:57:24.440Z",
+     "labels": []
+    }
+   },
+   {
+    "post": {
+     "uri": "at://did:plc:7l75ck5g4b5k6gxqaq5rejit/app.bsky.feed.post/3myde5sends24",
+     "cid": "bafyreig46gvwne6evuwn2xlacsr4derrb5eajnadmo4gr3c7rnex3yc73i",
+     "author": {
+      "did": "did:plc:7l75ck5g4b5k6gxqaq5rejit",
+      "handle": "unusualwhales.bsky.social",
+      "displayName": "Unusual Whales",
+      "avatar": "https://cdn.bsky.app/img/avatar/plain/did:plc:7l75ck5g4b5k6gxqaq5rejit/bafkreia2gyds76c6uk5szzdxvsfcvnm4nh5nvudchuu3tqc6nlkwetcjai",
+      "associated": {
+       "chat": {
+        "allowIncoming": "following"
+       },
+       "activitySubscription": {
+        "allowSubscriptions": "followers"
+       }
+      },
+      "labels": [],
+      "createdAt": "2023-04-10T20:29:02.895Z"
+     },
+     "record": {
+      "$type": "app.bsky.feed.post",
+      "createdAt": "2026-10-20T19:20:54.513Z",
+      "langs": [
+       "en"
+      ],
+      "text": "JD Vance: \"Vote for the people who have solutions to lower the cost of gas, don't vote for the people who made the problem to begin with.\""
+     },
+     "bookmarkCount": 2,
+     "replyCount": 34,
+     "repostCount": 21,
+     "likeCount": 134,
+     "quoteCount": 17,
+     "indexedAt": "2026-10-20T19:20:54.843Z",
+     "labels": []
+    }
+   },
+   {
+    "post": {
+     "uri": "at://did:plc:7l75ck5g4b5k6gxqaq5rejit/app.bsky.feed.post/3mybwab5agk2b",
+     "cid": "bafyreidhgyw7iglqrje572nr426y4ezatezlnxxlkalhtbwkdjshapoyiy",
+     "author": {
+      "did": "did:plc:7l75ck5g4b5k6gxqaq5rejit",
+      "handle": "unusualwhales.bsky.social",
+      "displayName": "Unusual Whales",
+      "avatar": "https://cdn.bsky.app/img/avatar/plain/did:plc:7l75ck5g4b5k6gxqaq5rejit/bafkreia2gyds76c6uk5szzdxvsfcvnm4nh5nvudchuu3tqc6nlkwetcjai",
+      "associated": {
+       "chat": {
+        "allowIncoming": "following"
+       },
+       "activitySubscription": {
+        "allowSubscriptions": "followers"
+       }
+      },
+      "labels": [],
+      "createdAt": "2023-04-10T20:29:02.895Z"
+     },
+     "record": {
+      "$type": "app.bsky.feed.post",
+      "createdAt": "2026-10-20T05:39:04.983Z",
+      "langs": [
+       "en"
+      ],
+      "text": "BREAKING: Albertans have voted to stay in Canada and not separate, CBC News has projected"
+     },
+     "bookmarkCount": 0,
+     "replyCount": 5,
+     "repostCount": 8,
+     "likeCount": 107,
+     "quoteCount": 0,
+     "indexedAt": "2026-10-20T05:39:05.255Z",
+     "labels": []
+    }
+   },
+   {
+    "post": {
+     "uri": "at://did:plc:7l75ck5g4b5k6gxqaq5rejit/app.bsky.feed.post/3myan73klts24",
+     "cid": "bafyreihxzsthyl7gdpyptfm3lm4n2amvrxcy4vgqyfdpd2ai4phm2rsfse",
+     "author": {
+      "did": "did:plc:7l75ck5g4b5k6gxqaq5rejit",
+      "handle": "unusualwhales.bsky.social",
+      "displayName": "Unusual Whales",
+      "avatar": "https://cdn.bsky.app/img/avatar/plain/did:plc:7l75ck5g4b5k6gxqaq5rejit/bafkreia2gyds76c6uk5szzdxvsfcvnm4nh5nvudchuu3tqc6nlkwetcjai",
+      "associated": {
+       "chat": {
+        "allowIncoming": "following"
+       },
+       "activitySubscription": {
+        "allowSubscriptions": "followers"
+       }
+      },
+      "labels": [],
+      "createdAt": "2023-04-10T20:29:02.895Z"
+     },
+     "record": {
+      "$type": "app.bsky.feed.post",
+      "createdAt": "2026-10-19T17:24:42.155Z",
+      "langs": [
+       "en"
+      ],
+      "text": "BREAKING: French authorities acknowledge they have \u201clost control\u201d in major cities as widespread protests, violence and unrest grip the country, prompting calls for curfews to restore order, per NBC"
+     },
+     "bookmarkCount": 0,
+     "replyCount": 8,
+     "repostCount": 14,
+     "likeCount": 79,
+     "quoteCount": 4,
+     "indexedAt": "2026-10-19T17:24:42.357Z",
+     "labels": []
+    }
+   },
+   {
+    "post": {
+     "uri": "at://did:plc:7l75ck5g4b5k6gxqaq5rejit/app.bsky.feed.post/3my74g2jcr223",
+     "cid": "bafyreid7fdprihv7ggn7sydal74juwidmt7jfr7hwi7qdfvfglcpm5jxfq",
+     "author": {
+      "did": "did:plc:7l75ck5g4b5k6gxqaq5rejit",
+      "handle": "unusualwhales.bsky.social",
+      "displayName": "Unusual Whales",
+      "avatar": "https://cdn.bsky.app/img/avatar/plain/did:plc:7l75ck5g4b5k6gxqaq5rejit/bafkreia2gyds76c6uk5szzdxvsfcvnm4nh5nvudchuu3tqc6nlkwetcjai",
+      "associated": {
+       "chat": {
+        "allowIncoming": "following"
+       },
+       "activitySubscription": {
+        "allowSubscriptions": "followers"
+       }
+      },
+      "labels": [],
+      "createdAt": "2023-04-10T20:29:02.895Z"
+     },
+     "record": {
+      "$type": "app.bsky.feed.post",
+      "createdAt": "2026-10-19T02:51:42.601Z",
+      "langs": [
+       "en"
+      ],
+      "text": "Russian President Vladimir Putin has proposed that he, President Trump and Chinese leader Xi Jinping meet next month to attempt to negotiate an end to the war in Ukraine that would favor Moscow, per WSJ"
+     },
+     "bookmarkCount": 3,
+     "replyCount": 22,
+     "repostCount": 16,
+     "likeCount": 70,
+     "quoteCount": 8,
+     "indexedAt": "2026-10-19T02:51:42.864Z",
+     "labels": []
+    }
+   },
+   {
+    "post": {
+     "uri": "at://did:plc:7l75ck5g4b5k6gxqaq5rejit/app.bsky.feed.post/3my6qytbt7s2n",
+     "cid": "bafyreibsbj7kb6dxjrcjz33koeehz4qflgsbgx5wjqqm3j7elju6fiopl4",
+     "author": {
+      "did": "did:plc:7l75ck5g4b5k6gxqaq5rejit",
+      "handle": "unusualwhales.bsky.social",
+      "displayName": "Unusual Whales",
+      "avatar": "https://cdn.bsky.app/img/avatar/plain/did:plc:7l75ck5g4b5k6gxqaq5rejit/bafkreia2gyds76c6uk5szzdxvsfcvnm4nh5nvudchuu3tqc6nlkwetcjai",
+      "associated": {
+       "chat": {
+        "allowIncoming": "following"
+       },
+       "activitySubscription": {
+        "allowSubscriptions": "followers"
+       }
+      },
+      "labels": [],
+      "createdAt": "2023-04-10T20:29:02.895Z"
+     },
+     "record": {
+      "$type": "app.bsky.feed.post",
+      "createdAt": "2026-10-18T23:27:27.651Z",
+      "langs": [
+       "en"
+      ],
+      "text": "Anthropic says it\u2019s committing 5% of its shares to a \u2018public benefit fund\u2019\n\nAnthropic announced today that it\u2019s creating a \u201cpublic benefit fund\u201d that will give the company \u201cincreased flexibility and scale\u201d to support projects for societal good."
+     },
+     "bookmarkCount": 0,
+     "replyCount": 22,
+     "repostCount": 1,
+     "likeCount": 44,
+     "quoteCount": 10,
+     "indexedAt": "2026-10-18T23:27:27.961Z",
+     "labels": []
+    }
+   },
+   {
+    "post": {
+     "uri": "at://did:plc:7l75ck5g4b5k6gxqaq5rejit/app.bsky.feed.post/3my63glernc2h",
+     "cid": "bafyreih3r3nes36coj4m7wf7gn7woglpxbxhgftinki2pboba52muiiwam",
+     "author": {
+      "did": "did:plc:7l75ck5g4b5k6gxqaq5rejit",
+      "handle": "unusualwhales.bsky.social",
+      "displayName": "Unusual Whales",
+      "avatar": "https://cdn.bsky.app/img/avatar/plain/did:plc:7l75ck5g4b5k6gxqaq5rejit/bafkreia2gyds76c6uk5szzdxvsfcvnm4nh5nvudchuu3tqc6nlkwetcjai",
+      "associated": {
+       "chat": {
+        "allowIncoming": "following"
+       },
+       "activitySubscription": {
+        "allowSubscriptions": "followers"
+       }
+      },
+      "labels": [],
+      "createdAt": "2023-04-10T20:29:02.895Z"
+     },
+     "record": {
+      "$type": "app.bsky.feed.post",
+      "createdAt": "2026-10-18T17:01:26.801Z",
+      "langs": [
+       "en"
+      ],
+      "text": "BREAKING: President Trump has declined to rule out declaring a national emergency related to the 2026 midterms, per Reuters"
+     },
+     "bookmarkCount": 8,
+     "replyCount": 42,
+     "repostCount": 51,
+     "likeCount": 158,
+     "quoteCount": 49,
+     "indexedAt": "2026-10-18T17:01:27.054Z",
+     "labels": []
+    }
+   },
+   {
+    "post": {
+     "uri": "at://did:plc:7l75ck5g4b5k6gxqaq5rejit/app.bsky.feed.post/3my5ludfitc2m",
+     "cid": "bafyreiepguaea53h4hmlzywhvi3qrait2edtv5hr2l5hzu3nve7twa7bby",
+     "author": {
+      "did": "did:plc:7l75ck5g4b5k6gxqaq5rejit",
+      "handle": "unusualwhales.bsky.social",
+      "displayName": "Unusual Whales",
+      "avatar": "https://cdn.bsky.app/img/avatar/plain/did:plc:7l75ck5g4b5k6gxqaq5rejit/bafkreia2gyds76c6uk5szzdxvsfcvnm4nh5nvudchuu3tqc6nlkwetcjai",
+      "associated": {
+       "chat": {
+        "allowIncoming": "following"
+       },
+       "activitySubscription": {
+        "allowSubscriptions": "followers"
+       }
+      },
+      "labels": [],
+      "createdAt": "2023-04-10T20:29:02.895Z"
+     },
+     "record": {
+      "$type": "app.bsky.feed.post",
+      "createdAt": "2026-10-18T12:22:48.329Z",
+      "langs": [
+       "en"
+      ],
+      "text": "Iran urges US to accept proposal to reopen Strait of Hormuz, per Reuters"
+     },
+     "bookmarkCount": 1,
+     "replyCount": 2,
+     "repostCount": 8,
+     "likeCount": 66,
+     "quoteCount": 3,
+     "indexedAt": "2026-10-18T12:22:49.155Z",
+     "labels": []
+    }
+   },
+   {
+    "post": {
+     "uri": "at://did:plc:7l75ck5g4b5k6gxqaq5rejit/app.bsky.feed.post/3my3z2grmac2p",
+     "cid": "bafyreihglc3ywayqpxvds3rmb2iftx5gaphqxbd2wdky4fcdkuj627lzcm",
+     "author": {
+      "did": "did:plc:7l75ck5g4b5k6gxqaq5rejit",
+      "handle": "unusualwhales.bsky.social",
+      "displayName": "Unusual Whales",
+      "avatar": "https://cdn.bsky.app/img/avatar/plain/did:plc:7l75ck5g4b5k6gxqaq5rejit/bafkreia2gyds76c6uk5szzdxvsfcvnm4nh5nvudchuu3tqc6nlkwetcjai",
+      "associated": {
+       "chat": {
+        "allowIncoming": "following"
+       },
+       "activitySubscription": {
+        "allowSubscriptions": "followers"
+       }
+      },
+      "labels": [],
+      "createdAt": "2023-04-10T20:29:02.895Z"
+     },
+     "record": {
+      "$type": "app.bsky.feed.post",
+      "createdAt": "2026-10-17T21:13:32.362Z",
+      "langs": [
+       "en"
+      ],
+      "text": "BREAKING: Chaos exploded across France on Saturday as 550,000 protesters flooded the streets, torched cars and buildings, looted from posh stores including Louis Vuitton and Herm\u00e8s, and even threatened to storm the \u00c9lys\u00e9e Palace, prompting Emmanuel Macron to rage: \u201cLet them come and get me,\" per NYP"
+     },
+     "bookmarkCount": 6,
+     "replyCount": 20,
+     "repostCount": 46,
+     "likeCount": 236,
+     "quoteCount": 48,
+     "indexedAt": "2026-10-17T21:13:33.260Z",
+     "labels": []
+    }
+   },
+   {
+    "post": {
+     "uri": "at://did:plc:7l75ck5g4b5k6gxqaq5rejit/app.bsky.feed.post/3my3xncntuk2w",
+     "cid": "bafyreiayebzask3snyhuxflacidug6wxi6yjfkiyiuychxziseuzmbyb6u",
+     "author": {
+      "did": "did:plc:7l75ck5g4b5k6gxqaq5rejit",
+      "handle": "unusualwhales.bsky.social",
+      "displayName": "Unusual Whales",
+      "avatar": "https://cdn.bsky.app/img/avatar/plain/did:plc:7l75ck5g4b5k6gxqaq5rejit/bafkreia2gyds76c6uk5szzdxvsfcvnm4nh5nvudchuu3tqc6nlkwetcjai",
+      "associated": {
+       "chat": {
+        "allowIncoming": "following"
+       },
+       "activitySubscription": {
+        "allowSubscriptions": "followers"
+       }
+      },
+      "labels": [],
+      "createdAt": "2023-04-10T20:29:02.895Z"
+     },
+     "record": {
+      "$type": "app.bsky.feed.post",
+      "createdAt": "2026-10-17T20:48:18.098Z",
+      "langs": [
+       "en"
+      ],
+      "text": "BREAKING: The head of the army says the UK's political leaders are about to start a \"frank conversation\" with the public about the need to prepare for war, per Sky News.\n\nGeneral Sir Roly Walker said every citizen will be asked to make sacrifices and to play their part in the defence of the nation."
+     },
+     "bookmarkCount": 2,
+     "replyCount": 24,
+     "repostCount": 24,
+     "likeCount": 98,
+     "quoteCount": 34,
+     "indexedAt": "2026-10-17T20:48:18.666Z",
+     "labels": []
+    }
+   },
+   {
+    "post": {
+     "uri": "at://did:plc:7l75ck5g4b5k6gxqaq5rejit/app.bsky.feed.post/3my2a4s5sn22d",
+     "cid": "bafyreib5mr2k242zp2ivnjc4fe3xkcpusq7is35wr6gigygzmhcmj2yozy",
+     "author": {
+      "did": "did:plc:7l75ck5g4b5k6gxqaq5rejit",
+      "handle": "unusualwhales.bsky.social",
+      "displayName": "Unusual Whales",
+      "avatar": "https://cdn.bsky.app/img/avatar/plain/did:plc:7l75ck5g4b5k6gxqaq5rejit/bafkreia2gyds76c6uk5szzdxvsfcvnm4nh5nvudchuu3tqc6nlkwetcjai",
+      "associated": {
+       "chat": {
+        "allowIncoming": "following"
+       },
+       "activitySubscription": {
+        "allowSubscriptions": "followers"
+       }
+      },
+      "labels": [],
+      "createdAt": "2023-04-10T20:29:02.895Z"
+     },
+     "record": {
+      "$type": "app.bsky.feed.post",
+      "createdAt": "2026-10-17T04:14:48.123Z",
+      "langs": [
+       "en"
+      ],
+      "text": "BREAKING: President Trump puts new Russia sanctions passed by Congress on hold, saying a waiver is in the U.S. national interest."
+     },
+     "bookmarkCount": 3,
+     "replyCount": 19,
+     "repostCount": 16,
+     "likeCount": 70,
+     "quoteCount": 6,
+     "indexedAt": "2026-10-17T04:14:48.754Z",
+     "labels": []
+    }
+   },
+   {
+    "post": {
+     "uri": "at://did:plc:7l75ck5g4b5k6gxqaq5rejit/app.bsky.feed.post/3mxzyj5t6cc22",
+     "cid": "bafyreidbk46tra2bacw4dy46eq2tpkv3rdxooh62dtbjn7zskdzrz22ao4",
+     "author": {
+      "did": "did:plc:7l75ck5g4b5k6gxqaq5rejit",
+      "handle": "unusualwhales.bsky.social",
+      "displayName": "Unusual Whales",
+      "avatar": "https://cdn.bsky.app/img/avatar/plain/did:plc:7l75ck5g4b5k6gxqaq5rejit/bafkreia2gyds76c6uk5szzdxvsfcvnm4nh5nvudchuu3tqc6nlkwetcjai",
+      "associated": {
+       "chat": {
+        "allowIncoming": "following"
+       },
+       "activitySubscription": {
+        "allowSubscriptions": "followers"
+       }
+      },
+      "labels": [],
+      "createdAt": "2023-04-10T20:29:02.895Z"
+     },
+     "record": {
+      "$type": "app.bsky.feed.post",
+      "createdAt": "2026-10-17T01:58:33.077Z",
+      "langs": [
+       "en"
+      ],
+      "text": "BREAKING: Bank of America is warning that the AI boom is starting to look like a classic boom-and-bust cycle."
+     },
+     "bookmarkCount": 36,
+     "replyCount": 117,
+     "repostCount": 176,
+     "likeCount": 1102,
+     "quoteCount": 315,
+     "indexedAt": "2026-10-17T01:58:33.664Z",
+     "labels": []
+    }
+   },
+   {
+    "post": {
+     "uri": "at://did:plc:7l75ck5g4b5k6gxqaq5rejit/app.bsky.feed.post/3mxzk6zux3s2c",
+     "cid": "bafyreiefm4rb27dnxdn6eyqaulwaheb63ryl6sflw2hzkq2xxo4e3ej5yq",
+     "author": {
+      "did": "did:plc:7l75ck5g4b5k6gxqaq5rejit",
+      "handle": "unusualwhales.bsky.social",
+      "displayName": "Unusual Whales",
+      "avatar": "https://cdn.bsky.app/img/avatar/plain/did:plc:7l75ck5g4b5k6gxqaq5rejit/bafkreia2gyds76c6uk5szzdxvsfcvnm4nh5nvudchuu3tqc6nlkwetcjai",
+      "associated": {
+       "chat": {
+        "allowIncoming": "following"
+       },
+       "activitySubscription": {
+        "allowSubscriptions": "followers"
+       }
+      },
+      "labels": [],
+      "createdAt": "2023-04-10T20:29:02.895Z"
+     },
+     "record": {
+      "$type": "app.bsky.feed.post",
+      "createdAt": "2026-10-16T21:42:21.011Z",
+      "langs": [
+       "en"
+      ],
+      "text": "Real average hourly earnings are officially down 0.7% on the month, per Bloomberg.\n\nThat's the sixth straight month of decline."
+     },
+     "bookmarkCount": 6,
+     "replyCount": 6,
+     "repostCount": 59,
+     "likeCount": 238,
+     "quoteCount": 9,
+     "indexedAt": "2026-10-16T21:42:21.666Z",
+     "labels": []
+    }
+   },
+   {
+    "post": {
+     "uri": "at://did:plc:7l75ck5g4b5k6gxqaq5rejit/app.bsky.feed.post/3mxzahwisis2o",
+     "cid": "bafyreiawwfer3sxhgc3vz5vqy6hv6axcm5mfdvqyd6bvjehjvee3zstgum",
+     "author": {
+      "did": "did:plc:7l75ck5g4b5k6gxqaq5rejit",
+      "handle": "unusualwhales.bsky.social",
+      "displayName": "Unusual Whales",
+      "avatar": "https://cdn.bsky.app/img/avatar/plain/did:plc:7l75ck5g4b5k6gxqaq5rejit/bafkreia2gyds76c6uk5szzdxvsfcvnm4nh5nvudchuu3tqc6nlkwetcjai",
+      "associated": {
+       "chat": {
+        "allowIncoming": "following"
+       },
+       "activitySubscription": {
+        "allowSubscriptions": "followers"
+       }
+      },
+      "labels": [],
+      "createdAt": "2023-04-10T20:29:02.895Z"
+     },
+     "record": {
+      "$type": "app.bsky.feed.post",
+      "createdAt": "2026-10-16T18:48:22.039Z",
+      "langs": [
+       "en"
+      ],
+      "text": "BREAKING: The US has recorded its 25th straight fiscal year in a row of operating at a deficit, per CNBC"
+     },
+     "bookmarkCount": 2,
+     "replyCount": 13,
+     "repostCount": 19,
+     "likeCount": 100,
+     "quoteCount": 3,
+     "indexedAt": "2026-10-16T18:48:22.352Z",
+     "labels": []
+    }
+   },
+   {
+    "post": {
+     "uri": "at://did:plc:7l75ck5g4b5k6gxqaq5rejit/app.bsky.feed.post/3mxz5vfbo722j",
+     "cid": "bafyreidxqa3w2bhbwbm6xqiy2vael3jg5apdarozvftdjulollvp4zj5di",
+     "author": {
+      "did": "did:plc:7l75ck5g4b5k6gxqaq5rejit",
+      "handle": "unusualwhales.bsky.social",
+      "displayName": "Unusual Whales",
+      "avatar": "https://cdn.bsky.app/img/avatar/plain/did:plc:7l75ck5g4b5k6gxqaq5rejit/bafkreia2gyds76c6uk5szzdxvsfcvnm4nh5nvudchuu3tqc6nlkwetcjai",
+      "associated": {
+       "chat": {
+        "allowIncoming": "following"
+       },
+       "activitySubscription": {
+        "allowSubscriptions": "followers"
+       }
+      },
+      "labels": [],
+      "createdAt": "2023-04-10T20:29:02.895Z"
+     },
+     "record": {
+      "$type": "app.bsky.feed.post",
+      "createdAt": "2026-10-16T18:02:12.516Z",
+      "langs": [
+       "en"
+      ],
+      "text": "BREAKING:  Trump\u2019s new press secretary, Katie Zacharia, was fired after less than a week on the job, per NYT"
+     },
+     "bookmarkCount": 0,
+     "replyCount": 16,
+     "repostCount": 3,
+     "likeCount": 81,
+     "quoteCount": 5,
+     "indexedAt": "2026-10-16T18:02:12.765Z",
+     "labels": []
+    }
+   }
+  ],
+  "cursor": "2026-10-16T18:02:12.516Z"
+ }
+}

@@ -16,11 +16,15 @@ from .base import (
     bind_provenance,
 )
 from .fixture import FixtureSource
+from .bluesky import BlueskySource
 from .rss import RssSource
+from .telegram import TelegramSource
 from .xsearch import XSearchSource
 
 _BUILDERS: dict[str, Callable[[], Source]] = {
+    "bluesky": BlueskySource,
     "rss": RssSource,
+    "telegram": TelegramSource,
     "x": XSearchSource,
 }
 
@@ -67,12 +71,14 @@ def resolve(source_id: str) -> Source:
 
 
 __all__ = [
+    "BlueskySource",
     "FixtureSource",
     "PayloadShapeError",
     "Query",
     "RawResponse",
     "RssSource",
     "Source",
+    "TelegramSource",
     "XSearchSource",
     "bind_provenance",
     "register",
