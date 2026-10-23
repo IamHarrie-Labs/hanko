@@ -133,7 +133,7 @@ def cmd_decide(args: argparse.Namespace) -> int:
         return 0
 
     evidence = store.replay(snap.snapshot_id, source)
-    interpreter = KeywordInterpreter()
+    interpreter = _interpreter(args)
     market = (
         MarketFacts.from_dict(json.loads(Path(args.market).read_text(encoding="utf-8")))
         if args.market
@@ -430,6 +430,26 @@ def cmd_review(args: argparse.Namespace) -> int:
     return 0
 
 
+def _interpreter(args: argparse.Namespace):
+    """keyword (default: pure, free, what every fixture and test uses) or llm.
+
+    The llm interpreter's readings are frozen into each record exactly like
+    keyword readings, so replay never calls the model either way.
+    """
+    from .decision import KeywordInterpreter, LlmInterpreter
+
+    if getattr(args, "interpreter", "keyword") == "llm":
+        return LlmInterpreter(model=getattr(args, "model", None) or "grok-4.3")
+    return KeywordInterpreter()
+
+
+def _report_interpreter(interpreter) -> None:
+    stats = getattr(interpreter, "stats", None)
+    if stats is not None:
+        print("  interpreter " + interpreter.interpreter_id + ": " + json.dumps(stats.to_dict()),
+              file=sys.stderr)
+
+
 def _sweep_as_of(args: argparse.Namespace):
     from datetime import datetime, timezone
 
@@ -482,18 +502,20 @@ def cmd_sweep(args: argparse.Namespace) -> int:
     from .review import ReviewLedger, SampleTrail
     from .sweep import load_watchlist, run_sweep
 
+    interpreter = _interpreter(args)
     report = run_sweep(
         load_watchlist(args.watchlist),
         _store(args),
         DecisionLedger(args.ledger),
         ReviewLedger(args.reviews),
         Policy(),
-        interpreter=KeywordInterpreter(),
+        interpreter=interpreter,
         resolve=_sweep_resolver(args),
         as_of=_sweep_as_of(args),
         samples=SampleTrail(args.samples) if args.samples else None,
     )
     print(report.explain())
+    _report_interpreter(interpreter)
     return 1 if report.failures else 0
 
 
@@ -535,19 +557,21 @@ def cmd_seal(args: argparse.Namespace) -> int:
 
     watchlist = load_watchlist(args.watchlist)
     policy = Policy()
+    interpreter = _interpreter(args)
     report = run_sweep(
         watchlist,
         _store(args),
         DecisionLedger(args.ledger),
         ReviewLedger(args.reviews),
         policy,
-        interpreter=KeywordInterpreter(),
+        interpreter=interpreter,
         resolve=_sweep_resolver(args),
         as_of=_sweep_as_of(args),
         samples=SampleTrail(args.samples) if args.samples else None,
     )
     manifest = build_manifest(report, watchlist, policy)
     path = save_manifest(manifest, args.manifest_dir)
+    _report_interpreter(interpreter)
 
     print(manifest.explain())
     print("")
@@ -633,6 +657,9 @@ def build_parser() -> argparse.ArgumentParser:
     decide_p.add_argument("--as-of", dest="as_of", help="RFC3339, for reproducible runs")
     decide_p.add_argument("--fixture", type=Path)
     decide_p.add_argument("--ledger", type=Path, default=Path("decisions.jsonl"))
+    decide_p.add_argument("--interpreter", choices=("keyword", "llm"), default="keyword",
+        help="keyword: pure word list (default). llm: a model reads the posts, code validates every reading")
+    decide_p.add_argument("--model", default="grok-4.3", help="model for --interpreter llm")
     decide_p.set_defaults(func=cmd_decide)
 
     audit = sub.add_parser("audit", help="replay every recorded decision")
@@ -662,6 +689,9 @@ def build_parser() -> argparse.ArgumentParser:
         "--fixture-dir", type=Path,
         help="read every source from <dir>/<name>.json instead of live transports",
     )
+    sweep.add_argument("--interpreter", choices=("keyword", "llm"), default="keyword",
+        help="keyword: pure word list (default). llm: a model reads the posts, code validates every reading")
+    sweep.add_argument("--model", default="grok-4.3", help="model for --interpreter llm")
     sweep.set_defaults(func=cmd_sweep)
 
     seal = sub.add_parser("seal", help="run the watchlist, publish a numbered manifest of everything it did")
@@ -678,6 +708,9 @@ def build_parser() -> argparse.ArgumentParser:
         help="anchor manifest_digest to public OpenTimestamps calendars "
         "(needs the 'sealing' extra: pip install -e .[sealing])",
     )
+    seal.add_argument("--interpreter", choices=("keyword", "llm"), default="keyword",
+        help="keyword: pure word list (default). llm: a model reads the posts, code validates every reading")
+    seal.add_argument("--model", default="grok-4.3", help="model for --interpreter llm")
     seal.set_defaults(func=cmd_seal)
 
     ots_status = sub.add_parser("ots-status", help="check whether a .ots proof has a Bitcoin confirmation yet")

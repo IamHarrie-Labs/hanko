@@ -337,6 +337,14 @@ class DecisionRecord:
                 Outcome.NOTED: "  . ",
             }[rule.outcome]
             lines.append(mark + rule.rule_id + ": " + rule.detail)
+        for reading in self.readings:
+            # Only an interpreter that gives reasons has any to show; the
+            # keyword reader's readings carry none, so its trails are unchanged.
+            if reading.rationale and reading.subject == self.subject:
+                lines.append(
+                    "  > read " + reading.stance.value + " " + str(round(reading.conviction, 2))
+                    + ': "' + reading.rationale + '"'
+                )
         for gap in self.gaps:
             lines.append("  ? gap " + gap.kind.value + ": " + gap.detail)
         for echo in self.convergence.echoes:

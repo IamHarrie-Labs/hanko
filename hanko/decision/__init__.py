@@ -11,6 +11,7 @@ from .ledger import (
 )
 from .policy import Policy
 from .quality import EvidenceQuality, Gap, GapKind, assess_quality
+from .llm_interpreter import LlmInterpreter, injection_suspect
 from .reading import Interpreter, KeywordInterpreter, Reading, Stance, read_all
 from .record import (
     DecisionRecord,
@@ -37,6 +38,7 @@ __all__ = [
     "GapKind",
     "Interpreter",
     "KeywordInterpreter",
+    "LlmInterpreter",
     "MarketFacts",
     "Outcome",
     "Policy",
@@ -49,6 +51,7 @@ __all__ = [
     "assess_convergence",
     "assess_quality",
     "decide",
+    "injection_suspect",
     "read_all",
     "replay_decision",
 ]

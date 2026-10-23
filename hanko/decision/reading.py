@@ -43,9 +43,14 @@ class Reading:
     urgency: float  # 0..1, how time-sensitive the claim is
     interpreter_id: str
     interpreter_version: str
+    # A verbatim quote from the post that the reading rests on. Empty for
+    # the keyword interpreter, which has no reasons beyond its word list.
+    # Omitted from to_dict() when empty, so every record written before it
+    # existed serialises byte for byte as it always did.
+    rationale: str = ""
 
     def to_dict(self) -> dict[str, Any]:
-        return {
+        out = {
             "evidence_id": self.evidence_id,
             "subject": self.subject,
             "stance": self.stance.value,
@@ -54,6 +59,9 @@ class Reading:
             "interpreter_id": self.interpreter_id,
             "interpreter_version": self.interpreter_version,
         }
+        if self.rationale:
+            out["rationale"] = self.rationale
+        return out
 
     @classmethod
     def from_dict(cls, d: dict[str, Any]) -> "Reading":
@@ -65,6 +73,7 @@ class Reading:
             urgency=float(d["urgency"]),
             interpreter_id=d["interpreter_id"],
             interpreter_version=d["interpreter_version"],
+            rationale=d.get("rationale", ""),
         )
 
 
@@ -150,9 +159,17 @@ def _score(lowered: str, table: dict[str, float]) -> float:
 
 
 def read_all(interpreter: Interpreter, evidence: list[Evidence]) -> list[Reading]:
-    """Interpret a batch, in an order that does not depend on input order."""
-    readings: list[Reading] = []
-    for item in evidence:
-        readings.extend(interpreter.read(item))
+    """Interpret a batch, in an order that does not depend on input order.
+
+    An interpreter with a `read_many` (the model interpreter) gets the whole
+    batch in one call; one model request per post would cost twenty times
+    as much for the same readings.
+    """
+    if hasattr(interpreter, "read_many"):
+        readings = list(interpreter.read_many(list(evidence)))
+    else:
+        readings = []
+        for item in evidence:
+            readings.extend(interpreter.read(item))
     readings.sort(key=lambda r: (r.subject, r.evidence_id))
     return readings
