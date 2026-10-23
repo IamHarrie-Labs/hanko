@@ -437,8 +437,20 @@ def run_sweep(
     """
     by_token = {e.token.upper(): e for e in watchlist}
 
+    # One decision per token per instant, enforced before anything is
+    # collected. Snapshot ids carry the store's sequence number (D-12), so a
+    # restarted pass at the same as_of would otherwise re-collect, mint new
+    # snapshot ids and a new decision_id, and record the same decision twice
+    # -- which the scorecard would then count twice. Found by the failure
+    # drill (D-18). Skipping also spends no API calls on a restart.
+    already = {(r.subject.upper(), r.decided_at): r for r in decisions}
+
     entry_results: list[SweepEntryResult] = []
     for entry in watchlist:
+        existing = already.get((entry.token.upper(), as_of))
+        if existing is not None:
+            entry_results.append(SweepEntryResult(entry.token, existing, skipped_duplicate=True))
+            continue
         try:
             record = collect_and_decide(
                 entry,

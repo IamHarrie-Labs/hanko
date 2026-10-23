@@ -3,40 +3,30 @@
     {
       "token": "BTC",
       "sources": {
-        "x": [
-          "CryptoKaleo",
-          "WatcherGuru"
-        ]
-      }
-    },
-    {
-      "token": "SOL",
-      "sources": {
-        "x": [
-          "CryptoKaleo",
-          "AltcoinGordon"
-        ]
+        "x": ["CryptoKaleo", "WatcherGuru"],
+        "telegram": ["WatcherGuru", "cointelegraph", "bitcoin", "BWEnews"]
       }
     },
     {
       "token": "ETH",
       "sources": {
-        "x": [
-          "inversebrah",
-          "WatcherGuru"
-        ]
+        "x": ["inversebrah", "WatcherGuru"],
+        "telegram": ["cointelegraph", "DegenerateNews", "BWEnews", "CryptoRankNews"]
+      }
+    },
+    {
+      "token": "SOL",
+      "sources": {
+        "x": ["CryptoKaleo", "AltcoinGordon"],
+        "telegram": ["cointelegraph", "DegenerateNews", "unfolded", "BWEnews"]
       }
     },
     {
       "token": "BONK",
       "sources": {
-        "x": [
-          "AltcoinGordon",
-          "CryptoKaleo"
-        ],
-        "rss": [
-          "https://www.coindesk.com/arc/outboundfeeds/rss/"
-        ]
+        "x": ["AltcoinGordon", "CryptoKaleo"],
+        "telegram": ["DegenerateNews", "BWEnews"],
+        "rss": ["https://www.coindesk.com/arc/outboundfeeds/rss/"]
       }
     }
   ]

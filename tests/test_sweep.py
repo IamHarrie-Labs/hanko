@@ -446,3 +446,16 @@ def test_an_unregistered_token_is_never_looked_up(store):
     collect_and_decide(make_entry(), store, resolve=resolve, interpreter=KeywordInterpreter(),
                        policy=Policy(), as_of=AS_OF)
     assert "dexscreener" not in calls
+
+
+def test_a_restarted_pass_at_the_same_instant_records_one_decision_not_two(tmp_path, store):
+    """D-18: the real thing the stubbed test above could not reach. Two
+    genuine sweeps at the same as_of, same store, same ledger."""
+    decisions = DecisionLedger(tmp_path / "decisions.jsonl")
+    reviews = ReviewLedger(tmp_path / "reviews.jsonl")
+    for _ in range(2):
+        report = run_sweep((make_entry(),), store, decisions, reviews, Policy(),
+                           interpreter=KeywordInterpreter(), resolve=make_resolver(), as_of=AS_OF)
+    assert report.decisions[0].skipped_duplicate is True
+    assert len(list(decisions)) == 1
+    assert report.decisions[0].record.decision_id == next(iter(decisions)).decision_id

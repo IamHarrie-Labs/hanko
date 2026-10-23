@@ -257,3 +257,20 @@ its decisions, plus exactly the snapshot envelopes and objects they cite,
 copied byte for byte and committed. `hanko verify-run` checks a run from a
 bare clone. Test runs now use a temporary `--root`, never the repository's
 default store.
+
+## D-18: A restarted sweep recorded the same decision twice
+
+Found by the failure drill (`hanko/drill.py`), the first time a scenario ran
+two genuine sweeps at the same instant instead of a stub. The README promised
+that a sweep re-run against unchanged sources reaches the same decision_id.
+It did not. Snapshot ids carry the store's sequence number (D-12), so the
+second pass minted new snapshot ids and a new decision_id, and the ledger
+recorded the same decision twice, which the scorecard would then have
+counted twice. The existing test had stubbed around exactly this, and its
+own comment said so.
+
+Fixed by making a sweep idempotent per token per instant: if the ledger
+already holds a decision for that token at that `as_of`, the pass skips it
+before collecting anything. A restart therefore also spends no API calls.
+The new test runs two real sweeps against one store and one ledger, and
+expects one decision.
