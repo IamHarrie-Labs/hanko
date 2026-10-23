@@ -62,6 +62,13 @@ def resolve(source_id: str) -> Source:
     if source_id.startswith("fixture:"):
         return FixtureSource(path=None, source_id=source_id)
 
+    # Imported lazily: the venue module lives with the exit_liquidity skill,
+    # which itself depends on this package.
+    if source_id == "dexscreener":
+        from ..skills.exit_liquidity.venues import DexScreenerSource
+
+        return DexScreenerSource()
+
     if source_id not in _BUILDERS:
         raise KeyError(
             "no adapter registered for source_id " + repr(source_id)

@@ -414,3 +414,34 @@ def gather(
             "the figure is modelled from on-chain depth"
         )
     return VenueEvidence(depth=depth, quote=quote, failures=tuple(failures))
+
+
+class DexScreenerSource:
+    """DexScreener as a snapshotted facts source for the decision pipeline.
+
+    The sweep collects it through the SnapshotStore like any RYO tool, so a
+    decision built on venue depth replays from stored bytes like any other.
+    Like the RYO tool sources, parse() yields no evidence items: a pool
+    listing is facts, not anyone's utterance.
+    """
+
+    source_id = "dexscreener"
+    adapter_version = "1.0.0"
+
+    def __init__(self, client: httpx.Client | None = None) -> None:
+        self._client = client
+
+    def fetch(self, query):
+        from ...provenance import Coverage, Status
+        from ...sources.base import RawResponse
+
+        (token,) = query.subjects
+        try:
+            pairs = fetch_pairs(token, client=self._client)
+        except VenueError as exc:
+            return RawResponse(payload=None, status=Status.FAILED, coverage=Coverage.UNKNOWN, error=str(exc))
+        return RawResponse(payload={"token": token.upper(), "pairs": pairs}, status=Status.OK,
+                           coverage=Coverage.UNKNOWN, meta={"pairs": len(pairs) if isinstance(pairs, list) else 0})
+
+    def parse(self, payload: Any) -> list[dict[str, Any]]:
+        return []

@@ -180,6 +180,58 @@ def _collect_facts(
     return extraction.facts, gaps, last_snapshot
 
 
+
+def _venue_facts(
+    entry: WatchEntry,
+    store: SnapshotStore,
+    resolve: Resolver,
+    facts: MarketFacts,
+    *,
+    as_of: datetime,
+) -> tuple[MarketFacts, list[Gap], str | None, dict[str, str]]:
+    """Fill what RYO left empty from DexScreener's canonical pools.
+
+    RYO has never returned pool depth, so without this every decision's
+    exit gate and liquidity falsifier ran on nothing. And when RYO's market
+    data fails outright (every call since 2026-09-28), price and 24h volume
+    come from the same pools -- labelled on-chain only -- instead of the
+    decision going dark. RYO's own figures always win where both exist.
+
+    Only tokens with a registered canonical contract are looked up; a
+    symbol is never searched (D-15: symbol search returns impostor pools).
+    Returns (facts, gaps, snapshot_id, field -> source).
+    """
+    from dataclasses import replace
+
+    from .skills.exit_liquidity.venues import TOKENS, parse_pairs
+
+    token = entry.token.upper()
+    wanted = [f for f in ("liquidity_usd", "price_usd", "volume_24h_usd") if getattr(facts, f) is None]
+    if token not in TOKENS or not wanted:
+        return facts, [], None, {}
+    snap = store.collect(resolve("dexscreener"), Query(subjects=(token,)), requested_at=as_of)
+    if not snap.has_payload:
+        return facts, [Gap(kind=GapKind.SOURCE_FAILED, subject=entry.token,
+                           detail="dexscreener: " + (snap.error or "no payload"),
+                           snapshot_id=snap.snapshot_id)], snap.snapshot_id, {}
+    depth = parse_pairs(token, store.load_payload(snap.payload_digest).get("pairs"))
+    if depth.deepest is None:
+        return facts, [], snap.snapshot_id, {}
+    values = {
+        "liquidity_usd": depth.total_liquidity_usd,
+        "price_usd": depth.price_usd,
+        "volume_24h_usd": depth.total_volume_24h_usd,
+    }
+    labels = {
+        "liquidity_usd": "total_liquidity_usd",
+        "price_usd": "volume_weighted_median_price",
+        "volume_24h_usd": "total_volume_24h_usd (on-chain only)",
+    }
+    filled = {f: values[f] for f in wanted if values[f] is not None}
+    sources = {f: depth.source + ":" + labels[f] for f in filled}
+    return replace(facts, **filled), [], snap.snapshot_id, sources
+
+
 def collect_and_decide(
     entry: WatchEntry,
     store: SnapshotStore,
@@ -204,9 +256,17 @@ def collect_and_decide(
     )
     if facts_snapshot:
         snapshot_ids.append(facts_snapshot)
+    facts, venue_gaps, venue_snapshot, venue_sources = _venue_facts(
+        entry, store, resolve, facts, as_of=as_of
+    )
+    fact_gaps = fact_gaps + venue_gaps
+    if venue_snapshot:
+        snapshot_ids.append(venue_snapshot)
 
     readings = read_all(interpreter, evidence)
-    sources_requested = len(entry.evidence_sources) + len(entry.fact_tools)
+    sources_requested = (
+        len(entry.evidence_sources) + len(entry.fact_tools) + (1 if venue_snapshot else 0)
+    )
 
     return decide(
         DecisionInputs(
@@ -220,7 +280,7 @@ def collect_and_decide(
             sources_requested=max(1, sources_requested),
             interpreter_id=interpreter.interpreter_id,
             interpreter_version=interpreter.interpreter_version,
-            notes={"sources_requested": sources_requested},
+            notes={"sources_requested": sources_requested, **({"venue_fact_sources": venue_sources} if venue_sources else {})},
         ),
         policy,
     )
@@ -254,6 +314,8 @@ def fresh_observations(
     """
     evidence, _, _ = _collect_evidence(entry, store, resolve, as_of=as_of)
     facts, _, _ = _collect_facts(entry, store, resolve, tool_prefix=tool_prefix, as_of=as_of)
+    # Review needs liquidity too: the exit falsifier checks it.
+    facts, _, _, _ = _venue_facts(entry, store, resolve, facts, as_of=as_of)
 
     readings = read_all(interpreter, evidence)
     convergence = assess_convergence(

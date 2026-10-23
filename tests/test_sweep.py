@@ -393,3 +393,56 @@ def test_fresh_observations_recomputes_independent_voices(store):
     # Three mentions in the fixture, one an echo: two independent voices.
     assert obs.metrics["independent_voices"] == 2.0
     assert obs.metrics["price_usd"] == 1.25
+
+
+# ---- venue facts: RYO down, the decision still has a market ------------------------------
+
+
+class _RecordedPairs:
+    """DexScreener's real recorded BONK pairs, served as a facts source."""
+
+    source_id = "dexscreener"
+    adapter_version = "1.0.0"
+
+    def fetch(self, query):
+        from hanko.provenance import Coverage, Status
+        from hanko.sources import RawResponse
+
+        pairs = json.loads((FIXTURES / "venues" / "dexscreener_pairs_bonk.json").read_text(encoding="utf-8"))["payload"]
+        return RawResponse(payload={"token": "BONK", "pairs": pairs}, status=Status.OK, coverage=Coverage.UNKNOWN)
+
+    def parse(self, payload):
+        return []
+
+
+def test_ryo_down_the_decision_takes_its_market_from_the_venue(tmp_path, store):
+    from hanko.decision import assert_reproduces
+
+    base = make_resolver(analyze="ryo_failed.json", deep_analysis="ryo_failed.json")
+
+    def resolve(source_id):
+        return _RecordedPairs() if source_id == "dexscreener" else base(source_id)
+
+    record = collect_and_decide(
+        make_entry(token="BONK"), store, resolve=resolve, interpreter=KeywordInterpreter(),
+        policy=Policy(), as_of=AS_OF,
+    )
+    assert record.market.liquidity_usd == pytest.approx(1_289_500, rel=0.01)
+    assert record.market.price_usd == pytest.approx(3.273e-06)
+    sources = record.notes["venue_fact_sources"]
+    assert sources["volume_24h_usd"].endswith("(on-chain only)")
+    assert any(g.detail.startswith("analyze_token") for g in record.gaps)  # RYO's failure still recorded
+    assert_reproduces(record, store, resolve)
+
+
+def test_an_unregistered_token_is_never_looked_up(store):
+    calls = []
+    base = make_resolver()
+
+    def resolve(source_id):
+        calls.append(source_id)
+        return base(source_id)
+
+    collect_and_decide(make_entry(), store, resolve=resolve, interpreter=KeywordInterpreter(),
+                       policy=Policy(), as_of=AS_OF)
+    assert "dexscreener" not in calls
