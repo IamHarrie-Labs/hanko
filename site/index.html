@@ -97,7 +97,7 @@
   replayed from stored bytes: same decision id"></pre>
         <!-- trail:end -->
       </div>
-      <p class="receipt-caption">Three authors mentioned the token. Two were independent. voice_beta was demoted, with the reason attached. The last three lines are the commitment, written before the outcome is known. Real output from the real engine, run at build time against fixed inputs so the decision id on this page stays the same one every build. <a href="try.html">Run it against live data here</a>.</p>
+      <p class="receipt-caption">Three authors mentioned the token. Two were independent. voice_beta was demoted, with the reason attached. The last three lines are the commitment, written before the outcome is known. Real output from the real engine, run at build time against fixed, synthetic inputs (three fictional voices and a fictional token, not real accounts or prices) so the decision id on this page stays the same one every build. <a href="try.html">Run it against live data here</a>.</p>
     </div>
   </div>
 
@@ -105,13 +105,13 @@
   <div class="stats">
     <div class="stat">
       <div class="label">Tests</div>
-      <div class="stat-value" data-stat="tests">233</div>
+      <div class="stat-value" data-stat="tests">234</div>
       <div class="stat-note">All offline, about 5s</div>
     </div>
     <div class="stat">
       <div class="label">Lines</div>
-      <div class="stat-value" data-stat="lines">10,123</div>
-      <div class="stat-note">Across <span data-stat="commits">41</span> commits</div>
+      <div class="stat-value" data-stat="lines">10,138</div>
+      <div class="stat-note">Across <span data-stat="commits">42</span> commits</div>
     </div>
     <div class="stat">
       <div class="label">Layers</div>
@@ -130,7 +130,7 @@
 
 <section id="missing" class="band">
   <div class="shell band-inner">
-    <div class="eyebrow">Missing data shrinks the position</div>
+    <div class="eyebrow">Missing data shrinks the position · sample inputs</div>
     <h2 style="max-width: 22em">Nothing in the rules changed. Only what it knew.</h2>
     <p class="section-lede" style="margin-bottom: 48px">No rule says "halve the size if the safety check is unavailable." A gap lowers completeness, completeness lowers quality, and quality sets size, combined as a geometric mean, so one component at zero takes the whole score to zero.</p>
 
@@ -172,7 +172,7 @@
 </section>
 
 <section id="voices" class="shell">
-  <div class="eyebrow">Independence, not agreement</div>
+  <div class="eyebrow">Independence, not agreement · sample inputs</div>
   <h2 style="max-width: 20em">Three voices, two opinions.</h2>
   <p class="section-lede">Three accounts quoting one thesis is one observation wearing a disguise. Reposts and near-duplicates get demoted to echoes, each tagged with the post it repeats and why.</p>
 
@@ -209,7 +209,7 @@
 </section>
 
 <section id="commitment" class="shell">
-  <div class="eyebrow">Pre-registration</div>
+  <div class="eyebrow">Pre-registration · sample inputs</div>
   <h2 style="max-width: 22em">The commitment is sealed before the outcome is known.</h2>
   <p class="section-lede">Move a threshold, a size, or a review date after the fact and the decision_id changes too: a new decision, not an edited one. Hindsight rationalisation becomes structurally impossible. Refusals commit too: a PASS records what would have flipped it.</p>
 
@@ -243,7 +243,7 @@
   <p class="footnote">A decision can be profitable and still falsified: the price rose while the liquidity that justified the size drained away. The reasoning was wrong; the outcome was luck. Both are recorded; only one sets the grade.</p>
 
   <div class="teaser">
-    <p>Don't take the rule list on faith. Remove a voice or tighten a threshold yourself and watch this exact decision's verdict move, live, in the workbench.</p>
+    <p>Don't take the rule list on faith. Remove a voice or tighten a threshold on this sample decision yourself and watch the real engine's verdict move, in the workbench.</p>
     <a href="workbench.html">Open the decision workbench</a>
   </div>
 </section>
@@ -257,15 +257,15 @@
     <div class="stage">
       <div class="label">Stage 01</div>
       <div class="stage-name">Collect</div>
-      <div class="stage-note">X, RSS, Telegram and the six RYO research tools behind one adapter interface. Every response is stored under the hash of its own bytes.</div>
+      <div class="stage-note">X, RSS and the six RYO research tools behind one adapter interface. Every response is stored under the hash of its own bytes.</div>
       <div class="stage-purity">impure · network</div>
     </div>
 
     <div class="stage">
       <div class="label">Stage 02</div>
       <div class="stage-name">Interpret</div>
-      <div class="stage-note">Each post becomes a reading: which token, which direction, how strongly, how urgently. Produced once and frozen into the record.</div>
-      <div class="stage-purity">impure · model</div>
+      <div class="stage-note">Each post becomes a reading: which token, which direction, how strongly, how urgently. Produced once and frozen into the record. Today a transparent keyword interpreter; a model can replace it without touching replay.</div>
+      <div class="stage-purity">frozen · rule-based</div>
     </div>
 
     <div class="boundary"><span>PURITY BOUNDARY</span></div>
@@ -297,7 +297,7 @@
   <div class="eyebrow">Test coverage</div>
   <h2 style="max-width: 22em">What's actually proven.</h2>
 
-  <div class="proof-head good">Proven · <span data-stat="tests">233</span> tests, all offline</div>
+  <div class="proof-head good">Proven · <span data-stat="tests">234</span> tests, all offline</div>
   <ul class="proof-list" style="max-width: 46em">
     <li class="proof-item"><span class="sigil good">+</span><span>Every failure mode: rate limit, partial window, empty result, raising adapter, malformed feed, unreadable payload</span></li>
     <li class="proof-item"><span class="sigil good">+</span><span>Size shrinking under missing safety data, a failed source, and stale evidence</span></li>
@@ -327,7 +327,7 @@
 
     <div class="colophon">
       <span>Hanko 判子 · RYO-CHAN Hackathon 2026</span>
-      <span><span data-stat="tests">233</span> tests · <span data-stat="lines">10,123</span> lines · <span data-stat="commits">41</span> commits · <a href="https://github.com/IamHarrie-Labs/hanko" data-repo>GitHub</a></span>
+      <span><span data-stat="tests">234</span> tests · <span data-stat="lines">10,138</span> lines · <span data-stat="commits">42</span> commits · <a href="https://github.com/IamHarrie-Labs/hanko" data-repo>GitHub</a></span>
     </div>
   </div>
 </footer>

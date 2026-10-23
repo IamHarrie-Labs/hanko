@@ -3,7 +3,7 @@
 <div align="center">
 
 [![CI](https://github.com/IamHarrie-Labs/hanko/actions/workflows/ci.yml/badge.svg)](https://github.com/IamHarrie-Labs/hanko/actions/workflows/ci.yml)
-[![Tests: 198 passing](https://img.shields.io/badge/tests-198_passing-555555)](tests/)
+[![Tests: 234 passing](https://img.shields.io/badge/tests-234_passing-555555)](tests/)
 [![RYO tools confirmed live: 6](https://img.shields.io/badge/RYO_tools_confirmed_live-6-555555)](ARCHITECTURE.md#transport-mcp-and-rest-reach-the-same-facts)
 [![Tracks entered: 2](https://img.shields.io/badge/tracks_entered-2-8b6a27)](#submission)
 [![License: MIT](https://img.shields.io/badge/license-MIT-555555)](LICENSE)
@@ -22,9 +22,11 @@ repeated three times, and decides:
 ENTER TOKENA  size 3.28%  confidence 0.66
   + independent_voices: 2 independent voice(s): voice_alpha, voice_gamma
   ~ echo voice_beta: marked as a repost or quote by the source
-  ! wrong if price_usd < 1.0625 within 72.0h (thesis fails if price falls 15% from entry)
+  ! wrong if price_usd < 1.0625 at any point within 72.0h (thesis fails if price falls 15% from entry)
   review at 2026-08-30T12:00:00Z
 ```
+
+<sub>Sample output: real engine, synthetic inputs. `voice_alpha`/`voice_beta`/`voice_gamma` and `TOKENA` are fictional test fixtures, not real accounts or a real token.</sub>
 
 Run that same input again in a year and it produces the identical decision
 id, because nothing about deciding touches the network, a clock, or a model.
@@ -32,11 +34,11 @@ It only ever reads what was actually stored. That's the whole project: an
 architecture that makes "prove it" a command you can run, not a promise in
 this README.
 
-**[tryhanko.vercel.app](https://tryhanko.vercel.app)** has the pitch and a live
-receipt. **[/try](https://tryhanko.vercel.app/try)** runs a piece of it, live,
+**[tryhanko.vercel.app](https://tryhanko.vercel.app)** has the pitch and a sample
+receipt (synthetic inputs, labelled). **[/try](https://tryhanko.vercel.app/try)** runs a piece of it, live,
 from your browser, no install. Full technical detail is at `/docs`.
 
-![The landing page: the receipt above, typed out live by the real engine against fixed inputs](.github/images/landing.png)
+![The landing page: the sample receipt above, typed out by the real engine against synthetic sample inputs](.github/images/landing.png)
 
 ---
 
@@ -76,13 +78,14 @@ and states in advance what would prove it wrong.
 ## Verify it yourself in 60 seconds
 
 No live credential, no account, no network. Every number below regenerates
-from fixtures committed in this repository:
+from synthetic fixtures committed in this repository (fictional sample voices
+and a fictional token, written for testing, not captured from real accounts):
 
 ```bash
 git clone https://github.com/IamHarrie-Labs/hanko && cd hanko
 pip install -e ".[dev]"
 
-pytest                                          # 198 tests, offline, ~5s
+pytest                                          # 234 tests, offline, ~8s
 
 # make a decision, then prove it replays from stored bytes
 hanko decide x --token TOKENA --subject voice_alpha --subject voice_beta \
@@ -111,9 +114,9 @@ Everything here researches and sizes a position; nothing here moves funds.
 
 | Open | What it shows |
 |---|---|
-| [tryhanko.vercel.app](https://tryhanko.vercel.app) | The pitch, and a real fixture-based decision receipt, typed out live |
+| [tryhanko.vercel.app](https://tryhanko.vercel.app) | The pitch, and a sample decision receipt (real engine, synthetic fixture inputs, labelled as such) |
 | [/try](https://tryhanko.vercel.app/try) | `exit_liquidity` running live against the real RYO platform, from a browser |
-| [/workbench](https://tryhanko.vercel.app/workbench) | Remove a voice or tighten a threshold on a real, sealed decision and watch the actual `decide()` verdict move, and which rule caused it |
+| [/workbench](https://tryhanko.vercel.app/workbench) | Remove a voice or tighten a threshold on the sample decision (synthetic inputs, labelled as such) and watch the actual `decide()` verdict move, and which rule caused it |
 | [/docs#track1-live](https://tryhanko.vercel.app/docs#track1-live) | Two real decisions, live X evidence and live RYO facts, neither cherry-picked |
 | [/docs#mcp-transport](https://tryhanko.vercel.app/docs#mcp-transport) | What a live MCP handshake and a live `x_search` call actually return |
 
@@ -172,7 +175,7 @@ hanko/
   sweep.py, cli.py, config.py, provenance.py, evidence.py
 site/            static landing page, /docs, /try -- the live web demo
   api/exit_liquidity.py    the /try endpoint, real assess() call, no fixture
-tests/           198 tests, one file per hanko/ package
+tests/           234 tests, one file per hanko/ package
 fixtures/        evidence and market fixtures used offline and in CI
 .github/workflows/ci.yml       pytest on every push, Python 3.11 and 3.12
 .claude/skills/hanko-exit-liquidity/SKILL.md   packages exit_liquidity as a Claude Skill
@@ -242,7 +245,7 @@ a `FAILED` snapshot saying so, rather than throwing.
 
 ## Status
 
-197 tests, all offline, ~5s. Covered at the evidence layer: canonical form and
+234 tests, all offline, ~8s. Covered at the evidence layer: canonical form and
 address stability, payload deduplication, tamper detection, adapter-version
 mismatch on replay, replay determinism, evidence identity pinned to bytes and
 position, and each failure mode (rate limit, partial window, empty result,

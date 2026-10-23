@@ -1,16 +1,19 @@
 """Decision workbench: change one input, watch the real engine's verdict move.
 
 Runs the exact decide() the CLI and the sealing pipeline use, against one
-captured decision baked into this function -- never live X or RYO calls,
+sample decision baked into this function -- never live X or RYO calls,
 so a public page can be explored at no cost and with no paid credential
 behind it. Every experiment is computed fresh from the same pure inputs
 and returned as a labelled hypothetical; nothing here is written to any
-ledger, and the original decision (the one already printed throughout
+ledger, and the baseline (the sample decision already printed throughout
 this project's README) is never touched.
 
-The baseline is fixtures/x_three_voices.json + fixtures/market_tokena.json,
-embedded directly rather than read from a vendored fixtures/ directory --
-one less deploy-time path to get wrong for two small, fixed JSON blobs.
+The inputs are SYNTHETIC: fixtures/x_three_voices.json +
+fixtures/market_tokena.json are hand-written test data (made-up voices, a
+made-up token, made-up prices), not captured posts or real quotes. Every
+response says so in `inputs`, so nothing downstream can present them as
+real. Embedded directly rather than read from a vendored fixtures/
+directory -- one less deploy-time path to get wrong for two small JSON blobs.
 """
 
 from __future__ import annotations
@@ -234,6 +237,14 @@ def _run_workbench(exclude: set[str], missing: set[str], policy_overrides: dict)
 
     return {
         "token": TOKEN,
+        # Machine-readable provenance: a judge, or any client, can check
+        # where these inputs came from without reading the page copy.
+        "inputs": {
+            "kind": "synthetic_fixture",
+            "evidence": "fixtures/x_three_voices.json",
+            "market": "fixtures/market_tokena.json",
+            "note": "hand-written sample data: fictional voices, a fictional token, fictional prices",
+        },
         "baseline": {**_record_view(baseline), "evidence": _evidence_view(evidence, baseline)},
         "experiment": {
             **_record_view(experiment),

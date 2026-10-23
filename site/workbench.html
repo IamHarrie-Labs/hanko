@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Hanko: decision workbench</title>
-<meta name="description" content="Open a real, sealed decision, remove a source or tighten a threshold, and watch the actual decide() engine's verdict move -- and which rule caused it.">
+<meta name="description" content="Open a sample decision built on synthetic inputs, remove a source or tighten a threshold, and watch the actual decide() engine's verdict move -- and which rule caused it.">
 
 <link rel="icon" href="assets/favicon.png" sizes="32x32" type="image/png">
 <link rel="icon" href="assets/icon-512.png" sizes="512x512" type="image/png">
@@ -49,13 +49,13 @@
   <a href="index.html" class="back-link">&larr; Hanko</a>
   <div class="eyebrow">Decision workbench</div>
   <h1>Remove a source. Tighten a threshold. Watch the verdict move.</h1>
-  <p class="lede">This is the real, sealed decision printed throughout this project's README (<code id="wb-decid">loading…</code>), re-derived by the same <code>decide()</code> the CLI and the sealing pipeline use. Nothing below touches X or RYO -- every post and every market figure is the exact captured fixture this decision was built from. Changing an input below computes a fresh, clearly labelled hypothetical; the original decision is never altered.</p>
+  <p class="lede">This is the sample decision used throughout this project's README (<code id="wb-decid">loading…</code>): real output from the same <code>decide()</code> the CLI and the sealing pipeline use, run on <strong>synthetic inputs</strong>. The three voices, their posts and $TOKENA's market figures are a hand-written test fixture (<code>fixtures/x_three_voices.json</code>, <code>fixtures/market_tokena.json</code>), not real accounts, real posts or real prices. That is what lets anyone explore this page with no X or RYO call and no cost. Changing an input below computes a fresh, clearly labelled hypothetical; the baseline is never altered.</p>
 </header>
 
 <section id="wb-baseline" class="shell wb-section">
-  <div class="label">The sealed decision</div>
+  <div class="label">The baseline decision</div>
   <div class="seal" id="wb-baseline-seal">
-    <div class="seal-head"><span>BASELINE</span><span>Unchanged, always</span></div>
+    <div class="seal-head"><span>BASELINE · SAMPLE · SYNTHETIC INPUTS</span><span>Unchanged, always</span></div>
     <div class="seal-verdict" id="wb-baseline-verdict">loading…</div>
     <div class="seal-body" id="wb-baseline-body"></div>
   </div>
@@ -63,7 +63,7 @@
 
 <section id="wb-evidence" class="shell wb-section">
   <div class="label">The evidence</div>
-  <p class="section-lede">Three accounts mentioned $TOKENA. Uncheck one to simulate it never having posted -- the same effect a quiet source or a rate-limited call has on a real sweep.</p>
+  <p class="section-lede">Three sample voices (synthetic, not real accounts) mention $TOKENA, a made-up token. Uncheck one to simulate it never having posted -- the same effect a quiet source or a rate-limited call has on a real sweep.</p>
   <div class="voices" id="wb-voices"></div>
 </section>
 
@@ -116,14 +116,14 @@
       <div class="seal-body" id="wb-result-experiment-body"></div>
     </div>
   </div>
-  <p class="footnote">This branch is computed fresh from the same pure inputs every time and is never appended to a decision ledger. It proves the engine's cause and effect, not a new fact about $TOKENA -- the sealed decision above is the only one that ever committed to anything.</p>
+  <p class="footnote">This branch is computed fresh from the same pure inputs every time and is never appended to a decision ledger. It proves the engine's cause and effect on sample inputs, not a fact about any real market. Real, live decisions are the ones sealed in the repository's <code>runs/</code> manifests.</p>
 </section>
 
 <footer class="band">
   <div class="shell band-inner" style="padding-top: 56px; padding-bottom: 56px">
     <div class="colophon">
       <span>Hanko 判子 · RYO-CHAN Hackathon 2026</span>
-      <span><span data-stat="tests">219</span> tests · <a href="index.html">Home</a> · <a href="https://github.com/IamHarrie-Labs/hanko" data-repo>GitHub</a></span>
+      <span><span data-stat="tests">234</span> tests · <a href="index.html">Home</a> · <a href="https://github.com/IamHarrie-Labs/hanko" data-repo>GitHub</a></span>
     </div>
   </div>
 </footer>
@@ -273,9 +273,29 @@
 
   document.getElementById('wb-run').addEventListener('click', runExperiment);
 
+  // A shared link like ?exclude=voice_gamma opens with that experiment
+  // already applied, so a post can point straight at a verdict flip.
+  function applyDeepLink() {
+    var q = new URLSearchParams(window.location.search);
+    var any = false;
+    (q.get('exclude') || '').split(',').filter(Boolean).forEach(function (author) {
+      var box = document.querySelector('[data-exclude="' + author + '"]');
+      if (box) { box.checked = false; any = true; }
+    });
+    (q.get('missing') || '').split(',').filter(Boolean).forEach(function (field) {
+      var box = document.querySelector('[data-missing="' + field + '"]');
+      if (box) { box.checked = true; any = true; }
+    });
+    [['min_independent_voices', 'wb-min-voices'], ['echo_similarity', 'wb-echo-sim'],
+     ['min_evidence_quality', 'wb-min-quality']].forEach(function (pair) {
+      if (q.has(pair[0])) { document.getElementById(pair[1]).value = q.get(pair[0]); any = true; }
+    });
+    if (any) runExperiment();
+  }
+
   fetch('/api/workbench')
     .then(function (res) { return res.json(); })
-    .then(renderBaseline)
+    .then(function (data) { renderBaseline(data); applyDeepLink(); })
     .catch(function (err) {
       document.getElementById('wb-baseline-verdict').textContent = 'Could not load: ' + err.message;
     });

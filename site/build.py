@@ -30,7 +30,7 @@ INDEX = SITE_DIR / "index.html"
 # Every page that carries the live stat spans or the GitHub link. The
 # trail substitution is index-only in effect: docs.html has no
 # <pre id="trail"> for the regex to match, so it is a safe no-op there.
-PAGES = (INDEX, SITE_DIR / "docs.html", SITE_DIR / "try.html")
+PAGES = (INDEX, SITE_DIR / "docs.html", SITE_DIR / "try.html", SITE_DIR / "workbench.html")
 
 # Fixed inputs, so the published trail is reproducible rather than
 # whatever the market happened to look like when the site was built.

@@ -41,6 +41,21 @@ def test_baseline_matches_the_cli_decision(wb):
     assert result["baseline"]["verdict"] == "enter"
 
 
+def test_every_response_declares_its_inputs_synthetic(wb):
+    """The rules disqualify placeholder data passed off as real.
+
+    The workbench runs on hand-written sample data, so every response must
+    say so in a machine-readable field, not just in page copy a client
+    could drop.
+    """
+    for result in (
+        wb._run_workbench(set(), set(), {}),
+        wb._run_workbench({"voice_gamma"}, {"liquidity_usd"}, {"min_independent_voices": "3"}),
+    ):
+        assert result["inputs"]["kind"] == "synthetic_fixture"
+        assert result["inputs"]["evidence"] == "fixtures/x_three_voices.json"
+
+
 def test_excluding_the_corroborating_voice_flips_the_verdict(wb):
     result = wb._run_workbench({"voice_gamma"}, set(), {})
     assert result["diff"]["verdict_before"] == "enter"
