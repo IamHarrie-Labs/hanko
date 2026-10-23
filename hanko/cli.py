@@ -540,6 +540,20 @@ def cmd_ots_status(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_verify_run(args: argparse.Namespace) -> int:
+    """Check a sealed run from its committed files alone: no network, no key."""
+    from .sealing import verify_run
+
+    problems, passed = verify_run(args.manifest)
+    for line in passed:
+        print("  ok    " + line)
+    for line in problems:
+        print("  FAIL  " + line)
+    print("")
+    print("verified" if not problems else str(len(problems)) + " problem(s)")
+    return 1 if problems else 0
+
+
 def cmd_seal(args: argparse.Namespace) -> int:
     """Run the watchlist, then publish a numbered manifest of everything it did.
 
@@ -552,15 +566,16 @@ def cmd_seal(args: argparse.Namespace) -> int:
     """
     from .decision import DecisionLedger, KeywordInterpreter, Policy
     from .review import ReviewLedger, SampleTrail
-    from .sealing import build_manifest, save_manifest
+    from .sealing import build_manifest, save_manifest, write_bundle
     from .sweep import load_watchlist, run_sweep
 
     watchlist = load_watchlist(args.watchlist)
     policy = Policy()
     interpreter = _interpreter(args)
+    store = _store(args)
     report = run_sweep(
         watchlist,
-        _store(args),
+        store,
         DecisionLedger(args.ledger),
         ReviewLedger(args.reviews),
         policy,
@@ -571,11 +586,13 @@ def cmd_seal(args: argparse.Namespace) -> int:
     )
     manifest = build_manifest(report, watchlist, policy)
     path = save_manifest(manifest, args.manifest_dir)
+    bundle = write_bundle(manifest, report, store, args.manifest_dir)
     _report_interpreter(interpreter)
 
     print(manifest.explain())
     print("")
     print("written to " + str(path))
+    print("replay bundle " + str(bundle) + "  (check it: hanko verify-run " + str(path) + ")")
     if manifest.verify():
         print("MANIFEST PROBLEM: " + "; ".join(manifest.verify()))
         return 1
@@ -712,6 +729,10 @@ def build_parser() -> argparse.ArgumentParser:
         help="keyword: pure word list (default). llm: a model reads the posts, code validates every reading")
     seal.add_argument("--model", default="grok-4.3", help="model for --interpreter llm")
     seal.set_defaults(func=cmd_seal)
+
+    verify_p = sub.add_parser("verify-run", help="replay a sealed run from its committed manifest and bundle")
+    verify_p.add_argument("manifest", type=Path)
+    verify_p.set_defaults(func=cmd_verify_run)
 
     ots_status = sub.add_parser("ots-status", help="check whether a .ots proof has a Bitcoin confirmation yet")
     ots_status.add_argument("path", type=Path)

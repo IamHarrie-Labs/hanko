@@ -209,3 +209,72 @@ class TestManifest:
         manifest_b = build_manifest(report_b, make_watchlist("TOKENB"), policy)
 
         assert manifest_a.run_id != manifest_b.run_id
+
+
+# ---- the replay bundle ------------------------------------------------------------------
+
+
+class TestBundle:
+    def _seal(self, tmp_path):
+        from hanko.sealing import write_bundle
+
+        store = SnapshotStore(tmp_path / "local-store")
+        decisions = DecisionLedger(tmp_path / "decisions.jsonl")
+        reviews = ReviewLedger(tmp_path / "reviews.jsonl")
+        watchlist = make_watchlist("TOKENA")
+        policy = Policy()
+
+        def resolve_fixture_ids(source_id):
+            # As `hanko seal --fixture-dir` labels them: fixture evidence
+            # carries a fixture: id, so replay never mistakes it for live X.
+            if source_id == "x":
+                return FixtureSource(FIXTURES / "x_three_voices.json", source_id="fixture:x")
+            return make_resolver()(source_id)
+
+        report = run_sweep(watchlist, store, decisions, reviews, policy,
+                           interpreter=KeywordInterpreter(), resolve=resolve_fixture_ids, as_of=AS_OF)
+        manifest = build_manifest(report, watchlist, policy)
+        runs = tmp_path / "runs"
+        path = save_manifest(manifest, runs)
+        write_bundle(manifest, report, store, runs)
+        return path, store
+
+    def test_a_sealed_run_verifies_from_its_committed_files_alone(self, tmp_path):
+        import shutil
+
+        from hanko.sealing import verify_run
+
+        path, store = self._seal(tmp_path)
+        shutil.rmtree(store.root)  # the local store is gone, as it was on 2026-10-23
+        problems, passed = verify_run(path)
+        assert problems == []
+        assert any("replays from the bundle's bytes" in p for p in passed)
+
+    def test_an_edited_manifest_fails(self, tmp_path):
+        from hanko.sealing import verify_run
+
+        path, _ = self._seal(tmp_path)
+        doc = json.loads(path.read_text(encoding="utf-8"))
+        doc["entries"][0]["verdict"] = "pass"
+        path.write_text(json.dumps(doc), encoding="utf-8")
+        problems, _ = verify_run(path)
+        assert any("does not recompute" in p for p in problems)
+
+    def test_tampered_snapshot_bytes_fail(self, tmp_path):
+        from hanko.sealing import verify_run
+
+        path, _ = self._seal(tmp_path)
+        bundle = path.parent / json.loads(path.read_text(encoding="utf-8"))["run_id"]
+        obj = next((bundle / "snapshots" / "objects").rglob("*.json"))
+        obj.write_text(obj.read_text(encoding="utf-8").replace("voice", "VOICE"), encoding="utf-8")
+        problems, _ = verify_run(path)
+        assert problems  # the object no longer hashes to its address
+
+    def test_a_run_without_a_bundle_says_so(self, tmp_path):
+        from hanko.sealing import verify_run
+
+        path, _ = self._seal(tmp_path)
+        import shutil
+        shutil.rmtree(path.parent / json.loads(path.read_text(encoding="utf-8"))["run_id"])
+        problems, _ = verify_run(path)
+        assert any("no replay bundle" in p for p in problems)

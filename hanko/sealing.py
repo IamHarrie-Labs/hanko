@@ -217,3 +217,109 @@ def save_manifest(manifest: RunManifest, out_dir: str | Path) -> Path:
     path = out_dir / (manifest.run_id + ".json")
     path.write_text(json.dumps(manifest.to_dict(), indent=2, ensure_ascii=False), encoding="utf-8")
     return path
+
+
+# ---------------------------------------------------------------------------
+# The run bundle: everything a stranger needs to replay a sealed run
+# ---------------------------------------------------------------------------
+#
+# A manifest proves what was committed. On its own it cannot prove the
+# commitments re-derive, because the snapshot bytes the decisions cite used
+# to live only in the operator's local, gitignored snapshots/ store -- and on
+# 2026-10-23 that store was deleted during routine test cleanup, taking the
+# replay data for the first two sealed runs with it. So a sealed run now
+# carries its own bundle, committed beside its manifest:
+#
+#   runs/<run_id>/decisions.jsonl            the decisions this run made
+#   runs/<run_id>/snapshots/index.jsonl      the envelopes they cite
+#   runs/<run_id>/snapshots/objects/...      those payloads, byte for byte
+#
+# `hanko verify-run runs/<run_id>.json` checks the whole chain from a bare
+# clone: manifest digest, every entry against the bundle, every decision
+# replayed from the bundle's bytes.
+
+
+def write_bundle(manifest: RunManifest, report: SweepReport, store, out_dir: str | Path) -> Path:
+    import shutil
+
+    bundle = Path(out_dir) / manifest.run_id
+    objects = bundle / "snapshots" / "objects"
+    objects.mkdir(parents=True, exist_ok=True)
+    records = [r.record for r in report.decisions if r.record is not None and not r.skipped_duplicate]
+    wanted = sorted({sid for rec in records for sid in rec.snapshot_ids})
+    with (bundle / "decisions.jsonl").open("w", encoding="utf-8", newline="\n") as fh:
+        for rec in records:
+            fh.write(json.dumps(rec.to_dict(), ensure_ascii=False) + "\n")
+    with (bundle / "snapshots" / "index.jsonl").open("w", encoding="utf-8", newline="\n") as fh:
+        for sid in wanted:
+            snap = store.get(sid)
+            fh.write(json.dumps(snap.to_dict(), ensure_ascii=False) + "\n")
+            if snap.payload_digest:
+                src = store._object_path(snap.payload_digest)
+                dst = objects / src.parent.name / src.name
+                dst.parent.mkdir(parents=True, exist_ok=True)
+                shutil.copyfile(src, dst)
+    return bundle
+
+
+def verify_run(manifest_path: str | Path, *, resolve_source=None) -> tuple[list[str], list[str]]:
+    """(problems, checks passed). Empty problems means the run verifies."""
+    from .decision import DecisionLedger, assert_reproduces
+    from .decision.ledger import ReplayMismatch
+    from .snapshot import IntegrityError, SnapshotStore
+    from .sources import resolve
+
+    resolve_source = resolve_source or resolve
+    path = Path(manifest_path)
+    stored = json.loads(path.read_text(encoding="utf-8"))
+    manifest = RunManifest.from_dict(stored)
+    problems: list[str] = []
+    passed: list[str] = []
+
+    if manifest.manifest_digest != stored.get("manifest_digest"):
+        problems.append("manifest_digest does not recompute: the manifest was edited after sealing")
+    else:
+        passed.append("manifest_digest recomputes: " + manifest.manifest_digest)
+    problems.extend(manifest.verify())
+
+    bundle = path.parent / manifest.run_id
+    if not (bundle / "decisions.jsonl").exists():
+        problems.append("no replay bundle at " + str(bundle) + " (runs sealed before bundles existed have none)")
+        return problems, passed
+
+    ledger = DecisionLedger(bundle / "decisions.jsonl")
+    store = SnapshotStore(bundle / "snapshots")
+    records = {r.decision_id: r for r in ledger}
+    for entry in manifest.entries:
+        if entry.decision_id is None:
+            passed.append(str(entry.seq) + ". " + entry.token + ": no decision (" + (entry.error or "listed") + ")")
+            continue
+        rec = records.get(entry.decision_id)
+        if rec is None:
+            if entry.skipped_duplicate:
+                passed.append(str(entry.seq) + ". " + entry.token + ": duplicate of an earlier run's decision")
+                continue
+            problems.append(str(entry.seq) + ". " + entry.token + ": " + entry.decision_id + " missing from the bundle")
+            continue
+        if rec.commitment_digest != entry.commitment_digest:
+            problems.append(str(entry.seq) + ". " + entry.token + ": commitment differs from the manifest")
+            continue
+        try:
+            assert_reproduces(rec, store, resolve_source)
+            passed.append(str(entry.seq) + ". " + entry.token + " " + rec.verdict.value.upper()
+                          + ": " + rec.decision_id + " replays from the bundle's bytes")
+        except (ReplayMismatch, KeyError, FileNotFoundError, IntegrityError) as exc:
+            problems.append(str(entry.seq) + ". " + entry.token + ": replay failed: "
+                            + type(exc).__name__ + ": " + str(exc))
+    problems.extend("snapshot: " + p for p in store.verify())
+
+    ots = Path(str(path) + ".ots")
+    if ots.exists():
+        try:
+            from .otstamp import is_confirmed, load_proof
+
+            state = "confirmed by a Bitcoin block" if is_confirmed(load_proof(ots)) else "pending"
+            passed.append("OpenTimestamps proof present: " + state)
+        except ImportError:
+            passed.append("OpenTimestamps proof present (install the 'sealing' extra to check it)")
+    return problems, passed

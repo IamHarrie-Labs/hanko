@@ -85,13 +85,32 @@ each one exactly from the snapshot store. This is the reveal -- the
 manifest published on day 1 already said what would be checked; this step
 is where the checking actually happens, in public.
 
-## What is not automated yet
+## Check any run yourself, from a bare clone
 
-Publishing `decisions.jsonl`, `reviews.jsonl`, and the relevant snapshot
-objects alongside each run's manifest, so a third party can run `hanko
-audit` themselves from a bare clone without re-running the original
-sweep, is still a manual step (copy the ledger lines and the referenced
-snapshot files into the run's own folder before committing). Automating
-that -- a `hanko seal --publish-bundle` that writes exactly the slice of
-each gitignored ledger a given run touched -- is the natural next piece of
-this pipeline, not yet built.
+```bash
+hanko verify-run runs/run_<id>.json
+```
+
+Every run sealed since 2026-10-23 carries a replay bundle beside its manifest:
+
+```
+runs/run_<id>/decisions.jsonl          the decisions this run made
+runs/run_<id>/snapshots/index.jsonl    the snapshot envelopes they cite
+runs/run_<id>/snapshots/objects/...    those payloads, byte for byte
+```
+
+`verify-run` needs no network and no key. It recomputes `manifest_digest`,
+checks every numbered entry against the bundle (same decision id, same
+commitment digest), replays every decision from the bundle's bytes and
+insists on the identical id, re-hashes every snapshot object, and reports the
+OpenTimestamps proof's state. An edited manifest, a swapped decision or one
+altered byte in an object each fails with the reason named.
+
+**The first two runs have no bundle, and that is a recorded failure, not a
+gap papered over.** `run_d3de00c9dcfa61eb` and `run_3b9ace591019d60a` (both
+2026-09-28) were sealed before bundles existed, when the snapshots their
+decisions cite lived only in the local, gitignored `snapshots/` store. That
+store was deleted during routine test cleanup on 2026-10-23. Their manifests
+and OpenTimestamps proofs still prove what was committed and when, and
+`verify-run` still checks their digests, but their decisions can no longer
+be replayed. That loss is the reason bundles exist.
