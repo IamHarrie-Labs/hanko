@@ -84,6 +84,30 @@ def _jaccard(a: set[str], b: set[str]) -> float:
     return len(a & b) / len(a | b)
 
 
+# Below this many content words, containment is too easy to reach by
+# accident ("$BTC pumping" is contained in half the posts about BTC), so a
+# short post is compared by Jaccard alone.
+CONTAINMENT_MIN_TOKENS = 8
+
+
+def _similarity(a: set[str], b: set[str]) -> tuple[float, str]:
+    """(score, measure). The larger of Jaccard and containment.
+
+    Jaccard alone missed real copies (D-14): channels append their own
+    boilerplate -- an ad, a "News | Markets | YouTube" footer, a signature --
+    and every added word dilutes the union, so a verbatim headline scored
+    0.53 against the 0.6 line and counted as a second voice. Containment
+    (shared words over the shorter post's words) cannot be diluted by
+    padding on either side. Taking the larger can only ever demote more,
+    never fewer: every echo Jaccard found, this still finds.
+    """
+    jac = _jaccard(a, b)
+    if min(len(a), len(b)) < CONTAINMENT_MIN_TOKENS:
+        return jac, "jaccard"
+    contained = len(a & b) / min(len(a), len(b))
+    return (contained, "containment") if contained > jac else (jac, "jaccard")
+
+
 def assess_convergence(
     subject: str,
     readings: list[Reading],
@@ -136,7 +160,7 @@ def assess_convergence(
                 if item.published_at and earlier.published_at:
                     if item.published_at - earlier.published_at > window:
                         continue
-                similarity = _jaccard(tokens, earlier_tokens)
+                similarity, measure = _similarity(tokens, earlier_tokens)
                 if similarity >= policy.echo_similarity:
                     echoed = earlier.evidence_id
                     reason = (
@@ -144,6 +168,7 @@ def assess_convergence(
                         + earlier.author
                         + " (similarity "
                         + str(round(similarity, 2))
+                        + (", contains most of its wording" if measure == "containment" else "")
                         + ")"
                     )
                     break

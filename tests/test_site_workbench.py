@@ -34,10 +34,10 @@ def test_baseline_matches_the_cli_decision(wb):
     voice_alpha --subject voice_beta --subject voice_gamma --market
     fixtures/market_tokena.json --as-of 2026-08-27T12:00:00Z --fixture
     fixtures/x_three_voices.json` against a fresh store produces
-    dec_40bf0f1b0698c991a2efc4b7 -- the same id this asserts.
+    dec_1c1fb9e7ae2020cb260d6f32 -- the same id this asserts.
     """
     result = wb._run_workbench(set(), set(), {})
-    assert result["baseline"]["decision_id"] == "dec_40bf0f1b0698c991a2efc4b7"
+    assert result["baseline"]["decision_id"] == "dec_1c1fb9e7ae2020cb260d6f32"
     assert result["baseline"]["verdict"] == "enter"
 
 
@@ -165,7 +165,7 @@ class TestHTTPHandler:
         h.do_GET()
         body = json.loads(h.wfile.getvalue())
         assert h.status == 200
-        assert body["baseline"]["decision_id"] == "dec_40bf0f1b0698c991a2efc4b7"
+        assert body["baseline"]["decision_id"] == "dec_1c1fb9e7ae2020cb260d6f32"
 
     def test_get_with_exclude_param_returns_the_experiment(self, wb):
         h = _make_fake_handler(wb, "/api/workbench?exclude=voice_gamma")

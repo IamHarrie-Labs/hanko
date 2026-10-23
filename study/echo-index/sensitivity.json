@@ -1,0 +1,128 @@
+[
+ {
+  "echo_window_minutes": 30,
+  "echo_similarity": 0.4,
+  "apparent": 156,
+  "collapsed_pct": 0.6,
+  "inflation_ratio": 1.014
+ },
+ {
+  "echo_window_minutes": 30,
+  "echo_similarity": 0.5,
+  "apparent": 156,
+  "collapsed_pct": 0.0,
+  "inflation_ratio": 1.005
+ },
+ {
+  "echo_window_minutes": 30,
+  "echo_similarity": 0.6,
+  "apparent": 156,
+  "collapsed_pct": 0.0,
+  "inflation_ratio": 1.002
+ },
+ {
+  "echo_window_minutes": 30,
+  "echo_similarity": 0.7,
+  "apparent": 156,
+  "collapsed_pct": 0.0,
+  "inflation_ratio": 1.0
+ },
+ {
+  "echo_window_minutes": 30,
+  "echo_similarity": 0.8,
+  "apparent": 156,
+  "collapsed_pct": 0.0,
+  "inflation_ratio": 1.0
+ },
+ {
+  "echo_window_minutes": 30,
+  "echo_similarity": 0.9,
+  "apparent": 156,
+  "collapsed_pct": 0.0,
+  "inflation_ratio": 1.0
+ },
+ {
+  "echo_window_minutes": 90,
+  "echo_similarity": 0.4,
+  "apparent": 156,
+  "collapsed_pct": 0.6,
+  "inflation_ratio": 1.019
+ },
+ {
+  "echo_window_minutes": 90,
+  "echo_similarity": 0.5,
+  "apparent": 156,
+  "collapsed_pct": 0.0,
+  "inflation_ratio": 1.009
+ },
+ {
+  "echo_window_minutes": 90,
+  "echo_similarity": 0.6,
+  "apparent": 156,
+  "collapsed_pct": 0.0,
+  "inflation_ratio": 1.005
+ },
+ {
+  "echo_window_minutes": 90,
+  "echo_similarity": 0.7,
+  "apparent": 156,
+  "collapsed_pct": 0.0,
+  "inflation_ratio": 1.002
+ },
+ {
+  "echo_window_minutes": 90,
+  "echo_similarity": 0.8,
+  "apparent": 156,
+  "collapsed_pct": 0.0,
+  "inflation_ratio": 1.002
+ },
+ {
+  "echo_window_minutes": 90,
+  "echo_similarity": 0.9,
+  "apparent": 156,
+  "collapsed_pct": 0.0,
+  "inflation_ratio": 1.0
+ },
+ {
+  "echo_window_minutes": 180,
+  "echo_similarity": 0.4,
+  "apparent": 156,
+  "collapsed_pct": 1.9,
+  "inflation_ratio": 1.031
+ },
+ {
+  "echo_window_minutes": 180,
+  "echo_similarity": 0.5,
+  "apparent": 156,
+  "collapsed_pct": 0.0,
+  "inflation_ratio": 1.014
+ },
+ {
+  "echo_window_minutes": 180,
+  "echo_similarity": 0.6,
+  "apparent": 156,
+  "collapsed_pct": 0.0,
+  "inflation_ratio": 1.005
+ },
+ {
+  "echo_window_minutes": 180,
+  "echo_similarity": 0.7,
+  "apparent": 156,
+  "collapsed_pct": 0.0,
+  "inflation_ratio": 1.002
+ },
+ {
+  "echo_window_minutes": 180,
+  "echo_similarity": 0.8,
+  "apparent": 156,
+  "collapsed_pct": 0.0,
+  "inflation_ratio": 1.002
+ },
+ {
+  "echo_window_minutes": 180,
+  "echo_similarity": 0.9,
+  "apparent": 156,
+  "collapsed_pct": 0.0,
+  "inflation_ratio": 1.0
+ }
+]

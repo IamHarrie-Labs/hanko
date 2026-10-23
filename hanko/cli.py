@@ -554,6 +554,20 @@ def cmd_verify_run(args: argparse.Namespace) -> int:
     return 1 if problems else 0
 
 
+def cmd_echo_index(args: argparse.Namespace) -> int:
+    """The Echo Index study: collect real posts, or re-derive the published numbers."""
+    from .study.echo_index import DEFAULT_CHANNELS, collect, publish, save_collection
+
+    if args.action == "collect":
+        channels = args.channel or list(DEFAULT_CHANNELS)
+        save_collection(collect(channels, days=args.days, max_pages=args.max_pages), args.dir)
+    r = publish(args.dir)
+    print(str(r["apparent_convergence_events"]) + " apparent convergence events, "
+          + str(r["collapsed_events"]) + " collapsed to one voice, inflation "
+          + str(r["inflation_ratio"]) + "x; report at " + str(Path(args.dir) / "REPORT.md"))
+    return 0
+
+
 def cmd_seal(args: argparse.Namespace) -> int:
     """Run the watchlist, then publish a numbered manifest of everything it did.
 
@@ -729,6 +743,14 @@ def build_parser() -> argparse.ArgumentParser:
         help="keyword: pure word list (default). llm: a model reads the posts, code validates every reading")
     seal.add_argument("--model", default="grok-4.3", help="model for --interpreter llm")
     seal.set_defaults(func=cmd_seal)
+
+    echo_p = sub.add_parser("echo-index", help="the Echo Index study: collect posts, or re-derive its numbers")
+    echo_p.add_argument("action", choices=("collect", "publish"))
+    echo_p.add_argument("--dir", type=Path, default=Path("study/echo-index"))
+    echo_p.add_argument("--days", type=int, default=14)
+    echo_p.add_argument("--max-pages", dest="max_pages", type=int, default=80)
+    echo_p.add_argument("--channel", action="append", help="repeatable; defaults to the published list")
+    echo_p.set_defaults(func=cmd_echo_index)
 
     verify_p = sub.add_parser("verify-run", help="replay a sealed run from its committed manifest and bundle")
     verify_p.add_argument("manifest", type=Path)

@@ -1,0 +1,1579 @@
+{
+ "study": "echo-index",
+ "version": "1.0.0",
+ "method": {
+  "window_hours": 6,
+  "echo_window_minutes": 90,
+  "echo_similarity": 0.6,
+  "tickers": [
+   "BTC",
+   "ETH",
+   "SOL",
+   "XRP",
+   "BNB",
+   "DOGE",
+   "ADA",
+   "TRX",
+   "AVAX",
+   "LINK",
+   "TON",
+   "SHIB",
+   "DOT",
+   "BCH",
+   "LTC",
+   "NEAR",
+   "UNI",
+   "APT",
+   "SUI",
+   "PEPE",
+   "ICP",
+   "ETC",
+   "XLM",
+   "HBAR",
+   "FIL",
+   "ARB",
+   "INJ",
+   "TIA",
+   "SEI",
+   "RENDER",
+   "WIF",
+   "BONK",
+   "JUP",
+   "PYTH",
+   "ONDO",
+   "ENA",
+   "TAO",
+   "HYPE",
+   "AAVE",
+   "LDO",
+   "STX",
+   "IMX",
+   "FET",
+   "GRT",
+   "ATOM",
+   "ALGO",
+   "KAS",
+   "FLOKI",
+   "TRUMP",
+   "PENGU",
+   "WLD",
+   "USDT",
+   "USDC"
+  ],
+  "event": "a (token, window) mentioned by 2+ distinct channels",
+  "collapsed": "an event with fewer than 2 independent voices after echo demotion"
+ },
+ "posts": 2094,
+ "posts_mentioning_a_token": 998,
+ "apparent_convergence_events": 156,
+ "collapsed_events": 0,
+ "collapsed_pct": 0.0,
+ "inflated_events": 2,
+ "inflated_pct": 1.3,
+ "channels_counted": 431,
+ "independent_voices_counted": 429,
+ "inflation_ratio": 1.005,
+ "echo_reasons": {
+  "near-duplicate text": 4
+ },
+ "top_echoing_channels": [
+  [
+   "cointelegraph",
+   3
+  ],
+  [
+   "crypto",
+   1
+  ]
+ ],
+ "events_by_token": [
+  [
+   "BTC",
+   42
+  ],
+  [
+   "ETH",
+   30
+  ],
+  [
+   "USDC",
+   20
+  ],
+  [
+   "USDT",
+   17
+  ],
+  [
+   "SOL",
+   15
+  ],
+  [
+   "HYPE",
+   11
+  ],
+  [
+   "XRP",
+   10
+  ],
+  [
+   "BNB",
+   6
+  ],
+  [
+   "SUI",
+   2
+  ],
+  [
+   "DOGE",
+   1
+  ],
+  [
+   "NEAR",
+   1
+  ],
+  [
+   "TRUMP",
+   1
+  ]
+ ],
+ "collapsed_by_token": [],
+ "examples": [],
+ "events": [
+  {
+   "token": "BNB",
+   "window_start": "2026-10-14T06:00:00Z",
+   "mentions": 2,
+   "channels": 2,
+   "independent_voices": 2,
+   "collapsed": false,
+   "echoes": []
+  },
+  {
+   "token": "BNB",
+   "window_start": "2026-10-18T06:00:00Z",
+   "mentions": 2,
+   "channels": 2,
+   "independent_voices": 2,
+   "collapsed": false,
+   "echoes": []
+  },
+  {
+   "token": "BNB",
+   "window_start": "2026-10-19T12:00:00Z",
+   "mentions": 3,
+   "channels": 2,
+   "independent_voices": 2,
+   "collapsed": false,
+   "echoes": []
+  },
+  {
+   "token": "BNB",
+   "window_start": "2026-10-21T06:00:00Z",
+   "mentions": 2,
+   "channels": 2,
+   "independent_voices": 2,
+   "collapsed": false,
+   "echoes": []
+  },
+  {
+   "token": "BNB",
+   "window_start": "2026-10-21T12:00:00Z",
+   "mentions": 2,
+   "channels": 2,
+   "independent_voices": 2,
+   "collapsed": false,
+   "echoes": []
+  },
+  {
+   "token": "BNB",
+   "window_start": "2026-10-22T06:00:00Z",
+   "mentions": 2,
+   "channels": 2,
+   "independent_voices": 2,
+   "collapsed": false,
+   "echoes": []
+  },
+  {
+   "token": "BTC",
+   "window_start": "2026-10-09T18:00:00Z",
+   "mentions": 6,
+   "channels": 2,
+   "independent_voices": 2,
+   "collapsed": false,
+   "echoes": []
+  },
+  {
+   "token": "BTC",
+   "window_start": "2026-10-10T06:00:00Z",
+   "mentions": 4,
+   "channels": 2,
+   "independent_voices": 2,
+   "collapsed": false,
+   "echoes": []
+  },
+  {
+   "token": "BTC",
+   "window_start": "2026-10-10T12:00:00Z",
+   "mentions": 5,
+   "channels": 2,
+   "independent_voices": 2,
+   "collapsed": false,
+   "echoes": []
+  },
+  {
+   "token": "BTC",
+   "window_start": "2026-10-10T18:00:00Z",
+   "mentions": 3,
+   "channels": 2,
+   "independent_voices": 2,
+   "collapsed": false,
+   "echoes": []
+  },
+  {
+   "token": "BTC",
+   "window_start": "2026-10-11T06:00:00Z",
+   "mentions": 3,
+   "channels": 3,
+   "independent_voices": 2,
+   "collapsed": false,
+   "echoes": [
+    {
+     "channel": "crypto",
+     "reason": "near-duplicate of an earlier post by cointelegraph (similarity 0.69, contains most of its wording)",
+     "echoes_channel": "cointelegraph",
+     "text": "Roughly 700,000 $BTC has left exchanges in the 365 days.\n\n🦘 Roobet – The #1 Crypto Casino & Sportsbook.",
+     "url": "https://t.me/crypto/4095"
+    }
+   ]
+  },
+  {
+   "token": "BTC",
+   "window_start": "2026-10-11T12:00:00Z",
+   "mentions": 6,
+   "channels": 4,
+   "independent_voices": 4,
+   "collapsed": false,
+   "echoes": []
+  },
+  {
+   "token": "BTC",
+   "window_start": "2026-10-12T06:00:00Z",
+   "mentions": 7,
+   "channels": 5,
+   "independent_voices": 5,
+   "collapsed": false,
+   "echoes": []
+  },
+  {
+   "token": "BTC",
+   "window_start": "2026-10-12T12:00:00Z",
+   "mentions": 8,
+   "channels": 4,
+   "independent_voices": 4,
+   "collapsed": false,
+   "echoes": []
+  },
+  {
+   "token": "BTC",
+   "window_start": "2026-10-12T18:00:00Z",
+   "mentions": 13,
+   "channels": 5,
+   "independent_voices": 5,
+   "collapsed": false,
+   "echoes": []
+  },
+  {
+   "token": "BTC",
+   "window_start": "2026-10-13T06:00:00Z",
+   "mentions": 3,
+   "channels": 3,
+   "independent_voices": 3,
+   "collapsed": false,
+   "echoes": []
+  },
+  {
+   "token": "BTC",
+   "window_start": "2026-10-13T12:00:00Z",
+   "mentions": 16,
+   "channels": 7,
+   "independent_voices": 7,
+   "collapsed": false,
+   "echoes": [
+    {
+     "channel": "cointelegraph",
+     "reason": "near-duplicate of an earlier post by unfolded (similarity 0.62, contains most of its wording)",
+     "echoes_channel": "unfolded",
+     "text": "🔥 NEW: Strive bought 3,311 BTC last week, bringing its total holdings to 32,773 Bitcoin. \n\nNews | Markets | YouTube",
+     "url": "https://t.me/cointelegraph/72635"
+    }
+   ]
+  },
+  {
+   "token": "BTC",
+   "window_start": "2026-10-13T18:00:00Z",
+   "mentions": 8,
+   "channels": 4,
+   "independent_voices": 4,
+   "collapsed": false,
+   "echoes": []
+  },
+  {
+   "token": "BTC",
+   "window_start": "2026-10-14T06:00:00Z",
+   "mentions": 5,
+   "channels": 4,
+   "independent_voices": 4,
+   "collapsed": false,
+   "echoes": []
+  },
+  {
+   "token": "BTC",
+   "window_start": "2026-10-14T12:00:00Z",
+   "mentions": 13,
+   "channels": 6,
+   "independent_voices": 6,
+   "collapsed": false,
+   "echoes": []
+  },
+  {
+   "token": "BTC",
+   "window_start": "2026-10-14T18:00:00Z",
+   "mentions": 7,
+   "channels": 3,
+   "independent_voices": 3,
+   "collapsed": false,
+   "echoes": []
+  },
+  {
+   "token": "BTC",
+   "window_start": "2026-10-15T00:00:00Z",
+   "mentions": 9,
+   "channels": 4,
+   "independent_voices": 4,
+   "collapsed": false,
+   "echoes": []
+  },
+  {
+   "token": "BTC",
+   "window_start": "2026-10-15T06:00:00Z",
+   "mentions": 8,
+   "channels": 6,
+   "independent_voices": 6,
+   "collapsed": false,
+   "echoes": []
+  },
+  {
+   "token": "BTC",
+   "window_start": "2026-10-15T12:00:00Z",
+   "mentions": 10,
+   "channels": 5,
+   "independent_voices": 5,
+   "collapsed": false,
+   "echoes": []
+  },
+  {
+   "token": "BTC",
+   "window_start": "2026-10-15T18:00:00Z",
+   "mentions": 5,
+   "channels": 2,
+   "independent_voices": 2,
+   "collapsed": false,
+   "echoes": []
+  },
+  {
+   "token": "BTC",
+   "window_start": "2026-10-16T06:00:00Z",
+   "mentions": 6,
+   "channels": 4,
+   "independent_voices": 4,
+   "collapsed": false,
+   "echoes": []
+  },
+  {
+   "token": "BTC",
+   "window_start": "2026-10-16T12:00:00Z",
+   "mentions": 12,
+   "channels": 5,
+   "independent_voices": 5,
+   "collapsed": false,
+   "echoes": []
+  },
+  {
+   "token": "BTC",
+   "window_start": "2026-10-16T18:00:00Z",
+   "mentions": 5,
+   "channels": 2,
+   "independent_voices": 2,
+   "collapsed": false,
+   "echoes": []
+  },
+  {
+   "token": "BTC",
+   "window_start": "2026-10-17T18:00:00Z",
+   "mentions": 3,
+   "channels": 3,
+   "independent_voices": 3,
+   "collapsed": false,
+   "echoes": []
+  },
+  {
+   "token": "BTC",
+   "window_start": "2026-10-18T06:00:00Z",
+   "mentions": 3,
+   "channels": 2,
+   "independent_voices": 2,
+   "collapsed": false,
+   "echoes": [
+    {
+     "channel": "cointelegraph",
+     "reason": "near-duplicate of an earlier post by crypto (similarity 0.67, contains most of its wording)",
+     "echoes_channel": "crypto",
+     "text": "🇸🇻 HUGE: El Salvador's Bitcoin holdings now surpass 7,800 $BTC.\n\nNews | Markets | YouTube",
+     "url": "https://t.me/cointelegraph/72722"
+    }
+   ]
+  },
+  {
+   "token": "BTC",
+   "window_start": "2026-10-18T12:00:00Z",
+   "mentions": 2,
+   "channels": 2,
+   "independent_voices": 2,
+   "collapsed": false,
+   "echoes": []
+  },
+  {
+   "token": "BTC",
+   "window_start": "2026-10-19T00:00:00Z",
+   "mentions": 3,
+   "channels": 2,
+   "independent_voices": 2,
+   "collapsed": false,
+   "echoes": []
+  },
+  {
+   "token": "BTC",
+   "window_start": "2026-10-19T06:00:00Z",
+   "mentions": 15,
+   "channels": 9,
+   "independent_voices": 9,
+   "collapsed": false,
+   "echoes": []
+  },
+  {
+   "token": "BTC",
+   "window_start": "2026-10-19T12:00:00Z",
+   "mentions": 18,
+   "channels": 7,
+   "independent_voices": 7,
+   "collapsed": false,
+   "echoes": []
+  },
+  {
+   "token": "BTC",
+   "window_start": "2026-10-19T18:00:00Z",
+   "mentions": 5,
+   "channels": 2,
+   "independent_voices": 2,
+   "collapsed": false,
+   "echoes": []
+  },
+  {
+   "token": "BTC",
+   "window_start": "2026-10-20T00:00:00Z",
+   "mentions": 2,
+   "channels": 2,
+   "independent_voices": 2,
+   "collapsed": false,
+   "echoes": []
+  },
+  {
+   "token": "BTC",
+   "window_start": "2026-10-20T06:00:00Z",
+   "mentions": 11,
+   "channels": 7,
+   "independent_voices": 7,
+   "collapsed": false,
+   "echoes": []
+  },
+  {
+   "token": "BTC",
+   "window_start": "2026-10-20T12:00:00Z",
+   "mentions": 30,
+   "channels": 6,
+   "independent_voices": 5,
+   "collapsed": false,
+   "echoes": [
+    {
+     "channel": "cointelegraph",
+     "reason": "near-duplicate of an earlier post by WatcherGuru (similarity 0.83, contains most of its wording)",
+     "echoes_channel": "WatcherGuru",
+     "text": "🇨🇭 JUST IN: Switzerland approves its first spot Bitcoin ETF for retail investors, allowing direct $BTC investment under Swiss fund rules.\n\nNews | Markets | YouTube",
+     "url": "https://t.me/cointelegraph/72766"
+    }
+   ]
+  },
+  {
+   "token": "BTC",
+   "window_start": "2026-10-20T18:00:00Z",
+   "mentions": 16,
+   "channels": 5,
+   "independent_voices": 5,
+   "collapsed": false,
+   "echoes": []
+  },
+  {
+   "token": "BTC",
+   "window_start": "2026-10-21T06:00:00Z",
+   "mentions": 8,
+   "channels": 6,
+   "independent_voices": 6,
+   "collapsed": false,
+   "echoes": []
+  },
+  {
+   "token": "BTC",
+   "window_start": "2026-10-21T12:00:00Z",
+   "mentions": 12,
+   "channels": 5,
+   "independent_voices": 5,
+   "collapsed": false,
+   "echoes": []
+  },
+  {
+   "token": "BTC",
+   "window_start": "2026-10-21T18:00:00Z",
+   "mentions": 5,
+   "channels": 2,
+   "independent_voices": 2,
+   "collapsed": false,
+   "echoes": []
+  },
+  {
+   "token": "BTC",
+   "window_start": "2026-10-22T06:00:00Z",
+   "mentions": 5,
+   "channels": 4,
+   "independent_voices": 4,
+   "collapsed": false,
+   "echoes": []
+  },
+  {
+   "token": "BTC",
+   "window_start": "2026-10-22T12:00:00Z",
+   "mentions": 19,
+   "channels": 4,
+   "independent_voices": 4,
+   "collapsed": false,
+   "echoes": []
+  },
+  {
+   "token": "BTC",
+   "window_start": "2026-10-22T18:00:00Z",
+   "mentions": 7,
+   "channels": 2,
+   "independent_voices": 2,
+   "collapsed": false,
+   "echoes": []
+  },
+  {
+   "token": "BTC",
+   "window_start": "2026-10-23T00:00:00Z",
+   "mentions": 4,
+   "channels": 3,
+   "independent_voices": 3,
+   "collapsed": false,
+   "echoes": []
+  },
+  {
+   "token": "BTC",
+   "window_start": "2026-10-23T06:00:00Z",
+   "mentions": 16,
+   "channels": 4,
+   "independent_voices": 4,
+   "collapsed": false,
+   "echoes": []
+  },
+  {
+   "token": "BTC",
+   "window_start": "2026-10-23T12:00:00Z",
+   "mentions": 18,
+   "channels": 3,
+   "independent_voices": 3,
+   "collapsed": false,
+   "echoes": []
+  },
+  {
+   "token": "DOGE",
+   "window_start": "2026-10-21T12:00:00Z",
+   "mentions": 2,
+   "channels": 2,
+   "independent_voices": 2,
+   "collapsed": false,
+   "echoes": []
+  },
+  {
+   "token": "ETH",
+   "window_start": "2026-10-10T00:00:00Z",
+   "mentions": 3,
+   "channels": 2,
+   "independent_voices": 2,
+   "collapsed": false,
+   "echoes": []
+  },
+  {
+   "token": "ETH",
+   "window_start": "2026-10-10T06:00:00Z",
+   "mentions": 3,
+   "channels": 2,
+   "independent_voices": 2,
+   "collapsed": false,
+   "echoes": []
+  },
+  {
+   "token": "ETH",
+   "window_start": "2026-10-10T12:00:00Z",
+   "mentions": 2,
+   "channels": 2,
+   "independent_voices": 2,
+   "collapsed": false,
+   "echoes": []
+  },
+  {
+   "token": "ETH",
+   "window_start": "2026-10-11T00:00:00Z",
+   "mentions": 4,
+   "channels": 3,
+   "independent_voices": 3,
+   "collapsed": false,
+   "echoes": []
+  },
+  {
+   "token": "ETH",
+   "window_start": "2026-10-11T12:00:00Z",
+   "mentions": 3,
+   "channels": 3,
+   "independent_voices": 3,
+   "collapsed": false,
+   "echoes": []
+  },
+  {
+   "token": "ETH",
+   "window_start": "2026-10-12T06:00:00Z",
+   "mentions": 4,
+   "channels": 3,
+   "independent_voices": 3,
+   "collapsed": false,
+   "echoes": []
+  },
+  {
+   "token": "ETH",
+   "window_start": "2026-10-12T12:00:00Z",
+   "mentions": 5,
+   "channels": 2,
+   "independent_voices": 2,
+   "collapsed": false,
+   "echoes": []
+  },
+  {
+   "token": "ETH",
+   "window_start": "2026-10-13T06:00:00Z",
+   "mentions": 3,
+   "channels": 2,
+   "independent_voices": 2,
+   "collapsed": false,
+   "echoes": []
+  },
+  {
+   "token": "ETH",
+   "window_start": "2026-10-13T12:00:00Z",
+   "mentions": 6,
+   "channels": 2,
+   "independent_voices": 2,
+   "collapsed": false,
+   "echoes": []
+  },
+  {
+   "token": "ETH",
+   "window_start": "2026-10-14T00:00:00Z",
+   "mentions": 6,
+   "channels": 2,
+   "independent_voices": 2,
+   "collapsed": false,
+   "echoes": []
+  },
+  {
+   "token": "ETH",
+   "window_start": "2026-10-14T06:00:00Z",
+   "mentions": 5,
+   "channels": 4,
+   "independent_voices": 4,
+   "collapsed": false,
+   "echoes": []
+  },
+  {
+   "token": "ETH",
+   "window_start": "2026-10-15T00:00:00Z",
+   "mentions": 10,
+   "channels": 2,
+   "independent_voices": 2,
+   "collapsed": false,
+   "echoes": []
+  },
+  {
+   "token": "ETH",
+   "window_start": "2026-10-15T06:00:00Z",
+   "mentions": 6,
+   "channels": 3,
+   "independent_voices": 3,
+   "collapsed": false,
+   "echoes": []
+  },
+  {
+   "token": "ETH",
+   "window_start": "2026-10-15T12:00:00Z",
+   "mentions": 4,
+   "channels": 2,
+   "independent_voices": 2,
+   "collapsed": false,
+   "echoes": []
+  },
+  {
+   "token": "ETH",
+   "window_start": "2026-10-16T00:00:00Z",
+   "mentions": 6,
+   "channels": 3,
+   "independent_voices": 3,
+   "collapsed": false,
+   "echoes": []
+  },
+  {
+   "token": "ETH",
+   "window_start": "2026-10-16T06:00:00Z",
+   "mentions": 3,
+   "channels": 2,
+   "independent_voices": 2,
+   "collapsed": false,
+   "echoes": []
+  },
+  {
+   "token": "ETH",
+   "window_start": "2026-10-16T12:00:00Z",
+   "mentions": 4,
+   "channels": 4,
+   "independent_voices": 4,
+   "collapsed": false,
+   "echoes": []
+  },
+  {
+   "token": "ETH",
+   "window_start": "2026-10-19T00:00:00Z",
+   "mentions": 5,
+   "channels": 2,
+   "independent_voices": 2,
+   "collapsed": false,
+   "echoes": []
+  },
+  {
+   "token": "ETH",
+   "window_start": "2026-10-19T06:00:00Z",
+   "mentions": 6,
+   "channels": 5,
+   "independent_voices": 5,
+   "collapsed": false,
+   "echoes": []
+  },
+  {
+   "token": "ETH",
+   "window_start": "2026-10-19T12:00:00Z",
+   "mentions": 10,
+   "channels": 5,
+   "independent_voices": 5,
+   "collapsed": false,
+   "echoes": []
+  },
+  {
+   "token": "ETH",
+   "window_start": "2026-10-20T00:00:00Z",
+   "mentions": 5,
+   "channels": 2,
+   "independent_voices": 2,
+   "collapsed": false,
+   "echoes": []
+  },
+  {
+   "token": "ETH",
+   "window_start": "2026-10-20T06:00:00Z",
+   "mentions": 3,
+   "channels": 3,
+   "independent_voices": 3,
+   "collapsed": false,
+   "echoes": []
+  },
+  {
+   "token": "ETH",
+   "window_start": "2026-10-20T18:00:00Z",
+   "mentions": 3,
+   "channels": 2,
+   "independent_voices": 2,
+   "collapsed": false,
+   "echoes": []
+  },
+  {
+   "token": "ETH",
+   "window_start": "2026-10-21T00:00:00Z",
+   "mentions": 5,
+   "channels": 2,
+   "independent_voices": 2,
+   "collapsed": false,
+   "echoes": []
+  },
+  {
+   "token": "ETH",
+   "window_start": "2026-10-21T06:00:00Z",
+   "mentions": 7,
+   "channels": 3,
+   "independent_voices": 3,
+   "collapsed": false,
+   "echoes": []
+  },
+  {
+   "token": "ETH",
+   "window_start": "2026-10-21T12:00:00Z",
+   "mentions": 6,
+   "channels": 3,
+   "independent_voices": 3,
+   "collapsed": false,
+   "echoes": []
+  },
+  {
+   "token": "ETH",
+   "window_start": "2026-10-22T06:00:00Z",
+   "mentions": 6,
+   "channels": 3,
+   "independent_voices": 3,
+   "collapsed": false,
+   "echoes": []
+  },
+  {
+   "token": "ETH",
+   "window_start": "2026-10-22T12:00:00Z",
+   "mentions": 7,
+   "channels": 3,
+   "independent_voices": 3,
+   "collapsed": false,
+   "echoes": []
+  },
+  {
+   "token": "ETH",
+   "window_start": "2026-10-23T06:00:00Z",
+   "mentions": 3,
+   "channels": 2,
+   "independent_voices": 2,
+   "collapsed": false,
+   "echoes": []
+  },
+  {
+   "token": "ETH",
+   "window_start": "2026-10-23T12:00:00Z",
+   "mentions": 7,
+   "channels": 2,
+   "independent_voices": 2,
+   "collapsed": false,
+   "echoes": []
+  },
+  {
+   "token": "HYPE",
+   "window_start": "2026-10-11T00:00:00Z",
+   "mentions": 2,
+   "channels": 2,
+   "independent_voices": 2,
+   "collapsed": false,
+   "echoes": []
+  },
+  {
+   "token": "HYPE",
+   "window_start": "2026-10-12T06:00:00Z",
+   "mentions": 3,
+   "channels": 2,
+   "independent_voices": 2,
+   "collapsed": false,
+   "echoes": []
+  },
+  {
+   "token": "HYPE",
+   "window_start": "2026-10-12T12:00:00Z",
+   "mentions": 3,
+   "channels": 2,
+   "independent_voices": 2,
+   "collapsed": false,
+   "echoes": []
+  },
+  {
+   "token": "HYPE",
+   "window_start": "2026-10-13T00:00:00Z",
+   "mentions": 2,
+   "channels": 2,
+   "independent_voices": 2,
+   "collapsed": false,
+   "echoes": []
+  },
+  {
+   "token": "HYPE",
+   "window_start": "2026-10-15T06:00:00Z",
+   "mentions": 4,
+   "channels": 3,
+   "independent_voices": 3,
+   "collapsed": false,
+   "echoes": []
+  },
+  {
+   "token": "HYPE",
+   "window_start": "2026-10-15T12:00:00Z",
+   "mentions": 2,
+   "channels": 2,
+   "independent_voices": 2,
+   "collapsed": false,
+   "echoes": []
+  },
+  {
+   "token": "HYPE",
+   "window_start": "2026-10-16T12:00:00Z",
+   "mentions": 3,
+   "channels": 3,
+   "independent_voices": 3,
+   "collapsed": false,
+   "echoes": []
+  },
+  {
+   "token": "HYPE",
+   "window_start": "2026-10-17T00:00:00Z",
+   "mentions": 3,
+   "channels": 2,
+   "independent_voices": 2,
+   "collapsed": false,
+   "echoes": []
+  },
+  {
+   "token": "HYPE",
+   "window_start": "2026-10-19T06:00:00Z",
+   "mentions": 4,
+   "channels": 2,
+   "independent_voices": 2,
+   "collapsed": false,
+   "echoes": []
+  },
+  {
+   "token": "HYPE",
+   "window_start": "2026-10-21T00:00:00Z",
+   "mentions": 2,
+   "channels": 2,
+   "independent_voices": 2,
+   "collapsed": false,
+   "echoes": []
+  },
+  {
+   "token": "HYPE",
+   "window_start": "2026-10-23T12:00:00Z",
+   "mentions": 6,
+   "channels": 2,
+   "independent_voices": 2,
+   "collapsed": false,
+   "echoes": []
+  },
+  {
+   "token": "NEAR",
+   "window_start": "2026-10-15T12:00:00Z",
+   "mentions": 5,
+   "channels": 3,
+   "independent_voices": 3,
+   "collapsed": false,
+   "echoes": []
+  },
+  {
+   "token": "SOL",
+   "window_start": "2026-10-12T12:00:00Z",
+   "mentions": 4,
+   "channels": 2,
+   "independent_voices": 2,
+   "collapsed": false,
+   "echoes": []
+  },
+  {
+   "token": "SOL",
+   "window_start": "2026-10-13T00:00:00Z",
+   "mentions": 3,
+   "channels": 2,
+   "independent_voices": 2,
+   "collapsed": false,
+   "echoes": []
+  },
+  {
+   "token": "SOL",
+   "window_start": "2026-10-14T00:00:00Z",
+   "mentions": 2,
+   "channels": 2,
+   "independent_voices": 2,
+   "collapsed": false,
+   "echoes": []
+  },
+  {
+   "token": "SOL",
+   "window_start": "2026-10-15T00:00:00Z",
+   "mentions": 3,
+   "channels": 2,
+   "independent_voices": 2,
+   "collapsed": false,
+   "echoes": []
+  },
+  {
+   "token": "SOL",
+   "window_start": "2026-10-15T06:00:00Z",
+   "mentions": 2,
+   "channels": 2,
+   "independent_voices": 2,
+   "collapsed": false,
+   "echoes": []
+  },
+  {
+   "token": "SOL",
+   "window_start": "2026-10-15T12:00:00Z",
+   "mentions": 8,
+   "channels": 3,
+   "independent_voices": 3,
+   "collapsed": false,
+   "echoes": []
+  },
+  {
+   "token": "SOL",
+   "window_start": "2026-10-16T00:00:00Z",
+   "mentions": 4,
+   "channels": 2,
+   "independent_voices": 2,
+   "collapsed": false,
+   "echoes": []
+  },
+  {
+   "token": "SOL",
+   "window_start": "2026-10-18T00:00:00Z",
+   "mentions": 2,
+   "channels": 2,
+   "independent_voices": 2,
+   "collapsed": false,
+   "echoes": []
+  },
+  {
+   "token": "SOL",
+   "window_start": "2026-10-19T06:00:00Z",
+   "mentions": 2,
+   "channels": 2,
+   "independent_voices": 2,
+   "collapsed": false,
+   "echoes": []
+  },
+  {
+   "token": "SOL",
+   "window_start": "2026-10-19T12:00:00Z",
+   "mentions": 8,
+   "channels": 3,
+   "independent_voices": 3,
+   "collapsed": false,
+   "echoes": []
+  },
+  {
+   "token": "SOL",
+   "window_start": "2026-10-21T00:00:00Z",
+   "mentions": 6,
+   "channels": 2,
+   "independent_voices": 2,
+   "collapsed": false,
+   "echoes": []
+  },
+  {
+   "token": "SOL",
+   "window_start": "2026-10-21T06:00:00Z",
+   "mentions": 5,
+   "channels": 3,
+   "independent_voices": 3,
+   "collapsed": false,
+   "echoes": []
+  },
+  {
+   "token": "SOL",
+   "window_start": "2026-10-21T12:00:00Z",
+   "mentions": 9,
+   "channels": 2,
+   "independent_voices": 2,
+   "collapsed": false,
+   "echoes": []
+  },
+  {
+   "token": "SOL",
+   "window_start": "2026-10-22T06:00:00Z",
+   "mentions": 2,
+   "channels": 2,
+   "independent_voices": 2,
+   "collapsed": false,
+   "echoes": []
+  },
+  {
+   "token": "SOL",
+   "window_start": "2026-10-23T12:00:00Z",
+   "mentions": 2,
+   "channels": 2,
+   "independent_voices": 2,
+   "collapsed": false,
+   "echoes": []
+  },
+  {
+   "token": "SUI",
+   "window_start": "2026-10-12T00:00:00Z",
+   "mentions": 2,
+   "channels": 2,
+   "independent_voices": 2,
+   "collapsed": false,
+   "echoes": []
+  },
+  {
+   "token": "SUI",
+   "window_start": "2026-10-13T06:00:00Z",
+   "mentions": 2,
+   "channels": 2,
+   "independent_voices": 2,
+   "collapsed": false,
+   "echoes": []
+  },
+  {
+   "token": "TRUMP",
+   "window_start": "2026-10-22T06:00:00Z",
+   "mentions": 2,
+   "channels": 2,
+   "independent_voices": 2,
+   "collapsed": false,
+   "echoes": []
+  },
+  {
+   "token": "USDC",
+   "window_start": "2026-10-10T00:00:00Z",
+   "mentions": 2,
+   "channels": 2,
+   "independent_voices": 2,
+   "collapsed": false,
+   "echoes": []
+  },
+  {
+   "token": "USDC",
+   "window_start": "2026-10-11T00:00:00Z",
+   "mentions": 3,
+   "channels": 2,
+   "independent_voices": 2,
+   "collapsed": false,
+   "echoes": []
+  },
+  {
+   "token": "USDC",
+   "window_start": "2026-10-12T06:00:00Z",
+   "mentions": 3,
+   "channels": 2,
+   "independent_voices": 2,
+   "collapsed": false,
+   "echoes": []
+  },
+  {
+   "token": "USDC",
+   "window_start": "2026-10-13T00:00:00Z",
+   "mentions": 3,
+   "channels": 2,
+   "independent_voices": 2,
+   "collapsed": false,
+   "echoes": []
+  },
+  {
+   "token": "USDC",
+   "window_start": "2026-10-13T12:00:00Z",
+   "mentions": 7,
+   "channels": 2,
+   "independent_voices": 2,
+   "collapsed": false,
+   "echoes": []
+  },
+  {
+   "token": "USDC",
+   "window_start": "2026-10-14T00:00:00Z",
+   "mentions": 6,
+   "channels": 3,
+   "independent_voices": 3,
+   "collapsed": false,
+   "echoes": []
+  },
+  {
+   "token": "USDC",
+   "window_start": "2026-10-14T12:00:00Z",
+   "mentions": 4,
+   "channels": 3,
+   "independent_voices": 3,
+   "collapsed": false,
+   "echoes": []
+  },
+  {
+   "token": "USDC",
+   "window_start": "2026-10-15T00:00:00Z",
+   "mentions": 3,
+   "channels": 2,
+   "independent_voices": 2,
+   "collapsed": false,
+   "echoes": []
+  },
+  {
+   "token": "USDC",
+   "window_start": "2026-10-15T06:00:00Z",
+   "mentions": 4,
+   "channels": 3,
+   "independent_voices": 3,
+   "collapsed": false,
+   "echoes": []
+  },
+  {
+   "token": "USDC",
+   "window_start": "2026-10-15T12:00:00Z",
+   "mentions": 2,
+   "channels": 2,
+   "independent_voices": 2,
+   "collapsed": false,
+   "echoes": []
+  },
+  {
+   "token": "USDC",
+   "window_start": "2026-10-16T00:00:00Z",
+   "mentions": 4,
+   "channels": 2,
+   "independent_voices": 2,
+   "collapsed": false,
+   "echoes": []
+  },
+  {
+   "token": "USDC",
+   "window_start": "2026-10-16T12:00:00Z",
+   "mentions": 6,
+   "channels": 4,
+   "independent_voices": 4,
+   "collapsed": false,
+   "echoes": []
+  },
+  {
+   "token": "USDC",
+   "window_start": "2026-10-19T06:00:00Z",
+   "mentions": 2,
+   "channels": 2,
+   "independent_voices": 2,
+   "collapsed": false,
+   "echoes": []
+  },
+  {
+   "token": "USDC",
+   "window_start": "2026-10-19T12:00:00Z",
+   "mentions": 5,
+   "channels": 2,
+   "independent_voices": 2,
+   "collapsed": false,
+   "echoes": []
+  },
+  {
+   "token": "USDC",
+   "window_start": "2026-10-20T00:00:00Z",
+   "mentions": 3,
+   "channels": 2,
+   "independent_voices": 2,
+   "collapsed": false,
+   "echoes": []
+  },
+  {
+   "token": "USDC",
+   "window_start": "2026-10-21T00:00:00Z",
+   "mentions": 3,
+   "channels": 3,
+   "independent_voices": 3,
+   "collapsed": false,
+   "echoes": []
+  },
+  {
+   "token": "USDC",
+   "window_start": "2026-10-21T12:00:00Z",
+   "mentions": 5,
+   "channels": 2,
+   "independent_voices": 2,
+   "collapsed": false,
+   "echoes": []
+  },
+  {
+   "token": "USDC",
+   "window_start": "2026-10-22T12:00:00Z",
+   "mentions": 5,
+   "channels": 2,
+   "independent_voices": 2,
+   "collapsed": false,
+   "echoes": []
+  },
+  {
+   "token": "USDC",
+   "window_start": "2026-10-23T00:00:00Z",
+   "mentions": 2,
+   "channels": 2,
+   "independent_voices": 2,
+   "collapsed": false,
+   "echoes": []
+  },
+  {
+   "token": "USDC",
+   "window_start": "2026-10-23T12:00:00Z",
+   "mentions": 3,
+   "channels": 2,
+   "independent_voices": 2,
+   "collapsed": false,
+   "echoes": []
+  },
+  {
+   "token": "USDT",
+   "window_start": "2026-10-12T00:00:00Z",
+   "mentions": 8,
+   "channels": 4,
+   "independent_voices": 4,
+   "collapsed": false,
+   "echoes": []
+  },
+  {
+   "token": "USDT",
+   "window_start": "2026-10-12T06:00:00Z",
+   "mentions": 6,
+   "channels": 2,
+   "independent_voices": 2,
+   "collapsed": false,
+   "echoes": []
+  },
+  {
+   "token": "USDT",
+   "window_start": "2026-10-12T12:00:00Z",
+   "mentions": 3,
+   "channels": 2,
+   "independent_voices": 2,
+   "collapsed": false,
+   "echoes": []
+  },
+  {
+   "token": "USDT",
+   "window_start": "2026-10-12T18:00:00Z",
+   "mentions": 2,
+   "channels": 2,
+   "independent_voices": 2,
+   "collapsed": false,
+   "echoes": []
+  },
+  {
+   "token": "USDT",
+   "window_start": "2026-10-13T00:00:00Z",
+   "mentions": 5,
+   "channels": 2,
+   "independent_voices": 2,
+   "collapsed": false,
+   "echoes": []
+  },
+  {
+   "token": "USDT",
+   "window_start": "2026-10-13T12:00:00Z",
+   "mentions": 6,
+   "channels": 3,
+   "independent_voices": 3,
+   "collapsed": false,
+   "echoes": []
+  },
+  {
+   "token": "USDT",
+   "window_start": "2026-10-14T00:00:00Z",
+   "mentions": 4,
+   "channels": 2,
+   "independent_voices": 2,
+   "collapsed": false,
+   "echoes": []
+  },
+  {
+   "token": "USDT",
+   "window_start": "2026-10-15T00:00:00Z",
+   "mentions": 8,
+   "channels": 2,
+   "independent_voices": 2,
+   "collapsed": false,
+   "echoes": []
+  },
+  {
+   "token": "USDT",
+   "window_start": "2026-10-15T12:00:00Z",
+   "mentions": 5,
+   "channels": 2,
+   "independent_voices": 2,
+   "collapsed": false,
+   "echoes": []
+  },
+  {
+   "token": "USDT",
+   "window_start": "2026-10-16T06:00:00Z",
+   "mentions": 5,
+   "channels": 2,
+   "independent_voices": 2,
+   "collapsed": false,
+   "echoes": []
+  },
+  {
+   "token": "USDT",
+   "window_start": "2026-10-16T12:00:00Z",
+   "mentions": 4,
+   "channels": 2,
+   "independent_voices": 2,
+   "collapsed": false,
+   "echoes": []
+  },
+  {
+   "token": "USDT",
+   "window_start": "2026-10-19T06:00:00Z",
+   "mentions": 6,
+   "channels": 2,
+   "independent_voices": 2,
+   "collapsed": false,
+   "echoes": []
+  },
+  {
+   "token": "USDT",
+   "window_start": "2026-10-20T12:00:00Z",
+   "mentions": 3,
+   "channels": 2,
+   "independent_voices": 2,
+   "collapsed": false,
+   "echoes": []
+  },
+  {
+   "token": "USDT",
+   "window_start": "2026-10-21T06:00:00Z",
+   "mentions": 7,
+   "channels": 3,
+   "independent_voices": 3,
+   "collapsed": false,
+   "echoes": []
+  },
+  {
+   "token": "USDT",
+   "window_start": "2026-10-21T12:00:00Z",
+   "mentions": 10,
+   "channels": 2,
+   "independent_voices": 2,
+   "collapsed": false,
+   "echoes": []
+  },
+  {
+   "token": "USDT",
+   "window_start": "2026-10-22T06:00:00Z",
+   "mentions": 6,
+   "channels": 2,
+   "independent_voices": 2,
+   "collapsed": false,
+   "echoes": []
+  },
+  {
+   "token": "USDT",
+   "window_start": "2026-10-22T12:00:00Z",
+   "mentions": 3,
+   "channels": 2,
+   "independent_voices": 2,
+   "collapsed": false,
+   "echoes": []
+  },
+  {
+   "token": "XRP",
+   "window_start": "2026-10-10T00:00:00Z",
+   "mentions": 3,
+   "channels": 3,
+   "independent_voices": 3,
+   "collapsed": false,
+   "echoes": []
+  },
+  {
+   "token": "XRP",
+   "window_start": "2026-10-10T06:00:00Z",
+   "mentions": 2,
+   "channels": 2,
+   "independent_voices": 2,
+   "collapsed": false,
+   "echoes": []
+  },
+  {
+   "token": "XRP",
+   "window_start": "2026-10-11T00:00:00Z",
+   "mentions": 2,
+   "channels": 2,
+   "independent_voices": 2,
+   "collapsed": false,
+   "echoes": []
+  },
+  {
+   "token": "XRP",
+   "window_start": "2026-10-12T06:00:00Z",
+   "mentions": 4,
+   "channels": 2,
+   "independent_voices": 2,
+   "collapsed": false,
+   "echoes": []
+  },
+  {
+   "token": "XRP",
+   "window_start": "2026-10-12T12:00:00Z",
+   "mentions": 2,
+   "channels": 2,
+   "independent_voices": 2,
+   "collapsed": false,
+   "echoes": []
+  },
+  {
+   "token": "XRP",
+   "window_start": "2026-10-14T00:00:00Z",
+   "mentions": 2,
+   "channels": 2,
+   "independent_voices": 2,
+   "collapsed": false,
+   "echoes": []
+  },
+  {
+   "token": "XRP",
+   "window_start": "2026-10-15T12:00:00Z",
+   "mentions": 4,
+   "channels": 3,
+   "independent_voices": 3,
+   "collapsed": false,
+   "echoes": []
+  },
+  {
+   "token": "XRP",
+   "window_start": "2026-10-19T12:00:00Z",
+   "mentions": 3,
+   "channels": 3,
+   "independent_voices": 3,
+   "collapsed": false,
+   "echoes": []
+  },
+  {
+   "token": "XRP",
+   "window_start": "2026-10-20T00:00:00Z",
+   "mentions": 3,
+   "channels": 2,
+   "independent_voices": 2,
+   "collapsed": false,
+   "echoes": []
+  },
+  {
+   "token": "XRP",
+   "window_start": "2026-10-21T06:00:00Z",
+   "mentions": 2,
+   "channels": 2,
+   "independent_voices": 2,
+   "collapsed": false,
+   "echoes": []
+  }
+ ]
+}

@@ -405,7 +405,7 @@ hanko decide x --token TOKENA --subject voice_alpha --subject voice_beta --subje
 
 ```
 ENTER TOKENA  size 3.28%  confidence 0.66
-  dec_303b323b282605ea4d861a25
+  dec_1c1fb9e7ae2020cb260d6f32
   evidence quality 0.82  (completeness 1.0, freshness 0.75, corroboration 1.0, independence 0.67)
   + independent_voices: 2 independent voice(s): voice_alpha, voice_gamma
   + safety: safety score 0.82
@@ -457,7 +457,7 @@ hanko review --observations fixtures/observations_day3.json --now 2026-08-30T12:
 
 ```
 FALSIFIED  TOKENA  (enter at confidence 0.66)
-  dec_303b323b282605ea4d861a25 -> rev_3508881c4db712c3a908e919
+  dec_1c1fb9e7ae2020cb260d6f32 -> rev_24903844c6020591a568451b
   x price_usd observed at 1.02 at 2026-08-30T12:00:00Z; committed to being wrong if < 1.0625 at any point in the window -- thesis fails if price falls 15% from entry
   + liquidity_usd held against < 630000.0 across 1 sample at 2026-08-30T12:00:00Z -- no intermediate readings; last observed 880000.0
   + independent_voices observed at 2.0; holds against < 2.0
@@ -553,7 +553,7 @@ hanko sweep --watchlist fixtures/sweep_demo/watchlist.json \
 
 ```
 sweep at 2026-08-27T12:00:00+00:00
-  ENTER   TOKENA  dec_a30db3a0aa46b141d4c48343
+  ENTER   TOKENA  dec_5b2eadbf21bc8c073927b4ac
 ```
 
 16 tests, all offline, using a fixture stand-in for RYO tool responses

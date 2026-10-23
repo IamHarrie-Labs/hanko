@@ -40,7 +40,9 @@ from .record import (
 
 # 1.1.0: falsifiers now state a window (D-13) -- a decision built under 1.0.0
 # has no such field and cannot be replayed against this engine.
-ENGINE_VERSION = "1.1.0"
+# 1.2.0: echo detection also compares by containment, so boilerplate-padded
+# copies are caught (D-14). Can only demote more voices, never fewer.
+ENGINE_VERSION = "1.2.0"
 
 
 @dataclass(frozen=True, slots=True)
