@@ -38,6 +38,9 @@ jobs:
         run: |
           # A token whose decide step failed makes seal exit 1. The run is
           # still sealed and still committed: the failure is in its manifest.
+          # A fresh checkout gives every file the same mtime, so the new run
+          # is found by comparing the list before and after, not by ls -t.
+          ls live/runs/run_*.json | sort > "$RUNNER_TEMP/before"
           hanko --root "$RUNNER_TEMP/snapshots" seal \
             --watchlist watchlist.live.json \
             --ledger live/decisions.jsonl \
@@ -48,11 +51,13 @@ jobs:
             --lookback-hours 24 \
             --ots \
             --repo-url https://github.com/IamHarrie-Labs/hanko || echo "seal reported a failure; see the manifest"
+          ls live/runs/run_*.json | sort | comm -13 "$RUNNER_TEMP/before" - > "$RUNNER_TEMP/new"
+          cat "$RUNNER_TEMP/new"
 
       - name: Verify the new run from its committed files
         run: |
-          newest=$(ls -t live/runs/run_*.json | head -1)
-          hanko verify-run "$newest"
+          test -s "$RUNNER_TEMP/new"
+          while read -r manifest; do hanko verify-run "$manifest"; done < "$RUNNER_TEMP/new"
 
       - name: Upgrade pending timestamps
         run: |
@@ -69,7 +74,7 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add live runs
           git diff --cached --quiet && exit 0
-          git commit -q -m "Sealed run $(ls -t live/runs/run_*.json | head -1 | xargs basename .json)"
+          git commit -q -m "Sealed run $(basename "$(head -1 "$RUNNER_TEMP/new")" .json)"
           for attempt in 1 2 3; do
             git pull -q --rebase && git push -q && exit 0
             sleep $((attempt * 10))
