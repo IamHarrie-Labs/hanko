@@ -431,15 +431,19 @@ def cmd_review(args: argparse.Namespace) -> int:
 
 
 def _interpreter(args: argparse.Namespace):
-    """keyword (default: pure, free, what every fixture and test uses) or llm.
+    """keyword (default: pure, free, what every fixture and test uses), lexicon
+    (keyword plus token names, for headline feeds), or llm.
 
     The llm interpreter's readings are frozen into each record exactly like
     keyword readings, so replay never calls the model either way.
     """
-    from .decision import KeywordInterpreter, LlmInterpreter
+    from .decision import KeywordInterpreter, LexiconInterpreter, LlmInterpreter
 
-    if getattr(args, "interpreter", "keyword") == "llm":
+    choice = getattr(args, "interpreter", "keyword")
+    if choice == "llm":
         return LlmInterpreter(model=getattr(args, "model", None) or "grok-4.3")
+    if choice == "lexicon":
+        return LexiconInterpreter()
     return KeywordInterpreter()
 
 
@@ -513,6 +517,7 @@ def cmd_sweep(args: argparse.Namespace) -> int:
         resolve=_sweep_resolver(args),
         as_of=_sweep_as_of(args),
         samples=SampleTrail(args.samples) if args.samples else None,
+        lookback_hours=args.lookback_hours,
     )
     print(report.explain())
     _report_interpreter(interpreter)
@@ -524,15 +529,19 @@ def cmd_ots_status(args: argparse.Namespace) -> int:
 
     Confirmation means a Bitcoin block, already mined after this proof was
     submitted, now includes it -- usually a few hours after stamping, never
-    instant. Re-run this later; there is nothing to upgrade in-process.
+    instant. With --upgrade, the calendars are asked for that block's
+    attestation and the proof file is rewritten with it.
     """
     try:
-        from .otstamp import is_confirmed, load_proof
+        from .otstamp import is_confirmed, load_proof, save_proof, upgrade_proof
     except ImportError:
         print("needs the 'sealing' extra: pip install -e .[sealing]")
         return 1
 
     proof = load_proof(args.path)
+    if args.upgrade and not is_confirmed(proof) and upgrade_proof(proof):
+        save_proof(proof, args.path)
+        print("upgraded: " + str(args.path))
     if is_confirmed(proof):
         print("confirmed: " + str(args.path))
         return 0
@@ -597,6 +606,7 @@ def cmd_seal(args: argparse.Namespace) -> int:
         resolve=_sweep_resolver(args),
         as_of=_sweep_as_of(args),
         samples=SampleTrail(args.samples) if args.samples else None,
+        lookback_hours=args.lookback_hours,
     )
     manifest = build_manifest(report, watchlist, policy)
     path = save_manifest(manifest, args.manifest_dir)
@@ -630,6 +640,15 @@ def cmd_seal(args: argparse.Namespace) -> int:
     print("--- post text ---")
     print(manifest.post_text(repo_url=args.repo_url or ""))
     return 1 if report.failures else 0
+
+
+def cmd_live_summary(args: argparse.Namespace) -> int:
+    """Summarise the committed live ledger for the /ledger page."""
+    from .live import write_summary
+
+    path = write_summary(args.dir, args.out)
+    print("wrote " + str(path))
+    return 0
 
 
 def cmd_scorecard(args: argparse.Namespace) -> int:
@@ -688,8 +707,8 @@ def build_parser() -> argparse.ArgumentParser:
     decide_p.add_argument("--as-of", dest="as_of", help="RFC3339, for reproducible runs")
     decide_p.add_argument("--fixture", type=Path)
     decide_p.add_argument("--ledger", type=Path, default=Path("decisions.jsonl"))
-    decide_p.add_argument("--interpreter", choices=("keyword", "llm"), default="keyword",
-        help="keyword: pure word list (default). llm: a model reads the posts, code validates every reading")
+    decide_p.add_argument("--interpreter", choices=("keyword", "lexicon", "llm"), default="keyword",
+        help="keyword: pure word list, cashtags only (default). lexicon: the same, plus token names. llm: a model reads the posts, code validates every reading")
     decide_p.add_argument("--model", default="grok-4.3", help="model for --interpreter llm")
     decide_p.set_defaults(func=cmd_decide)
 
@@ -720,9 +739,14 @@ def build_parser() -> argparse.ArgumentParser:
         "--fixture-dir", type=Path,
         help="read every source from <dir>/<name>.json instead of live transports",
     )
-    sweep.add_argument("--interpreter", choices=("keyword", "llm"), default="keyword",
-        help="keyword: pure word list (default). llm: a model reads the posts, code validates every reading")
+    sweep.add_argument("--interpreter", choices=("keyword", "lexicon", "llm"), default="keyword",
+        help="keyword: pure word list, cashtags only (default). lexicon: the same, plus token names. llm: a model reads the posts, code validates every reading")
     sweep.add_argument("--model", default="grok-4.3", help="model for --interpreter llm")
+    sweep.add_argument(
+        "--lookback-hours", dest="lookback_hours", type=float, default=None,
+        help="read only posts published in the last N hours; feeds that keep days of "
+        "history otherwise score as stale (default: read everything fetched)",
+    )
     sweep.set_defaults(func=cmd_sweep)
 
     seal = sub.add_parser("seal", help="run the watchlist, publish a numbered manifest of everything it did")
@@ -739,9 +763,14 @@ def build_parser() -> argparse.ArgumentParser:
         help="anchor manifest_digest to public OpenTimestamps calendars "
         "(needs the 'sealing' extra: pip install -e .[sealing])",
     )
-    seal.add_argument("--interpreter", choices=("keyword", "llm"), default="keyword",
-        help="keyword: pure word list (default). llm: a model reads the posts, code validates every reading")
+    seal.add_argument("--interpreter", choices=("keyword", "lexicon", "llm"), default="keyword",
+        help="keyword: pure word list, cashtags only (default). lexicon: the same, plus token names. llm: a model reads the posts, code validates every reading")
     seal.add_argument("--model", default="grok-4.3", help="model for --interpreter llm")
+    seal.add_argument(
+        "--lookback-hours", dest="lookback_hours", type=float, default=None,
+        help="read only posts published in the last N hours; feeds that keep days of "
+        "history otherwise score as stale (default: read everything fetched)",
+    )
     seal.set_defaults(func=cmd_seal)
 
     echo_p = sub.add_parser("echo-index", help="the Echo Index study: collect posts, or re-derive its numbers")
@@ -758,7 +787,14 @@ def build_parser() -> argparse.ArgumentParser:
 
     ots_status = sub.add_parser("ots-status", help="check whether a .ots proof has a Bitcoin confirmation yet")
     ots_status.add_argument("path", type=Path)
+    ots_status.add_argument("--upgrade", action="store_true",
+                            help="fetch the Bitcoin attestation from the calendars and save it into the proof")
     ots_status.set_defaults(func=cmd_ots_status)
+
+    live_p = sub.add_parser("live-summary", help="summarise the live ledger: what changed since the last run, most important first")
+    live_p.add_argument("--dir", type=Path, default=Path("live"))
+    live_p.add_argument("--out", type=Path, default=None, help="default: <dir>/summary.json")
+    live_p.set_defaults(func=cmd_live_summary)
 
     scorecard = sub.add_parser("scorecard", help="calibration and per-voice track record")
     scorecard.add_argument("--reviews", type=Path, default=Path("reviews.jsonl"))

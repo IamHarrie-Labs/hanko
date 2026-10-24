@@ -1,0 +1,36 @@
+{
+  "watchlist": [
+    {
+      "token": "BTC",
+      "sources": {
+        "telegram": ["WatcherGuru", "cointelegraph", "bitcoin", "BWEnews"],
+        "bluesky": ["btcbreakdown.com", "cryptovka.com", "chainestate.bsky.social"],
+        "rss": ["https://cointelegraph.com/rss", "https://decrypt.co/feed"]
+      }
+    },
+    {
+      "token": "ETH",
+      "sources": {
+        "telegram": ["cointelegraph", "DegenerateNews", "BWEnews", "CryptoRankNews"],
+        "bluesky": ["cryptovka.com", "chainestate.bsky.social"],
+        "rss": ["https://cointelegraph.com/rss", "https://decrypt.co/feed"]
+      }
+    },
+    {
+      "token": "SOL",
+      "sources": {
+        "telegram": ["cointelegraph", "DegenerateNews", "unfolded", "BWEnews"],
+        "bluesky": ["cryptovka.com", "chainestate.bsky.social"],
+        "rss": ["https://cointelegraph.com/rss", "https://decrypt.co/feed"]
+      }
+    },
+    {
+      "token": "BONK",
+      "sources": {
+        "telegram": ["DegenerateNews", "BWEnews", "unfolded"],
+        "bluesky": ["cryptovka.com"],
+        "rss": ["https://www.coindesk.com/arc/outboundfeeds/rss/", "https://decrypt.co/feed"]
+      }
+    }
+  ]
+}

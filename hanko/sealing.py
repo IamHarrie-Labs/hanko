@@ -240,7 +240,7 @@ def save_manifest(manifest: RunManifest, out_dir: str | Path) -> Path:
 
 
 def write_bundle(manifest: RunManifest, report: SweepReport, store, out_dir: str | Path) -> Path:
-    import shutil
+    import gzip
 
     bundle = Path(out_dir) / manifest.run_id
     objects = bundle / "snapshots" / "objects"
@@ -256,9 +256,12 @@ def write_bundle(manifest: RunManifest, report: SweepReport, store, out_dir: str
             fh.write(json.dumps(snap.to_dict(), ensure_ascii=False) + "\n")
             if snap.payload_digest:
                 src = store._object_path(snap.payload_digest)
-                dst = objects / src.parent.name / src.name
+                dst = objects / src.parent.name / (src.name + ".gz")
                 dst.parent.mkdir(parents=True, exist_ok=True)
-                shutil.copyfile(src, dst)
+                # Raw page captures run to half a megabyte; gzip cuts a
+                # bundle about eight-fold. mtime=0 keeps the file bytes
+                # the same for the same object, run after run.
+                dst.write_bytes(gzip.compress(src.read_bytes(), compresslevel=9, mtime=0))
     return bundle
 
 
@@ -316,10 +319,23 @@ def verify_run(manifest_path: str | Path, *, resolve_source=None) -> tuple[list[
     ots = Path(str(path) + ".ots")
     if ots.exists():
         try:
-            from .otstamp import is_confirmed, load_proof
+            from opentimestamps.core.notary import BitcoinBlockHeaderAttestation
 
-            state = "confirmed by a Bitcoin block" if is_confirmed(load_proof(ots)) else "pending"
-            passed.append("OpenTimestamps proof present: " + state)
+            from .otstamp import load_proof
+
+            proof = load_proof(ots)
+            if proof.file_digest.hex() != manifest.manifest_digest.removeprefix("sha256:"):
+                problems.append("the .ots proof is for a different digest than this manifest")
+            else:
+                heights = sorted({
+                    att.height for _, att in proof.timestamp.all_attestations()
+                    if isinstance(att, BitcoinBlockHeaderAttestation)
+                })
+                passed.append(
+                    "OpenTimestamps proof commits to manifest_digest; "
+                    + ("anchored in Bitcoin block " + str(heights[0])
+                       + " (any block explorer shows that block's time)" if heights else "pending")
+                )
         except ImportError:
             passed.append("OpenTimestamps proof present (install the 'sealing' extra to check it)")
     return problems, passed

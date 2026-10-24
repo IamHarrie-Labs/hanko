@@ -31,6 +31,7 @@
     </a>
     <div class="nav-links">
       <a href="try.html">Try it live</a>
+      <a href="ledger.html">Ledger</a>
       <a href="workbench.html">Workbench</a>
       <a href="drill.html">Drill</a>
       <a href="echo.html">Echo Index</a>
@@ -56,9 +57,10 @@
     <h2 id="j-start" class="label">Two minutes, if that is all you have</h2>
     <ol class="judge-steps">
       <li><a href="drill.html">Failure drill</a>: nine real failures injected into the real code, each defence computed live. One broke the first time it ran (D-18, now fixed).</li>
+      <li><a href="ledger.html">Live ledger</a>: a run sealed every three hours with no key, committed to the repository and anchored in Bitcoin. What changed since the last run comes first, and every decision is graded 72 hours later against conditions it wrote down in advance.</li>
       <li><a href="try.html">Try it live</a>: <code>exit_liquidity</code> on BONK, $50,000. An executable venue quote, the model's own figure beside it, and the model's error, while RYO's market data is down.</li>
       <li><a href="echo.html">Echo Index</a>: 2,094 real posts, Hanko's own echo check, a result published as found, and the bug it found in Hanko first.</li>
-      <li>From a clone, no keys: <code>pip install -e ".[dev]" &amp;&amp; pytest</code>, then <code>hanko verify-run runs/run_836b976720f63dc0.json</code>. This is the first live ENTER (BTC, 23 Oct). It is replayed decision by decision from the committed bundle, and its manifest is anchored on Bitcoin.</li>
+      <li>From a clone, no keys: <code>pip install -e ".[dev]" &amp;&amp; pytest</code>, then <code>hanko verify-run runs/run_836b976720f63dc0.json</code>. This is the first live ENTER (BTC, 23 Oct). It is replayed decision by decision from the committed bundle, and its manifest is anchored in Bitcoin block 972,817.</li>
     </ol>
   </section>
 
@@ -82,7 +84,7 @@
       <tbody>
         <tr><th scope="row">Real thinking (25)</th><td><code>--interpreter llm</code>, <code>tests/test_llm_interpreter.py</code></td><td>A model reads posts, including tokens named without cashtags, sarcasm and negation, and quotes the words its reading rests on. Code then checks every reading: a token the post never names is dropped, a quote that isn't verbatim is discarded, and an injected instruction produces nothing. The decision itself stays mechanical: evidence quality as a geometric mean, independence, the exit gate.</td></tr>
         <tr><th scope="row">Cause and effect (20)</th><td><a href="workbench.html?exclude=voice_gamma">/workbench</a></td><td>Remove one voice and the verdict flips from ENTER to PASS. The page names the rule that caused it, and shows every rule whose outcome moved, most important first.</td></tr>
-        <tr><th scope="row">Repeatability (10)</th><td><code>hanko audit</code>, <code>hanko verify-run</code></td><td>A decision re-derives from stored bytes to the identical id, with no cache and no model call. Each sealed run carries its own bundle and verifies from a bare clone. Its manifest is anchored on Bitcoin through OpenTimestamps.</td></tr>
+        <tr><th scope="row">Repeatability (10)</th><td><code>hanko audit</code>, <code>hanko verify-run</code></td><td>A decision re-derives from stored bytes to the identical id, with no cache and no model call. Each sealed run carries its own bundle and verifies from a bare clone; the scheduled workflow checks this on every run it commits. Manifests are anchored in Bitcoin through OpenTimestamps, and <code>hanko ots-status --upgrade</code> fetches the block attestation.</td></tr>
         <tr><th scope="row">Advanced execution (5)</th><td><a href="echo.html">/echo</a>, <code>DECISIONS.md</code></td><td>A reproducible study on real data that audited the agent's own echo detector. 18 recorded engineering decisions, several of them bugs found by the project's own checks.</td></tr>
       </tbody>
     </table></div>
@@ -108,8 +110,8 @@
       <caption class="sr-only">Track 2 rubric lines and where each is answered</caption>
       <thead><tr><th scope="col">Rubric line</th><th scope="col">Open</th><th scope="col">What to look for</th></tr></thead>
       <tbody>
-        <tr><th scope="row">Easy to read (25)</th><td><a href="workbench.html?exclude=voice_gamma">/workbench</a></td><td>What changed first (ENTER → PASS), then why, in one sentence per rule. Every sample input is labelled as sample.</td></tr>
-        <tr><th scope="row">Sorted by importance (25)</th><td><a href="workbench.html?exclude=voice_gamma">/workbench</a>, <a href="echo.html">/echo</a></td><td>The rule that decided the verdict comes first, then the rules that changed outcome, then those whose detail moved. Echoes are listed most similar first.</td></tr>
+        <tr><th scope="row">Easy to read (25)</th><td><a href="ledger.html">/ledger</a>, <a href="workbench.html?exclude=voice_gamma">/workbench</a></td><td>The ledger opens on what changed since the last run, then where each token stands, in words: the verdict, the rule behind it, and the condition that would prove it wrong. The workbench shows the same for one removed voice. Every sample input is labelled as sample.</td></tr>
+        <tr><th scope="row">Sorted by importance (25)</th><td><a href="ledger.html">/ledger</a>, <a href="workbench.html?exclude=voice_gamma">/workbench</a>, <a href="echo.html">/echo</a></td><td>On the ledger a flipped verdict ranks first, because it is the only change that would have moved money, then a resized position, then a large move in evidence quality. On the workbench the deciding rule comes first. Echoes are listed most similar first.</td></tr>
         <tr><th scope="row">Works for everyone (10)</th><td>any page, keyboard only</td><td>A skip link and a visible focus ring, results announced through live regions, native controls only, tables with headers and captions, no information carried by colour alone (HELD and BROKE are words), and reduced-motion respected.</td></tr>
       </tbody>
     </table></div>
@@ -117,7 +119,7 @@
 
   <section aria-labelledby="j-limits">
     <h2 id="j-limits" class="label">What is not proven yet</h2>
-    <p class="section-lede">In full in <a href="https://github.com/IamHarrie-Labs/hanko" data-repo-path>LIMITATIONS.md</a>. In short: RYO's market data has failed on every live call made with this key since 2026-09-28 (a ticket is open), so live decisions run on venue facts and lack RYO's safety and technical fields. There is no calibration curve from a long live record yet. And the first two sealed runs predate replay bundles, so they can no longer be replayed (D-17).</p>
+    <p class="section-lede">In full in <a href="https://github.com/IamHarrie-Labs/hanko" data-repo-path>LIMITATIONS.md</a>. In short: RYO's market data has failed on every live call made with this key since 2026-09-28 (a ticket is open), so live decisions run on venue facts and lack RYO's safety and technical fields. The scheduled live record started on 24 Oct, so it is weeks long, not months, and it reads posts with a word list so it can run with no key. And the first two sealed runs predate replay bundles, so they can no longer be replayed (D-17).</p>
   </section>
 </main>
 
@@ -125,7 +127,7 @@
   <div class="shell band-inner" style="padding-top: 56px; padding-bottom: 56px">
     <div class="colophon">
       <span>Hanko 判子 · RYO-CHAN Hackathon 2026</span>
-      <span><span data-stat="tests">335</span> tests · <a href="index.html">Home</a> · <a href="https://github.com/IamHarrie-Labs/hanko" data-repo>GitHub</a></span>
+      <span><span data-stat="tests">345</span> tests · <a href="index.html">Home</a> · <a href="https://github.com/IamHarrie-Labs/hanko" data-repo>GitHub</a></span>
     </div>
   </div>
 </footer>

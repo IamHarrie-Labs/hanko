@@ -115,17 +115,25 @@ class KeywordInterpreter:
     interpreter_id = "keyword"
     interpreter_version = "1.0.0"
 
+    def subjects(self, text: str) -> list[str]:
+        """Tokens a post is about: cashtags only, for this interpreter."""
+        return sorted({m.group(1).upper() for m in _TICKER.finditer(text)})
+
+    def score(self, lowered: str, table: dict[str, float]) -> float:
+        """Substring matching, kept as it is so recorded readings re-derive."""
+        return _score(lowered, table)
+
     def read(self, evidence: Evidence) -> list[Reading]:
         text = evidence.text
         lowered = text.lower()
-        subjects = sorted({m.group(1).upper() for m in _TICKER.finditer(text)})
+        subjects = self.subjects(text)
         if not subjects:
             return []
 
-        bull = _score(lowered, _BULL)
-        bear = _score(lowered, _BEAR)
-        urgency = min(1.0, _score(lowered, _URGENT))
-        hedged = any(h in lowered for h in _HEDGE)
+        bull = self.score(lowered, _BULL)
+        bear = self.score(lowered, _BEAR)
+        urgency = min(1.0, self.score(lowered, _URGENT))
+        hedged = any(self.score(lowered, {h: 1.0}) for h in _HEDGE)
 
         if bull == bear:
             stance, conviction = Stance.NEUTRAL, 0.0

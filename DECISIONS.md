@@ -274,3 +274,50 @@ already holds a decision for that token at that `as_of`, the pass skips it
 before collecting anything. A restart therefore also spends no API calls.
 The new test runs two real sweeps against one store and one ledger, and
 expects one decision.
+
+## D-19: The first live ENTER's replay bundle was never committed
+
+`runs/run_836b976720f63dc0/` was written on 2026-10-23 and verified locally,
+and the README said it verified from a bare clone. It did not: `.gitignore`
+excludes `snapshots/` and `decisions.jsonl` everywhere, so git skipped the
+bundle without a word, and only the manifest and its proof were pushed.
+Found on 2026-10-24 while adding the scheduled sweep, by reading
+`git status` rather than trusting it.
+
+Fixed by un-ignoring bundle directories under `runs/` and `live/`. The bytes
+committed now are the same bytes written on the 23rd; `hanko verify-run`
+replays all four decisions from them. The lesson is the D-17 one again: a
+claim about a clone has to be checked on a clone. The scheduled workflow now
+runs `verify-run` on every run it commits.
+
+## D-20: A scheduled sweep that needs no key
+
+The live record was three runs. Rivals had hundreds. The constraint was
+money: an X search costs about $0.05, and RYO's market data has failed for
+this key since 2026-09-28. So `.github/workflows/sealed-sweep.yml` runs every
+three hours on keyless sources only: public Telegram channels, Bluesky
+accounts and RSS feeds, with facts from DexScreener. Each run is sealed with
+its bundle, stamped on OpenTimestamps, verified, and committed to `live/`.
+
+Three things had to change for that to mean anything:
+
+- **The keyword reader only sees cashtags.** News says "Bitcoin", not
+  "$BTC", so every decision abstained for want of evidence that was there.
+  `LexiconInterpreter` finds a token by cashtag, bare ticker or unambiguous
+  name, the same check the model interpreter's validator uses, and matches
+  stance words whole: substring matching read "long" inside "along" as
+  bullish on a real headline. It has its own interpreter id, so no keyword
+  decision changes id.
+- **Feeds return days of history.** Read whole, a Telegram page's median
+  post is days old and freshness rounds to zero. `--lookback-hours` reads
+  only posts from the window. It filters readings, not evidence, so every
+  post stays in the snapshot and replay sees identical inputs.
+- **A bundle was 2 MB.** Raw page captures dominate. Bundle objects are now
+  gzipped with a fixed mtime (about eight times smaller); the digest is
+  still over the uncompressed bytes, and older plain bundles still verify.
+
+Also: proofs were never upgraded, so every `.ots` file said `pending`
+forever. `hanko ots-status --upgrade` fetches the Bitcoin attestation from
+the calendars. All three committed proofs confirmed on the first try; the
+first live ENTER is in block 972,817, mined 35 minutes after it was sealed.
+`verify-run` now also checks the proof commits to the manifest digest.

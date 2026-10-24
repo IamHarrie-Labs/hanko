@@ -9,3 +9,12 @@ __pycache__/
 .env
 site/api/_vendor/
 .hanko-live/
+
+# The scheduled sweep's ledgers and sealed runs are the published record.
+!live/decisions.jsonl
+!live/reviews.jsonl
+!live/samples.jsonl
+!live/runs/**/decisions.jsonl
+!runs/**/decisions.jsonl
+!runs/*/snapshots/
+!live/runs/*/snapshots/

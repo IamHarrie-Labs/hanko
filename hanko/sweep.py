@@ -22,7 +22,7 @@ from __future__ import annotations
 
 import json
 from dataclasses import dataclass
-from datetime import datetime
+from datetime import datetime, timedelta
 from pathlib import Path
 from typing import Any, Callable
 
@@ -232,6 +232,23 @@ def _venue_facts(
     return replace(facts, **filled), [], snap.snapshot_id, sources
 
 
+def _recent(evidence: list, as_of: datetime, lookback_hours: float | None) -> list:
+    """Evidence published inside the lookback window, for reading.
+
+    An X search returns a window; a Telegram page or an RSS feed returns
+    whatever it still holds, often days of it. Read whole, a feed's median
+    post is days old and freshness decays to zero however much was said in
+    the last hour. Only readings are filtered: every post stays in the
+    snapshot and in the decision's evidence, so replay sees the same inputs
+    and the posts left out remain inspectable. Undated posts are left out,
+    since nothing shows they are recent.
+    """
+    if lookback_hours is None:
+        return evidence
+    start = as_of - timedelta(hours=lookback_hours)
+    return [e for e in evidence if e.published_at is not None and start <= e.published_at <= as_of]
+
+
 def collect_and_decide(
     entry: WatchEntry,
     store: SnapshotStore,
@@ -241,6 +258,7 @@ def collect_and_decide(
     policy: Policy,
     as_of: datetime,
     tool_prefix: str = "ryomcp:",
+    lookback_hours: float | None = None,
 ) -> DecisionRecord:
     """Collect everything configured for one token and reach a verdict.
 
@@ -263,7 +281,7 @@ def collect_and_decide(
     if venue_snapshot:
         snapshot_ids.append(venue_snapshot)
 
-    readings = read_all(interpreter, evidence)
+    readings = read_all(interpreter, _recent(evidence, as_of, lookback_hours))
     sources_requested = (
         len(entry.evidence_sources) + len(entry.fact_tools) + (1 if venue_snapshot else 0)
     )
@@ -280,7 +298,11 @@ def collect_and_decide(
             sources_requested=max(1, sources_requested),
             interpreter_id=interpreter.interpreter_id,
             interpreter_version=interpreter.interpreter_version,
-            notes={"sources_requested": sources_requested, **({"venue_fact_sources": venue_sources} if venue_sources else {})},
+            notes={
+                "sources_requested": sources_requested,
+                **({"venue_fact_sources": venue_sources} if venue_sources else {}),
+                **({"lookback_hours": lookback_hours} if lookback_hours is not None else {}),
+            },
         ),
         policy,
     )
@@ -297,6 +319,7 @@ def fresh_observations(
     tool_prefix: str = "ryomcp:",
     trail: SampleTrail | None = None,
     since: datetime | None = None,
+    lookback_hours: float | None = None,
 ) -> Observations:
     """What review needs: a fresh look, not the frozen decision-time one.
 
@@ -317,7 +340,7 @@ def fresh_observations(
     # Review needs liquidity too: the exit falsifier checks it.
     facts, _, _, _ = _venue_facts(entry, store, resolve, facts, as_of=as_of)
 
-    readings = read_all(interpreter, evidence)
+    readings = read_all(interpreter, _recent(evidence, as_of, lookback_hours))
     convergence = assess_convergence(
         entry.token.upper(), readings, {e.evidence_id: e for e in evidence}, policy
     )
@@ -419,6 +442,7 @@ def run_sweep(
     as_of: datetime,
     tool_prefix: str = "ryomcp:",
     samples: SampleTrail | None = None,
+    lookback_hours: float | None = None,
 ) -> SweepReport:
     """One pass: decide on everything watched, then grade what's due.
 
@@ -460,6 +484,7 @@ def run_sweep(
                 policy=policy,
                 as_of=as_of,
                 tool_prefix=tool_prefix,
+                lookback_hours=lookback_hours,
             )
         except Exception as exc:  # noqa: BLE001 -- reported, not fatal to the sweep
             entry_results.append(
@@ -512,6 +537,7 @@ def run_sweep(
                 tool_prefix=tool_prefix,
                 trail=samples,
                 since=due_record.decided_at,
+                lookback_hours=lookback_hours,
             )
             review = reviews.append(review_decision(due_record, obs))
             review_results.append(ReviewResult(due_record.decision_id, due_record.subject, review))

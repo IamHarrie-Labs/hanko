@@ -100,6 +100,53 @@ def is_confirmed(proof: DetachedTimestampFile) -> bool:
     )
 
 
+def _walk(stamp: Timestamp):
+    yield stamp
+    for child in stamp.ops.values():
+        yield from _walk(child)
+
+
+def upgrade_proof(
+    proof: DetachedTimestampFile,
+    *,
+    calendars: tuple[str, ...] = DEFAULT_CALENDARS,
+    timeout: float = 15.0,
+) -> bool:
+    """Ask each calendar for the Bitcoin attestation of its pending receipt.
+
+    A stamp holds only calendar promises. Once a block includes the
+    calendar's aggregate, the calendar can return the path from this digest
+    to that block header; merging it in is what turns `pending` into
+    `confirmed`. Returns True if anything was added. Only calendars in the
+    configured set are asked, so a proof cannot steer this to a URL of its
+    choosing.
+    """
+    from opentimestamps.core.notary import PendingAttestation
+
+    changed = False
+    for sub in list(_walk(proof.timestamp)):
+        for att in list(sub.attestations):
+            if not isinstance(att, PendingAttestation):
+                continue
+            uri = att.uri.rstrip("/")
+            if uri not in calendars:
+                continue
+            try:
+                upgraded = RemoteCalendar(uri).get_timestamp(sub.msg, timeout=timeout)
+            except Exception:  # noqa: BLE001 -- not yet in a block, or the calendar is down
+                continue
+            before = len(list(sub.all_attestations()))
+            sub.merge(upgraded)
+            changed = changed or len(list(sub.all_attestations())) > before
+    return changed
+
+
+def save_proof(proof: DetachedTimestampFile, path: str | Path) -> None:
+    ctx = BytesSerializationContext()
+    proof.serialize(ctx)
+    Path(path).write_bytes(ctx.getbytes())
+
+
 def stamp_and_save(digest_hex: str, out_path: str | Path, **kwargs) -> Path:
     out_path = Path(out_path)
     out_path.parent.mkdir(parents=True, exist_ok=True)

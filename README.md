@@ -56,11 +56,19 @@ the [workbench](https://tryhanko.vercel.app/workbench), the
 
 ### What it has shown, live
 
+- **A ledger that grows every three hours, with no key.** A scheduled
+  workflow reads public Telegram, Bluesky and news voices on BTC, ETH, SOL
+  and BONK, decides, seals the run with its replay bundle, stamps it on
+  OpenTimestamps and commits it to [`live/`](live/). Every decision is graded
+  72 hours later against the conditions it wrote down first.
+  [/ledger](https://tryhanko.vercel.app/ledger) shows what changed since the
+  last run, most important first (D-20).
 - **A sealed live ENTER that anyone can re-derive.** BTC, 2026-10-23,
   `runs/run_836b976720f63dc0.json`. The manifest lists every watchlist entry,
-  including the PASS and both ABSTAINs. It is anchored on Bitcoin through
-  OpenTimestamps, and `hanko verify-run` replays all four decisions from the
-  committed bundle with no network and no key.
+  including the PASS and both ABSTAINs. It is anchored in Bitcoin block
+  972,817, mined 35 minutes after the seal, and `hanko verify-run` replays
+  all four decisions from the committed bundle with no network and no key.
+  (Until 2026-10-24 that bundle was not actually in the repository; D-19.)
 - **An exit cost measured, not modelled.** BONK, $50,000: the Jupiter quote
   says 2.3%. The skill's own constant-product model said 7.2%, and the report
   prints the 3.1x gap instead of hiding it.
@@ -587,6 +595,22 @@ Meant to be invoked by something that already knows how to schedule things:
 cron, a scheduled GitHub Action, Windows Task Scheduler. One pass and exit,
 not a loop that sleeps in-process. A failed run is a failed invocation, not a
 process to go find and kill.
+
+This repository runs one. [`.github/workflows/sealed-sweep.yml`](.github/workflows/sealed-sweep.yml)
+seals [`watchlist.live.json`](watchlist.live.json) every three hours with no
+key at all, then verifies the run from its committed files, upgrades any
+pending Bitcoin proofs, and writes `live/summary.json` for
+[/ledger](https://tryhanko.vercel.app/ledger):
+
+```bash
+hanko seal --watchlist watchlist.live.json --ledger live/decisions.jsonl   --reviews live/reviews.jsonl --samples live/samples.jsonl   --manifest-dir live/runs --interpreter lexicon --lookback-hours 24 --ots
+hanko live-summary --dir live
+```
+
+`--interpreter lexicon` is the keyword reader taught to recognise "Bitcoin"
+as well as "$BTC", matching words whole. `--lookback-hours 24` reads only
+the last day of a feed, since a Telegram page or an RSS feed keeps days of
+history that would otherwise score as stale (D-20).
 
 ```bash
 hanko sweep --watchlist fixtures/sweep_demo/watchlist.json \

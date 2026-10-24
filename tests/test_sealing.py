@@ -265,10 +265,27 @@ class TestBundle:
 
         path, _ = self._seal(tmp_path)
         bundle = path.parent / json.loads(path.read_text(encoding="utf-8"))["run_id"]
-        obj = next((bundle / "snapshots" / "objects").rglob("*.json"))
-        obj.write_text(obj.read_text(encoding="utf-8").replace("voice", "VOICE"), encoding="utf-8")
+        import gzip
+
+        obj = next((bundle / "snapshots" / "objects").rglob("*.json.gz"))
+        text = gzip.decompress(obj.read_bytes()).decode("utf-8")
+        obj.write_bytes(gzip.compress(text.replace("voice", "VOICE").encode("utf-8")))
         problems, _ = verify_run(path)
         assert problems  # the object no longer hashes to its address
+
+    def test_an_uncompressed_bundle_still_verifies(self, tmp_path):
+        """Bundles sealed before objects were gzipped (run_836b...) keep working."""
+        import gzip
+
+        from hanko.sealing import verify_run
+
+        path, _ = self._seal(tmp_path)
+        bundle = path.parent / json.loads(path.read_text(encoding="utf-8"))["run_id"]
+        for obj in list((bundle / "snapshots" / "objects").rglob("*.json.gz")):
+            obj.with_name(obj.name.removesuffix(".gz")).write_bytes(gzip.decompress(obj.read_bytes()))
+            obj.unlink()
+        problems, _ = verify_run(path)
+        assert problems == []
 
     def test_a_run_without_a_bundle_says_so(self, tmp_path):
         from hanko.sealing import verify_run

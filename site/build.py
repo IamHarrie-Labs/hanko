@@ -32,7 +32,8 @@ INDEX = SITE_DIR / "index.html"
 # trail substitution is index-only in effect: docs.html has no
 # <pre id="trail"> for the regex to match, so it is a safe no-op there.
 PAGES = (INDEX, SITE_DIR / "docs.html", SITE_DIR / "try.html", SITE_DIR / "workbench.html",
-         SITE_DIR / "drill.html", SITE_DIR / "judges.html", SITE_DIR / "echo.html")
+         SITE_DIR / "drill.html", SITE_DIR / "judges.html", SITE_DIR / "echo.html",
+         SITE_DIR / "ledger.html")
 
 # Fixed inputs, so the published trail is reproducible rather than
 # whatever the market happened to look like when the site was built.
@@ -197,7 +198,13 @@ def study_data() -> dict[str, str]:
         "sensitivity": json.loads((src / "sensitivity.json").read_text(encoding="utf-8")),
         "collection": json.loads((src / "collection.json").read_text(encoding="utf-8")),
     }
-    return {"data/echo-index.json": json.dumps(payload, indent=1, ensure_ascii=False) + chr(10)}
+    out = {"data/echo-index.json": json.dumps(payload, indent=1, ensure_ascii=False) + chr(10)}
+    # /ledger reads the live file from the repository first; this copy is
+    # its fallback when GitHub cannot be reached, as of the last deploy.
+    live = ROOT / "live" / "summary.json"
+    if live.exists():
+        out["data/live-summary.json"] = live.read_text(encoding="utf-8")
+    return out
 
 
 def main() -> int:

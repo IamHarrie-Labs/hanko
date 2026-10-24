@@ -13,13 +13,21 @@ such and on-chain only. RYO's safety and technical fields (safety score,
 ATR) stay missing. Each missing field is a recorded gap that lowers
 evidence quality and so position size; none of them is filled with a guess.
 
-**One live `ENTER`, not a track record.** The first live `ENTER` (BTC,
-`runs/run_836b976720f63dc0.json`, 2026-10-23) was small (1.64%, confidence
-0.33) because evidence quality only just cleared the floor. Its falsifiers
-come due on 2026-10-26. One sealed decision shows the lifecycle works. It is
-not evidence that the agent is right, and the scorecard's calibration buckets
-are still proven against synthetic review histories in tests, not a real
-series.
+**The live record is young, and read by a word list.** The scheduled sweep
+started on 2026-10-24 and seals a run every three hours, so by the deadline
+it holds a few weeks of decisions and the graded reviews of everything older
+than 72 hours: a real series, but a short one. To run with no key it reads
+posts with the lexicon reader, a word list, not the model. A word list
+cannot tell sarcasm from conviction, and news headlines rarely state a view,
+so most decisions are PASS or ABSTAIN. That is the honest output for news
+feeds; it is not a test of reading skill. The model interpreter is
+exercised in tests and in the hand-run seals, not on the schedule, because
+each run would cost money. The first live `ENTER` from X voices
+(`runs/run_836b976720f63dc0.json`) is one decision, graded on 2026-10-26.
+
+**Crypto Bluesky is thin.** Of the accounts a search turns up, three were
+posting on-topic in October 2026 and the schedule uses those. Most crypto
+voices with an audience are on X, which needs a paid key.
 
 **The first two sealed runs can no longer be replayed** (D-17). Their
 manifests and OpenTimestamps proofs still prove what was committed and when.

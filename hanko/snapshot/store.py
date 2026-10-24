@@ -3,6 +3,8 @@
 Layout under the store root:
 
     objects/<aa>/<sha256>.json   payload bytes, deduplicated by content
+                                 (.json.gz in run bundles: same digest, over
+                                 the uncompressed bytes)
     index.jsonl                  append-only envelope log, one JSON per line
 
 Two properties this buys, both of which the reasoning trail depends on:
@@ -19,6 +21,7 @@ agent needs that fact to size a position honestly.
 
 from __future__ import annotations
 
+import gzip
 import json
 import os
 from dataclasses import dataclass
@@ -245,9 +248,17 @@ class SnapshotStore:
 
     def load_payload(self, payload_digest: str) -> Any:
         path = self._object_path(payload_digest)
-        if not path.exists():
+        packed = path.with_name(path.name + ".gz")
+        if path.exists():
+            raw = path.read_bytes()
+        elif packed.exists():
+            # Run bundles store objects gzipped to keep the repo small. The
+            # digest is still checked over the uncompressed bytes, so a
+            # compressed copy proves exactly what a plain one would.
+            path = packed
+            raw = gzip.decompress(packed.read_bytes())
+        else:
             raise FileNotFoundError("no object for " + payload_digest)
-        raw = path.read_bytes()
         actual = digest_bytes(raw)
         if actual != payload_digest:
             raise IntegrityError(

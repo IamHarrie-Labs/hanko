@@ -11,6 +11,7 @@ from .ledger import (
 )
 from .policy import Policy
 from .quality import EvidenceQuality, Gap, GapKind, assess_quality
+from .lexicon import LexiconInterpreter
 from .llm_interpreter import LlmInterpreter, injection_suspect
 from .reading import Interpreter, KeywordInterpreter, Reading, Stance, read_all
 from .record import (
@@ -38,6 +39,7 @@ __all__ = [
     "GapKind",
     "Interpreter",
     "KeywordInterpreter",
+    "LexiconInterpreter",
     "LlmInterpreter",
     "MarketFacts",
     "Outcome",

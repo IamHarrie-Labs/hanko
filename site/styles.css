@@ -616,3 +616,25 @@ button:focus-visible, input:focus-visible, select:focus-visible, summary:focus-v
 .judge-table td:nth-child(2) { width: 15em; font-family: var(--mono); font-size: 12.5px; }
 .wb-fieldset { border: none; margin: 0; padding: 0; min-width: 0; }
 .wb-fieldset legend { padding: 0; margin-bottom: 8px; }
+
+/* ---- live ledger ---------------------------------------------------- */
+.ledger-changes, .ledger-reviews { list-style: none; padding: 0; display: grid; gap: 12px; }
+.ledger-change, .ledger-review { border: 1px solid var(--line-2); background: var(--surface); padding: 16px 20px; }
+.ledger-rank-3 { border-left: 4px solid var(--accent); }
+.ledger-rank-2 { border-left: 4px solid var(--ink); }
+.ledger-change-head { display: flex; flex-wrap: wrap; gap: 12px; align-items: baseline; }
+.ledger-token { font-family: var(--mono); font-weight: 700; letter-spacing: .04em; }
+.ledger-headline { font-weight: 600; }
+.ledger-why { margin: 8px 0 0; font-size: 14px; color: var(--body); }
+.ledger-sub { font-family: var(--mono); font-size: 12px; color: var(--muted); margin-top: 6px; }
+.ledger-wrong { margin: 0; padding-left: 18px; font-size: 13.5px; }
+.ledger-table td:nth-child(2) { width: 14em; }
+.verdict-tag { font-family: var(--mono); font-weight: 700; font-size: 12.5px; letter-spacing: .08em; }
+.verdict-enter { color: var(--good); }
+.verdict-pass { color: var(--ink); }
+.verdict-abstain { color: var(--muted); }
+.ledger-result { font-family: var(--mono); font-size: 12px; font-weight: 700; letter-spacing: .08em; }
+.ledger-result-held { color: var(--good); }
+.ledger-result-falsified { color: var(--accent-deep); }
+.ledger-result-inconclusive { color: var(--muted); }
+.ledger-runs a { word-break: break-all; }
