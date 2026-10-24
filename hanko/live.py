@@ -25,17 +25,27 @@ from .review import ReviewLedger, build_scorecard
 from .provenance import to_iso
 
 QUALITY_MOVE = 0.1  # a quality change this large is worth a line of its own
+SIZE_MOVE = 0.0025  # a quarter of a percentage point; smaller is rounding, not news
+VERDICT_ORDER = {"enter": 0, "pass": 1, "abstain": 2}
 
 
-def _deciding_rule(record: DecisionRecord) -> str:
-    """The one line that best explains the verdict."""
+def _rule_name(rule_id: str) -> str:
+    return rule_id.replace("_", " ")
+
+
+def _number(value: float) -> str:
+    return format(value, ",.0f") if abs(value) >= 1000 else format(value, ".6g")
+
+
+def _deciding_rule(record: DecisionRecord) -> dict[str, str]:
+    """The one rule that best explains the verdict, in its own words."""
     blocked = [r for r in record.rules if r.outcome is Outcome.BLOCKED]
-    if blocked:
-        return blocked[0].rule_id + ": " + blocked[0].detail
-    for rule in record.rules:
-        if rule.rule_id == "conviction":
-            return rule.rule_id + ": " + rule.detail
-    return record.rules[-1].rule_id + ": " + record.rules[-1].detail if record.rules else ""
+    rule = blocked[0] if blocked else next(
+        (r for r in record.rules if r.rule_id == "conviction"), record.rules[-1] if record.rules else None
+    )
+    if rule is None:
+        return {"rule": "", "detail": ""}
+    return {"rule": _rule_name(rule.rule_id), "detail": rule.detail}
 
 
 def _token_view(record: DecisionRecord) -> dict[str, Any]:
@@ -54,7 +64,7 @@ def _token_view(record: DecisionRecord) -> dict[str, Any]:
         "readings": len(record.readings),
         "because": _deciding_rule(record),
         "wrong_if": [
-            f.metric + " " + f.comparator + " " + format(f.threshold, ",.6g")
+            f.metric + " " + f.comparator + " " + _number(f.threshold)
             + " within " + format(f.horizon_hours, "g") + "h (" + f.note + ")"
             for f in record.falsifiers
         ],
@@ -70,7 +80,8 @@ def _change(prev: DecisionRecord, cur: DecisionRecord) -> dict[str, Any]:
         rank = 3
         lines.append(prev.verdict.value.upper() + " to " + cur.verdict.value.upper())
     if round(prev.size_fraction, 4) != round(cur.size_fraction, 4):
-        rank = max(rank, 2)
+        if abs(cur.size_fraction - prev.size_fraction) >= SIZE_MOVE:
+            rank = max(rank, 2)
         lines.append(
             "size " + format(prev.size_fraction * 100, ".2f") + "% to "
             + format(cur.size_fraction * 100, ".2f") + "%"
@@ -88,7 +99,7 @@ def _change(prev: DecisionRecord, cur: DecisionRecord) -> dict[str, Any]:
         "token": cur.subject,
         "rank": rank,
         "headline": "; ".join(lines) if lines else "no change",
-        "why": [r.rule_id + " now " + r.outcome.value + ": " + r.detail for r in moved],
+        "why": [_rule_name(r.rule_id) + " now " + r.outcome.value + ": " + r.detail for r in moved],
         "magnitude": round(abs(dq), 4),
     }
 
@@ -152,7 +163,10 @@ def summarize(live_dir: str | Path) -> dict[str, Any]:
             "anchored_runs": sum(1 for r in runs if r["ots"]["state"] == "confirmed"),
         },
         "changes": changes,
-        "tokens": [_token_view(recs[-1]) for _, recs in sorted(by_token.items())],
+        "tokens": sorted(
+            (_token_view(recs[-1]) for recs in by_token.values()),
+            key=lambda t: (VERDICT_ORDER.get(t["verdict"], 9), -t["size_pct"], t["token"]),
+        ),
         "reviews": [
             {
                 "decision_id": r.decision_id,

@@ -46,26 +46,6 @@
  ],
  "tokens": [
   {
-   "token": "BONK",
-   "decision_id": "dec_2a07562ddcb15e5bcf819a0f",
-   "decided_at": "2026-10-24T06:46:20.875013Z",
-   "review_at": "2026-10-27T06:46:20.875013Z",
-   "verdict": "abstain",
-   "size_pct": 0.0,
-   "confidence": 0.0,
-   "quality": 0.0,
-   "independent_voices": 0,
-   "voices": [],
-   "echoes": 0,
-   "readings": 0,
-   "because": "evidence_present: no readings reference BONK",
-   "wrong_if": [
-    "independent_voices > 1 within 72h (verdict flips if another independent voice converges)",
-    "volume_24h_usd > 2.06461e+06 within 72h (verdict is worth revisiting if volume rises 50%)"
-   ],
-   "gaps": 3
-  },
-  {
    "token": "BTC",
    "decision_id": "dec_02797bf2027bce017f46be29",
    "decided_at": "2026-10-24T06:46:20.875013Z",
@@ -86,10 +66,13 @@
    ],
    "echoes": 0,
    "readings": 22,
-   "because": "conviction: mean bullish conviction 0.63",
+   "because": {
+    "rule": "conviction",
+    "detail": "mean bullish conviction 0.63"
+   },
    "wrong_if": [
-    "price_usd < 68,541.8 within 72h (thesis fails if price falls 15% from entry)",
-    "liquidity_usd < 2.37505e+08 within 72h (exit assumption fails if depth drops 30%)",
+    "price_usd < 68,542 within 72h (thesis fails if price falls 15% from entry)",
+    "liquidity_usd < 237,505,217 within 72h (exit assumption fails if depth drops 30%)",
     "independent_voices < 2 within 72h (entry rested on convergence that no longer holds)"
    ],
    "gaps": 3
@@ -114,10 +97,13 @@
    ],
    "echoes": 0,
    "readings": 12,
-   "because": "direction: evidence does not argue for entry",
+   "because": {
+    "rule": "direction",
+    "detail": "evidence does not argue for entry"
+   },
    "wrong_if": [
     "independent_voices > 6 within 72h (verdict flips if another independent voice converges)",
-    "volume_24h_usd > 2.3826e+08 within 72h (verdict is worth revisiting if volume rises 50%)"
+    "volume_24h_usd > 238,259,782 within 72h (verdict is worth revisiting if volume rises 50%)"
    ],
    "gaps": 3
   },
@@ -138,10 +124,36 @@
    ],
    "echoes": 0,
    "readings": 4,
-   "because": "direction: evidence does not argue for entry",
+   "because": {
+    "rule": "direction",
+    "detail": "evidence does not argue for entry"
+   },
    "wrong_if": [
     "independent_voices > 3 within 72h (verdict flips if another independent voice converges)",
-    "volume_24h_usd > 2.43311e+08 within 72h (verdict is worth revisiting if volume rises 50%)"
+    "volume_24h_usd > 243,311,207 within 72h (verdict is worth revisiting if volume rises 50%)"
+   ],
+   "gaps": 3
+  },
+  {
+   "token": "BONK",
+   "decision_id": "dec_2a07562ddcb15e5bcf819a0f",
+   "decided_at": "2026-10-24T06:46:20.875013Z",
+   "review_at": "2026-10-27T06:46:20.875013Z",
+   "verdict": "abstain",
+   "size_pct": 0.0,
+   "confidence": 0.0,
+   "quality": 0.0,
+   "independent_voices": 0,
+   "voices": [],
+   "echoes": 0,
+   "readings": 0,
+   "because": {
+    "rule": "evidence present",
+    "detail": "no readings reference BONK"
+   },
+   "wrong_if": [
+    "independent_voices > 1 within 72h (verdict flips if another independent voice converges)",
+    "volume_24h_usd > 2,064,607 within 72h (verdict is worth revisiting if volume rises 50%)"
    ],
    "gaps": 3
   }

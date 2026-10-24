@@ -36,7 +36,7 @@ def test_a_flipped_verdict_ranks_first_and_says_why(tmp_path):
     (change,) = summary["changes"]
     assert change["rank"] == 3
     assert change["headline"].startswith("ENTER to ABSTAIN")
-    assert any(line.startswith("evidence_present now blocked") for line in change["why"])
+    assert any(line.startswith("evidence present now blocked") for line in change["why"])
 
 
 def test_the_latest_decision_per_token_states_its_falsifiers(tmp_path):

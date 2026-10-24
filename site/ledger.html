@@ -132,7 +132,8 @@
       (v.enter || 0) + ' enter · ' + (v.pass || 0) + ' pass · ' + (v.abstain || 0) + ' abstain'));
     stats.appendChild(stat('Graded', String(t.reviews),
       (res.held || 0) + ' held · ' + (res.falsified || 0) + ' proved wrong · ' + (res.inconclusive || 0) + ' uncheckable'));
-    stats.appendChild(stat('Running since', d.first_decision_at ? when(d.first_decision_at).slice(0, 10) : '–',
+    stats.appendChild(stat('Running since', d.first_decision_at
+      ? new Date(d.first_decision_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', timeZone: 'UTC' }) : '–',
       d.last_decision_at ? 'last run ' + ago(d.last_decision_at) : ''));
     document.getElementById('ledger-fresh').textContent = source === 'live'
       ? 'Read just now from the repository, so this is the latest committed run.'
@@ -160,7 +161,10 @@
       td.appendChild(el('div', 'ledger-sub', 'size ' + k.size_pct + '% · confidence ' + k.confidence));
       td.appendChild(el('div', 'ledger-sub', 'quality ' + k.quality + ' · ' + k.independent_voices + ' independent voices'));
       tr.appendChild(td);
-      tr.appendChild(el('td', null, k.because));
+      var because = el('td');
+      because.appendChild(el('div', null, k.because.detail));
+      if (k.because.rule) because.appendChild(el('div', 'ledger-sub', 'rule: ' + k.because.rule));
+      tr.appendChild(because);
       var wrong = el('td'); var ul = el('ul', 'ledger-wrong');
       k.wrong_if.forEach(function (w) { ul.appendChild(el('li', null, w)); });
       wrong.appendChild(ul);
