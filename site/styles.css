@@ -4,8 +4,8 @@
   --ink:       #171614;
   --on-ink:    #F4F2EF;
   --body:      #3B3833;
-  --muted:     #6B6660;
-  --muted-ink: #7C766E;
+  --muted:     #625E58;
+  --muted-ink: #8C857C;
   --dim-ink:   #B5AFA7;
   --line:      rgba(23, 22, 20, .14);
   --line-2:    rgba(23, 22, 20, .18);
@@ -13,8 +13,8 @@
 
   --accent:      #E357AE;
   --accent-lift: #FF9AD9;
-  --accent-deep: #B0348A;
-  --good:        #2E7D45;
+  --accent-deep: #A2307F;
+  --good:        #29703E;
   --good-lift:   #A9E0B4;
 
   --shell: 1180px;
@@ -38,6 +38,8 @@ body {
 
 a { color: var(--ink); text-decoration: none; }
 a:hover { color: var(--accent); }
+/* A link inside running text is underlined, so it is not told apart by colour alone. */
+:where(p, li, td, dd, blockquote, figcaption) a:not(.btn) { text-decoration: underline; text-underline-offset: 2px; }
 a:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 2px; }
 
 h1, h2 { text-wrap: balance; }
@@ -139,7 +141,7 @@ h1 { font-size: 62px; line-height: 1.02; letter-spacing: -.032em; font-weight: 7
 .try-field { display: flex; flex-direction: column; gap: 8px; }
 .try-label {
   font-family: var(--mono); font-size: 10.5px; letter-spacing: .1em;
-  color: var(--muted-ink); text-transform: uppercase;
+  color: var(--muted); text-transform: uppercase;
 }
 .try-field select, .try-field input {
   font-family: var(--mono); font-size: 14px; padding: 10px 12px;
@@ -476,10 +478,10 @@ h1 { font-size: 62px; line-height: 1.02; letter-spacing: -.032em; font-weight: 7
 .doc-live { margin: 14px 0; }
 .doc-live-head {
   display: flex; justify-content: space-between; align-items: center; gap: 12px;
-  font-family: var(--mono); font-size: 10.5px; letter-spacing: .1em; color: var(--muted-ink);
+  font-family: var(--mono); font-size: 10.5px; letter-spacing: .1em; color: var(--muted);
   margin-bottom: 6px;
 }
-.doc-live-head .live-tag { color: var(--accent-lift); }
+.doc-live-head .live-tag { color: var(--accent-deep); }
 .doc-live pre {
   background: var(--ink); color: #DCD8D2; border-radius: 3px; padding: 18px 20px;
   margin: 0; font-family: var(--mono); font-size: 12.4px; line-height: 1.7;
@@ -638,3 +640,8 @@ button:focus-visible, input:focus-visible, select:focus-visible, summary:focus-v
 .ledger-result-falsified { color: var(--accent-deep); }
 .ledger-result-inconclusive { color: var(--muted); }
 .ledger-runs a { word-break: break-all; }
+
+/* Accessibility: links in the footer line are underlined like links in text,
+   and checkboxes meet the 24px minimum target size. */
+.colophon a { text-decoration: underline; text-underline-offset: 2px; }
+input[type="checkbox"] { width: 24px; height: 24px; accent-color: var(--ink); flex: none; }
