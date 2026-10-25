@@ -1,0 +1,1167 @@
+[
+ {
+  "id": "hook",
+  "tone": "dark",
+  "text": "Five accounts say buy. Is that five opinions? Or one opinion, copied four times?",
+  "words": [
+   {
+    "text": "Five",
+    "start": 0.154625,
+    "end": 0.360791
+   },
+   {
+    "text": "accounts",
+    "start": 0.373708,
+    "end": 0.837624
+   },
+   {
+    "text": "say",
+    "start": 0.837625,
+    "end": 1.069583
+   },
+   {
+    "text": "buy",
+    "start": 1.082458,
+    "end": 1.533499
+   },
+   {
+    "text": "Is",
+    "start": 1.933,
+    "end": 2.048958
+   },
+   {
+    "text": "that",
+    "start": 2.048958,
+    "end": 2.255124
+   },
+   {
+    "text": "five",
+    "start": 2.255166,
+    "end": 2.538666
+   },
+   {
+    "text": "opinions",
+    "start": 2.551541,
+    "end": 3.273207
+   },
+   {
+    "text": "Or",
+    "start": 3.659791,
+    "end": 3.853082
+   },
+   {
+    "text": "one",
+    "start": 3.853083,
+    "end": 4.020624
+   },
+   {
+    "text": "opinion",
+    "start": 4.020625,
+    "end": 4.600541
+   },
+   {
+    "text": "copied",
+    "start": 4.987125,
+    "end": 5.3995
+   },
+   {
+    "text": "four",
+    "start": 5.3995,
+    "end": 5.618583
+   },
+   {
+    "text": "times",
+    "start": 5.631458,
+    "end": 6.275791
+   }
+  ]
+ },
+ {
+  "id": "problem",
+  "tone": "light",
+  "text": "Most trading bots can't tell the difference. They count the noise, act on it, and keep no record of why.",
+  "words": [
+   {
+    "text": "Most",
+    "start": 0.090208,
+    "end": 0.438166
+   },
+   {
+    "text": "trading",
+    "start": 0.451041,
+    "end": 0.786082
+   },
+   {
+    "text": "bots",
+    "start": 0.798958,
+    "end": 1.224208
+   },
+   {
+    "text": "can't",
+    "start": 1.237125,
+    "end": 1.50775
+   },
+   {
+    "text": "tell",
+    "start": 1.50775,
+    "end": 1.688125
+   },
+   {
+    "text": "the",
+    "start": 1.688125,
+    "end": 1.752541
+   },
+   {
+    "text": "difference",
+    "start": 1.752583,
+    "end": 2.384041
+   },
+   {
+    "text": "They",
+    "start": 2.809291,
+    "end": 2.912374
+   },
+   {
+    "text": "count",
+    "start": 2.912375,
+    "end": 3.221666
+   },
+   {
+    "text": "the",
+    "start": 3.221666,
+    "end": 3.286082
+   },
+   {
+    "text": "noise",
+    "start": 3.298958,
+    "end": 3.930416
+   },
+   {
+    "text": "act",
+    "start": 4.317,
+    "end": 4.57475
+   },
+   {
+    "text": "on",
+    "start": 4.57475,
+    "end": 4.729375
+   },
+   {
+    "text": "it",
+    "start": 4.74225,
+    "end": 4.896875
+   },
+   {
+    "text": "and",
+    "start": 5.115958,
+    "end": 5.360791
+   },
+   {
+    "text": "keep",
+    "start": 5.373708,
+    "end": 5.657208
+   },
+   {
+    "text": "no",
+    "start": 5.657208,
+    "end": 5.876291
+   },
+   {
+    "text": "record",
+    "start": 5.889166,
+    "end": 6.224207
+   },
+   {
+    "text": "of",
+    "start": 6.224208,
+    "end": 6.301541
+   },
+   {
+    "text": "why",
+    "start": 6.301541,
+    "end": 6.726791
+   }
+  ]
+ },
+ {
+  "id": "reveal",
+  "tone": "pink",
+  "text": "This is Hanko. A hanko is the seal you stamp in Japan to commit to something. Every decision here is stamped before the outcome is known.",
+  "words": [
+   {
+    "text": "This",
+    "start": 0.064416,
+    "end": 0.322166
+   },
+   {
+    "text": "is",
+    "start": 0.335041,
+    "end": 0.438124
+   },
+   {
+    "text": "Hanko",
+    "start": 0.438125,
+    "end": 0.979375
+   },
+   {
+    "text": "A",
+    "start": 1.39175,
+    "end": 1.4432909
+   },
+   {
+    "text": "hanko",
+    "start": 1.443291,
+    "end": 2.100499
+   },
+   {
+    "text": "is",
+    "start": 2.113416,
+    "end": 2.280916
+   },
+   {
+    "text": "the",
+    "start": 2.280916,
+    "end": 2.383999
+   },
+   {
+    "text": "seal",
+    "start": 2.396916,
+    "end": 2.706166
+   },
+   {
+    "text": "you",
+    "start": 2.706166,
+    "end": 2.796374
+   },
+   {
+    "text": "stamp",
+    "start": 2.796375,
+    "end": 3.157208
+   },
+   {
+    "text": "in",
+    "start": 3.170083,
+    "end": 3.260291
+   },
+   {
+    "text": "Japan",
+    "start": 3.273208,
+    "end": 3.827333
+   },
+   {
+    "text": "to",
+    "start": 3.840208,
+    "end": 3.956208
+   },
+   {
+    "text": "commit",
+    "start": 3.969083,
+    "end": 4.394333
+   },
+   {
+    "text": "to",
+    "start": 4.394333,
+    "end": 4.484541
+   },
+   {
+    "text": "something",
+    "start": 4.497416,
+    "end": 5.077332
+   },
+   {
+    "text": "Every",
+    "start": 5.489708,
+    "end": 5.747458
+   },
+   {
+    "text": "decision",
+    "start": 5.760291,
+    "end": 6.211332
+   },
+   {
+    "text": "here",
+    "start": 6.224208,
+    "end": 6.623708
+   },
+   {
+    "text": "is",
+    "start": 6.636583,
+    "end": 6.765458
+   },
+   {
+    "text": "stamped",
+    "start": 6.765458,
+    "end": 7.268041
+   },
+   {
+    "text": "before",
+    "start": 7.280916,
+    "end": 7.577291
+   },
+   {
+    "text": "the",
+    "start": 7.590208,
+    "end": 7.680416
+   },
+   {
+    "text": "outcome",
+    "start": 7.693291,
+    "end": 8.092791
+   },
+   {
+    "text": "is",
+    "start": 8.105666,
+    "end": 8.221666
+   },
+   {
+    "text": "known",
+    "start": 8.234541,
+    "end": 8.685582
+   }
+  ]
+ },
+ {
+  "id": "read",
+  "tone": "light",
+  "text": "It reads public voices on Telegram, Bluesky and X. A repost, a forward, or a copy with an ad pasted on counts as one voice. Not two.",
+  "words": [
+   {
+    "text": "It",
+    "start": 0.077333,
+    "end": 0.193333
+   },
+   {
+    "text": "reads",
+    "start": 0.206166,
+    "end": 0.502541
+   },
+   {
+    "text": "public",
+    "start": 0.515458,
+    "end": 0.876291
+   },
+   {
+    "text": "voices",
+    "start": 0.889166,
+    "end": 1.365957
+   },
+   {
+    "text": "on",
+    "start": 1.378875,
+    "end": 1.546375
+   },
+   {
+    "text": "Telegram",
+    "start": 1.546375,
+    "end": 2.177833
+   },
+   {
+    "text": "Bluesky",
+    "start": 2.603083,
+    "end": 3.273166
+   },
+   {
+    "text": "and",
+    "start": 3.337625,
+    "end": 3.556708
+   },
+   {
+    "text": "X",
+    "start": 3.634,
+    "end": 4.05925
+   },
+   {
+    "text": "A",
+    "start": 4.445875,
+    "end": 4.523208
+   },
+   {
+    "text": "repost",
+    "start": 4.536083,
+    "end": 5.244833
+   },
+   {
+    "text": "a",
+    "start": 5.476791,
+    "end": 5.5283319
+   },
+   {
+    "text": "forward",
+    "start": 5.54125,
+    "end": 6.0825
+   },
+   {
+    "text": "or",
+    "start": 6.494833,
+    "end": 6.649458
+   },
+   {
+    "text": "a",
+    "start": 6.662375,
+    "end": 6.7010409
+   },
+   {
+    "text": "copy",
+    "start": 6.701041,
+    "end": 7.152082
+   },
+   {
+    "text": "with",
+    "start": 7.164958,
+    "end": 7.319583
+   },
+   {
+    "text": "an",
+    "start": 7.332458,
+    "end": 7.474208
+   },
+   {
+    "text": "ad",
+    "start": 7.487125,
+    "end": 7.744875
+   },
+   {
+    "text": "pasted",
+    "start": 7.75775,
+    "end": 8.170083
+   },
+   {
+    "text": "on",
+    "start": 8.170083,
+    "end": 8.350499
+   },
+   {
+    "text": "counts",
+    "start": 8.363416,
+    "end": 8.827332
+   },
+   {
+    "text": "as",
+    "start": 8.904625,
+    "end": 9.149458
+   },
+   {
+    "text": "one",
+    "start": 9.162375,
+    "end": 9.45875
+   },
+   {
+    "text": "voice",
+    "start": 9.45875,
+    "end": 10.012875
+   },
+   {
+    "text": "Not",
+    "start": 10.386583,
+    "end": 10.657208
+   },
+   {
+    "text": "two",
+    "start": 10.670083,
+    "end": 11.095333
+   }
+  ]
+ },
+ {
+  "id": "decide",
+  "tone": "dark",
+  "text": "Then it decides. Enter, pass, or admit it can't tell. It sizes the position, and writes down in advance exactly what would prove it wrong.",
+  "words": [
+   {
+    "text": "Then",
+    "start": 0.064416,
+    "end": 0.219041
+   },
+   {
+    "text": "it",
+    "start": 0.231958,
+    "end": 0.309291
+   },
+   {
+    "text": "decides",
+    "start": 0.322166,
+    "end": 1.121124
+   },
+   {
+    "text": "Enter",
+    "start": 1.50775,
+    "end": 1.958791
+   },
+   {
+    "text": "pass",
+    "start": 1.971666,
+    "end": 2.512916
+   },
+   {
+    "text": "or",
+    "start": 2.525791,
+    "end": 2.731957
+   },
+   {
+    "text": "admit",
+    "start": 2.731958,
+    "end": 3.092791
+   },
+   {
+    "text": "it",
+    "start": 3.105666,
+    "end": 3.195874
+   },
+   {
+    "text": "can't",
+    "start": 3.195875,
+    "end": 3.453625
+   },
+   {
+    "text": "tell",
+    "start": 3.4665,
+    "end": 3.866
+   },
+   {
+    "text": "It",
+    "start": 4.265458,
+    "end": 4.394333
+   },
+   {
+    "text": "sizes",
+    "start": 4.407208,
+    "end": 4.883999
+   },
+   {
+    "text": "the",
+    "start": 4.896916,
+    "end": 4.974207
+   },
+   {
+    "text": "position",
+    "start": 4.974208,
+    "end": 5.528333
+   },
+   {
+    "text": "and",
+    "start": 5.683,
+    "end": 5.889166
+   },
+   {
+    "text": "writes",
+    "start": 5.9665,
+    "end": 6.262875
+   },
+   {
+    "text": "down",
+    "start": 6.262875,
+    "end": 6.507708
+   },
+   {
+    "text": "in",
+    "start": 6.520625,
+    "end": 6.5721659
+   },
+   {
+    "text": "advance",
+    "start": 6.585041,
+    "end": 7.113374
+   },
+   {
+    "text": "exactly",
+    "start": 7.126291,
+    "end": 7.719082
+   },
+   {
+    "text": "what",
+    "start": 7.731958,
+    "end": 7.899499
+   },
+   {
+    "text": "would",
+    "start": 7.912375,
+    "end": 8.04125
+   },
+   {
+    "text": "prove",
+    "start": 8.054125,
+    "end": 8.311875
+   },
+   {
+    "text": "it",
+    "start": 8.32475,
+    "end": 8.453625
+   },
+   {
+    "text": "wrong",
+    "start": 8.4665,
+    "end": 8.930416
+   }
+  ]
+ },
+ {
+  "id": "seal",
+  "tone": "light",
+  "text": "Every run is sealed and anchored in a Bitcoin block. Change one byte, and the seal breaks. Anyone can check it, with no account and no key.",
+  "words": [
+   {
+    "text": "Every",
+    "start": 0.090208,
+    "end": 0.373708
+   },
+   {
+    "text": "run",
+    "start": 0.386583,
+    "end": 0.592749
+   },
+   {
+    "text": "is",
+    "start": 0.592791,
+    "end": 0.708749
+   },
+   {
+    "text": "sealed",
+    "start": 0.70875,
+    "end": 1.198458
+   },
+   {
+    "text": "and",
+    "start": 1.211333,
+    "end": 1.546374
+   },
+   {
+    "text": "anchored",
+    "start": 1.559291,
+    "end": 2.023207
+   },
+   {
+    "text": "in",
+    "start": 2.087625,
+    "end": 2.2165
+   },
+   {
+    "text": "a",
+    "start": 2.229375,
+    "end": 2.306708
+   },
+   {
+    "text": "Bitcoin",
+    "start": 2.306708,
+    "end": 2.757749
+   },
+   {
+    "text": "block",
+    "start": 2.770625,
+    "end": 3.221666
+   },
+   {
+    "text": "Change",
+    "start": 3.646916,
+    "end": 4.020624
+   },
+   {
+    "text": "one",
+    "start": 4.0335,
+    "end": 4.278333
+   },
+   {
+    "text": "byte",
+    "start": 4.278333,
+    "end": 4.613374
+   },
+   {
+    "text": "and",
+    "start": 4.626291,
+    "end": 4.729374
+   },
+   {
+    "text": "the",
+    "start": 4.729375,
+    "end": 4.806708
+   },
+   {
+    "text": "seal",
+    "start": 4.819583,
+    "end": 5.154624
+   },
+   {
+    "text": "breaks",
+    "start": 5.154625,
+    "end": 5.657208
+   },
+   {
+    "text": "Anyone",
+    "start": 6.030916,
+    "end": 6.417499
+   },
+   {
+    "text": "can",
+    "start": 6.417541,
+    "end": 6.559291
+   },
+   {
+    "text": "check",
+    "start": 6.572166,
+    "end": 6.829916
+   },
+   {
+    "text": "it",
+    "start": 6.842791,
+    "end": 7.036082
+   },
+   {
+    "text": "with",
+    "start": 7.229375,
+    "end": 7.396916
+   },
+   {
+    "text": "no",
+    "start": 7.409791,
+    "end": 7.680416
+   },
+   {
+    "text": "account",
+    "start": 7.693291,
+    "end": 8.221624
+   },
+   {
+    "text": "and",
+    "start": 8.337625,
+    "end": 8.49225
+   },
+   {
+    "text": "no",
+    "start": 8.505166,
+    "end": 8.711332
+   },
+   {
+    "text": "key",
+    "start": 8.724208,
+    "end": 9.136583
+   }
+  ]
+ },
+ {
+  "id": "exit",
+  "tone": "dark",
+  "text": "Before it buys, it checks it can sell. Selling fifty thousand dollars of BONK costs under three percent, from a real quote. The textbook formula said seven point six.",
+  "words": [
+   {
+    "text": "Before",
+    "start": 0.077333,
+    "end": 0.438166
+   },
+   {
+    "text": "it",
+    "start": 0.451041,
+    "end": 0.541249
+   },
+   {
+    "text": "buys",
+    "start": 0.54125,
+    "end": 1.10825
+   },
+   {
+    "text": "it",
+    "start": 1.301541,
+    "end": 1.404624
+   },
+   {
+    "text": "checks",
+    "start": 1.417541,
+    "end": 1.778332
+   },
+   {
+    "text": "it",
+    "start": 1.778333,
+    "end": 1.855666
+   },
+   {
+    "text": "can",
+    "start": 1.868541,
+    "end": 2.010291
+   },
+   {
+    "text": "sell",
+    "start": 2.023208,
+    "end": 2.499999
+   },
+   {
+    "text": "Selling",
+    "start": 2.912375,
+    "end": 3.376291
+   },
+   {
+    "text": "fifty",
+    "start": 3.376291,
+    "end": 3.724207
+   },
+   {
+    "text": "thousand",
+    "start": 3.724208,
+    "end": 4.136583
+   },
+   {
+    "text": "dollars",
+    "start": 4.1495,
+    "end": 4.549
+   },
+   {
+    "text": "of",
+    "start": 4.561875,
+    "end": 4.690708
+   },
+   {
+    "text": "BONK",
+    "start": 4.690708,
+    "end": 4.948458
+   },
+   {
+    "text": "costs",
+    "start": 4.961333,
+    "end": 5.438124
+   },
+   {
+    "text": "under",
+    "start": 5.451041,
+    "end": 5.747416
+   },
+   {
+    "text": "three",
+    "start": 5.760291,
+    "end": 6.043791
+   },
+   {
+    "text": "percent",
+    "start": 6.056708,
+    "end": 6.610833
+   },
+   {
+    "text": "from",
+    "start": 7.010291,
+    "end": 7.164916
+   },
+   {
+    "text": "a",
+    "start": 7.177833,
+    "end": 7.242249
+   },
+   {
+    "text": "real",
+    "start": 7.255166,
+    "end": 7.615999
+   },
+   {
+    "text": "quote",
+    "start": 7.628875,
+    "end": 8.067
+   },
+   {
+    "text": "The",
+    "start": 8.453625,
+    "end": 8.543833
+   },
+   {
+    "text": "textbook",
+    "start": 8.556708,
+    "end": 9.123708
+   },
+   {
+    "text": "formula",
+    "start": 9.123708,
+    "end": 9.600499
+   },
+   {
+    "text": "said",
+    "start": 9.613416,
+    "end": 9.948457
+   },
+   {
+    "text": "seven",
+    "start": 9.961333,
+    "end": 10.386583
+   },
+   {
+    "text": "point",
+    "start": 10.3995,
+    "end": 10.70875
+   },
+   {
+    "text": "six",
+    "start": 10.70875,
+    "end": 11.224208
+   }
+  ]
+ },
+ {
+  "id": "drill",
+  "tone": "light",
+  "text": "So we broke it on purpose. Sources down. Rate limits. A planted instruction. Tampered evidence. Nine failures. Nine held.",
+  "words": [
+   {
+    "text": "So",
+    "start": 0.077333,
+    "end": 0.373708
+   },
+   {
+    "text": "we",
+    "start": 0.386583,
+    "end": 0.541208
+   },
+   {
+    "text": "broke",
+    "start": 0.54125,
+    "end": 0.811875
+   },
+   {
+    "text": "it",
+    "start": 0.82475,
+    "end": 0.902041
+   },
+   {
+    "text": "on",
+    "start": 0.902041,
+    "end": 1.043791
+   },
+   {
+    "text": "purpose",
+    "start": 1.056708,
+    "end": 1.713916
+   },
+   {
+    "text": "Sources",
+    "start": 2.1005,
+    "end": 2.603083
+   },
+   {
+    "text": "down",
+    "start": 2.615958,
+    "end": 3.041208
+   },
+   {
+    "text": "Rate",
+    "start": 3.4005,
+    "end": 3.684
+   },
+   {
+    "text": "limits",
+    "start": 3.696916,
+    "end": 4.315457
+   },
+   {
+    "text": "A",
+    "start": 4.729375,
+    "end": 4.806708
+   },
+   {
+    "text": "planted",
+    "start": 4.819583,
+    "end": 5.309291
+   },
+   {
+    "text": "instruction",
+    "start": 5.322166,
+    "end": 6.030916
+   },
+   {
+    "text": "Tampered",
+    "start": 6.430416,
+    "end": 7.010332
+   },
+   {
+    "text": "evidence",
+    "start": 7.087625,
+    "end": 7.706166
+   },
+   {
+    "text": "Nine",
+    "start": 8.118541,
+    "end": 8.453582
+   },
+   {
+    "text": "failures",
+    "start": 8.453625,
+    "end": 9.175291
+   },
+   {
+    "text": "Nine",
+    "start": 9.536083,
+    "end": 9.845374
+   },
+   {
+    "text": "held",
+    "start": 9.845375,
+    "end": 10.335083
+   }
+  ]
+ },
+ {
+  "id": "ledger",
+  "tone": "dark",
+  "text": "And it runs every three hours, on its own, in public. Three days later, every call is graded against the conditions it set itself.",
+  "words": [
+   {
+    "text": "And",
+    "start": 0.090208,
+    "end": 0.270624
+   },
+   {
+    "text": "it",
+    "start": 0.2835,
+    "end": 0.412375
+   },
+   {
+    "text": "runs",
+    "start": 0.42525,
+    "end": 0.747416
+   },
+   {
+    "text": "every",
+    "start": 0.863416,
+    "end": 1.172707
+   },
+   {
+    "text": "three",
+    "start": 1.185583,
+    "end": 1.520624
+   },
+   {
+    "text": "hours",
+    "start": 1.5335,
+    "end": 2.126291
+   },
+   {
+    "text": "on",
+    "start": 2.319583,
+    "end": 2.435583
+   },
+   {
+    "text": "its",
+    "start": 2.448458,
+    "end": 2.590208
+   },
+   {
+    "text": "own",
+    "start": 2.654625,
+    "end": 3.067
+   },
+   {
+    "text": "in",
+    "start": 3.4665,
+    "end": 3.60825
+   },
+   {
+    "text": "public",
+    "start": 3.621125,
+    "end": 4.17525
+   },
+   {
+    "text": "Three",
+    "start": 4.587625,
+    "end": 4.806708
+   },
+   {
+    "text": "days",
+    "start": 4.819583,
+    "end": 5.077333
+   },
+   {
+    "text": "later",
+    "start": 5.090208,
+    "end": 5.463916
+   },
+   {
+    "text": "every",
+    "start": 5.99225,
+    "end": 6.262875
+   },
+   {
+    "text": "call",
+    "start": 6.262875,
+    "end": 6.713916
+   },
+   {
+    "text": "is",
+    "start": 6.726791,
+    "end": 6.907207
+   },
+   {
+    "text": "graded",
+    "start": 6.907208,
+    "end": 7.487124
+   },
+   {
+    "text": "against",
+    "start": 7.5,
+    "end": 7.809291
+   },
+   {
+    "text": "the",
+    "start": 7.822166,
+    "end": 7.886582
+   },
+   {
+    "text": "conditions",
+    "start": 7.8995,
+    "end": 8.505166
+   },
+   {
+    "text": "it",
+    "start": 8.505166,
+    "end": 8.608249
+   },
+   {
+    "text": "set",
+    "start": 8.621125,
+    "end": 8.814416
+   },
+   {
+    "text": "itself",
+    "start": 8.827333,
+    "end": 9.394333
+   }
+  ]
+ },
+ {
+  "id": "close",
+  "tone": "pink",
+  "text": "Hanko. Don't trust the call. Check the receipt.",
+  "words": [
+   {
+    "text": "Hanko",
+    "start": 0.090208,
+    "end": 0.631458
+   },
+   {
+    "text": "Don't",
+    "start": 1.030916,
+    "end": 1.237082
+   },
+   {
+    "text": "trust",
+    "start": 1.237125,
+    "end": 1.5335
+   },
+   {
+    "text": "the",
+    "start": 1.5335,
+    "end": 1.5850409
+   },
+   {
+    "text": "call",
+    "start": 1.597958,
+    "end": 2.061874
+   },
+   {
+    "text": "Check",
+    "start": 2.461333,
+    "end": 2.731958
+   },
+   {
+    "text": "the",
+    "start": 2.731958,
+    "end": 2.809291
+   },
+   {
+    "text": "receipt",
+    "start": 2.822166,
+    "end": 3.363416
+   }
+  ]
+ }
+]

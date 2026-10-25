@@ -1,0 +1,12 @@
+[
+ {"id": "hook",    "tone": "dark",  "text": "Five accounts say buy. Is that five opinions? Or one opinion, copied four times?"},
+ {"id": "problem", "tone": "light", "text": "Most trading bots can't tell the difference. They count the noise, act on it, and keep no record of why."},
+ {"id": "reveal",  "tone": "pink",  "text": "This is Hanko. A hanko is the seal you stamp in Japan to commit to something. Every decision here is stamped before the outcome is known."},
+ {"id": "read",    "tone": "light", "text": "It reads public voices on Telegram, Bluesky and X. A repost, a forward, or a copy with an ad pasted on counts as one voice. Not two."},
+ {"id": "decide",  "tone": "dark",  "text": "Then it decides. Enter, pass, or admit it can't tell. It sizes the position, and writes down in advance exactly what would prove it wrong."},
+ {"id": "seal",    "tone": "light", "text": "Every run is sealed and anchored in a Bitcoin block. Change one byte, and the seal breaks. Anyone can check it, with no account and no key."},
+ {"id": "exit",    "tone": "dark",  "text": "Before it buys, it checks it can sell. Selling fifty thousand dollars of BONK costs under three percent, from a real quote. The textbook formula said seven point six."},
+ {"id": "drill",   "tone": "light", "text": "So we broke it on purpose. Sources down. Rate limits. A planted instruction. Tampered evidence. Nine failures. Nine held."},
+ {"id": "ledger",  "tone": "dark",  "text": "And it runs every three hours, on its own, in public. Three days later, every call is graded against the conditions it set itself."},
+ {"id": "close",   "tone": "pink",  "text": "Hanko. Don't trust the call. Check the receipt."}
+]

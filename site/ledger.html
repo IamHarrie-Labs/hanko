@@ -168,7 +168,7 @@
       var wrong = el('td'); var ul = el('ul', 'ledger-wrong');
       k.wrong_if.forEach(function (w) { ul.appendChild(el('li', null, w)); });
       wrong.appendChild(ul);
-      wrong.appendChild(el('div', 'ledger-sub', 'graded ' + when(k.review_at) + ' UTC'));
+      wrong.appendChild(el('div', 'ledger-sub', 'due for grading ' + when(k.review_at) + ' UTC'));
       tr.appendChild(wrong);
       tbody.appendChild(tr);
     });
