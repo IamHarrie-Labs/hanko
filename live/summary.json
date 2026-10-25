@@ -10,6 +10,7 @@
    "pass": 17,
    "abstain": 14
   },
+  "model_read": 0,
   "reviews": 0,
   "results": {},
   "anchored_runs": 9
@@ -63,6 +64,7 @@
    ],
    "echoes": 0,
    "readings": 8,
+   "read_by": "word list",
    "because": {
     "rule": "conviction",
     "detail": "mean bullish conviction 1.0"
@@ -89,6 +91,7 @@
    ],
    "echoes": 0,
    "readings": 1,
+   "read_by": "word list",
    "because": {
     "rule": "independent voices",
     "detail": "1 independent voice(s) of 1 author(s); 0 echo(es) discounted; policy requires 2"
@@ -115,6 +118,7 @@
    ],
    "echoes": 0,
    "readings": 3,
+   "read_by": "word list",
    "because": {
     "rule": "direction",
     "detail": "evidence does not argue for entry"
@@ -141,6 +145,7 @@
    ],
    "echoes": 0,
    "readings": 4,
+   "read_by": "word list",
    "because": {
     "rule": "symmetry",
     "detail": "bullish weight 0.6 and bearish weight 0.7 do not discriminate between the thesis and its opposite"

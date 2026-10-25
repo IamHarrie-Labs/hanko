@@ -62,6 +62,7 @@ def _token_view(record: DecisionRecord) -> dict[str, Any]:
         "voices": list(record.convergence.independent_authors),
         "echoes": len(record.convergence.echoes),
         "readings": len(record.readings),
+        "read_by": "model, checked by code" if record.interpreter_id.startswith("llm") else "word list",
         "because": _deciding_rule(record),
         "wrong_if": [
             f.metric + " " + f.comparator + " " + _number(f.threshold)
@@ -158,6 +159,7 @@ def summarize(live_dir: str | Path) -> dict[str, Any]:
             "runs": len(runs),
             "decisions": len(records),
             "verdicts": dict(Counter(r.verdict.value for r in records)),
+            "model_read": sum(1 for r in records if r.interpreter_id.startswith("llm")),
             "reviews": len(reviews),
             "results": dict(Counter(r.result.value for r in reviews)),
             "anchored_runs": sum(1 for r in runs if r["ots"]["state"] == "confirmed"),

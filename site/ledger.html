@@ -129,7 +129,8 @@
     stats.textContent = '';
     stats.appendChild(stat('Sealed runs', String(t.runs), t.anchored_runs + ' anchored in a Bitcoin block so far'));
     stats.appendChild(stat('Decisions', String(t.decisions),
-      (v.enter || 0) + ' enter · ' + (v.pass || 0) + ' pass · ' + (v.abstain || 0) + ' abstain'));
+      (v.enter || 0) + ' enter · ' + (v.pass || 0) + ' pass · ' + (v.abstain || 0) + ' abstain'
+      + (t.model_read ? ' · ' + t.model_read + ' read by the model' : '')));
     stats.appendChild(stat('Graded', String(t.reviews),
       (res.held || 0) + ' held · ' + (res.falsified || 0) + ' proved wrong · ' + (res.inconclusive || 0) + ' uncheckable'));
     stats.appendChild(stat('Running since', d.first_decision_at
@@ -160,6 +161,7 @@
       var td = el('td'); td.appendChild(verdictTag(k.verdict));
       td.appendChild(el('div', 'ledger-sub', 'size ' + k.size_pct + '% · confidence ' + k.confidence));
       td.appendChild(el('div', 'ledger-sub', 'quality ' + k.quality + ' · ' + k.independent_voices + ' independent voices'));
+      if (k.read_by) td.appendChild(el('div', 'ledger-sub', 'read by ' + k.read_by));
       tr.appendChild(td);
       var because = el('td');
       because.appendChild(el('div', null, k.because.detail));
