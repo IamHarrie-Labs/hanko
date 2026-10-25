@@ -517,10 +517,11 @@ h1 { font-size: 62px; line-height: 1.02; letter-spacing: -.032em; font-weight: 7
   font-size: 13.5px; line-height: 1.55; color: var(--body); margin: 8px 0 12px;
 }
 .wb-check {
-  display: flex; align-items: flex-start; gap: 10px; font-family: var(--mono);
+  display: flex; align-items: center; gap: 10px; font-family: var(--mono);
   font-size: 11px; letter-spacing: .04em; cursor: pointer; margin-top: 14px;
 }
-.wb-check input { margin-top: 2px; flex: none; }
+.wb-check input { margin: 0; flex: none; }
+.wb-fieldset legend + .wb-check { margin-top: 22px; }
 .wb-controls {
   display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px;
   border: 1px solid var(--line-2); padding: 24px 26px; margin: 28px 0;
