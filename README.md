@@ -92,7 +92,7 @@ and states in advance what would prove it wrong.
 ## Submission
 
 - **[Project Submission Form](RYOCHAN-Project-Submission-Form.pdf)** (PDF, this repo)
-- **[Demo video](https://drive.google.com/file/d/1nVfAE-yO4b4ni2CXKxa0DtAsWnY5Zpfx/view?usp=drivesdk)**
+- **[Demo video](https://youtu.be/fm0B4hZQCwQ)**
 - **[Announcement post on X](https://x.com/IamHarrie/status/2096908693967179844?s=20)**
 
 ## Contents
