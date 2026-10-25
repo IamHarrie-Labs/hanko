@@ -646,3 +646,8 @@ button:focus-visible, input:focus-visible, select:focus-visible, summary:focus-v
    and checkboxes meet the 24px minimum target size. */
 .colophon a { text-decoration: underline; text-underline-offset: 2px; }
 input[type="checkbox"] { width: 24px; height: 24px; accent-color: var(--ink); flex: none; }
+
+/* Japanese text falls back to the system's Japanese typeface. */
+:lang(ja) { font-family: 'Space Grotesk', 'Hiragino Sans', 'Yu Gothic UI', 'Yu Gothic', 'Noto Sans JP', 'Meiryo', sans-serif; line-break: strict; }
+.ja-summary .section-lede, .ja-summary .proof-item { line-height: 1.85; }
+.ja-summary { margin-bottom: 56px; }

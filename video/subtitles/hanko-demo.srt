@@ -1,0 +1,216 @@
+1
+00:00:00,621 --> 00:00:02,250
+Five accounts say buy.
+
+2
+00:00:02,400 --> 00:00:03,990
+Is that five opinions?
+
+3
+00:00:04,126 --> 00:00:06,992
+Or one opinion, copied four times?
+
+4
+00:00:07,457 --> 00:00:09,369
+Most trading bots can't tell the
+
+5
+00:00:09,119 --> 00:00:10,001
+difference.
+
+6
+00:00:10,176 --> 00:00:11,547
+They count the noise,
+
+7
+00:00:11,684 --> 00:00:13,493
+act on it, and keep no
+
+8
+00:00:13,256 --> 00:00:14,343
+record of why.
+
+9
+00:00:14,764 --> 00:00:15,929
+This is Hanko.
+
+10
+00:00:16,092 --> 00:00:17,746
+A hanko is the seal you
+
+11
+00:00:17,496 --> 00:00:19,435
+stamp in Japan to commit to
+
+12
+00:00:19,197 --> 00:00:20,027
+something.
+
+13
+00:00:20,190 --> 00:00:22,527
+Every decision here is stamped before
+
+14
+00:00:22,290 --> 00:00:23,636
+the outcome is known.
+
+15
+00:00:24,077 --> 00:00:26,428
+It reads public voices on Telegram,
+
+16
+00:00:26,603 --> 00:00:28,309
+Bluesky and X.
+
+17
+00:00:28,446 --> 00:00:30,333
+A repost, a forward,
+
+18
+00:00:30,495 --> 00:00:31,995
+or a copy with an ad
+
+19
+00:00:31,758 --> 00:00:34,263
+pasted on counts as one voice.
+
+20
+00:00:34,387 --> 00:00:35,345
+Not two.
+
+21
+00:00:35,764 --> 00:00:37,071
+Then it decides.
+
+22
+00:00:37,208 --> 00:00:39,404
+Enter, pass, or admit it can't
+
+23
+00:00:39,167 --> 00:00:39,816
+tell.
+
+24
+00:00:39,965 --> 00:00:41,478
+It sizes the position,
+
+25
+00:00:41,383 --> 00:00:43,669
+and writes down in advance exactly
+
+26
+00:00:43,432 --> 00:00:44,880
+what would prove it wrong.
+
+27
+00:00:45,324 --> 00:00:47,507
+Every run is sealed and anchored
+
+28
+00:00:47,321 --> 00:00:48,705
+in a Bitcoin block.
+
+29
+00:00:48,880 --> 00:00:50,638
+Change one byte, and the seal
+
+30
+00:00:50,388 --> 00:00:51,141
+breaks.
+
+31
+00:00:51,264 --> 00:00:52,519
+Anyone can check it,
+
+32
+00:00:52,463 --> 00:00:54,620
+with no account and no key.
+
+33
+00:00:55,077 --> 00:00:57,106
+Before it buys, it checks it
+
+34
+00:00:56,869 --> 00:00:57,750
+can sell.
+
+35
+00:00:57,912 --> 00:01:00,198
+Selling fifty thousand dollars of BONK
+
+36
+00:00:59,961 --> 00:01:01,861
+costs under three percent,
+
+37
+00:01:02,010 --> 00:01:03,317
+from a real quote.
+
+38
+00:01:03,454 --> 00:01:05,959
+The textbook formula said seven point
+
+39
+00:01:05,709 --> 00:01:06,474
+six.
+
+40
+00:01:06,911 --> 00:01:08,797
+So we broke it on purpose.
+
+41
+00:01:08,934 --> 00:01:10,125
+Sources down.
+
+42
+00:01:10,234 --> 00:01:11,399
+Rate limits.
+
+43
+00:01:11,563 --> 00:01:13,114
+A planted instruction.
+
+44
+00:01:13,264 --> 00:01:14,789
+Tampered evidence.
+
+45
+00:01:14,952 --> 00:01:16,259
+Nine failures.
+
+46
+00:01:16,369 --> 00:01:17,418
+Nine held.
+
+47
+00:01:17,890 --> 00:01:20,176
+And it runs every three hours,
+
+48
+00:01:20,120 --> 00:01:22,225
+on its own, in public.
+
+49
+00:01:22,388 --> 00:01:24,957
+Three days later, every call is
+
+50
+00:01:24,707 --> 00:01:26,864
+graded against the conditions it set
+
+51
+00:01:26,627 --> 00:01:27,444
+itself.
+
+52
+00:01:27,890 --> 00:01:28,681
+Hanko.
+
+53
+00:01:28,831 --> 00:01:30,112
+Don't trust the call.
+
+54
+00:01:30,261 --> 00:01:31,413
+Check the receipt.
+

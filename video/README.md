@@ -13,7 +13,9 @@ python tts.py          # narration, one MP3 per scene, plus word timings
 python sound.py        # music bed and sound effects, synthesised
 node capture.mjs       # screenshots of the live site (needs CHROME_PATH)
 npm run render         # out/hanko-demo.mp4
-node srt.mjs           # out/hanko-demo.srt
+npx remotion render HankoTeaser out/hanko-teaser.mp4   # the 33-second cut for X
+node srt.mjs           # out/hanko-demo.srt (English)
+node srt-ja.mjs        # out/hanko-demo.ja.srt (Japanese, one cue per sentence)
 ```
 
 - `script.json`: the narration, scene by scene.

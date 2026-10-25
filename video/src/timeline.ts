@@ -18,9 +18,11 @@ export type SceneTiming = {
 
 type Raw = { id: string; tone: Tone; text: string; words: Word[] };
 
-const build = (): SceneTiming[] => {
+/** Lay scenes end to end. `ids` picks and orders them; the default is all ten. */
+export const build = (ids?: string[]): SceneTiming[] => {
   let from = 0;
-  return (timings as Raw[]).map((s, i) => {
+  const raw = ids ? ids.map((id) => (timings as Raw[]).find((t) => t.id === id)!) : (timings as Raw[]);
+  return raw.map((s, i) => {
     // Show the script's own tokens (with punctuation) when they line up
     // one-to-one with the spoken word boundaries, which they do here.
     const tokens = s.text.split(/\s+/);
@@ -28,13 +30,20 @@ const build = (): SceneTiming[] => {
     const last = words[words.length - 1].end;
     const duration = LEAD + Math.ceil(last * FPS) + TAIL + (s.id === "close" ? CLOSE_HOLD : 0);
     const scene = { id: s.id, tone: s.tone, words, from, duration };
-    from += duration - (i < (timings as Raw[]).length - 1 ? OVERLAP : 0);
+    from += duration - (i < raw.length - 1 ? OVERLAP : 0);
     return scene;
   });
 };
 
+export const totalOf = (scenes: SceneTiming[]) => scenes[scenes.length - 1].from + scenes[scenes.length - 1].duration;
+
 export const SCENES = build();
-export const TOTAL = SCENES[SCENES.length - 1].from + SCENES[SCENES.length - 1].duration;
+export const TOTAL = totalOf(SCENES);
+
+// The 33-second cut for X: the hook, the name, the seal, the close.
+export const TEASER_IDS = ["hook", "reveal", "seal", "close"];
+export const TEASER = build(TEASER_IDS);
+export const TEASER_TOTAL = totalOf(TEASER);
 
 export const sceneById = (id: string) => SCENES.find((s) => s.id === id)!;
 

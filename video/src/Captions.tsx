@@ -43,9 +43,8 @@ const paginate = (scene: SceneTiming): Page[] => {
   return pages;
 };
 
-const PAGES = SCENES.flatMap(paginate);
-
-export const Captions: React.FC = () => {
+export const Captions: React.FC<{ scenes?: SceneTiming[] }> = ({ scenes = SCENES }) => {
+  const PAGES = React.useMemo(() => scenes.flatMap(paginate), [scenes]);
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
   const page = PAGES.find((p) => frame >= p.start && frame < p.end);
