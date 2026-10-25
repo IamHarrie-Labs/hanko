@@ -1,0 +1,18 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.IamHarrie-Labs/hanko",
+  "title": "Hanko exit_liquidity",
+  "description": "Can this position be closed, and what does it cost? Executable quote first, model beside it",
+  "version": "2.0.0",
+  "repository": {
+    "url": "https://github.com/IamHarrie-Labs/hanko",
+    "source": "github"
+  },
+  "websiteUrl": "https://tryhanko.vercel.app/try",
+  "remotes": [
+    {
+      "type": "streamable-http",
+      "url": "https://tryhanko.vercel.app/api/mcp"
+    }
+  ]
+}
