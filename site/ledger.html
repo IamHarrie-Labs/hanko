@@ -93,7 +93,7 @@
   <div class="shell band-inner" style="padding-top: 56px; padding-bottom: 56px">
     <div class="colophon">
       <span>Hanko 判子 · RYO-CHAN Hackathon 2026</span>
-      <span><span data-stat="tests">345</span> tests · <a href="index.html">Home</a> · <a href="https://github.com/IamHarrie-Labs/hanko" data-repo>GitHub</a></span>
+      <span><span data-stat="tests">349</span> tests · <a href="index.html">Home</a> · <a href="https://github.com/IamHarrie-Labs/hanko" data-repo>GitHub</a></span>
     </div>
   </div>
 </footer>
@@ -185,8 +185,13 @@
     } else {
       var sc = d.scorecard;
       score.textContent = sc && sc.scored
-        ? sc.held + ' of ' + sc.scored + ' scored decisions held (' + Math.round(sc.hit_rate * 100) + '%), Brier score '
-          + sc.brier + '. Uncheckable reviews are excluded rather than counted as wins.'
+        ? sc.held + ' of ' + sc.scored + ' scored decisions held (' + Math.round(sc.hit_rate * 100) + '%). '
+          + Object.keys(sc.by_verdict || {}).sort().map(function (k) {
+              var v = sc.by_verdict[k]; return k.toUpperCase() + ' ' + v.held + ' held, ' + v.falsified + ' proved wrong';
+            }).join(' · ') + '. '
+          + (sc.brier !== null ? 'Brier score ' + sc.brier.toFixed(3) + ' over the ' + sc.forecasts
+              + ' ENTER decisions, the only ones whose confidence is a forecast. ' : '')
+          + 'Uncheckable reviews are excluded rather than counted as wins.'
         : 'Reviews so far could not be checked; they are excluded rather than counted as wins.';
       d.reviews.forEach(function (r) {
         var li = el('li', 'ledger-review');

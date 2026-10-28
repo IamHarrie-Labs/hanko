@@ -18,3 +18,4 @@ site/api/_vendor/
 !runs/**/decisions.jsonl
 !runs/*/snapshots/
 !live/runs/*/snapshots/
+!runs/**/reviews.jsonl

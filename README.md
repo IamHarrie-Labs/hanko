@@ -3,7 +3,7 @@
 <div align="center">
 
 [![CI](https://github.com/IamHarrie-Labs/hanko/actions/workflows/ci.yml/badge.svg)](https://github.com/IamHarrie-Labs/hanko/actions/workflows/ci.yml)
-[![Tests: 335 passing](https://img.shields.io/badge/tests-335_passing-555555)](tests/)
+[![Tests: 349 passing](https://img.shields.io/badge/tests-349_passing-555555)](tests/)
 [![RYO tools confirmed live: 6](https://img.shields.io/badge/RYO_tools_confirmed_live-6-555555)](ARCHITECTURE.md#transport-mcp-and-rest-reach-the-same-facts)
 [![Tracks entered: 3](https://img.shields.io/badge/tracks_entered-3-8b6a27)](https://tryhanko.vercel.app/judges)
 [![License: MIT](https://img.shields.io/badge/license-MIT-555555)](LICENSE)
@@ -63,6 +63,11 @@ the [workbench](https://tryhanko.vercel.app/workbench), the
   72 hours later against the conditions it wrote down first.
   [/ledger](https://tryhanko.vercel.app/ledger) shows what changed since the
   last run, most important first (D-20).
+- **Graded against its own conditions, including when it was wrong.** The
+  first 32 scheduled decisions came due on 2026-10-27 and 28: every ENTER
+  held (7 of 7, realised returns between -0.9% and +1.1%), and 7 of 25
+  refusals were proved wrong because a voice they said would flip them
+  arrived. Those reviews also exposed two grading bugs, fixed in D-21.
 - **A sealed live ENTER that anyone can re-derive.** BTC, 2026-10-23,
   `runs/run_836b976720f63dc0.json`. The manifest lists every watchlist entry,
   including the PASS and both ABSTAINs. It is anchored in Bitcoin block
@@ -121,7 +126,7 @@ and a fictional token, written for testing, not captured from real accounts):
 git clone https://github.com/IamHarrie-Labs/hanko && cd hanko
 pip install -e ".[dev]"
 
-pytest                                          # 335 tests, offline, ~20s
+pytest                                          # 349 tests, offline, ~20s
 
 # make a decision, then prove it replays from stored bytes
 hanko decide x --token TOKENA --subject voice_alpha --subject voice_beta \
@@ -223,7 +228,7 @@ hanko/
   sweep.py, cli.py, config.py, provenance.py, evidence.py
 site/            static landing page, /docs, /try -- the live web demo
   api/exit_liquidity.py    the /try endpoint, real assess() call, no fixture
-tests/           335 tests, one file per hanko/ package
+tests/           349 tests, one file per hanko/ package
 fixtures/        evidence and market fixtures used offline and in CI
 .github/workflows/ci.yml       pytest on every push, Python 3.11 and 3.12
 .claude/skills/hanko-exit-liquidity/SKILL.md   packages exit_liquidity as a Claude Skill
@@ -293,7 +298,7 @@ a `FAILED` snapshot saying so, rather than throwing.
 
 ## Status
 
-335 tests, all offline, ~20s. Covered at the evidence layer: canonical form and
+349 tests, all offline, ~20s. Covered at the evidence layer: canonical form and
 address stability, payload deduplication, tamper detection, adapter-version
 mismatch on replay, replay determinism, evidence identity pinned to bytes and
 position, and each failure mode (rate limit, partial window, empty result,

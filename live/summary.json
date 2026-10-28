@@ -400,25 +400,41 @@
   "held": 25,
   "falsified": 7,
   "hit_rate": 0.78125,
-  "brier": 0.609716,
+  "brier": 0.35807,
+  "brier_over": "enter decisions only",
+  "forecasts": 7,
+  "by_verdict": {
+   "abstain": {
+    "held": 9,
+    "falsified": 3
+   },
+   "enter": {
+    "held": 7,
+    "falsified": 0
+   },
+   "pass": {
+    "held": 9,
+    "falsified": 4
+   }
+  },
   "calibration": [
    {
     "range": [
      0.0,
      0.2
     ],
-    "count": 21,
-    "mean_confidence": 0.0,
-    "hit_rate": 0.761905
+    "count": 0,
+    "mean_confidence": null,
+    "hit_rate": null
    },
    {
     "range": [
      0.2,
      0.4
     ],
-    "count": 8,
-    "mean_confidence": 0.357988,
-    "hit_rate": 0.75
+    "count": 4,
+    "mean_confidence": 0.357619,
+    "hit_rate": 1.0
    },
    {
     "range": [

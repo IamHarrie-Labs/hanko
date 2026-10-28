@@ -179,6 +179,33 @@ class TestFalsifierWindow:
         met = [c for c in review.checks if c.outcome is CheckOutcome.MET]
         assert [c.falsifier.metric for c in met] == ["price_usd"]
 
+    def test_a_breach_after_the_window_closes_does_not_count(self, store, x_source):
+        """D-21: a review run late must not grade against prices from after the deadline.
+
+        The price holds through the 72-hour window and only breaks at hour
+        100, by which time the decision's own commitment had expired.
+        """
+        record = make_decision(store, x_source)
+        obs = Observations(
+            samples=(
+                Sample(at=AS_OF + timedelta(hours=30), metrics={"price_usd": 1.40, "liquidity_usd": 880_000.0}),
+                Sample(
+                    at=AS_OF + timedelta(hours=100),
+                    metrics={"price_usd": 1.00, "liquidity_usd": 880_000.0, "independent_voices": 3.0},
+                ),
+            )
+        )
+        review = review_decision(record, obs)
+        price = next(c for c in review.checks if c.falsifier.metric == "price_usd")
+        assert price.outcome is CheckOutcome.NOT_MET
+
+    def test_no_reading_inside_the_window_is_unresolved(self, store, x_source):
+        record = make_decision(store, x_source)
+        obs = Observations(samples=(Sample(at=AS_OF + timedelta(hours=100), metrics={"price_usd": 1.40}),))
+        review = review_decision(record, obs)
+        price = next(c for c in review.checks if c.falsifier.metric == "price_usd")
+        assert price.outcome is CheckOutcome.UNCHECKABLE
+
     def test_a_liquidity_breach_that_recovers_is_still_falsified(self, store, x_source):
         record = make_decision(store, x_source)
         obs = Observations(

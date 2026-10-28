@@ -321,3 +321,34 @@ forever. `hanko ots-status --upgrade` fetches the Bitcoin attestation from
 the calendars. All three committed proofs confirmed on the first try; the
 first live ENTER is in block 972,817, mined 35 minutes after it was sealed.
 `verify-run` now also checks the proof commits to the manifest digest.
+
+## D-21: The first real reviews exposed two grading bugs
+
+The scheduled sweep's first 32 reviews came in on 2026-10-27 and 28: 25
+held, 7 proved wrong. Two things in how they were scored were wrong.
+
+**Refusals were scored as forecasts of failure.** A PASS or ABSTAIN records
+confidence 0, meaning no confidence in entering. The Brier score read that 0
+as a prediction that the decision would fail, so every refusal that held
+counted as a maximal miss, and the scorecard reported 0.61 for a record in
+which every ENTER held. Brier and calibration now cover ENTER decisions
+only, the one verdict whose confidence is a forecast, and each verdict's
+held and proved-wrong counts are reported beside them. On the same 32
+reviews: Brier 0.358 over 7 ENTERs, all of which held at about 0.4
+confidence, so the record says the engine is underconfident. The 32 reviews
+are frozen in `fixtures/reviews/first_32_live.jsonl` as the regression test.
+
+**A late review graded against prices from after the deadline.** An
+"at any point in the window" falsifier was checked against every sample
+logged up to review time, including samples after the 72-hour window had
+closed. On schedule the gap is an hour or two; on a review run two days
+late it is two days of prices the decision never committed to. Only
+readings inside the window count now, and a window with none is reported
+as unresolved.
+
+The first live ENTER (`runs/run_836b976720f63dc0.json`, BTC, sealed
+2026-10-23) was graded on 2026-10-28, two days after it fell due, once both
+were fixed. It held: price and exit depth held across 16 readings inside
+the window, and exactly 2 independent voices still converged, the least
+the entry allowed. Realised return was +0.02%. The grades, and the samples
+they were checked against, are in that run's directory.

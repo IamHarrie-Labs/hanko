@@ -19,7 +19,7 @@ its unverifiable calls is flattering itself.
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from datetime import datetime
+from datetime import datetime, timedelta
 from enum import Enum
 from typing import Any
 
@@ -321,6 +321,24 @@ def review_decision(
             continue
 
         if falsifier.window is FalsifierWindow.ANY_POINT_IN_WINDOW:
+            # Only readings inside the committed window count. A review run
+            # late would otherwise grade the decision against prices from
+            # after its own deadline (D-21).
+            window_end = record.decided_at + timedelta(hours=falsifier.horizon_hours)
+            samples = tuple(s for s in samples if s.at <= window_end)
+            if not samples:
+                checks.append(
+                    FalsifierCheck(
+                        falsifier=falsifier,
+                        outcome=CheckOutcome.UNCHECKABLE,
+                        observed=None,
+                        detail=(
+                            "no " + falsifier.metric + " reading inside the window ending "
+                            + to_iso(window_end) + "; this axis is unresolved, not passed"
+                        ),
+                    )
+                )
+                continue
             # A breach that recovers before review time still falsifies the
             # thesis -- checked against every sample that reports this
             # metric, not just the last one. See D-13.

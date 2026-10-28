@@ -25,6 +25,12 @@ exercised in tests and in the hand-run seals, not on the schedule, because
 each run would cost money. The first live `ENTER` from X voices
 (`runs/run_836b976720f63dc0.json`) is one decision, graded on 2026-10-26.
 
+**The first grades come from a calm week.** Every ENTER graded so far was
+BTC, and none of their conditions came close to firing, so "7 of 7 held"
+says the engine did not walk into a loss, not that it makes money: realised
+returns averaged about zero. The Brier score covers ENTER decisions only
+(D-21) and rests on a handful of them.
+
 **Crypto Bluesky is thin.** Of the accounts a search turns up, three were
 posting on-topic in October 2026 and the schedule uses those. Most crypto
 voices with an audience are on X, which needs a paid key.

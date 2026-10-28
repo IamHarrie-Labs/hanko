@@ -22,9 +22,10 @@ sample it chose after the fact.
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import Any, Iterable
 
+from ..decision.record import Verdict
 from .outcome import Review, ReviewResult
 
 _BUCKETS = ((0.0, 0.2), (0.2, 0.4), (0.4, 0.6), (0.6, 0.8), (0.8, 1.0001))
@@ -91,6 +92,9 @@ class Scorecard:
     buckets: tuple[CalibrationBucket, ...]
     authors: tuple[Reliability, ...]
     rules: tuple[Reliability, ...]
+    # verdict -> (held, falsified), scoreable reviews only
+    by_verdict: dict[str, tuple[int, int]] = field(default_factory=dict)
+    forecasts: int = 0  # how many reviews the Brier score and calibration cover
 
     @property
     def hit_rate(self) -> float | None:
@@ -105,6 +109,9 @@ class Scorecard:
             "falsified": self.falsified,
             "hit_rate": round(self.hit_rate, 6) if self.hit_rate is not None else None,
             "brier": round(self.brier, 6) if self.brier is not None else None,
+            "brier_over": "enter decisions only",
+            "forecasts": self.forecasts,
+            "by_verdict": {k: {"held": h, "falsified": f} for k, (h, f) in sorted(self.by_verdict.items())},
             "calibration": [b.to_dict() for b in self.buckets],
             "authors": [a.to_dict() for a in self.authors],
             "rules": [r.to_dict() for r in self.rules],
@@ -120,7 +127,12 @@ class Scorecard:
             lines.append(
                 "held " + str(self.held) + "   falsified " + str(self.falsified)
                 + "   hit rate " + str(round((self.hit_rate or 0) * 100, 1)) + "%"
-                + "   brier " + str(round(self.brier or 0, 4))
+            )
+            for verdict, (h, f) in sorted(self.by_verdict.items()):
+                lines.append("  " + verdict.ljust(8) + str(h) + " held, " + str(f) + " falsified")
+            lines.append(
+                "brier " + (str(round(self.brier, 4)) if self.brier is not None else "n/a")
+                + " over " + str(self.forecasts) + " enter decision(s); refusals carry no forecast"
             )
         else:
             lines.append("nothing scoreable yet -- no rates are reported")
@@ -217,16 +229,26 @@ def build_scorecard(reviews: Iterable[Review]) -> Scorecard:
     held = sum(1 for r in scoreable if r.result is ReviewResult.HELD)
     falsified = sum(1 for r in scoreable if r.result is ReviewResult.FALSIFIED)
 
+    # Only an ENTER's confidence is a forecast that it will hold. A PASS or
+    # ABSTAIN records confidence 0 ("no confidence in entering"), and scoring
+    # that 0 as a prediction of failure counted every refusal that held as a
+    # maximal miss: the first 32 live reviews scored 0.61 that way (D-21).
+    forecasts = [r for r in scoreable if r.verdict is Verdict.ENTER]
     brier = None
-    if scoreable:
+    if forecasts:
         brier = sum(
             (r.confidence - (1.0 if r.result is ReviewResult.HELD else 0.0)) ** 2
-            for r in scoreable
-        ) / len(scoreable)
+            for r in forecasts
+        ) / len(forecasts)
+
+    by_verdict: dict[str, tuple[int, int]] = {}
+    for r in scoreable:
+        h, f = by_verdict.get(r.verdict.value, (0, 0))
+        by_verdict[r.verdict.value] = (h + (r.result is ReviewResult.HELD), f + (r.result is ReviewResult.FALSIFIED))
 
     buckets = []
     for low, high in _BUCKETS:
-        members = [r for r in scoreable if low <= r.confidence < high]
+        members = [r for r in forecasts if low <= r.confidence < high]
         buckets.append(
             CalibrationBucket(
                 low=low,
@@ -257,4 +279,6 @@ def build_scorecard(reviews: Iterable[Review]) -> Scorecard:
         rules=_tally(
             (rule, review) for review in reviews for rule in review.credited_rules
         ),
+        by_verdict=by_verdict,
+        forecasts=len(forecasts),
     )
