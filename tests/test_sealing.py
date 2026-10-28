@@ -267,9 +267,14 @@ class TestBundle:
         bundle = path.parent / json.loads(path.read_text(encoding="utf-8"))["run_id"]
         import gzip
 
-        obj = next((bundle / "snapshots" / "objects").rglob("*.json.gz"))
-        text = gzip.decompress(obj.read_bytes()).decode("utf-8")
-        obj.write_bytes(gzip.compress(text.replace("voice", "VOICE").encode("utf-8")))
+        # Sorted, so every OS picks the same object, and edited in a way that
+        # changes its bytes whatever it holds: a leading space is still valid
+        # JSON, so only the content check can catch it. (A replace() of one
+        # word silently did nothing on Linux, where the first object listed
+        # did not contain the word, and CI failed from 2026-10-23 on.)
+        obj = sorted((bundle / "snapshots" / "objects").rglob("*.json.gz"))[0]
+        raw = gzip.decompress(obj.read_bytes())
+        obj.write_bytes(gzip.compress(b" " + raw))
         problems, _ = verify_run(path)
         assert problems  # the object no longer hashes to its address
 
