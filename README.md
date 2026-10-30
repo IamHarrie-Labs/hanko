@@ -656,3 +656,9 @@ observations rather than the ones frozen into the original decision.
 Wire `sweep`, `audit`, and `scorecard` into CI or a scheduled run, and feed
 per-voice reliability back into evidence weighting so the agent's own track
 record starts shaping what it believes.
+# Evidence update, 30 Oct 2026
+
+Hanko 2.0.0 is published in the official MCP registry as `io.github.IamHarrie-Labs/hanko`.
+
+- [Retrospective baseline comparison](study/baseline/README.md): the first 32 eligible reviewed opportunities produce identical entry selections under Hanko and a simple rule. This sample establishes no selection advantage. Reproduce with `python scripts/compare_baseline.py`.
+- [A sealed SOL refusal proved wrong](study/baseline/failure-case.md): the original commitment, late review-time observations, and what the extra voice does and does not establish.

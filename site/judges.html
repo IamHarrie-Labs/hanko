@@ -57,13 +57,21 @@
     <h2 id="j-start" class="label">Two minutes, if that is all you have</h2>
     <ol class="judge-steps">
       <li><a href="https://youtu.be/fm0B4hZQCwQ" rel="noopener">The 96-second demo video</a>: what Hanko does and the proof behind each claim. Every number on screen is from the live project.</li>
-      <li><a href="drill.html">Failure drill</a>: nine real failures injected into the real code, each defence computed live. One broke the first time it ran (D-18, now fixed).</li>
+      <li><a href="#j-evidence">What held and what failed</a>: a sealed SOL refusal proved wrong, plus a reproducible comparison with a simple entry rule. Open the original decision, replay it, then inspect the review.</li>
       <li><a href="ledger.html">Live ledger</a>: a run sealed every three hours with no key, committed to the repository and anchored in Bitcoin. What changed since the last run comes first, and every decision is graded 72 hours later against conditions it wrote down in advance.</li>
       <li><a href="try.html">Try it live</a>: <code>exit_liquidity</code> on BONK, $50,000. An executable venue quote, the model's own figure beside it, and the model's error, while RYO's market data is down.</li>
-      <li><a href="echo.html">Echo Index</a>: 2,094 real posts, Hanko's own echo check, a result published as found, and the bug it found in Hanko first.</li>
+      <li><a href="drill.html">Failure drill</a>: nine failures injected into the real code. <a href="echo.html">Echo Index</a>: 2,094 real posts, the measured result, and the bug the study found.</li>
       <li>From a clone, no keys: <code>pip install -e ".[dev]" &amp;&amp; pytest</code>, then <code>hanko verify-run runs/run_836b976720f63dc0.json</code>. This is the first live ENTER (BTC, 23 Oct). It is replayed decision by decision from the committed bundle, and its manifest is anchored in Bitcoin block 972,817.</li>
     </ol>
     <p class="footnote"><a href="https://x.com/IamHarrie/status/2096908693967179844" rel="noopener">Hanko announcement on X</a>: the project post submitted for the Social Media Award. The same link is included in the submission PDF and README.</p>
+  </section>
+
+  <section aria-labelledby="j-evidence">
+    <h2 id="j-evidence" class="label">Evidence, including the misses</h2>
+    <p class="section-lede">The SOL refusal sealed on 23 Oct was proved wrong: its one-voice assumption no longer held when two independent voices were observed at review. The review was late, so this is a review-time observation, not a reconstructed deadline count. It invalidates that assumption; it does not prove every entry gate cleared.</p>
+    <p><a href="https://github.com/IamHarrie-Labs/hanko/blob/master/study/baseline/failure-case.md">Read the failure case</a>, inspect the <a href="https://github.com/IamHarrie-Labs/hanko/blob/master/runs/run_836b976720f63dc0/decisions.jsonl">sealed decision</a>, run <code>hanko verify-run runs/run_836b976720f63dc0.json</code>, then inspect its <a href="https://github.com/IamHarrie-Labs/hanko/blob/master/runs/run_836b976720f63dc0/reviews.jsonl">review and observations</a>. The policy was not automatically retrained.</p>
+    <p><a href="https://github.com/IamHarrie-Labs/hanko/blob/master/study/baseline/README.md">The retrospective baseline comparison</a> uses the same recorded readings and price windows. On the first 32 eligible opportunities, both rules chose the same seven entries; their mean price return was &minus;0.47%. All seven holding against their falsifiers did not mean all seven made money. This sample establishes no selection advantage. The script, input hashes, exclusions and every included row are published.</p>
+    <p class="footnote">The baseline enters on bullish weight greater than bearish weight with at least two distinct authors, before independence filtering. Equal hypothetical 1% positions; costs omitted; overlapping observations are dependent. The baseline was specified retrospectively. <a href="https://registry.modelcontextprotocol.io/v0/servers/io.github.IamHarrie-Labs%2Fhanko/versions/2.0.0">Official MCP registry listing: Hanko 2.0.0</a>.</p>
   </section>
 
   <section aria-labelledby="j-ja" lang="ja" class="ja-summary">
@@ -141,7 +149,7 @@
   <div class="shell band-inner" style="padding-top: 56px; padding-bottom: 56px">
     <div class="colophon">
       <span>Hanko 判子 · RYO-CHAN Hackathon 2026</span>
-      <span><span data-stat="tests">349</span> tests · <a href="index.html">Home</a> · <a href="https://github.com/IamHarrie-Labs/hanko" data-repo>GitHub</a></span>
+      <span><span data-stat="tests">351</span> tests · <a href="index.html">Home</a> · <a href="https://github.com/IamHarrie-Labs/hanko" data-repo>GitHub</a></span>
     </div>
   </div>
 </footer>

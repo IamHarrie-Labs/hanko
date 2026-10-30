@@ -352,3 +352,8 @@ were fixed. It held: price and exit depth held across 16 readings inside
 the window, and exactly 2 independent voices still converged, the least
 the entry allowed. Realised return was +0.02%. The grades, and the samples
 they were checked against, are in that run's directory.
+# D-22: publish the baseline tie and distinguish refusal invalidation from entry clearance
+
+30 Oct 2026. A retrospective comparison on the first 32 eligible reviewed live opportunities found identical selections: seven entries for Hanko and for a simple bullish-weight / distinct-author rule. Their mean endpoint price return was negative despite all seven ENTER falsifiers holding. Publish the result, methods, source hashes and individual rows; do not retune the baseline to obtain a favourable gap. Endpoints must be within the original window and within six hours of the deadline. Equal hypothetical 1% positions isolate selection; costs and portfolio behaviour are not modelled.
+
+The Oct 23 SOL refusal was falsified at a late review when a second voice appeared. Its historical wording "verdict flips" overstates the inference: another gate can still block entry. Preserve the original commitment and disclose that limitation in the case study. Do not describe the engine as automatically learning from reviews or claim that the late voice observation reconstructs the deadline count.
