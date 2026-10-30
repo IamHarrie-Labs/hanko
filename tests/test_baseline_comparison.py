@@ -1,4 +1,9 @@
-from scripts.compare_baseline import baseline_enters, endpoint
+from pathlib import Path
+from runpy import run_path
+
+_script = run_path(str(Path(__file__).resolve().parents[1] / "scripts" / "compare_baseline.py"))
+baseline_enters = _script["baseline_enters"]
+endpoint = _script["endpoint"]
 
 
 def test_baseline_counts_authors_but_needs_bullish_weight():
