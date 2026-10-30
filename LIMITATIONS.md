@@ -13,23 +13,9 @@ such and on-chain only. RYO's safety and technical fields (safety score,
 ATR) stay missing. Each missing field is a recorded gap that lowers
 evidence quality and so position size; none of them is filled with a guess.
 
-**The live record is young, and read by a word list.** The scheduled sweep
-started on 2026-10-24 and seals a run every three hours, so by the deadline
-it holds a few weeks of decisions and the graded reviews of everything older
-than 72 hours: a real series, but a short one. To run with no key it reads
-posts with the lexicon reader, a word list, not the model. A word list
-cannot tell sarcasm from conviction, and news headlines rarely state a view,
-so most decisions are PASS or ABSTAIN. That is the honest output for news
-feeds; it is not a test of reading skill. The model interpreter is
-exercised in tests and in the hand-run seals, not on the schedule, because
-each run would cost money. The first live `ENTER` from X voices
-(`runs/run_836b976720f63dc0.json`) is one decision, graded on 2026-10-26.
+**The live record is young.** The keyless scheduled sweep started on 24 Oct and uses a lexicon reader. A separate daily model-read workflow is now enabled: its 30 Oct run made 21 model calls with no fallback and sealed four replayable decisions. Most history still comes from the word list. One successful model run does not establish reading accuracy. The Oct 23 hand-run seal was graded late on 28 Oct; its review-time voice counts do not reconstruct the original deadline.
 
-**The first grades come from a calm week.** Every ENTER graded so far was
-BTC, and none of their conditions came close to firing, so "7 of 7 held"
-says the engine did not walk into a loss, not that it makes money: realised
-returns averaged about zero. The Brier score covers ENTER decisions only
-(D-21) and rests on a handful of them.
+**The baseline currently ties Hanko.** On 76 eligible reviewed opportunities, Hanko and a simple bullish-weight / distinct-author rule chose the same 27 entries. Twelve had positive endpoint returns; mean entry return was +0.2396% before costs. These are dependent, overlapping observations selected retrospectively. Holding against a falsifier is not a positive return. See study/baseline/README.md for methodology, exclusions and input hashes. No incremental trading advantage is established.
 
 **Crypto Bluesky is thin.** Of the accounts a search turns up, three were
 posting on-topic in October 2026 and the schedule uses those. Most crypto

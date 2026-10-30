@@ -6,11 +6,11 @@ The baseline enters when bullish conviction exceeds bearish conviction and at le
 
 Only non-early reviewed decisions with a positive entry price and a positive observed endpoint inside the original window, no more than six hours before its deadline, qualify. Both strategies use the same endpoint and opportunities. Refusals contribute zero. Each entry is assigned an equal hypothetical 1% position to isolate selection from sizing. Fees, spread and execution impact are omitted. No portfolio is simulated; overlapping windows and correlated tokens make these observations dependent.
 
-Eligible opportunities: 32. Different entry choices: 0. Exclusions: {'unreviewed_or_early': 64, 'missing_or_stale_endpoint': 0}.
+Eligible opportunities: 76. Different entry choices: 0. Exclusions: {'unreviewed_or_early': 64, 'missing_or_stale_endpoint': 0}.
 
 | Rule | Entries | Positive returns | Mean price return on entries | Mean contribution per opportunity at 1% size |
 |---|---:|---:|---:|---:|
-| hanko | 7 | 2 | -0.4684% | -0.0010% |
-| baseline | 7 | 2 | -0.4684% | -0.0010% |
+| hanko | 27 | 12 | +0.2396% | +0.0009% |
+| baseline | 27 | 12 | +0.2396% | +0.0009% |
 
 This baseline and endpoint filter were specified after inspecting the project's live record. This is exploratory, retrospective evidence, not a preregistered test, profitability claim, or estimate of future performance. A held falsifier is a different outcome from a positive price return. More history and a prospective comparison are needed before asserting an advantage.

@@ -1,21 +1,21 @@
 {
-  "eligible": 32,
+  "eligible": 76,
   "excluded": {
     "unreviewed_or_early": 64,
     "missing_or_stale_endpoint": 0
   },
   "strategies": {
     "hanko": {
-      "entries": 7,
-      "mean_entered_return": -0.004684199354780689,
-      "positive_entries": 2,
-      "mean_opportunity_contribution": -1.0246686088582758e-05
+      "entries": 27,
+      "mean_entered_return": 0.0023956519345363337,
+      "positive_entries": 12,
+      "mean_opportunity_contribution": 8.510868714800136e-06
     },
     "baseline": {
-      "entries": 7,
-      "mean_entered_return": -0.004684199354780689,
-      "positive_entries": 2,
-      "mean_opportunity_contribution": -1.0246686088582758e-05
+      "entries": 27,
+      "mean_entered_return": 0.0023956519345363337,
+      "positive_entries": 12,
+      "mean_opportunity_contribution": 8.510868714800136e-06
     }
   },
   "disagreements": 0,
@@ -307,10 +307,406 @@
       "price_return": -0.013213019658395164,
       "endpoint_at": "2026-10-28T00:48:34.564205Z",
       "endpoint_lag_hours": 4.0754668644444445
+    },
+    {
+      "decision_id": "dec_a20ad90829eb00acdd617d6e",
+      "subject": "BTC",
+      "hanko_enter": true,
+      "baseline_enter": true,
+      "price_return": 0.013211169758239105,
+      "endpoint_at": "2026-10-28T09:50:52.751582Z",
+      "endpoint_lag_hours": 1.8776002344444445
+    },
+    {
+      "decision_id": "dec_a931d1f0e75772eb2054cf36",
+      "subject": "ETH",
+      "hanko_enter": false,
+      "baseline_enter": false,
+      "price_return": 0.017173000489308032,
+      "endpoint_at": "2026-10-28T09:50:52.751582Z",
+      "endpoint_lag_hours": 1.8776002344444445
+    },
+    {
+      "decision_id": "dec_523000fd59f89b5d97235e64",
+      "subject": "SOL",
+      "hanko_enter": false,
+      "baseline_enter": false,
+      "price_return": 0.018839861179970274,
+      "endpoint_at": "2026-10-28T09:50:52.751582Z",
+      "endpoint_lag_hours": 1.8776002344444445
+    },
+    {
+      "decision_id": "dec_11b1492c02031c8d8f8e0981",
+      "subject": "BONK",
+      "hanko_enter": false,
+      "baseline_enter": false,
+      "price_return": 0.03226879574184971,
+      "endpoint_at": "2026-10-28T09:50:52.751582Z",
+      "endpoint_lag_hours": 1.8776002344444445
+    },
+    {
+      "decision_id": "dec_3df00b0f127523082b12588d",
+      "subject": "BTC",
+      "hanko_enter": true,
+      "baseline_enter": true,
+      "price_return": 0.0016056302545517376,
+      "endpoint_at": "2026-10-28T13:39:09.043849Z",
+      "endpoint_lag_hours": 1.4083036777777778
+    },
+    {
+      "decision_id": "dec_5385c69fcbcfa6a8acb0a8ac",
+      "subject": "ETH",
+      "hanko_enter": false,
+      "baseline_enter": false,
+      "price_return": -0.0011820482292747014,
+      "endpoint_at": "2026-10-28T13:39:09.043849Z",
+      "endpoint_lag_hours": 1.4083036777777778
+    },
+    {
+      "decision_id": "dec_200de93134f88830108861c8",
+      "subject": "SOL",
+      "hanko_enter": false,
+      "baseline_enter": false,
+      "price_return": -0.0005910165484633856,
+      "endpoint_at": "2026-10-28T13:39:09.043849Z",
+      "endpoint_lag_hours": 1.4083036777777778
+    },
+    {
+      "decision_id": "dec_92c7561b98c20fceaccb64ef",
+      "subject": "BONK",
+      "hanko_enter": false,
+      "baseline_enter": false,
+      "price_return": 0.006578947368421018,
+      "endpoint_at": "2026-10-28T13:39:09.043849Z",
+      "endpoint_lag_hours": 1.4083036777777778
+    },
+    {
+      "decision_id": "dec_44d70fac5ddb26ced5dafcf1",
+      "subject": "BTC",
+      "hanko_enter": true,
+      "baseline_enter": true,
+      "price_return": -0.0029022313826514434,
+      "endpoint_at": "2026-10-28T16:43:06.599491Z",
+      "endpoint_lag_hours": 1.7412093358333334
+    },
+    {
+      "decision_id": "dec_7e3a0595627fe07477f4edce",
+      "subject": "ETH",
+      "hanko_enter": false,
+      "baseline_enter": false,
+      "price_return": -0.00966692881586484,
+      "endpoint_at": "2026-10-28T16:43:06.599491Z",
+      "endpoint_lag_hours": 1.7412093358333334
+    },
+    {
+      "decision_id": "dec_b6179a0f079f64e7805940c7",
+      "subject": "SOL",
+      "hanko_enter": false,
+      "baseline_enter": false,
+      "price_return": -0.008942610062893208,
+      "endpoint_at": "2026-10-28T16:43:06.599491Z",
+      "endpoint_lag_hours": 1.7412093358333334
+    },
+    {
+      "decision_id": "dec_a8fb9682ca66acb349040181",
+      "subject": "BONK",
+      "hanko_enter": false,
+      "baseline_enter": false,
+      "price_return": 0.01226383824991717,
+      "endpoint_at": "2026-10-28T16:43:06.599491Z",
+      "endpoint_lag_hours": 1.7412093358333334
+    },
+    {
+      "decision_id": "dec_7ddee4bcdbbda2b65f605a0b",
+      "subject": "BTC",
+      "hanko_enter": true,
+      "baseline_enter": true,
+      "price_return": 0.0007063665235549355,
+      "endpoint_at": "2026-10-28T16:43:06.599491Z",
+      "endpoint_lag_hours": 4.5843924891666665
+    },
+    {
+      "decision_id": "dec_b3cbbe1db5d724543541a74e",
+      "subject": "ETH",
+      "hanko_enter": false,
+      "baseline_enter": false,
+      "price_return": -0.005332820972631325,
+      "endpoint_at": "2026-10-28T16:43:06.599491Z",
+      "endpoint_lag_hours": 4.5843924891666665
+    },
+    {
+      "decision_id": "dec_7b94eadb12527f0077c3678b",
+      "subject": "SOL",
+      "hanko_enter": false,
+      "baseline_enter": false,
+      "price_return": -0.0064039408866995995,
+      "endpoint_at": "2026-10-28T16:43:06.599491Z",
+      "endpoint_lag_hours": 4.5843924891666665
+    },
+    {
+      "decision_id": "dec_a4986fb8c243070d8379354a",
+      "subject": "BONK",
+      "hanko_enter": false,
+      "baseline_enter": false,
+      "price_return": 0.01630615640598987,
+      "endpoint_at": "2026-10-28T16:43:06.599491Z",
+      "endpoint_lag_hours": 4.5843924891666665
+    },
+    {
+      "decision_id": "dec_688293bc8c07bf06410b0a2b",
+      "subject": "BTC",
+      "hanko_enter": true,
+      "baseline_enter": true,
+      "price_return": 0.01371602069833111,
+      "endpoint_at": "2026-10-28T21:44:29.620900Z",
+      "endpoint_lag_hours": 2.727701866388889
+    },
+    {
+      "decision_id": "dec_ac136d7a5c8f1933282383b7",
+      "subject": "ETH",
+      "hanko_enter": false,
+      "baseline_enter": false,
+      "price_return": 0.011804623191451924,
+      "endpoint_at": "2026-10-28T21:44:29.620900Z",
+      "endpoint_lag_hours": 2.727701866388889
+    },
+    {
+      "decision_id": "dec_ed482fdee014dbf1730dad40",
+      "subject": "SOL",
+      "hanko_enter": false,
+      "baseline_enter": false,
+      "price_return": 0.009769094138543544,
+      "endpoint_at": "2026-10-28T21:44:29.620900Z",
+      "endpoint_lag_hours": 2.727701866388889
+    },
+    {
+      "decision_id": "dec_a569c9ede6b056ee1857dabb",
+      "subject": "BONK",
+      "hanko_enter": false,
+      "baseline_enter": false,
+      "price_return": 0.057570715474209555,
+      "endpoint_at": "2026-10-28T21:44:29.620900Z",
+      "endpoint_lag_hours": 2.727701866388889
+    },
+    {
+      "decision_id": "dec_5de7beabe0cae9387f42d27d",
+      "subject": "BTC",
+      "hanko_enter": true,
+      "baseline_enter": true,
+      "price_return": 0.001269704531398519,
+      "endpoint_at": "2026-10-29T01:52:23.120563Z",
+      "endpoint_lag_hours": 4.549787431944444
+    },
+    {
+      "decision_id": "dec_396c6d81658f21760913cc45",
+      "subject": "ETH",
+      "hanko_enter": false,
+      "baseline_enter": false,
+      "price_return": 0.0013386534010433326,
+      "endpoint_at": "2026-10-29T01:52:23.120563Z",
+      "endpoint_lag_hours": 4.549787431944444
+    },
+    {
+      "decision_id": "dec_bd0c4c0ba5bf66cf5e05619a",
+      "subject": "SOL",
+      "hanko_enter": false,
+      "baseline_enter": false,
+      "price_return": -0.009709699791935034,
+      "endpoint_at": "2026-10-29T01:52:23.120563Z",
+      "endpoint_lag_hours": 4.549787431944444
+    },
+    {
+      "decision_id": "dec_d2d385c90f5eca11ac0e1e6c",
+      "subject": "BONK",
+      "hanko_enter": false,
+      "baseline_enter": false,
+      "price_return": 0.03206412825651306,
+      "endpoint_at": "2026-10-29T01:52:23.120563Z",
+      "endpoint_lag_hours": 4.549787431944444
+    },
+    {
+      "decision_id": "dec_8b9c6706111c5f1969b388d8",
+      "subject": "BTC",
+      "hanko_enter": false,
+      "baseline_enter": false,
+      "price_return": -0.0012966725939796975,
+      "endpoint_at": "2026-10-29T08:39:17.488699Z",
+      "endpoint_lag_hours": 5.745152591388889
+    },
+    {
+      "decision_id": "dec_5ba23faa42f39bb0176d2371",
+      "subject": "ETH",
+      "hanko_enter": true,
+      "baseline_enter": true,
+      "price_return": -0.003199400596819446,
+      "endpoint_at": "2026-10-29T08:39:17.488699Z",
+      "endpoint_lag_hours": 5.745152591388889
+    },
+    {
+      "decision_id": "dec_ebe5a6f2e0189b5422e22a8d",
+      "subject": "SOL",
+      "hanko_enter": true,
+      "baseline_enter": true,
+      "price_return": -0.0167355778696594,
+      "endpoint_at": "2026-10-29T08:39:17.488699Z",
+      "endpoint_lag_hours": 5.745152591388889
+    },
+    {
+      "decision_id": "dec_f728f72b27968bb10014c830",
+      "subject": "BONK",
+      "hanko_enter": false,
+      "baseline_enter": false,
+      "price_return": 0.003977461054027298,
+      "endpoint_at": "2026-10-29T08:39:17.488699Z",
+      "endpoint_lag_hours": 5.745152591388889
+    },
+    {
+      "decision_id": "dec_9137f2a393aa95d1b3f21b01",
+      "subject": "BTC",
+      "hanko_enter": true,
+      "baseline_enter": true,
+      "price_return": 0.02246798757710411,
+      "endpoint_at": "2026-10-29T16:15:24.727538Z",
+      "endpoint_lag_hours": 4.356892704444444
+    },
+    {
+      "decision_id": "dec_54dda8dbc08ea99b413708ac",
+      "subject": "ETH",
+      "hanko_enter": true,
+      "baseline_enter": true,
+      "price_return": 0.024200915218868913,
+      "endpoint_at": "2026-10-29T16:15:24.727538Z",
+      "endpoint_lag_hours": 4.356892704444444
+    },
+    {
+      "decision_id": "dec_d9b4811ed0b430a35d922644",
+      "subject": "SOL",
+      "hanko_enter": true,
+      "baseline_enter": true,
+      "price_return": 0.02264113305405946,
+      "endpoint_at": "2026-10-29T16:15:24.727538Z",
+      "endpoint_lag_hours": 4.356892704444444
+    },
+    {
+      "decision_id": "dec_79b9eae98ca615d86d21ddba",
+      "subject": "BONK",
+      "hanko_enter": false,
+      "baseline_enter": false,
+      "price_return": 0.07424593967517401,
+      "endpoint_at": "2026-10-29T16:15:24.727538Z",
+      "endpoint_lag_hours": 4.356892704444444
+    },
+    {
+      "decision_id": "dec_ffb5a39dc9788c34ae2cb9a6",
+      "subject": "BTC",
+      "hanko_enter": true,
+      "baseline_enter": true,
+      "price_return": 0.05214026089745283,
+      "endpoint_at": "2026-10-29T21:14:18.515002Z",
+      "endpoint_lag_hours": 2.8863620044444445
+    },
+    {
+      "decision_id": "dec_c57959f7dbb7a4d6d1d9f9b8",
+      "subject": "ETH",
+      "hanko_enter": true,
+      "baseline_enter": true,
+      "price_return": 0.2147845605690477,
+      "endpoint_at": "2026-10-29T21:14:18.515002Z",
+      "endpoint_lag_hours": 2.8863620044444445
+    },
+    {
+      "decision_id": "dec_c536b71fe0e2b1c45abc9136",
+      "subject": "SOL",
+      "hanko_enter": true,
+      "baseline_enter": true,
+      "price_return": -0.03958726064093665,
+      "endpoint_at": "2026-10-29T21:14:18.515002Z",
+      "endpoint_lag_hours": 2.8863620044444445
+    },
+    {
+      "decision_id": "dec_5bb17f646af94a60e90c635f",
+      "subject": "BONK",
+      "hanko_enter": false,
+      "baseline_enter": false,
+      "price_return": -0.052735662491760094,
+      "endpoint_at": "2026-10-29T21:14:18.515002Z",
+      "endpoint_lag_hours": 2.8863620044444445
+    },
+    {
+      "decision_id": "dec_06a7e194f26249690b782669",
+      "subject": "BTC",
+      "hanko_enter": true,
+      "baseline_enter": true,
+      "price_return": -0.034642954148223604,
+      "endpoint_at": "2026-10-30T01:09:07.336586Z",
+      "endpoint_lag_hours": 4.633485072777778
+    },
+    {
+      "decision_id": "dec_4cd4362cc2799f3c319c686a",
+      "subject": "ETH",
+      "hanko_enter": true,
+      "baseline_enter": true,
+      "price_return": -0.041160330979088666,
+      "endpoint_at": "2026-10-30T01:09:07.336586Z",
+      "endpoint_lag_hours": 4.633485072777778
+    },
+    {
+      "decision_id": "dec_6608f1832fd675a1032a452b",
+      "subject": "SOL",
+      "hanko_enter": true,
+      "baseline_enter": true,
+      "price_return": -0.05760522975120708,
+      "endpoint_at": "2026-10-30T01:09:07.336586Z",
+      "endpoint_lag_hours": 4.633485072777778
+    },
+    {
+      "decision_id": "dec_903e55ad90b3f2a5abe78863",
+      "subject": "BONK",
+      "hanko_enter": false,
+      "baseline_enter": false,
+      "price_return": -0.08286000668225857,
+      "endpoint_at": "2026-10-30T01:09:07.336586Z",
+      "endpoint_lag_hours": 4.633485072777778
+    },
+    {
+      "decision_id": "dec_6f17e2a5b856ebfc76257f77",
+      "subject": "BTC",
+      "hanko_enter": true,
+      "baseline_enter": true,
+      "price_return": -0.020070674313209635,
+      "endpoint_at": "2026-10-30T07:17:02.125082Z",
+      "endpoint_lag_hours": 3.9086918708333336
+    },
+    {
+      "decision_id": "dec_fdcd42dd8472c91dfdc702b4",
+      "subject": "ETH",
+      "hanko_enter": true,
+      "baseline_enter": true,
+      "price_return": -0.029420775779857578,
+      "endpoint_at": "2026-10-30T07:17:02.125082Z",
+      "endpoint_lag_hours": 3.9086918708333336
+    },
+    {
+      "decision_id": "dec_f5d1d4558188287f96eb8891",
+      "subject": "SOL",
+      "hanko_enter": true,
+      "baseline_enter": true,
+      "price_return": -0.023947315905009092,
+      "endpoint_at": "2026-10-30T07:17:02.125082Z",
+      "endpoint_lag_hours": 3.9086918708333336
+    },
+    {
+      "decision_id": "dec_7447f2f96c9e2627d3a9d52b",
+      "subject": "BONK",
+      "hanko_enter": false,
+      "baseline_enter": false,
+      "price_return": -0.029323558813728834,
+      "endpoint_at": "2026-10-30T07:17:02.125082Z",
+      "endpoint_lag_hours": 3.9086918708333336
     }
   ],
   "inputs": {
-    "live\\decisions.jsonl": "84bfb7d7a2ad93a1267143f6f9e890c5576ae30b9f1660a3bb986c85250e764d",
-    "live\\reviews.jsonl": "6cd8d8e2a0089346615a385caf514273c596ec17511ee2e719d97fcb2f621703"
+    "live\\decisions.jsonl": "9e2d2bc6cb30a2c121a4c34d7b0ae9706b48f186c6d26ce08e753c7634f8f774",
+    "live\\reviews.jsonl": "30116802bd0d32138ca86a69052060f40d8845f0ae92a1c31fd08e2d85ba723d"
   }
 }

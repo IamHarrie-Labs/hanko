@@ -660,5 +660,7 @@ record starts shaping what it believes.
 
 Hanko 2.0.0 is published in the official MCP registry as `io.github.IamHarrie-Labs/hanko`.
 
-- [Retrospective baseline comparison](study/baseline/README.md): the first 32 eligible reviewed opportunities produce identical entry selections under Hanko and a simple rule. This sample establishes no selection advantage. Reproduce with `python scripts/compare_baseline.py`.
+- [Retrospective baseline comparison](study/baseline/README.md): 76 eligible reviewed opportunities produce identical entry selections under Hanko and a simple rule. This sample establishes no selection advantage. Reproduce with `python scripts/compare_baseline.py`.
 - [A sealed SOL refusal proved wrong](study/baseline/failure-case.md): the original commitment, late review-time observations, and what the extra voice does and does not establish.
+
+The first successful model-read workflow sealed `run_547a6eaf6c69d992` on 30 Oct: 21 model calls, no fallbacks, three unnamed-token readings rejected, and all four decisions independently replayed. Its Bitcoin timestamp is pending confirmation.
