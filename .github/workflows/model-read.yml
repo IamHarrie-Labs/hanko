@@ -21,6 +21,8 @@ concurrency:
 
 jobs:
   seal:
+    # The RYO-Digital submission mirror must not allocate runners or spend API credits.
+    if: github.repository == 'IamHarrie-Labs/hanko'
     runs-on: ubuntu-latest
     timeout-minutes: 25
     env:

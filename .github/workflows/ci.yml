@@ -8,6 +8,8 @@ on:
 
 jobs:
   test:
+    # Submission copies share the code; checks run in the canonical repository.
+    if: github.repository == 'IamHarrie-Labs/hanko'
     runs-on: ubuntu-latest
     strategy:
       matrix:

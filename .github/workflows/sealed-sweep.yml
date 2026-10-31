@@ -32,6 +32,8 @@ concurrency:
 
 jobs:
   seal:
+    # Run the live ledger only in its canonical repository, not submission copies.
+    if: github.repository == 'IamHarrie-Labs/hanko'
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
