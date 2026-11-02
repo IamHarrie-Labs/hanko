@@ -202,3 +202,7 @@
 {"subject": "ETH", "at": "2026-11-02T06:26:29.754079Z", "metrics": {"price_usd": 2284.048, "volume_24h_usd": 185175521.3, "liquidity_usd": 303383948.84000003, "safety_score": null}, "snapshot_id": null}
 {"subject": "SOL", "at": "2026-11-02T06:26:29.754079Z", "metrics": {"price_usd": 94.29, "volume_24h_usd": 86630643.59, "liquidity_usd": 79567100.8, "safety_score": null}, "snapshot_id": null}
 {"subject": "BONK", "at": "2026-11-02T06:26:29.754079Z", "metrics": {"price_usd": 2.876e-06, "volume_24h_usd": 265662.64, "liquidity_usd": 1135987.14, "safety_score": null}, "snapshot_id": null}
+{"subject": "BTC", "at": "2026-11-02T17:13:39.732447Z", "metrics": {"price_usd": 77338.31, "volume_24h_usd": 50765800.870000005, "liquidity_usd": 264918306.9, "safety_score": null}, "snapshot_id": null}
+{"subject": "ETH", "at": "2026-11-02T17:13:39.732447Z", "metrics": {"price_usd": 2262.65, "volume_24h_usd": 241315566.73, "liquidity_usd": 303982244.25, "safety_score": null}, "snapshot_id": null}
+{"subject": "SOL", "at": "2026-11-02T17:13:39.732447Z", "metrics": {"price_usd": 93.11, "volume_24h_usd": 130471440.17999999, "liquidity_usd": 79424842.17, "safety_score": null}, "snapshot_id": null}
+{"subject": "BONK", "at": "2026-11-02T17:13:39.732447Z", "metrics": {"price_usd": 2.801e-06, "volume_24h_usd": 382194.27999999997, "liquidity_usd": 1117036.72, "safety_score": null}, "snapshot_id": null}
