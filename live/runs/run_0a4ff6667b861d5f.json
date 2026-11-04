@@ -1,0 +1,46 @@
+{
+  "run_id": "run_0a4ff6667b861d5f",
+  "as_of": "2026-11-04T09:28:51.322663Z",
+  "watchlist_digest": "sha256:0ba6264e92bcceb002e57bcb4090da9d8c68cc8ddbc1dc3c80f177a855bf5e6c",
+  "policy_digest": "sha256:2ecd23937ae4b96296baac76fcfdcffbc3c96006739d14698842edc4cb300fa7",
+  "entries": [
+    {
+      "seq": 1,
+      "token": "BTC",
+      "verdict": "enter",
+      "decision_id": "dec_94085627c8382202e9943573",
+      "commitment_digest": "sha256:94085627c8382202e99435733a8ca86c95729a031f66f5559d4ae78e6ff2a6bc",
+      "skipped_duplicate": false,
+      "error": null
+    },
+    {
+      "seq": 2,
+      "token": "ETH",
+      "verdict": "enter",
+      "decision_id": "dec_a944fd8a505500fedba7eeb4",
+      "commitment_digest": "sha256:a944fd8a505500fedba7eeb45daeb96210a0afce99d5a05dfbe0ff13764425c0",
+      "skipped_duplicate": false,
+      "error": null
+    },
+    {
+      "seq": 3,
+      "token": "SOL",
+      "verdict": "enter",
+      "decision_id": "dec_ca08ef2c22c666f2513a9a9d",
+      "commitment_digest": "sha256:ca08ef2c22c666f2513a9a9d101f91b9c187bd4ae018eab728b5955fb7e6f6bb",
+      "skipped_duplicate": false,
+      "error": null
+    },
+    {
+      "seq": 4,
+      "token": "BONK",
+      "verdict": "abstain",
+      "decision_id": "dec_3619602d75e56af9d2fbc351",
+      "commitment_digest": "sha256:3619602d75e56af9d2fbc351498825ae1dd0666e82ac05521015c27ea9c24328",
+      "skipped_duplicate": false,
+      "error": null
+    }
+  ],
+  "manifest_digest": "sha256:565eda7a802ab05d62777fc49c8853f31ba5b4eceecd2eb4189ff8f97cbf778a",
+  "notes": {}
+}
