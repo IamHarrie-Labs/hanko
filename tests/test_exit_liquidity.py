@@ -170,8 +170,8 @@ class TestRefusals:
         b = assess("BONK", thin, size_usd=5_000, sources=src)
 
         # Same headline duration, wildly different markets.
-        assert "exit over under a minute" in a.explain()
-        assert "exit over under a minute" in b.explain()
+        assert "exit in under a minute" in a.explain()
+        assert "exit in under a minute" in b.explain()
         assert a.hourly_capacity_usd == pytest.approx(45_158_333.8, rel=1e-6)
         assert b.hourly_capacity_usd == pytest.approx(565_125.1, rel=1e-6)
         assert a.hourly_capacity_usd > b.hourly_capacity_usd * 50
@@ -326,3 +326,13 @@ def test_explain_reads_as_a_verdict():
     assert "ILLIQUID" in text
     assert "largest exit at 3% slippage" in text
     assert "modelled with cpmm_v1, not observed" in text
+
+
+def test_small_costs_keep_the_digits_the_ratio_was_computed_from():
+    from hanko.skills.exit_liquidity.skill import _pct
+
+    # 0.12% / 0.0054% is ~22x; printed as 0.01% it would read as 12x.
+    assert _pct(0.000054) == "0.0054%"
+    assert _pct(0.0012) == "0.12%"
+    assert _pct(0.0234) == "2.34%"
+    assert _pct(0) == "0.00%"

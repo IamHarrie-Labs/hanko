@@ -116,7 +116,13 @@
     return v.toFixed(8).replace(/0+$/, '');
   }
 
-  function pctText(v) { return v.toFixed(2) + '%'; }
+  function pctText(v) {
+    // Same as the CLI: two decimals would print a real 0.0054% as 0.01%,
+    // and the model-over-quote ratio beside it would stop adding up.
+    var a = Math.abs(v);
+    if (a === 0 || a >= 0.1) return v.toFixed(2) + '%';
+    return v.toFixed(Math.min(8, 1 - Math.floor(Math.log10(a)))) + '%';
+  }
 
   function renderReport(env) {
     // The envelope is RYO's own public response contract; the skill's
@@ -142,8 +148,13 @@
 
     var q = body.venue_quote;
     if (q) {
+      // size_usd is converted at the reference price; the venue can price the
+      // token a little higher, so a near-free exit returns more than was sold.
+      var over = q.out_usd > q.size_usd
+        ? ' (more than $' + money(q.size_usd) + ' because ' + q.venue + ' prices the token above the reference price)'
+        : '';
       lines.push('  quoted: selling ~$' + money(q.size_usd) + ' on ' + q.venue + ' returns $' + money(q.out_usd)
-        + ', ' + pctText(q.effective_cost_pct) + ' under its own near-mid rate (impact plus fees, '
+        + over + ', ' + pctText(q.effective_cost_pct) + ' under its own near-mid rate (impact plus fees, '
         + q.route_hops + '-hop route)');
     }
     if (body.estimate) {
@@ -156,9 +167,9 @@
     if (mc && mc.model_over_quote !== null && mc.model_over_quote !== undefined) {
       var r = mc.model_over_quote;
       lines.push(r >= 1.25
-        ? '  the model overstates this exit ' + r.toFixed(1) + 'x: the route reaches concentrated liquidity a constant-product curve cannot see'
+        ? '  the model overstates this exit\'s cost ' + r.toFixed(1) + 'x: the route reaches concentrated liquidity a constant-product curve cannot see'
         : r <= 0.8
-          ? '  the model understates this exit ' + (1 / r).toFixed(1) + 'x: the venue is thinner than its TVL says'
+          ? '  the model understates this exit\'s cost by ' + (1 / r).toFixed(1) + 'x: the venue is thinner than its TVL says'
           : '  the model and the quote agree within 25%');
     }
     var dp = body.pool_depth;
@@ -167,7 +178,9 @@
         + ', deepest $' + money(dp.deepest_pool.liquidity_usd)
         + (dp.pools_rejected.length ? ', ' + dp.pools_rejected.length + ' rejected' : ''));
     }
-    var labels = { '1pct': '1% slippage', '3pct': '3% slippage', at_ceiling: 'the requested ceiling' };
+    var ceiling = body.parameters && body.parameters.max_slippage_pct;
+    var labels = { '1pct': '1% slippage', '3pct': '3% slippage',
+      at_ceiling: ceiling ? 'your ' + (+ceiling.toFixed(2)) + '% ceiling' : 'your slippage ceiling' };
     Object.keys(body.max_size_usd || {}).forEach(function (key) {
       var value = body.max_size_usd[key];
       if (value !== null && value !== undefined) {
@@ -182,7 +195,7 @@
       else if (h * 60 >= 1) when = Math.round(h * 60) + ' min';
       else when = 'under a minute';
       var pct = body.parameters ? Math.round(body.parameters.participation_pct) : 10;
-      lines.push(((q || body.estimate) ? '  or exit over ' : '  exit over ') + when + ' at ' + pct + '% of volume');
+      lines.push(((q || body.estimate) ? '  or exit ' : '  exit ') + (when === 'under a minute' ? 'in ' : 'over ') + when + ' at ' + pct + '% of volume');
     }
     if (body.drift_exposure_pct !== null && body.drift_exposure_pct !== undefined) {
       var d = body.drift_exposure_pct;

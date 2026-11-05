@@ -47,6 +47,7 @@ Three rules, all stricter than the platform requires.
 
 from __future__ import annotations
 
+import math
 from dataclasses import dataclass, field
 from datetime import datetime
 from typing import Any
@@ -198,14 +199,15 @@ class Report:
             lines.append(
                 "  quoted: selling ~$" + _money(self.quote.size_usd) + " on "
                 + self.quote.venue + " returns $" + _money(self.quote.out_usd)
-                + ", " + str(round(self.quote.effective_cost * 100, 2))
-                + "% under its own near-mid rate (price impact plus fees, "
+                + _over_reference(self.quote)
+                + ", " + _pct(self.quote.effective_cost)
+                + " under its own near-mid rate (price impact plus fees, "
                 + str(self.quote.route_hops) + "-hop route)"
             )
         if self.estimate:
             prefix = "  model said " if self.quote else "  exiting $" + _money(self.estimate.size_usd) + " costs "
             lines.append(
-                prefix + str(round(self.estimate.slippage * 100, 2)) + "%"
+                prefix + _pct(self.estimate.slippage)
                 + ("" if self.quote else "  ($" + _money(self.estimate.cost_usd) + ")")
                 + (" from $" + _money(self._liquidity_used()) + " of on-chain depth"
                    if self.quote and self._liquidity_used() is not None else "")
@@ -248,9 +250,12 @@ class Report:
         if self.hours_to_exit is not None:
             # "or" only reads correctly as the alternative to a cost figure
             # printed above. With no estimate, this is the sole answer.
-            lead = "  or exit over " if self.estimate else "  exit over "
+            when = _duration(self.hours_to_exit)
+            lead = ("  or exit " if self.estimate else "  exit ") + (
+                "in " if when == "under a minute" else "over "
+            )
             lines.append(
-                lead + _duration(self.hours_to_exit)
+                lead + when
                 + " at " + str(round(self.participation * 100)) + "% of volume"
             )
         if self.hourly_capacity_usd is not None:
@@ -382,13 +387,14 @@ class Report:
         if self.quote:
             points.append(
                 "Executable " + self.quote.venue + " quote: selling this size returns $"
-                + _money(self.quote.out_usd) + ", " + str(round(self.quote.effective_cost * 100, 2))
-                + "% under the venue's own near-mid rate (impact plus fees)."
+                + _money(self.quote.out_usd) + _over_reference(self.quote) + ", "
+                + _pct(self.quote.effective_cost)
+                + " under the venue's own near-mid rate (impact plus fees)."
             )
         if self.model_check and self.model_check.get("model_over_quote") is not None:
             points.append(
-                "Constant-product model: " + str(round(self.model_check["modelled_cost_pct"], 2))
-                + "% against the quote's " + str(round(self.model_check["quoted_cost_pct"], 2)) + "%."
+                "Constant-product model: " + _pct(self.model_check["modelled_cost_pct"] / 100)
+                + " against the quote's " + _pct(self.model_check["quoted_cost_pct"] / 100) + "."
             )
         if self.hours_to_exit is not None:
             points.append(
@@ -408,6 +414,27 @@ class Report:
 
 def _money(value: float) -> str:
     return format(round(value), ",")
+
+
+def _pct(fraction: float) -> str:
+    """A cost as a percentage, with the digits it actually needs.
+
+    Two decimals print a real 0.0054% as 0.01%, and the model-over-quote
+    ratio beside it then disagrees with the figures a reader can divide.
+    """
+    value = fraction * 100
+    if value == 0 or abs(value) >= 0.1:
+        return format(value, ".2f") + "%"
+    return format(value, "." + str(min(8, 1 - math.floor(math.log10(abs(value))))) + "f") + "%"
+
+
+def _over_reference(quote: Any) -> str:
+    # size_usd is converted at the reference price; the venue can price the
+    # token a little higher, so a near-free exit returns more dollars than
+    # were sold. Said outright, it stops reading as a contradiction.
+    if quote.out_usd > quote.size_usd:
+        return " (more than $" + _money(quote.size_usd) + " because " + quote.venue + " prices the token above the reference price)"
+    return ""
 
 
 def _price(value: float) -> str:
