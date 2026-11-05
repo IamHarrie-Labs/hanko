@@ -200,8 +200,8 @@
             }).join(' · ') + '. '
           + (sc.brier !== null ? 'Brier score ' + sc.brier.toFixed(3) + ' over the ' + sc.forecasts
               + ' ENTER decisions, the only ones whose confidence is a forecast. ' : '')
-          + 'Uncheckable reviews are excluded rather than counted as wins.'
-        : 'Reviews so far could not be checked; they are excluded rather than counted as wins.';
+          + 'Reviews that could not be checked are left out of the score.'
+        : 'Reviews so far could not be checked, so they are left out of the score.';
       d.reviews.forEach(function (r) {
         var li = el('li', 'ledger-review');
         var head = el('div', 'ledger-change-head');
