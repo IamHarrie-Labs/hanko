@@ -1,50 +1,44 @@
 {
  "schema": "hanko.live-summary/1",
  "first_decision_at": "2026-10-24T06:37:22.866702Z",
- "last_decision_at": "2026-10-30T14:44:09.095693Z",
+ "last_decision_at": "2026-11-05T07:00:19.668652Z",
  "totals": {
-  "runs": 35,
-  "decisions": 140,
+  "runs": 65,
+  "decisions": 260,
   "verdicts": {
-   "enter": 42,
-   "pass": 57,
-   "abstain": 41
+   "enter": 72,
+   "pass": 108,
+   "abstain": 80
   },
-  "model_read": 4,
-  "reviews": 76,
+  "model_read": 24,
+  "reviews": 204,
   "results": {
-   "held": 45,
-   "falsified": 31
+   "held": 101,
+   "falsified": 103
   },
-  "anchored_runs": 33
+  "anchored_runs": 64
  },
  "changes": [
   {
    "token": "SOL",
-   "rank": 3,
-   "headline": "PASS to ABSTAIN; evidence quality 0.53 to 0.00; -2 independent voices",
-   "why": [
-    "evidence present now blocked: no readings reference SOL",
-    "quality floor now blocked: evidence quality 0.0 is below the floor of 0.4",
-    "independent voices now blocked: 0 independent voice(s) of 0 author(s); 0 echo(es) discounted; policy requires 2"
-   ],
-   "magnitude": 0.5294
+   "rank": 1,
+   "headline": "evidence quality 0.71 to 0.59",
+   "why": [],
+   "magnitude": 0.1196
   },
   {
    "token": "BTC",
-   "rank": 1,
-   "headline": "size 1.50% to 1.59%; evidence quality 0.60 to 0.48; -6 independent voices",
+   "rank": 0,
+   "headline": "+2 independent voices",
    "why": [],
-   "magnitude": 0.1209
+   "magnitude": 0.094
   },
   {
    "token": "ETH",
    "rank": 0,
-   "headline": "-6 independent voices",
-   "why": [
-    "independent voices now blocked: 1 independent voice(s) of 1 author(s); 0 echo(es) discounted; policy requires 2"
-   ],
-   "magnitude": 0.0424
+   "headline": "no change",
+   "why": [],
+   "magnitude": 0.013
   },
   {
    "token": "BONK",
@@ -57,63 +51,102 @@
  "tokens": [
   {
    "token": "BTC",
-   "decision_id": "dec_da524959b90b16c898c0cbc7",
-   "decided_at": "2026-10-30T14:44:09.095693Z",
-   "review_at": "2026-11-02T14:44:09.095693Z",
-   "verdict": "enter",
-   "size_pct": 1.59,
-   "confidence": 0.32,
-   "quality": 0.481,
-   "independent_voices": 2,
+   "decision_id": "dec_a4d033e73f4e2c5d021d7ba7",
+   "decided_at": "2026-11-05T07:00:19.668652Z",
+   "review_at": "2026-11-08T07:00:19.668652Z",
+   "verdict": "pass",
+   "size_pct": 0.0,
+   "confidence": 0.34,
+   "quality": 0.572,
+   "independent_voices": 9,
    "voices": [
+    "BWEnews",
     "Cointelegraph.com News",
-    "bitcoin"
+    "Decrypt",
+    "WatcherGuru",
+    "bitcoin",
+    "btcbreakdown.com",
+    "chainestate.bsky.social",
+    "cointelegraph",
+    "cryptovka.com"
    ],
    "echoes": 0,
-   "readings": 5,
-   "read_by": "model, checked by code",
+   "readings": 34,
+   "read_by": "word list",
    "because": {
-    "rule": "conviction",
-    "detail": "mean bullish conviction 0.66"
+    "rule": "direction",
+    "detail": "evidence does not argue for entry"
    },
    "wrong_if": [
-    "price_usd < 65,370 within 72h (thesis fails if price falls 15% from entry)",
-    "liquidity_usd < 238,117,383 within 72h (exit assumption fails if depth drops 30%)",
-    "independent_voices < 2 within 72h (entry rested on convergence that no longer holds)"
+    "independent_voices > 9 within 72h (verdict flips if another independent voice converges)",
+    "volume_24h_usd > 255,855,567 within 72h (verdict is worth revisiting if volume rises 50%)"
    ],
    "gaps": 3
   },
   {
    "token": "ETH",
-   "decision_id": "dec_2caaabf9634459c5c5dbb33d",
-   "decided_at": "2026-10-30T14:44:09.095693Z",
-   "review_at": "2026-11-02T14:44:09.095693Z",
+   "decision_id": "dec_cd79fe27f4f6661e57bb60c2",
+   "decided_at": "2026-11-05T07:00:19.668652Z",
+   "review_at": "2026-11-08T07:00:19.668652Z",
    "verdict": "pass",
    "size_pct": 0.0,
    "confidence": 0.0,
-   "quality": 0.542,
-   "independent_voices": 1,
+   "quality": 0.586,
+   "independent_voices": 5,
    "voices": [
+    "Cointelegraph.com News",
+    "CryptoRankNews",
+    "DegenerateNews",
+    "chainestate.bsky.social",
     "cryptovka.com"
    ],
    "echoes": 0,
-   "readings": 1,
-   "read_by": "model, checked by code",
+   "readings": 8,
+   "read_by": "word list",
    "because": {
-    "rule": "independent voices",
-    "detail": "1 independent voice(s) of 1 author(s); 0 echo(es) discounted; policy requires 2"
+    "rule": "direction",
+    "detail": "evidence does not argue for entry"
    },
    "wrong_if": [
-    "independent_voices > 1 within 72h (verdict flips if another independent voice converges)",
-    "volume_24h_usd > 2,893,108,365 within 72h (verdict is worth revisiting if volume rises 50%)"
+    "independent_voices > 5 within 72h (verdict flips if another independent voice converges)",
+    "volume_24h_usd > 561,054,931 within 72h (verdict is worth revisiting if volume rises 50%)"
+   ],
+   "gaps": 3
+  },
+  {
+   "token": "SOL",
+   "decision_id": "dec_454ffa6727a7e0dd37abc0fb",
+   "decided_at": "2026-11-05T07:00:19.668652Z",
+   "review_at": "2026-11-08T07:00:19.668652Z",
+   "verdict": "pass",
+   "size_pct": 0.0,
+   "confidence": 0.0,
+   "quality": 0.586,
+   "independent_voices": 4,
+   "voices": [
+    "Cointelegraph.com News",
+    "DegenerateNews",
+    "chainestate.bsky.social",
+    "cryptovka.com"
+   ],
+   "echoes": 0,
+   "readings": 8,
+   "read_by": "word list",
+   "because": {
+    "rule": "direction",
+    "detail": "evidence does not argue for entry"
+   },
+   "wrong_if": [
+    "independent_voices > 4 within 72h (verdict flips if another independent voice converges)",
+    "volume_24h_usd > 359,004,623 within 72h (verdict is worth revisiting if volume rises 50%)"
    ],
    "gaps": 3
   },
   {
    "token": "BONK",
-   "decision_id": "dec_3785f0821968f2ddb52f9139",
-   "decided_at": "2026-10-30T14:44:09.095693Z",
-   "review_at": "2026-11-02T14:44:09.095693Z",
+   "decision_id": "dec_73b830b521e303489b215133",
+   "decided_at": "2026-11-05T07:00:19.668652Z",
+   "review_at": "2026-11-08T07:00:19.668652Z",
    "verdict": "abstain",
    "size_pct": 0.0,
    "confidence": 0.0,
@@ -122,300 +155,262 @@
    "voices": [],
    "echoes": 0,
    "readings": 0,
-   "read_by": "model, checked by code",
+   "read_by": "word list",
    "because": {
     "rule": "evidence present",
     "detail": "no readings reference BONK"
    },
    "wrong_if": [
     "independent_voices > 1 within 72h (verdict flips if another independent voice converges)",
-    "volume_24h_usd > 2,500,278 within 72h (verdict is worth revisiting if volume rises 50%)"
-   ],
-   "gaps": 3
-  },
-  {
-   "token": "SOL",
-   "decision_id": "dec_f7c2f1ad7655e2e992fe2e85",
-   "decided_at": "2026-10-30T14:44:09.095693Z",
-   "review_at": "2026-11-02T14:44:09.095693Z",
-   "verdict": "abstain",
-   "size_pct": 0.0,
-   "confidence": 0.0,
-   "quality": 0.0,
-   "independent_voices": 0,
-   "voices": [],
-   "echoes": 0,
-   "readings": 0,
-   "read_by": "model, checked by code",
-   "because": {
-    "rule": "evidence present",
-    "detail": "no readings reference SOL"
-   },
-   "wrong_if": [
-    "independent_voices > 1 within 72h (verdict flips if another independent voice converges)",
-    "volume_24h_usd > 458,740,735 within 72h (verdict is worth revisiting if volume rises 50%)"
+    "volume_24h_usd > 1,313,068 within 72h (verdict is worth revisiting if volume rises 50%)"
    ],
    "gaps": 3
   }
  ],
  "reviews": [
   {
-   "decision_id": "dec_6f17e2a5b856ebfc76257f77",
-   "token": "BTC",
-   "verdict": "enter",
-   "result": "held",
-   "reviewed_at": "2026-10-30T14:20:12.375488Z",
-   "checks": [
-    "thesis fails if price falls 15% from entry: not_met",
-    "exit assumption fails if depth drops 30%: not_met",
-    "entry rested on convergence that no longer holds: not_met"
-   ]
-  },
-  {
-   "decision_id": "dec_7447f2f96c9e2627d3a9d52b",
+   "decision_id": "dec_45c8bc4498883657ebee010d",
    "token": "BONK",
    "verdict": "abstain",
    "result": "falsified",
-   "reviewed_at": "2026-10-30T14:20:12.375488Z",
+   "reviewed_at": "2026-11-05T07:00:19.668652Z",
    "checks": [
     "verdict flips if another independent voice converges: not_met",
     "verdict is worth revisiting if volume rises 50%: met"
    ]
   },
   {
-   "decision_id": "dec_f5d1d4558188287f96eb8891",
-   "token": "SOL",
-   "verdict": "enter",
-   "result": "held",
-   "reviewed_at": "2026-10-30T14:20:12.375488Z",
-   "checks": [
-    "thesis fails if price falls 15% from entry: not_met",
-    "exit assumption fails if depth drops 30%: not_met",
-    "entry rested on convergence that no longer holds: not_met"
-   ]
-  },
-  {
-   "decision_id": "dec_fdcd42dd8472c91dfdc702b4",
-   "token": "ETH",
-   "verdict": "enter",
-   "result": "falsified",
-   "reviewed_at": "2026-10-30T14:20:12.375488Z",
-   "checks": [
-    "thesis fails if price falls 15% from entry: not_met",
-    "exit assumption fails if depth drops 30%: met",
-    "entry rested on convergence that no longer holds: not_met"
-   ]
-  },
-  {
-   "decision_id": "dec_06a7e194f26249690b782669",
+   "decision_id": "dec_73b6ce8f622f71d114f4ac81",
    "token": "BTC",
-   "verdict": "enter",
-   "result": "held",
-   "reviewed_at": "2026-10-30T07:17:02.125082Z",
-   "checks": [
-    "thesis fails if price falls 15% from entry: not_met",
-    "exit assumption fails if depth drops 30%: not_met",
-    "entry rested on convergence that no longer holds: not_met"
-   ]
-  },
-  {
-   "decision_id": "dec_4cd4362cc2799f3c319c686a",
-   "token": "ETH",
-   "verdict": "enter",
+   "verdict": "pass",
    "result": "falsified",
-   "reviewed_at": "2026-10-30T07:17:02.125082Z",
+   "reviewed_at": "2026-11-05T07:00:19.668652Z",
    "checks": [
-    "thesis fails if price falls 15% from entry: not_met",
-    "exit assumption fails if depth drops 30%: met",
-    "entry rested on convergence that no longer holds: not_met"
+    "verdict flips if another independent voice converges: met",
+    "verdict is worth revisiting if volume rises 50%: met"
    ]
   },
   {
-   "decision_id": "dec_6608f1832fd675a1032a452b",
+   "decision_id": "dec_77b90ea8096b819acaa666e3",
    "token": "SOL",
-   "verdict": "enter",
-   "result": "held",
-   "reviewed_at": "2026-10-30T07:17:02.125082Z",
-   "checks": [
-    "thesis fails if price falls 15% from entry: not_met",
-    "exit assumption fails if depth drops 30%: not_met",
-    "entry rested on convergence that no longer holds: not_met"
-   ]
-  },
-  {
-   "decision_id": "dec_903e55ad90b3f2a5abe78863",
-   "token": "BONK",
-   "verdict": "abstain",
+   "verdict": "pass",
    "result": "falsified",
-   "reviewed_at": "2026-10-30T07:17:02.125082Z",
+   "reviewed_at": "2026-11-05T07:00:19.668652Z",
    "checks": [
     "verdict flips if another independent voice converges: not_met",
     "verdict is worth revisiting if volume rises 50%: met"
    ]
   },
   {
-   "decision_id": "dec_5bb17f646af94a60e90c635f",
+   "decision_id": "dec_827ffa45b823034346f05bca",
+   "token": "ETH",
+   "verdict": "pass",
+   "result": "falsified",
+   "reviewed_at": "2026-11-05T07:00:19.668652Z",
+   "checks": [
+    "verdict flips if another independent voice converges: met",
+    "verdict is worth revisiting if volume rises 50%: met"
+   ]
+  },
+  {
+   "decision_id": "dec_313b23800521e6d445d40b9a",
    "token": "BONK",
    "verdict": "abstain",
    "result": "falsified",
-   "reviewed_at": "2026-10-30T01:09:07.336586Z",
+   "reviewed_at": "2026-11-04T23:46:18.928576Z",
    "checks": [
     "verdict flips if another independent voice converges: not_met",
     "verdict is worth revisiting if volume rises 50%: met"
    ]
   },
   {
-   "decision_id": "dec_c536b71fe0e2b1c45abc9136",
-   "token": "SOL",
-   "verdict": "enter",
-   "result": "held",
-   "reviewed_at": "2026-10-30T01:09:07.336586Z",
-   "checks": [
-    "thesis fails if price falls 15% from entry: not_met",
-    "exit assumption fails if depth drops 30%: not_met",
-    "entry rested on convergence that no longer holds: not_met"
-   ]
-  },
-  {
-   "decision_id": "dec_c57959f7dbb7a4d6d1d9f9b8",
+   "decision_id": "dec_39f55b5dcbca754862c0970a",
    "token": "ETH",
-   "verdict": "enter",
+   "verdict": "pass",
    "result": "falsified",
-   "reviewed_at": "2026-10-30T01:09:07.336586Z",
+   "reviewed_at": "2026-11-04T23:46:18.928576Z",
    "checks": [
-    "thesis fails if price falls 15% from entry: not_met",
-    "exit assumption fails if depth drops 30%: met",
-    "entry rested on convergence that no longer holds: not_met"
+    "verdict flips if another independent voice converges: met",
+    "verdict is worth revisiting if volume rises 50%: met"
    ]
   },
   {
-   "decision_id": "dec_ffb5a39dc9788c34ae2cb9a6",
+   "decision_id": "dec_6dbd4515ec0f38553b4e612a",
    "token": "BTC",
-   "verdict": "enter",
-   "result": "held",
-   "reviewed_at": "2026-10-30T01:09:07.336586Z",
+   "verdict": "pass",
+   "result": "falsified",
+   "reviewed_at": "2026-11-04T23:46:18.928576Z",
    "checks": [
-    "thesis fails if price falls 15% from entry: not_met",
-    "exit assumption fails if depth drops 30%: not_met",
-    "entry rested on convergence that no longer holds: not_met"
+    "verdict flips if another independent voice converges: met",
+    "verdict is worth revisiting if volume rises 50%: met"
    ]
   },
   {
-   "decision_id": "dec_54dda8dbc08ea99b413708ac",
+   "decision_id": "dec_b6e8b0ac4f6c83d808387b8b",
+   "token": "SOL",
+   "verdict": "pass",
+   "result": "falsified",
+   "reviewed_at": "2026-11-04T23:46:18.928576Z",
+   "checks": [
+    "verdict flips if another independent voice converges: met",
+    "verdict is worth revisiting if volume rises 50%: met"
+   ]
+  },
+  {
+   "decision_id": "dec_18895e15b27fb61b529ce550",
    "token": "ETH",
-   "verdict": "enter",
-   "result": "held",
-   "reviewed_at": "2026-10-29T21:14:18.515002Z",
+   "verdict": "pass",
+   "result": "falsified",
+   "reviewed_at": "2026-11-04T23:46:18.928576Z",
    "checks": [
-    "thesis fails if price falls 15% from entry: not_met",
-    "exit assumption fails if depth drops 30%: not_met",
-    "entry rested on convergence that no longer holds: not_met"
+    "verdict flips if another independent voice converges: met",
+    "verdict is worth revisiting if volume rises 50%: met"
    ]
   },
   {
-   "decision_id": "dec_79b9eae98ca615d86d21ddba",
+   "decision_id": "dec_792d98d924922154c26c625c",
    "token": "BONK",
    "verdict": "abstain",
    "result": "falsified",
-   "reviewed_at": "2026-10-29T21:14:18.515002Z",
+   "reviewed_at": "2026-11-04T23:46:18.928576Z",
    "checks": [
     "verdict flips if another independent voice converges: not_met",
     "verdict is worth revisiting if volume rises 50%: met"
    ]
   },
   {
-   "decision_id": "dec_9137f2a393aa95d1b3f21b01",
+   "decision_id": "dec_88301aed822e0b46959d19f2",
    "token": "BTC",
-   "verdict": "enter",
-   "result": "held",
-   "reviewed_at": "2026-10-29T21:14:18.515002Z",
+   "verdict": "pass",
+   "result": "falsified",
+   "reviewed_at": "2026-11-04T23:46:18.928576Z",
    "checks": [
-    "thesis fails if price falls 15% from entry: not_met",
-    "exit assumption fails if depth drops 30%: not_met",
-    "entry rested on convergence that no longer holds: not_met"
+    "verdict flips if another independent voice converges: met",
+    "verdict is worth revisiting if volume rises 50%: met"
    ]
   },
   {
-   "decision_id": "dec_d9b4811ed0b430a35d922644",
+   "decision_id": "dec_d41cd9ea7bbce62013db9715",
    "token": "SOL",
-   "verdict": "enter",
-   "result": "held",
-   "reviewed_at": "2026-10-29T21:14:18.515002Z",
+   "verdict": "pass",
+   "result": "falsified",
+   "reviewed_at": "2026-11-04T23:46:18.928576Z",
    "checks": [
-    "thesis fails if price falls 15% from entry: not_met",
-    "exit assumption fails if depth drops 30%: not_met",
-    "entry rested on convergence that no longer holds: not_met"
+    "verdict flips if another independent voice converges: met",
+    "verdict is worth revisiting if volume rises 50%: met"
    ]
   },
   {
-   "decision_id": "dec_5ba23faa42f39bb0176d2371",
+   "decision_id": "dec_481d80605e9527aec7d07a5d",
    "token": "ETH",
-   "verdict": "enter",
-   "result": "held",
-   "reviewed_at": "2026-10-29T16:15:24.727538Z",
+   "verdict": "pass",
+   "result": "falsified",
+   "reviewed_at": "2026-11-04T18:04:58.982110Z",
    "checks": [
-    "thesis fails if price falls 15% from entry: not_met",
-    "exit assumption fails if depth drops 30%: not_met",
-    "entry rested on convergence that no longer holds: not_met"
-   ]
-  },
-  {
-   "decision_id": "dec_8b9c6706111c5f1969b388d8",
-   "token": "BTC",
-   "verdict": "abstain",
-   "result": "held",
-   "reviewed_at": "2026-10-29T16:15:24.727538Z",
-   "checks": [
-    "verdict flips if another independent voice converges: not_met",
+    "verdict flips if another independent voice converges: met",
     "verdict is worth revisiting if volume rises 50%: not_met"
    ]
   },
   {
-   "decision_id": "dec_ebe5a6f2e0189b5422e22a8d",
-   "token": "SOL",
-   "verdict": "enter",
-   "result": "held",
-   "reviewed_at": "2026-10-29T16:15:24.727538Z",
-   "checks": [
-    "thesis fails if price falls 15% from entry: not_met",
-    "exit assumption fails if depth drops 30%: not_met",
-    "entry rested on convergence that no longer holds: not_met"
-   ]
-  },
-  {
-   "decision_id": "dec_f728f72b27968bb10014c830",
+   "decision_id": "dec_cbd086c8f6505b8afcc7184e",
    "token": "BONK",
    "verdict": "abstain",
    "result": "falsified",
-   "reviewed_at": "2026-10-29T16:15:24.727538Z",
+   "reviewed_at": "2026-11-04T18:04:58.982110Z",
    "checks": [
     "verdict flips if another independent voice converges: not_met",
+    "verdict is worth revisiting if volume rises 50%: met"
+   ]
+  },
+  {
+   "decision_id": "dec_eda1ca09cbbe2a938562430d",
+   "token": "SOL",
+   "verdict": "pass",
+   "result": "falsified",
+   "reviewed_at": "2026-11-04T18:04:58.982110Z",
+   "checks": [
+    "verdict flips if another independent voice converges: met",
+    "verdict is worth revisiting if volume rises 50%: met"
+   ]
+  },
+  {
+   "decision_id": "dec_f5c81dd9e118f8329d1c3807",
+   "token": "BTC",
+   "verdict": "abstain",
+   "result": "falsified",
+   "reviewed_at": "2026-11-04T18:04:58.982110Z",
+   "checks": [
+    "verdict flips if another independent voice converges: met",
+    "verdict is worth revisiting if volume rises 50%: met"
+   ]
+  },
+  {
+   "decision_id": "dec_bc0ba62523320b3a2c417e8d",
+   "token": "ETH",
+   "verdict": "pass",
+   "result": "falsified",
+   "reviewed_at": "2026-11-04T18:04:58.982110Z",
+   "checks": [
+    "verdict flips if another independent voice converges: met",
+    "verdict is worth revisiting if volume rises 50%: met"
+   ]
+  },
+  {
+   "decision_id": "dec_c076cc0be326f18f20ab5bf8",
+   "token": "BONK",
+   "verdict": "abstain",
+   "result": "falsified",
+   "reviewed_at": "2026-11-04T18:04:58.982110Z",
+   "checks": [
+    "verdict flips if another independent voice converges: not_met",
+    "verdict is worth revisiting if volume rises 50%: met"
+   ]
+  },
+  {
+   "decision_id": "dec_c82e8251fe6423fab1dbc816",
+   "token": "SOL",
+   "verdict": "pass",
+   "result": "falsified",
+   "reviewed_at": "2026-11-04T18:04:58.982110Z",
+   "checks": [
+    "verdict flips if another independent voice converges: met",
+    "verdict is worth revisiting if volume rises 50%: met"
+   ]
+  },
+  {
+   "decision_id": "dec_c8b9b01b5b5745640fc8f225",
+   "token": "BTC",
+   "verdict": "abstain",
+   "result": "falsified",
+   "reviewed_at": "2026-11-04T18:04:58.982110Z",
+   "checks": [
+    "verdict flips if another independent voice converges: met",
     "verdict is worth revisiting if volume rises 50%: met"
    ]
   }
  ],
  "scorecard": {
-  "reviewed": 76,
-  "scored": 76,
+  "reviewed": 204,
+  "scored": 204,
   "inconclusive": 0,
-  "held": 45,
-  "falsified": 31,
-  "hit_rate": 0.592105,
-  "brier": 0.300646,
+  "held": 101,
+  "falsified": 103,
+  "hit_rate": 0.495098,
+  "brier": 0.304618,
   "brier_over": "enter decisions only",
-  "forecasts": 27,
+  "forecasts": 48,
   "by_verdict": {
    "abstain": {
-    "held": 10,
-    "falsified": 13
+    "held": 33,
+    "falsified": 33
    },
    "enter": {
-    "held": 24,
-    "falsified": 3
+    "held": 37,
+    "falsified": 11
    },
    "pass": {
-    "held": 11,
-    "falsified": 15
+    "held": 31,
+    "falsified": 59
    }
   },
   "calibration": [
@@ -433,27 +428,27 @@
      0.2,
      0.4
     ],
-    "count": 12,
-    "mean_confidence": 0.3466,
-    "hit_rate": 0.833333
+    "count": 21,
+    "mean_confidence": 0.328971,
+    "hit_rate": 0.761905
    },
    {
     "range": [
      0.4,
      0.6
     ],
-    "count": 12,
-    "mean_confidence": 0.471158,
-    "hit_rate": 0.916667
+    "count": 22,
+    "mean_confidence": 0.47325,
+    "hit_rate": 0.818182
    },
    {
     "range": [
      0.6,
      0.8
     ],
-    "count": 3,
-    "mean_confidence": 0.635249,
-    "hit_rate": 1.0
+    "count": 5,
+    "mean_confidence": 0.625256,
+    "hit_rate": 0.6
    },
    {
     "range": [
@@ -468,543 +463,542 @@
   "authors": [
    {
     "key": "chainestate.bsky.social",
-    "held": 17,
-    "falsified": 15,
+    "held": 26,
+    "falsified": 53,
     "inconclusive": 0,
-    "scored": 32,
-    "hit_rate": 0.53125
-   },
-   {
-    "key": "DegenerateNews",
-    "held": 17,
-    "falsified": 14,
-    "inconclusive": 0,
-    "scored": 31,
-    "hit_rate": 0.548387
+    "scored": 79,
+    "hit_rate": 0.329114
    },
    {
     "key": "CryptoRankNews",
-    "held": 5,
-    "falsified": 3,
+    "held": 11,
+    "falsified": 15,
     "inconclusive": 0,
-    "scored": 8,
-    "hit_rate": 0.625
+    "scored": 26,
+    "hit_rate": 0.423077
    },
    {
-    "key": "cointelegraph",
-    "held": 20,
-    "falsified": 9,
+    "key": "DegenerateNews",
+    "held": 31,
+    "falsified": 36,
     "inconclusive": 0,
-    "scored": 29,
-    "hit_rate": 0.689655
+    "scored": 67,
+    "hit_rate": 0.462687
    },
    {
     "key": "cryptovka.com",
-    "held": 36,
-    "falsified": 15,
+    "held": 68,
+    "falsified": 64,
     "inconclusive": 0,
-    "scored": 51,
-    "hit_rate": 0.705882
+    "scored": 132,
+    "hit_rate": 0.515152
+   },
+   {
+    "key": "cointelegraph",
+    "held": 43,
+    "falsified": 30,
+    "inconclusive": 0,
+    "scored": 73,
+    "hit_rate": 0.589041
    },
    {
     "key": "Cointelegraph.com News",
-    "held": 22,
-    "falsified": 3,
+    "held": 55,
+    "falsified": 31,
     "inconclusive": 0,
-    "scored": 25,
-    "hit_rate": 0.88
+    "scored": 86,
+    "hit_rate": 0.639535
    },
    {
     "key": "Decrypt",
-    "held": 23,
-    "falsified": 3,
+    "held": 45,
+    "falsified": 25,
     "inconclusive": 0,
-    "scored": 26,
-    "hit_rate": 0.884615
-   },
-   {
-    "key": "WatcherGuru",
-    "held": 13,
-    "falsified": 1,
-    "inconclusive": 0,
-    "scored": 14,
-    "hit_rate": 0.928571
+    "scored": 70,
+    "hit_rate": 0.642857
    },
    {
     "key": "bitcoin",
-    "held": 15,
-    "falsified": 1,
+    "held": 30,
+    "falsified": 13,
     "inconclusive": 0,
-    "scored": 16,
-    "hit_rate": 0.9375
+    "scored": 43,
+    "hit_rate": 0.697674
+   },
+   {
+    "key": "WatcherGuru",
+    "held": 21,
+    "falsified": 8,
+    "inconclusive": 0,
+    "scored": 29,
+    "hit_rate": 0.724138
    },
    {
     "key": "btcbreakdown.com",
-    "held": 9,
-    "falsified": 0,
+    "held": 20,
+    "falsified": 7,
     "inconclusive": 0,
-    "scored": 9,
-    "hit_rate": 1.0
+    "scored": 27,
+    "hit_rate": 0.740741
+   },
+   {
+    "key": "BWEnews",
+    "held": 12,
+    "falsified": 1,
+    "inconclusive": 0,
+    "scored": 13,
+    "hit_rate": 0.923077
    }
   ],
   "rules": [
    {
-    "key": "exit_liquidity",
-    "held": 45,
-    "falsified": 31,
-    "inconclusive": 0,
-    "scored": 76,
-    "hit_rate": 0.592105
-   },
-   {
     "key": "evidence_present",
-    "held": 38,
-    "falsified": 25,
+    "held": 72,
+    "falsified": 81,
     "inconclusive": 0,
-    "scored": 63,
-    "hit_rate": 0.603175
-   },
-   {
-    "key": "symmetry",
-    "held": 35,
-    "falsified": 21,
-    "inconclusive": 0,
-    "scored": 56,
-    "hit_rate": 0.625
+    "scored": 153,
+    "hit_rate": 0.470588
    },
    {
     "key": "quality_floor",
-    "held": 38,
-    "falsified": 22,
+    "held": 72,
+    "falsified": 78,
     "inconclusive": 0,
-    "scored": 60,
-    "hit_rate": 0.633333
+    "scored": 150,
+    "hit_rate": 0.48
+   },
+   {
+    "key": "symmetry",
+    "held": 68,
+    "falsified": 73,
+    "inconclusive": 0,
+    "scored": 141,
+    "hit_rate": 0.48227
+   },
+   {
+    "key": "exit_liquidity",
+    "held": 101,
+    "falsified": 103,
+    "inconclusive": 0,
+    "scored": 204,
+    "hit_rate": 0.495098
    },
    {
     "key": "independent_voices",
-    "held": 35,
-    "falsified": 19,
+    "held": 69,
+    "falsified": 69,
     "inconclusive": 0,
-    "scored": 54,
-    "hit_rate": 0.648148
+    "scored": 138,
+    "hit_rate": 0.5
    },
    {
     "key": "conviction",
-    "held": 24,
-    "falsified": 3,
+    "held": 37,
+    "falsified": 11,
     "inconclusive": 0,
-    "scored": 27,
-    "hit_rate": 0.888889
+    "scored": 48,
+    "hit_rate": 0.770833
    }
   ]
  },
  "runs": [
   {
-   "run_id": "run_547a6eaf6c69d992",
-   "as_of": "2026-10-30T14:44:09.095693Z",
-   "manifest_digest": "sha256:82a7633a7bed113ea6dce9a9dede885dbb1793d065cc7a559c358df1a15b5397",
+   "run_id": "run_c7535db8562a6f57",
+   "as_of": "2026-11-05T07:00:19.668652Z",
+   "manifest_digest": "sha256:d5c8f246c70d548a77d77d6445838fbfada620345e9504954ebb287700e64506",
+   "verdicts": {
+    "pass": 3,
+    "abstain": 1
+   },
+   "ots": {
+    "state": "pending"
+   }
+  },
+  {
+   "run_id": "run_d6e9378adc343e76",
+   "as_of": "2026-11-04T23:46:18.928576Z",
+   "manifest_digest": "sha256:68d46f3954909bd81b6e54b8e583c61b9f206ac7627dae4fee3d079a57308763",
+   "verdicts": {
+    "pass": 3,
+    "abstain": 1
+   },
+   "ots": {
+    "state": "confirmed",
+    "block": 974606
+   }
+  },
+  {
+   "run_id": "run_93349a113d1cf99e",
+   "as_of": "2026-11-04T18:04:58.982110Z",
+   "manifest_digest": "sha256:ca9a786026083c42d01df564823e93c42c2f9733fa0ff67fd11908a11ace6aa1",
+   "verdicts": {
+    "pass": 1,
+    "enter": 1,
+    "abstain": 2
+   },
+   "ots": {
+    "state": "confirmed",
+    "block": 974562
+   }
+  },
+  {
+   "run_id": "run_0a4ff6667b861d5f",
+   "as_of": "2026-11-04T09:28:51.322663Z",
+   "manifest_digest": "sha256:565eda7a802ab05d62777fc49c8853f31ba5b4eceecd2eb4189ff8f97cbf778a",
+   "verdicts": {
+    "enter": 3,
+    "abstain": 1
+   },
+   "ots": {
+    "state": "confirmed",
+    "block": 974514
+   }
+  },
+  {
+   "run_id": "run_055a218227f3a220",
+   "as_of": "2026-11-04T03:40:54.987897Z",
+   "manifest_digest": "sha256:db1a5b51a0e54801ee7c60aa5d9c520fb78c41687cc39dacb30620431ea8768a",
+   "verdicts": {
+    "enter": 3,
+    "pass": 1
+   },
+   "ots": {
+    "state": "confirmed",
+    "block": 974473
+   }
+  },
+  {
+   "run_id": "run_1bca2ba16041e5c1",
+   "as_of": "2026-11-03T23:44:48.278353Z",
+   "manifest_digest": "sha256:e974bbb70db531140d9a480185b39b992a9fb0d0c7aaf78041cf5c6b9e27a091",
+   "verdicts": {
+    "enter": 3,
+    "pass": 1
+   },
+   "ots": {
+    "state": "confirmed",
+    "block": 974456
+   }
+  },
+  {
+   "run_id": "run_ac3de920f04c0f19",
+   "as_of": "2026-11-03T21:08:35.079598Z",
+   "manifest_digest": "sha256:eae5990ad2d39796b670a494aaacd8f19784429a728fa6a47b650e75522a9d52",
+   "verdicts": {
+    "enter": 3,
+    "pass": 1
+   },
+   "ots": {
+    "state": "confirmed",
+    "block": 974441
+   }
+  },
+  {
+   "run_id": "run_ea187d5b1a3cd7ca",
+   "as_of": "2026-11-03T17:18:03.591371Z",
+   "manifest_digest": "sha256:e58d98591d0326c937e6c7314094b685fd40a3ebe33b9a622a710c56ec6bc677",
+   "verdicts": {
+    "enter": 1,
+    "abstain": 2,
+    "pass": 1
+   },
+   "ots": {
+    "state": "confirmed",
+    "block": 974419
+   }
+  },
+  {
+   "run_id": "run_20d21350a7efb2a9",
+   "as_of": "2026-11-03T15:20:10.580553Z",
+   "manifest_digest": "sha256:4930c6e31839c19b7d89f228c69bdccac9407ad581ba8a0fa203d4053d213f41",
+   "verdicts": {
+    "enter": 2,
+    "pass": 2
+   },
+   "ots": {
+    "state": "confirmed",
+    "block": 974402
+   }
+  },
+  {
+   "run_id": "run_c32f27303814ddaf",
+   "as_of": "2026-11-03T10:13:50.816830Z",
+   "manifest_digest": "sha256:66931ce2150a78ba95c8488452f27dca4cdeb010981a675c113d3e86c3a0294a",
+   "verdicts": {
+    "enter": 2,
+    "pass": 2
+   },
+   "ots": {
+    "state": "confirmed",
+    "block": 974389
+   }
+  },
+  {
+   "run_id": "run_0fbf707306ba6e98",
+   "as_of": "2026-11-03T06:59:16.727298Z",
+   "manifest_digest": "sha256:3b51f06112ddc85d468c5667a9a9f0efd80d9a468647af9306dd568ab2849401",
+   "verdicts": {
+    "enter": 1,
+    "abstain": 2,
+    "pass": 1
+   },
+   "ots": {
+    "state": "confirmed",
+    "block": 974365
+   }
+  },
+  {
+   "run_id": "run_e9eb3bfce9da9a1c",
+   "as_of": "2026-11-02T23:56:03.224149Z",
+   "manifest_digest": "sha256:bb933d32c516547712d3eae120a68e1fe697ee9f8582e250e9e90a745021b855",
+   "verdicts": {
+    "enter": 2,
+    "pass": 1,
+    "abstain": 1
+   },
+   "ots": {
+    "state": "confirmed",
+    "block": 974318
+   }
+  },
+  {
+   "run_id": "run_8d8251ac6bd91d04",
+   "as_of": "2026-11-02T19:46:30.889868Z",
+   "manifest_digest": "sha256:108a4092a01bb69acc5d69d7160241fce68f7c79a7252927c14d4f1b773dfd3e",
+   "verdicts": {
+    "enter": 1,
+    "abstain": 3
+   },
+   "ots": {
+    "state": "confirmed",
+    "block": 974295
+   }
+  },
+  {
+   "run_id": "run_d68a5144c1105ae4",
+   "as_of": "2026-11-02T17:13:39.732447Z",
+   "manifest_digest": "sha256:9392197aa6c7328c484fb510cb9fbb35ab919581f6fe50fb212a99cabccd0e03",
+   "verdicts": {
+    "enter": 2,
+    "pass": 1,
+    "abstain": 1
+   },
+   "ots": {
+    "state": "confirmed",
+    "block": 974281
+   }
+  },
+  {
+   "run_id": "run_db3228772c9814c7",
+   "as_of": "2026-11-02T06:26:29.754079Z",
+   "manifest_digest": "sha256:818f8e9e1acea078e1ac0e5505f455562b116aa3c9acc7a9f21b8f9db6f93c0a",
+   "verdicts": {
+    "pass": 3,
+    "abstain": 1
+   },
+   "ots": {
+    "state": "confirmed",
+    "block": 974223
+   }
+  },
+  {
+   "run_id": "run_d66b9b127b9aa9ef",
+   "as_of": "2026-11-01T23:42:17.624887Z",
+   "manifest_digest": "sha256:63a5e422c0f48eb9090ea7df3b809ee7825d39dfd48eaea12817d89b1fd2d62f",
+   "verdicts": {
+    "pass": 3,
+    "abstain": 1
+   },
+   "ots": {
+    "state": "confirmed",
+    "block": 974194
+   }
+  },
+  {
+   "run_id": "run_fdc0812a0dce1dd6",
+   "as_of": "2026-11-01T19:47:04.266352Z",
+   "manifest_digest": "sha256:d251358b23b7ac6d8413ee48b2928990c4c6b7d3051472140f6038299ef58671",
+   "verdicts": {
+    "pass": 3,
+    "abstain": 1
+   },
+   "ots": {
+    "state": "confirmed",
+    "block": 974170
+   }
+  },
+  {
+   "run_id": "run_126bfc083c277e67",
+   "as_of": "2026-11-01T16:20:28.039264Z",
+   "manifest_digest": "sha256:f4f7418bcf7be565e74f1b8685f3b16e82bfecd02d1408bfdabe885a8e1488db",
+   "verdicts": {
+    "pass": 1,
+    "abstain": 3
+   },
+   "ots": {
+    "state": "confirmed",
+    "block": 974150
+   }
+  },
+  {
+   "run_id": "run_2cf367c7ca2c8900",
+   "as_of": "2026-11-01T15:18:15.823472Z",
+   "manifest_digest": "sha256:7f41be2746e5263316eda23a38178971b0c0b577f6c8f3b5be0ad269ed3b1670",
+   "verdicts": {
+    "abstain": 2,
+    "pass": 2
+   },
+   "ots": {
+    "state": "confirmed",
+    "block": 974140
+   }
+  },
+  {
+   "run_id": "run_075e9bbd992fe826",
+   "as_of": "2026-11-01T10:52:51.783669Z",
+   "manifest_digest": "sha256:499348b337c12204b0489fedf71b8c43486b6e7d13cd06567d9ae40ad03c49ae",
+   "verdicts": {
+    "abstain": 2,
+    "pass": 2
+   },
+   "ots": {
+    "state": "confirmed",
+    "block": 974119
+   }
+  },
+  {
+   "run_id": "run_e6da70e7c87126d7",
+   "as_of": "2026-11-01T07:39:30.129066Z",
+   "manifest_digest": "sha256:4429b83fd55da9c6462b2406c48a37c6a148590cdfcc7f69eb2199c15740e712",
+   "verdicts": {
+    "abstain": 2,
+    "pass": 2
+   },
+   "ots": {
+    "state": "confirmed",
+    "block": 974103
+   }
+  },
+  {
+   "run_id": "run_44cc998915d44130",
+   "as_of": "2026-11-01T01:17:41.147887Z",
+   "manifest_digest": "sha256:6510bfaf1f09700f350b9ed5d34a4f44de1625864bded3548881b856bab2c321",
+   "verdicts": {
+    "pass": 3,
+    "abstain": 1
+   },
+   "ots": {
+    "state": "confirmed",
+    "block": 974054
+   }
+  },
+  {
+   "run_id": "run_4ccc8bb444ca11d0",
+   "as_of": "2026-10-31T21:44:02.746375Z",
+   "manifest_digest": "sha256:c6c0979ede4d5863eaaf62081e23c9acf96d26594477ad7f6dbe55a3fe9a2ef3",
+   "verdicts": {
+    "pass": 3,
+    "abstain": 1
+   },
+   "ots": {
+    "state": "confirmed",
+    "block": 974029
+   }
+  },
+  {
+   "run_id": "run_7f15bd184a19d87b",
+   "as_of": "2026-10-31T18:54:41.752711Z",
+   "manifest_digest": "sha256:9070362232192f3ccf80216749e4090e64541330c05bfb9cc97da740af47cbdc",
+   "verdicts": {
+    "abstain": 2,
+    "pass": 2
+   },
+   "ots": {
+    "state": "confirmed",
+    "block": 974011
+   }
+  },
+  {
+   "run_id": "run_828188c3f9e0c625",
+   "as_of": "2026-10-31T15:29:40.312032Z",
+   "manifest_digest": "sha256:1426909f6f78b458c4410593a45409c972168838b11f592f055286ab56604c0e",
+   "verdicts": {
+    "enter": 1,
+    "abstain": 3
+   },
+   "ots": {
+    "state": "confirmed",
+    "block": 973994
+   }
+  },
+  {
+   "run_id": "run_8d1889b90639c36d",
+   "as_of": "2026-10-31T12:47:40.241633Z",
+   "manifest_digest": "sha256:2e34a16fc2bfc545b977a7f60c6a03a057e2c45f31ed69b44a6b658704d590c1",
+   "verdicts": {
+    "enter": 1,
+    "pass": 2,
+    "abstain": 1
+   },
+   "ots": {
+    "state": "confirmed",
+    "block": 973981
+   }
+  },
+  {
+   "run_id": "run_36fa86581a337dc4",
+   "as_of": "2026-10-31T05:56:45.663313Z",
+   "manifest_digest": "sha256:7e7e7e54fd4210fba65c56bea46987f1195f47b56463e6b26291d515c9491287",
+   "verdicts": {
+    "enter": 1,
+    "pass": 2,
+    "abstain": 1
+   },
+   "ots": {
+    "state": "confirmed",
+    "block": 973939
+   }
+  },
+  {
+   "run_id": "run_e019c7919473e6cb",
+   "as_of": "2026-10-30T23:54:38.161446Z",
+   "manifest_digest": "sha256:296e0a94ef2bbe8557229e88bbd24815ce82576aea4f376eb1e4a551c200e36e",
+   "verdicts": {
+    "enter": 1,
+    "pass": 2,
+    "abstain": 1
+   },
+   "ots": {
+    "state": "confirmed",
+    "block": 973898
+   }
+  },
+  {
+   "run_id": "run_7826af1e5f65c140",
+   "as_of": "2026-10-30T19:30:28.303937Z",
+   "manifest_digest": "sha256:505e72b3273356de874018ef6a65328586fed2bc87b0d7b1a5dc6e5856aeeaec",
+   "verdicts": {
+    "enter": 1,
+    "pass": 2,
+    "abstain": 1
+   },
+   "ots": {
+    "state": "confirmed",
+    "block": 973868
+   }
+  },
+  {
+   "run_id": "run_9986d3dc998b30b9",
+   "as_of": "2026-10-30T16:12:50.591103Z",
+   "manifest_digest": "sha256:25ba1e002f372e3074d7d1057d20222345f84306b1f4053336ac308bdba00774",
    "verdicts": {
     "enter": 1,
     "pass": 1,
     "abstain": 2
    },
    "ots": {
-    "state": "pending"
-   }
-  },
-  {
-   "run_id": "run_fd3eaa504132076e",
-   "as_of": "2026-10-30T14:20:12.375488Z",
-   "manifest_digest": "sha256:38ee05c3d7aa27b36cba6a2dc6f634bf5bbca9d38cb75227e0e03c2ca87ccced",
-   "verdicts": {
-    "enter": 1,
-    "pass": 2,
-    "abstain": 1
-   },
-   "ots": {
-    "state": "pending"
-   }
-  },
-  {
-   "run_id": "run_8c50277981203c77",
-   "as_of": "2026-10-30T07:17:02.125082Z",
-   "manifest_digest": "sha256:f9494270b88365be2d3617e6c5f43b3e2c3499dfe5bb774405c9bac25769b6a7",
-   "verdicts": {
-    "pass": 3,
-    "abstain": 1
-   },
-   "ots": {
     "state": "confirmed",
-    "block": 973787
-   }
-  },
-  {
-   "run_id": "run_0f61fc590727ef7b",
-   "as_of": "2026-10-30T01:09:07.336586Z",
-   "manifest_digest": "sha256:e786af3c120659e00a3e9aeeca0723fd8a71f1aad423a88902053d82079f512a",
-   "verdicts": {
-    "enter": 1,
-    "pass": 2,
-    "abstain": 1
-   },
-   "ots": {
-    "state": "confirmed",
-    "block": 973762
-   }
-  },
-  {
-   "run_id": "run_6339d3f01c4bc28f",
-   "as_of": "2026-10-29T21:14:18.515002Z",
-   "manifest_digest": "sha256:23e40bf3b34ba9c2f080ed850b09b3e90eadd7e08523668929895426ca8329f5",
-   "verdicts": {
-    "enter": 1,
-    "pass": 2,
-    "abstain": 1
-   },
-   "ots": {
-    "state": "confirmed",
-    "block": 973744
-   }
-  },
-  {
-   "run_id": "run_f443e4c3c79e411a",
-   "as_of": "2026-10-29T16:15:24.727538Z",
-   "manifest_digest": "sha256:a99756d19f6e49b82f3bcb17df7ac052da2579db97e8a155b5fbfef6fe027246",
-   "verdicts": {
-    "abstain": 2,
-    "pass": 2
-   },
-   "ots": {
-    "state": "confirmed",
-    "block": 973713
-   }
-  },
-  {
-   "run_id": "run_2b485240a15da7b7",
-   "as_of": "2026-10-29T08:39:17.488699Z",
-   "manifest_digest": "sha256:70360c5f0d4b8984c6f54b49ee41bfdb6d9baa87dceb34c772118bab64564c7f",
-   "verdicts": {
-    "enter": 1,
-    "pass": 2,
-    "abstain": 1
-   },
-   "ots": {
-    "state": "confirmed",
-    "block": 973669
-   }
-  },
-  {
-   "run_id": "run_ca4d9d8069e617ac",
-   "as_of": "2026-10-29T01:52:23.120563Z",
-   "manifest_digest": "sha256:9d01b7afd7fd93b75c1f37bd05cdc4eecd897fc9410236415c9d9dd4f72b610c",
-   "verdicts": {
-    "enter": 1,
-    "pass": 2,
-    "abstain": 1
-   },
-   "ots": {
-    "state": "confirmed",
-    "block": 973626
-   }
-  },
-  {
-   "run_id": "run_8bb0dad35e1c9f77",
-   "as_of": "2026-10-28T21:44:29.620900Z",
-   "manifest_digest": "sha256:0d7843590dcdd0c14071d919e03c9f7dbc513f722881537db6bb5adfb6a213a6",
-   "verdicts": {
-    "enter": 1,
-    "pass": 2,
-    "abstain": 1
-   },
-   "ots": {
-    "state": "confirmed",
-    "block": 973603
-   }
-  },
-  {
-   "run_id": "run_4dccc52b2059f95d",
-   "as_of": "2026-10-28T16:43:06.599491Z",
-   "manifest_digest": "sha256:780223092558030141e4df1a69540cdf4888576fe9ac82d5c1fd0623f0e2c7e2",
-   "verdicts": {
-    "enter": 1,
-    "pass": 2,
-    "abstain": 1
-   },
-   "ots": {
-    "state": "confirmed",
-    "block": 973584
-   }
-  },
-  {
-   "run_id": "run_4e5047554926ad2c",
-   "as_of": "2026-10-28T13:39:09.043849Z",
-   "manifest_digest": "sha256:80c24ab01bf6dfb9772e2cbb3d894aa4e70437b4d2ed0155c6fcee30a7aae99a",
-   "verdicts": {
-    "enter": 1,
-    "pass": 2,
-    "abstain": 1
-   },
-   "ots": {
-    "state": "confirmed",
-    "block": 973561
-   }
-  },
-  {
-   "run_id": "run_c7c4917430df8262",
-   "as_of": "2026-10-28T09:50:52.751582Z",
-   "manifest_digest": "sha256:20e93c87d2cbc0c87dc04fc6c122dcd6eff1502fbda7dec98ac75a7aab26838d",
-   "verdicts": {
-    "enter": 1,
-    "pass": 2,
-    "abstain": 1
-   },
-   "ots": {
-    "state": "confirmed",
-    "block": 973535
-   }
-  },
-  {
-   "run_id": "run_75dfba2b34399321",
-   "as_of": "2026-10-28T06:26:07.420670Z",
-   "manifest_digest": "sha256:3a08877969a20f86f903ad9ddf0d039b2094fbb790f74b020bfa83b0afd2fbba",
-   "verdicts": {
-    "pass": 3,
-    "abstain": 1
-   },
-   "ots": {
-    "state": "confirmed",
-    "block": 973513
-   }
-  },
-  {
-   "run_id": "run_5ec860d61108437f",
-   "as_of": "2026-10-28T00:48:34.564205Z",
-   "manifest_digest": "sha256:1548d324e5120aa119afe76da357bbf767ece1d821600967c7ff0c19b988957d",
-   "verdicts": {
-    "pass": 2,
-    "enter": 1,
-    "abstain": 1
-   },
-   "ots": {
-    "state": "confirmed",
-    "block": 973478
-   }
-  },
-  {
-   "run_id": "run_1cba2f0ba6e88d33",
-   "as_of": "2026-10-27T21:33:43.597431Z",
-   "manifest_digest": "sha256:023274e8d40dd7bd25bd3d5b60ba32ffac60a7dedd3c77a08800449b6260d493",
-   "verdicts": {
-    "enter": 2,
-    "pass": 1,
-    "abstain": 1
-   },
-   "ots": {
-    "state": "confirmed",
-    "block": 973463
-   }
-  },
-  {
-   "run_id": "run_95acca9266bee94f",
-   "as_of": "2026-10-27T16:57:29.119089Z",
-   "manifest_digest": "sha256:08205a2b431d9c441cd164844d9e0be92c95908f195da996f07a3d6c57b6ec1a",
-   "verdicts": {
-    "enter": 2,
-    "pass": 1,
-    "abstain": 1
-   },
-   "ots": {
-    "state": "confirmed",
-    "block": 973434
-   }
-  },
-  {
-   "run_id": "run_364aff26b516410c",
-   "as_of": "2026-10-27T11:11:33.415817Z",
-   "manifest_digest": "sha256:caede66d8fd6b7858d070861af83bab5e2d3d252bf12f8ac1964f1453f33681a",
-   "verdicts": {
-    "enter": 3,
-    "abstain": 1
-   },
-   "ots": {
-    "state": "confirmed",
-    "block": 973387
-   }
-  },
-  {
-   "run_id": "run_b48fc05db083798c",
-   "as_of": "2026-10-27T05:47:07.882848Z",
-   "manifest_digest": "sha256:e627a6ac79398d5045816ab3d7cbc4d4489ff97a6c394fc989ce2fb2e13b637a",
-   "verdicts": {
-    "enter": 3,
-    "abstain": 1
-   },
-   "ots": {
-    "state": "confirmed",
-    "block": 973354
-   }
-  },
-  {
-   "run_id": "run_85e9a8f74251fd7f",
-   "as_of": "2026-10-27T00:07:29.418218Z",
-   "manifest_digest": "sha256:022b228a7d7eeea0e8cdb29a9d45104b44981450d6d8ad26f0005b9533d80000",
-   "verdicts": {
-    "enter": 3,
-    "abstain": 1
-   },
-   "ots": {
-    "state": "confirmed",
-    "block": 973316
-   }
-  },
-  {
-   "run_id": "run_a3385bf45c3faa1e",
-   "as_of": "2026-10-26T20:36:49.541274Z",
-   "manifest_digest": "sha256:41e8d42aba90ef6d49d4afa47cf9e283e7d1ba767556df4e654d6e3dea532a90",
-   "verdicts": {
-    "enter": 3,
-    "abstain": 1
-   },
-   "ots": {
-    "state": "confirmed",
-    "block": 973287
-   }
-  },
-  {
-   "run_id": "run_c87c2a048d41cc59",
-   "as_of": "2026-10-26T14:24:00.038028Z",
-   "manifest_digest": "sha256:6ff60ee7094e4482b3f7646e91d292d7a1896a860b88b1d1e1d9af6214863138",
-   "verdicts": {
-    "abstain": 2,
-    "enter": 2
-   },
-   "ots": {
-    "state": "confirmed",
-    "block": 973249
-   }
-  },
-  {
-   "run_id": "run_e5d1271dc0ea400a",
-   "as_of": "2026-10-26T06:25:22.355318Z",
-   "manifest_digest": "sha256:7bb9151b91bb0cb22e352f2a724df4ed704d5423a2955310dcbbce2e6e3b0e3c",
-   "verdicts": {
-    "enter": 1,
-    "pass": 2,
-    "abstain": 1
-   },
-   "ots": {
-    "state": "confirmed",
-    "block": 973202
-   }
-  },
-  {
-   "run_id": "run_cedd59aeec63ce24",
-   "as_of": "2026-10-26T00:28:09.347619Z",
-   "manifest_digest": "sha256:a0c40ed833d0905c75705f9d9fdce9640a7dde0474847287b6ea1c1ddc25ca2c",
-   "verdicts": {
-    "enter": 1,
-    "pass": 2,
-    "abstain": 1
-   },
-   "ots": {
-    "state": "confirmed",
-    "block": 973154
-   }
-  },
-  {
-   "run_id": "run_92fcfa7e8238fe17",
-   "as_of": "2026-10-25T21:18:10.412452Z",
-   "manifest_digest": "sha256:b97feeb018d73adab85ff0338fdb0d05351c24d5f0c3fadd6782d6e9f99bb8c0",
-   "verdicts": {
-    "enter": 1,
-    "pass": 2,
-    "abstain": 1
-   },
-   "ots": {
-    "state": "confirmed",
-    "block": 973130
-   }
-  },
-  {
-   "run_id": "run_7f3dce3bcf4967bc",
-   "as_of": "2026-10-25T18:27:34.953100Z",
-   "manifest_digest": "sha256:baf64b2a928170c3c2bd4750290ea061eebc0a741d17d9646e14f8725942cef0",
-   "verdicts": {
-    "enter": 1,
-    "pass": 3
-   },
-   "ots": {
-    "state": "confirmed",
-    "block": 973108
-   }
-  },
-  {
-   "run_id": "run_5df467a5221834b0",
-   "as_of": "2026-10-25T15:03:38.937089Z",
-   "manifest_digest": "sha256:6377be2b4a1767b148c300ce0aa1333593db726445e1095e25f49c06fe5bd651",
-   "verdicts": {
-    "enter": 1,
-    "abstain": 1,
-    "pass": 2
-   },
-   "ots": {
-    "state": "confirmed",
-    "block": 973088
-   }
-  },
-  {
-   "run_id": "run_d2cd1b8fada26474",
-   "as_of": "2026-10-25T11:43:32.112426Z",
-   "manifest_digest": "sha256:46a02cf286b10b5cef5c7a56e1be06ae55d8f5188dd3e419a0ccb23dc555e85f",
-   "verdicts": {
-    "enter": 1,
-    "abstain": 1,
-    "pass": 2
-   },
-   "ots": {
-    "state": "confirmed",
-    "block": 973071
-   }
-  },
-  {
-   "run_id": "run_5523fe6f67d21485",
-   "as_of": "2026-10-25T04:53:06.244917Z",
-   "manifest_digest": "sha256:16b635c0ab06c5e06be3d874de0fdac3d109d54ed1d9638976002c0e2b574cb0",
-   "verdicts": {
-    "pass": 3,
-    "abstain": 1
-   },
-   "ots": {
-    "state": "confirmed",
-    "block": 973021
-   }
-  },
-  {
-   "run_id": "run_9e333fafdd5c3c93",
-   "as_of": "2026-10-24T23:21:46.644986Z",
-   "manifest_digest": "sha256:4623eed1a2859c4293a747326dc4bfcfd95de49e28b769acc8e8f3c42e8bf2d8",
-   "verdicts": {
-    "enter": 1,
-    "abstain": 2,
-    "pass": 1
-   },
-   "ots": {
-    "state": "confirmed",
-    "block": 972988
-   }
-  },
-  {
-   "run_id": "run_34b5b076ad632c2d",
-   "as_of": "2026-10-24T20:57:11.173368Z",
-   "manifest_digest": "sha256:c6069cdf765e1ea40c1750041c3becde295b4efeceec73148bff538d7ab3f5f5",
-   "verdicts": {
-    "enter": 1,
-    "abstain": 2,
-    "pass": 1
-   },
-   "ots": {
-    "state": "confirmed",
-    "block": 972976
+    "block": 973857
    }
   }
  ]
