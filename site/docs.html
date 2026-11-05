@@ -26,7 +26,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 
 <link rel="stylesheet" href="styles.css">
-<script>(function(d){d.className+=" js";var m=/[?&]lang=(ja|en)\b/.exec(location.search),l=m&&m[1];try{var s=localStorage,t=s.getItem("hanko-theme");if(t)d.setAttribute("data-theme",t);if(l)s.setItem("hanko-lang",l);else l=s.getItem("hanko-lang")}catch(e){}if(l==="ja"&&d.hasAttribute("data-i18n-page"))d.lang="ja"})(document.documentElement);</script>
+<script>(function(d){d.className+=" js";var m=/[?&]lang=(ja|en)\b/.exec(location.search),l=m&&m[1];try{var s=localStorage;if(l)s.setItem("hanko-lang",l);else l=s.getItem("hanko-lang")}catch(e){}if(l==="ja"&&d.hasAttribute("data-i18n-page"))d.lang="ja"})(document.documentElement);</script>
 </head>
 
 <body>
@@ -54,7 +54,6 @@
       <a href="docs.html" aria-current="page">Docs</a>
     </div>
     <div class="nav-actions">
-      <button class="nav-switch" type="button" data-theme-toggle aria-label="Switch to dark theme"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M13.5 9.6A5.6 5.6 0 0 1 6.4 2.5a5.6 5.6 0 1 0 7.1 7.1z"/></svg></button>
       <a href="https://github.com/IamHarrie-Labs/hanko" data-repo class="btn btn-dark">GITHUB</a>
       <a href="try.html" class="btn btn-dark btn-accent">TRY IT LIVE</a>
     </div>
@@ -258,7 +257,7 @@
   <div class="shell band-inner" style="padding-top: 56px; padding-bottom: 56px">
     <div class="colophon">
       <span>Hanko 判子 · RYO-CHAN Hackathon 2026</span>
-      <span><span data-stat="tests">352</span> tests · <span data-stat="lines">14,618</span> lines · <span data-stat="commits">148</span> commits · <a href="index.html">Home</a> · <a href="https://github.com/IamHarrie-Labs/hanko" data-repo>GitHub</a></span>
+      <span><span data-stat="tests">352</span> tests · <span data-stat="lines">14,618</span> lines · <span data-stat="commits">150</span> commits · <a href="index.html">Home</a> · <a href="https://github.com/IamHarrie-Labs/hanko" data-repo>GitHub</a></span>
     </div>
   </div>
 </footer>

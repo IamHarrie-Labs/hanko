@@ -30,40 +30,6 @@
   --gutter: 32px;
   --mono: 'JetBrains Mono', ui-monospace, Menlo, monospace;
 }
-/* Dark mode: follows the system unless the visitor picked one. The receipt
-   card stays paper-coloured on purpose, so it keeps its own dark ink. */
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-  --ground:    #131210;
-    --surface:   #1C1B18;
-    --text:      #ECE8E2;
-    --panel:     #23211E;
-    --body:      #CBC5BC;
-    --muted:     #A8A298;
-    --line:      rgba(244, 242, 239, .12);
-    --line-2:    rgba(244, 242, 239, .16);
-    --line-strong: rgba(244, 242, 239, .3);
-    --faint:     rgba(244, 242, 239, .05);
-    --accent-deep: #F07CC4;
-    --good:      #74C98C;
-    color-scheme: dark;
-  }
-}
-:root[data-theme="dark"] {
-  --ground:    #131210;
-  --surface:   #1C1B18;
-  --text:      #ECE8E2;
-  --panel:     #23211E;
-  --body:      #CBC5BC;
-  --muted:     #A8A298;
-  --line:      rgba(244, 242, 239, .12);
-  --line-2:    rgba(244, 242, 239, .16);
-  --line-strong: rgba(244, 242, 239, .3);
-  --faint:     rgba(244, 242, 239, .05);
-  --accent-deep: #F07CC4;
-  --good:      #74C98C;
-  color-scheme: dark;
-}
 
 
 * { box-sizing: border-box; }
@@ -961,8 +927,6 @@ input[type="checkbox"] { width: 24px; height: 24px; accent-color: var(--text); f
 
 /* The receipt is paper in both themes, so it keeps the light palette. */
 .paper { --text: #171614; --body: #3B3833; --muted: #625E58; --line: rgba(23, 22, 20, .14); --line-2: rgba(23, 22, 20, .18); --accent-deep: #A2307F; --good: #29703E; }
-:root[data-theme="dark"] .mark-nav { background: #EFEDE9; border-radius: 6px; padding: 2px 6px; }
-@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .mark-nav { background: #EFEDE9; border-radius: 6px; padding: 2px 6px; } }
 
 /* Theme and language switches in the nav */
 .nav-switch { font: 500 12px/1 var(--mono); letter-spacing: .06em; padding: 9px 11px; border: 1px solid var(--line-strong); background: transparent; color: var(--text); border-radius: 2px; cursor: pointer; }
@@ -1000,12 +964,4 @@ input[type="checkbox"] { width: 24px; height: 24px; accent-color: var(--text); f
   .vid-ui { left: auto; right: 8px; bottom: auto; top: 8px; gap: 6px; }
   .vid-btn { font-size: 11px; padding: 7px 9px; }
   .vid-intro { padding: 0 24px; }
-}
-
-/* Dark mode: the main buttons turn light so they stay the first thing you see. */
-:root[data-theme="dark"] .btn-solid, :root[data-theme="dark"] .btn-dark { background: #ECE8E2; color: #171614; }
-:root[data-theme="dark"] .btn-solid:hover, :root[data-theme="dark"] .btn-dark:hover { background: var(--accent); color: #171614; }
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) .btn-solid, :root:not([data-theme="light"]) .btn-dark { background: #ECE8E2; color: #171614; }
-  :root:not([data-theme="light"]) .btn-solid:hover, :root:not([data-theme="light"]) .btn-dark:hover { background: var(--accent); color: #171614; }
 }
