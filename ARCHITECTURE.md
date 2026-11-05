@@ -31,8 +31,7 @@ flowchart LR
 
 Everything left of `decide()` may touch the network, a clock, or a model, and
 may fail. `decide()` and everything after it reads only recorded arguments:
-no clock, no network, no randomness. That is what makes replay a proof
-rather than a description.
+no clock, no network, no randomness. That is what makes replay a proof.
 
 ## Layers, and what each one owns
 
@@ -55,13 +54,12 @@ REST payload for the same data. Swapping transport touches no line of
 reasoning code: the six tools, the decision engine, and the review loop
 cannot tell which one supplied a number. Full transport detail, including
 what a live MCP handshake and a live `x_search` call actually return, is at
-[tryhanko.vercel.app/docs](https://tryhanko.vercel.app/docs).
+[tryhanko.xyz/docs](https://tryhanko.xyz/docs).
 
 ## exit_liquidity, as a size gate
 
-`exit_liquidity` is not just a standalone Track 3 tool. It is also the size
-gate `decide()` runs internally before committing to a position, using the
-same model rather than a second copy of the arithmetic:
+`exit_liquidity` is the Track 3 tool and also the size gate `decide()` runs internally before committing to a position, using the
+same model:
 
 ```mermaid
 flowchart LR

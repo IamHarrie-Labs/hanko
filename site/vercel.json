@@ -37,5 +37,29 @@
     "api/drill.py": {
       "maxDuration": 30
     }
-  }
+  },
+  "redirects": [
+    {
+      "source": "/:path*",
+      "has": [
+        {
+          "type": "host",
+          "value": "tryhanko.vercel.app"
+        }
+      ],
+      "destination": "https://tryhanko.xyz/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/:path*",
+      "has": [
+        {
+          "type": "host",
+          "value": "www.tryhanko.xyz"
+        }
+      ],
+      "destination": "https://tryhanko.xyz/:path*",
+      "permanent": true
+    }
+  ]
 }

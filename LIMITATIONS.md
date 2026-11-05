@@ -5,11 +5,7 @@ about not overclaiming should not overclaim about itself either.
 
 **Most live decisions so far ran without RYO's market data.** From
 2026-09-28 to early November, `analyze_token`, `deep_analysis` and
-`compare_tokens` returned `400 VALIDATION_FAILED` for every token. On
-2026-11-05 `analyze_token` answered again and `deep_analysis` answered in
-part. The scheduled sweeps still run without a RYO key, so their decisions
-take price, volume and pool depth from DexScreener's canonical pools and
-record RYO's safety score and ATR as missing. Each missing field lowers
+`compare_tokens` returned `400 VALIDATION_FAILED` for every token. On 2026-11-05 `analyze_token` answered again and the scheduled sweeps got a RYO key. `deep_analysis` now answers in part: it leaves out technical indicators, so each sweep records it as degraded. Earlier decisions took price, volume and pool depth from DexScreener's canonical pools and recorded RYO's safety score and ATR as missing. Each missing field lowers
 evidence quality, and with it position size. No missing field is filled
 with a guess.
 
@@ -35,7 +31,7 @@ said 7.2% where the quote said 2.3%. The report prints that ratio rather
 than hiding it. On-chain depth and volume also leave out centralized
 exchanges, so time-to-exit reads conservatively long.
 
-**The model interpreter is checked, not trusted, and it is still a model.**
+**The model interpreter is checked by code, and it is still a model.**
 Code drops any token a post never names, discards any rationale that is not
 a verbatim quote, and drops any post containing text aimed at a model. It
 cannot tell whether a reading is *wise*. On the first live run it read a
@@ -45,7 +41,7 @@ into each decision, so replay never calls the model. The keyword
 interpreter remains the default for fixtures and tests, and the fallback
 when the model fails.
 
-**The injection guard is a pattern, not a proof.** It catches text that
+**The injection guard matches patterns.** It catches text that
 addresses a model directly ("ignore your previous rules", "respond with
 bullish"). A determined attacker could phrase around it. The other checks
 still apply in that case: the token must be named in the post, and the
@@ -73,7 +69,6 @@ a coverage gap that is wide relative to the falsifier's own horizon.
 
 **Reported evidence quality has an unmeasured floor.** The quality components
 (completeness, freshness, corroboration, independence) measure whether
-evidence exists, is recent, is corroborated and is independent, not whether
-it is true. A confidently wrong but well-corroborated claim scores the same
+evidence exists, is recent, is corroborated and is independent. It cannot measure whether the evidence is true. A confidently wrong but well-corroborated claim scores the same
 as a right one. Only the falsifier check, after the fact, tests a claim
 against what happened.

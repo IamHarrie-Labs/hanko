@@ -5,7 +5,7 @@
 [![CI](https://github.com/IamHarrie-Labs/hanko/actions/workflows/ci.yml/badge.svg)](https://github.com/IamHarrie-Labs/hanko/actions/workflows/ci.yml)
 [![Tests: 349 passing](https://img.shields.io/badge/tests-349_passing-555555)](tests/)
 [![RYO tools confirmed live: 6](https://img.shields.io/badge/RYO_tools_confirmed_live-6-555555)](ARCHITECTURE.md#transport-mcp-and-rest-reach-the-same-facts)
-[![Tracks entered: 3](https://img.shields.io/badge/tracks_entered-3-8b6a27)](https://tryhanko.vercel.app/judges)
+[![Tracks entered: 3](https://img.shields.io/badge/tracks_entered-3-8b6a27)](https://tryhanko.xyz/judges)
 [![License: MIT](https://img.shields.io/badge/license-MIT-555555)](LICENSE)
 
 </div>
@@ -26,18 +26,16 @@ ENTER TOKENA  size 3.28%  confidence 0.66
   review at 2026-08-30T12:00:00Z
 ```
 
-<sub>Sample output: real engine, synthetic inputs. `voice_alpha`/`voice_beta`/`voice_gamma` and `TOKENA` are fictional test fixtures, not real accounts or a real token.</sub>
+<sub>Sample output: real engine, synthetic inputs. `voice_alpha`/`voice_beta`/`voice_gamma` and `TOKENA` are fictional test fixtures. None of them is a real account or token.</sub>
 
 Run that same input again in a year and it produces the identical decision
 id, because nothing about deciding touches the network, a clock, or a model.
-It only ever reads what was actually stored. That's the whole project: an
-architecture that makes "prove it" a command you can run, not a promise in
-this README.
+It only ever reads what was actually stored. That is the whole project: "prove it" is a command you can run.
 
-**Judging? Start at [/judges](https://tryhanko.vercel.app/judges)**: every line of
+**Judging? Start at [/judges](https://tryhanko.xyz/judges)**: every line of
 the published rubric, mapped to a page or command you can check yourself.
-**[tryhanko.vercel.app](https://tryhanko.vercel.app)** has the pitch and a sample
-receipt (synthetic inputs, labelled). **[/try](https://tryhanko.vercel.app/try)** runs a piece of it, live,
+**[tryhanko.xyz](https://tryhanko.xyz)** has the pitch and a sample
+receipt (synthetic inputs, labelled). **[/try](https://tryhanko.xyz/try)** runs a piece of it, live,
 from your browser, no install. Full technical detail is at `/docs`.
 
 ![The landing page: the sample receipt above, typed out by the real engine against synthetic sample inputs](.github/images/landing.png)
@@ -50,9 +48,9 @@ Agents)** is the agent above, built to the Multi-KOL Narrative Agent spotlight.
 what it costs to get *out* of a position, from an executable venue quote where
 one exists, in RYO's own response envelope. It is also the size gate the agent
 runs before committing. **Track 2 (Dashboards & Interfaces)** is three screens:
-the [workbench](https://tryhanko.vercel.app/workbench), the
-[failure drill](https://tryhanko.vercel.app/drill) and the
-[Echo Index](https://tryhanko.vercel.app/echo).
+the [workbench](https://tryhanko.xyz/workbench), the
+[failure drill](https://tryhanko.xyz/drill) and the
+[Echo Index](https://tryhanko.xyz/echo).
 
 ### What it has shown, live
 
@@ -61,7 +59,7 @@ the [workbench](https://tryhanko.vercel.app/workbench), the
   and BONK, decides, seals the run with its replay bundle, stamps it on
   OpenTimestamps and commits it to [`live/`](live/). Every decision is graded
   72 hours later against the conditions it wrote down first.
-  [/ledger](https://tryhanko.vercel.app/ledger) shows what changed since the
+  [/ledger](https://tryhanko.xyz/ledger) shows what changed since the
   last run, most important first (D-20).
 - **Graded against its own conditions, including when it was wrong.** The
   first 32 scheduled decisions came due on 2026-10-27 and 28: every ENTER
@@ -74,9 +72,8 @@ the [workbench](https://tryhanko.vercel.app/workbench), the
   972,817, mined 35 minutes after the seal, and `hanko verify-run` replays
   all four decisions from the committed bundle with no network and no key.
   (Until 2026-10-24 that bundle was not actually in the repository; D-19.)
-- **An exit cost measured, not modelled.** BONK, $50,000: the Jupiter quote
-  says 2.3%. The skill's own constant-product model said 7.2%, and the report
-  prints the 3.1x gap instead of hiding it.
+- **A measured exit cost.** BONK, $50,000: the Jupiter quote
+  says 2.3%. The skill's own constant-product model said 7.2%, and the report prints the 3.1x gap.
 - **A study that audited the agent.** The [Echo Index](study/echo-index/REPORT.md)
   ran Hanko's echo check over 2,094 real posts from 15 crypto channels. Echo
   inflation was 1.005x, published as found. First, though, it found that
@@ -86,7 +83,7 @@ the [workbench](https://tryhanko.vercel.app/workbench), the
   rate-limited quote venue, the model down, a prompt injection the model
   actually obeyed, tampered evidence, an edited sealed run, a source dying
   mid-sweep, a restart. All nine hold, computed live on
-  [/drill](https://tryhanko.vercel.app/drill). The restart scenario broke the
+  [/drill](https://tryhanko.xyz/drill). The restart scenario broke the
   first time it ran (D-18, fixed).
 
 A 判子 is the seal a person stamps on a document to commit to it. The mark
@@ -119,8 +116,7 @@ and states in advance what would prove it wrong.
 ## Verify it yourself in 60 seconds
 
 No live credential, no account, no network. Every number below regenerates
-from synthetic fixtures committed in this repository (fictional sample voices
-and a fictional token, written for testing, not captured from real accounts):
+from synthetic fixtures committed in this repository (fictional sample voices and a fictional token, written for testing):
 
 ```bash
 git clone https://github.com/IamHarrie-Labs/hanko && cd hanko
@@ -153,8 +149,7 @@ Builders and traders who want an agent's reasoning to be auditable rather
 than taken on faith. Someone who has been burned by a bot that says
 "strong buy signal" with nothing behind it, and wants to see the evidence,
 the falsifiers, and the honest gaps instead. Also the judges reviewing this
-submission, who can replay any decision from the exact stored bytes it saw
-rather than trusting a claim in this README.
+submission, who can replay any decision from the exact stored bytes it saw.
 
 Not built for anyone who wants the agent to execute trades. It doesn't, and
 by the hackathon's own rules, none of the RYO tools it's built on can either.
@@ -164,14 +159,14 @@ Everything here researches and sizes a position; nothing here moves funds.
 
 | Open | What it shows |
 |---|---|
-| [tryhanko.vercel.app](https://tryhanko.vercel.app) | The pitch, and a sample decision receipt (real engine, synthetic fixture inputs, labelled as such) |
-| [/try](https://tryhanko.vercel.app/try) | `exit_liquidity` live: RYO facts, DexScreener depth, a Jupiter quote, in RYO's envelope |
-| [/judges](https://tryhanko.vercel.app/judges) | Every rubric line, mapped to where to check it |
-| [/workbench](https://tryhanko.vercel.app/workbench) | Remove a voice or tighten a threshold on the sample decision (synthetic inputs, labelled as such) and watch the actual `decide()` verdict move, and which rule caused it |
-| [/drill](https://tryhanko.vercel.app/drill) | Nine real failures injected into the real code, each defence computed live |
-| [/echo](https://tryhanko.vercel.app/echo) | The Echo Index: how much crypto consensus is one voice repeated, on 2,094 real posts |
-| [/docs#track1-live](https://tryhanko.vercel.app/docs#track1-live) | Two real decisions, live X evidence and live RYO facts, neither cherry-picked |
-| [/docs#mcp-transport](https://tryhanko.vercel.app/docs#mcp-transport) | What a live MCP handshake and a live `x_search` call actually return |
+| [tryhanko.xyz](https://tryhanko.xyz) | The pitch, and a sample decision receipt (real engine, synthetic fixture inputs, labelled as such) |
+| [/try](https://tryhanko.xyz/try) | `exit_liquidity` live: RYO facts, DexScreener depth, a Jupiter quote, in RYO's envelope |
+| [/judges](https://tryhanko.xyz/judges) | Every rubric line, mapped to where to check it |
+| [/workbench](https://tryhanko.xyz/workbench) | Remove a voice or tighten a threshold on the sample decision (synthetic inputs, labelled as such) and watch the actual `decide()` verdict move, and which rule caused it |
+| [/drill](https://tryhanko.xyz/drill) | Nine real failures injected into the real code, each defence computed live |
+| [/echo](https://tryhanko.xyz/echo) | The Echo Index: how much crypto consensus is one voice repeated, on 2,094 real posts |
+| [/docs#track1-live](https://tryhanko.xyz/docs#track1-live) | Two real decisions, live X evidence and live RYO facts, neither cherry-picked |
+| [/docs#mcp-transport](https://tryhanko.xyz/docs#mcp-transport) | What a live MCP handshake and a live `x_search` call actually return |
 
 <table>
 <tr>
@@ -208,7 +203,7 @@ hanko/sources/rss.py     RSS/Atom: free, and the only source with trustworthy ti
 hanko/sources/fixture.py local JSON: free development, and every failure mode in CI
 hanko/snapshot/store.py  append-only content-addressed store, replay, integrity
 hanko/ryotools/          the six RYO tools over MCP and REST; structural fact extraction
-hanko/skills/exit_liquidity/  Track 3: what it costs to exit a position, not just enter one
+hanko/skills/exit_liquidity/  Track 3: what it costs to exit a position
 hanko/review/outcome.py     grading a decision against its own commitment
 hanko/review/reliability.py calibration, per-voice and per-rule track records
 hanko/review/ledger.py      append-only reviews, one per decision
@@ -245,26 +240,24 @@ evidence came from. Swapping X for Telegram, or Grok for a direct API, changes
 one adapter and nothing downstream. If `x_search` is deprecated or priced out on
 day 9, nothing else moves.
 
-That swap is a real, considered option, not a hypothetical one: X's own API
+That swap is a real option. X's own API
 returns structured posts directly, with no model paraphrasing a prose summary
 in between, at the cost of a separate paid tier and a different credential
 than the one this build already has. Worth doing later; not worth the rewrite
 risk this close to submission when the adapter boundary already makes it
 cheap whenever it happens.
 
-**Failure is data, not an exception.** A source that was asked and did not
+**Failure is recorded as data.** A source that was asked and did not
 answer produces a `FAILED` snapshot with the reason attached. An adapter that
 raises produces one too. Silence is the single outcome this store cannot
-represent, which is what lets position sizing respond honestly to missing
-evidence instead of quietly proceeding as if the data were there.
+represent, which is what lets position sizing respond honestly to missing evidence.
 
 **Three different kinds of nothing stay distinct.** `FAILED` (the source did not
 answer), `OK` with zero items (nobody posted), and `PayloadShapeError` (bytes
 arrived that we cannot read) are separate facts. Collapsing them would let a
 schema change look like a quiet market.
 
-**Coverage is never overclaimed.** `x_search` is a search tool, not a timeline
-feed, so its coverage is `UNKNOWN` by construction. Claiming `COMPLETE` is
+**Coverage is never overclaimed.** `x_search` is a search tool. It cannot list a full timeline, so its coverage is `UNKNOWN` by construction. Claiming `COMPLETE` is
 precisely the lie that would inflate a convergence count across KOLs.
 
 **Collect once, develop free.** Real snapshots are captured once and everything
@@ -294,11 +287,11 @@ hanko collect x --subject voice_alpha --fixture fixtures/x_three_voices.json
 ```
 
 `XAI_API_KEY` must be set for live X collection. Without it the adapter records
-a `FAILED` snapshot saying so, rather than throwing.
+a `FAILED` snapshot saying so and carries on.
 
 ## Status
 
-349 tests, all offline, ~20s. Covered at the evidence layer: canonical form and
+352 tests, all offline, ~20s. Covered at the evidence layer: canonical form and
 address stability, payload deduplication, tamper detection, adapter-version
 mismatch on replay, replay determinism, evidence identity pinned to bytes and
 position, and each failure mode (rate limit, partial window, empty result,
@@ -325,18 +318,15 @@ prove the model transcribed the text or timestamp faithfully, so those fields
 are flagged as model-transcribed on every item.
 
 **Confirmed against the live RYO MCP server, 5 Sep 2026.** `hanko tools`,
-`hanko facts SOL`, and `hanko decide` have all run against the real endpoint,
-not a fixture. Three things that changed once the guessing stopped:
+`hanko facts SOL`, and `hanko decide` have all run against the real endpoint. Three things that changed once the guessing stopped:
 
-  The catalog is six tools, not the seven the hackathon's own public tool list
-  names. `check_safety` and `supported_tokens` are not on the authenticated
+  The catalog has six tools. The hackathon's public tool list names seven. `check_safety` and `supported_tokens` are not on the authenticated
   catalog; `monitor_market_sentiment_shift` is, and wasn't guessed at all.
   There is no numeric safety score anywhere in the six, so `safety_score` on
-  `MarketFacts` now stays `None` every time, honestly, rather than sometimes.
+  `MarketFacts` now stays `None` every time.
 
   Argument keys are `symbol` (`analyze_token`, `deep_analysis`) and `symbols`
-  as one comma-separated string (`compare_tokens`), not `token`. Both
-  transports were built guessing the latter and are now fixed to match.
+  as one comma-separated string (`compare_tokens`). Both transports were first built guessing `token` and are now fixed to match.
 
   The response is `{"tool": ..., "result": {envelope}, "latency_ms": ...}`
   over REST, and the envelope's own `status` (`ok` / `partial` /
@@ -348,8 +338,7 @@ not a fixture. Three things that changed once the guessing stopped:
 > **Correction, 22 Sep 2026.** A routine `hanko audit` crashed outright with
 > `PayloadShapeError: no message item in the response output`. The cause was
 > a labelling bug: a decision built from local fixture data had been tagged
-> with the *live* X source's own id instead of anything marking it as a
-> fixture, so replay handed the real adapter bytes it was never built to
+> with the *live* X source's own id, so replay handed the real adapter bytes it was never built to
 > read. Every existing replay test had missed it, because each one supplied
 > its own resolver that returned a fixture unconditionally rather than going
 > through the same lookup `hanko audit` actually uses. Full write-up, the
@@ -396,7 +385,7 @@ and as an MCP server (`/api/mcp`).
 Full model, honesty conventions, and test coverage in
 [`hanko/skills/exit_liquidity/README.md`](hanko/skills/exit_liquidity/README.md).
 Runnable live, against the real platform, at
-**[tryhanko.vercel.app/try](https://tryhanko.vercel.app/try)**, restricted to
+**[tryhanko.xyz/try](https://tryhanko.xyz/try)**, restricted to
 a few tokens and a capped size, so a public page can't turn into an unbounded
 tap on a live credential.
 
@@ -430,7 +419,7 @@ clock, no network, no model call, no randomness. Interpretation is the one
 subjective step, so it happens upstream and is frozen into the record. Put an
 LLM in the decision path and replay proves nothing.
 
-**Three verdicts, not two.** `ENTER`, `PASS` (the evidence was adequate and
+**Three verdicts.** `ENTER`, `PASS` (the evidence was adequate and
 argued against it), and `ABSTAIN` (the evidence was not adequate to argue either
 way). Collapsing the last two would let the agent claim a market view it never
 had.
@@ -449,7 +438,7 @@ repeats and the reason it was demoted.
 **Every decision pre-registers its own falsification.** Falsifiers are written
 before the outcome is known, evaluate mechanically, and are hashed into the
 `decision_id`. Move a threshold, a size, or a review date after the fact and you
-get a different id: a new decision, not an edited one. Refusals commit too: a
+get a different id, so any edit shows as a new decision. Refusals commit too: a
 `PASS` records what would flip it.
 
 ### Seeing it
@@ -473,8 +462,7 @@ ENTER TOKENA  size 3.28%  confidence 0.66
 ```
 
 Three authors mentioned the token; two of them were independent. Swap in the
-market fixture with no safety score and the same evidence sizes at 3.08%
-instead of 3.28%. Nothing in the rules changed, only what was known.
+market fixture with no safety score and the same evidence sizes at 3.08%, down from 3.28%. Nothing in the rules changed, only what was known.
 
 `hanko audit` re-derives every recorded decision from stored bytes and insists it
 reproduces. That is the CI gate that turns "preserves a repeatable reasoning
@@ -483,8 +471,7 @@ trail" from a README claim into a failing build.
 ## The review loop
 
 At `review_at`, each falsifier is evaluated against observed facts and the
-decision is graded **against what it committed to**, not against whether it
-happened to make money.
+decision is graded **against what it committed to**. Whether it made money is recorded but does not decide the grade.
 
 Those come apart more often than is comfortable. An entry can be profitable and
 still falsified: the price rose while the liquidity that justified the size
@@ -503,8 +490,7 @@ grading itself on a sample it chose after the fact.
 an agent that only marks the trades it took never learns what its caution cost.
 
 **One review per decision, enforced.** Re-reviewing until the answer improves is
-the exact failure pre-registration exists to prevent, so the ledger refuses a
-second review rather than keeping the latest.
+the exact failure pre-registration exists to prevent, so the ledger refuses a second review.
 
 ```bash
 hanko review --observations fixtures/observations_day3.json --now 2026-08-30T12:00:00Z
@@ -524,8 +510,7 @@ intermediate ones. `price_usd` and `liquidity_usd` are graded against every
 sample `hanko sweep --samples` logs between the decision and the review
 ([D-13](DECISIONS.md#d-13-a-falsifier-said-within-72h-and-only-checked-the-last-tick)) --
 a breach that recovers before review time still falsifies the thesis it
-broke, and a review built from a single end-of-window reading says so
-rather than implying it watched the whole window.
+broke, and a review built from a single end-of-window reading says so.
 
 ### The scorecard
 
@@ -551,9 +536,7 @@ rules satisfied on decisions that later
 
 Said 0.7, was right 50% of the time. The agent is overconfident, and says so.
 
-Per-voice reliability is **earned from the agent's own audited history**, not
-asserted from follower counts, and echoes earn neither credit nor blame. A voice
-with no scored decisions gets `None`, not 0%. Reporting it as zero would defame
+Per-voice reliability is **earned from the agent's own audited history**. Follower counts play no part, and echoes earn neither credit nor blame. A voice with no scored decisions gets `None`. Reporting it as zero would defame
 it; reporting it as 100% would promote it. Per-rule reliability answers the
 uncomfortable question: a rule that is always satisfied on losers is not a
 filter, it is decoration.
@@ -571,41 +554,33 @@ hanko sweep --watchlist watchlist.json --as-of 2026-08-27T12:00:00Z
 
 One pass: decide on every entry in the watchlist, then grade every decision
 the ledgers say is due. A failing token is recorded in the report and the
-sweep moves past it rather than raising; a token dropped from the watchlist
-still gets its outstanding decisions reviewed rather than orphaned.
+sweep moves on. A token dropped from the watchlist still gets its outstanding decisions reviewed.
 
-**Every snapshot in one sweep is stamped at the sweep's own `as_of`, not the
-literal wall clock.** The several source calls inside one pass take a few
+**Every snapshot in one sweep is stamped at the sweep's own `as_of`.** The several source calls inside one pass take a few
 real seconds, but they all belong to the same logical instant, and a sweep
-re-run against unchanged sources should reach the same `decision_id` rather
-than a new one just because the retry landed a second later.
+re-run against unchanged sources should reach the same `decision_id`, even if the retry lands a second later.
 
-**Review uses a fresh look, not the frozen one.** `fresh_observations()`
-re-collects evidence and re-derives `independent_voices` at review time
-rather than reusing the original decision's numbers. The whole point of a
+**Review takes a fresh look.** `fresh_observations()`
+re-collects evidence and re-derives `independent_voices` at review time. The whole point of a
 review is what's true *now*; a stale copy of "true then" would grade a
 decision against itself.
 
 **`--samples samples.jsonl` gives the window something to actually check.**
 Every pass appends one market reading per watched token, reusing the facts
-that pass already fetched. A decision that becomes due later is graded
-against every reading logged since it was made, not just the one taken at
-review time -- which is what lets an `ANY_POINT_IN_WINDOW` falsifier
+that pass already fetched. A decision that becomes due later is graded against every reading logged since it was made. That lets an `ANY_POINT_IN_WINDOW` falsifier
 ([D-13](DECISIONS.md#d-13-a-falsifier-said-within-72h-and-only-checked-the-last-tick))
 catch a price or liquidity breach that recovers before the clock gets there.
 Omit it and `hanko sweep` keeps the single end-of-window reading it always
 took; the review says which of the two it used.
 
 Meant to be invoked by something that already knows how to schedule things:
-cron, a scheduled GitHub Action, Windows Task Scheduler. One pass and exit,
-not a loop that sleeps in-process. A failed run is a failed invocation, not a
-process to go find and kill.
+cron, a scheduled GitHub Action, Windows Task Scheduler. Each call does one pass and exits, so a failed run is just a failed invocation.
 
 This repository runs one. [`.github/workflows/sealed-sweep.yml`](.github/workflows/sealed-sweep.yml)
 seals [`watchlist.live.json`](watchlist.live.json) every three hours with no
 key at all, then verifies the run from its committed files, upgrades any
 pending Bitcoin proofs, and writes `live/summary.json` for
-[/ledger](https://tryhanko.vercel.app/ledger):
+[/ledger](https://tryhanko.xyz/ledger):
 
 ```bash
 hanko seal --watchlist watchlist.live.json --ledger live/decisions.jsonl   --reviews live/reviews.jsonl --samples live/samples.jsonl   --manifest-dir live/runs --interpreter lexicon --lookback-hours 24 --ots
@@ -627,28 +602,23 @@ sweep at 2026-08-27T12:00:00+00:00
   ENTER   TOKENA  dec_5b2eadbf21bc8c073927b4ac
 ```
 
-16 tests, all offline, using a fixture stand-in for RYO tool responses
-(`FixtureFactsSource`, shaped like the live tool sources rather than the
-evidence-shaped `FixtureSource`) alongside the existing evidence fixtures.
-Covered: a failed evidence source or fact tool becoming a gap rather than an
-exception, one bad token not cancelling the rest of the sweep, a decision
-already in the ledger being skipped rather than duplicated, a token dropped
-from the watchlist still getting reviewed, and review pulling fresh
-observations rather than the ones frozen into the original decision.
+Sweep tests run offline, using a fixture stand-in for RYO tool responses
+(`FixtureFactsSource`, shaped like the live tool sources) alongside the existing evidence fixtures.
+Covered: a failed evidence source or fact tool becoming a recorded gap, one bad token not cancelling the rest of the sweep, a decision
+already in the ledger being skipped, a token dropped
+from the watchlist still getting reviewed, and review pulling fresh observations.
 
 ## Architecture, decisions, limitations
 
 - **[`ARCHITECTURE.md`](ARCHITECTURE.md)**: the one rule, the pipeline as a
   diagram, what each package owns, and how `exit_liquidity` sizes itself as
   the same size gate `decide()` runs internally.
-- **[`DECISIONS.md`](DECISIONS.md)**: thirteen engineering decisions in the
+- **[`DECISIONS.md`](DECISIONS.md)**: 21 engineering decisions in the
   order they happened, including several real bugs found and fixed during
   this build and what each one actually broke.
-- **[`LIMITATIONS.md`](LIMITATIONS.md)**: what hasn't been shown yet, a
-  calibration curve from real outcomes, a live `ENTER`, a real priced pool.
-  Stated plainly, not folded into a status paragraph.
+- **[`LIMITATIONS.md`](LIMITATIONS.md)**: what hasn't been shown yet, stated plainly.
 - **[`SEALING.md`](SEALING.md)**: `hanko seal` -- a numbered manifest of an
-  entire watchlist run (nothing omitted, not even the errors), anchored to
+  entire watchlist run (errors included), anchored to
   public OpenTimestamps calendars, published before the outcome is known.
 
 ## Next
@@ -663,4 +633,4 @@ Hanko 2.0.0 is published in the official MCP registry as `io.github.IamHarrie-La
 - [Retrospective baseline comparison](study/baseline/README.md): 76 eligible reviewed opportunities produce identical entry selections under Hanko and a simple rule. This sample establishes no selection advantage. Reproduce with `python scripts/compare_baseline.py`.
 - [A sealed SOL refusal proved wrong](study/baseline/failure-case.md): the original commitment, late review-time observations, and what the extra voice does and does not establish.
 
-The first successful model-read workflow sealed `run_547a6eaf6c69d992` on 30 Oct: 21 model calls, no fallbacks, three unnamed-token readings rejected, and all four decisions independently replayed. Its Bitcoin timestamp is pending confirmation.
+The first successful model-read workflow sealed `run_547a6eaf6c69d992` on 30 Oct: 21 model calls, no fallbacks, three unnamed-token readings rejected, and all four decisions independently replayed. Its Bitcoin timestamp is confirmed.

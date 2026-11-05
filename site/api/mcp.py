@@ -2,7 +2,7 @@
 
 Any MCP host that speaks Streamable HTTP can add it:
 
-    {"mcpServers": {"hanko": {"url": "https://tryhanko.vercel.app/api/mcp"}}}
+    {"mcpServers": {"hanko": {"url": "https://tryhanko.xyz/api/mcp"}}}
 
 initialize, tools/list, tools/call and ping are answered; a notification
 gets 202 and does nothing. Stateless, so there is no session to open and GET
