@@ -40,6 +40,28 @@
   },
   "redirects": [
     {
+      "source": "/",
+      "has": [
+        {
+          "type": "host",
+          "value": "tryhanko.vercel.app"
+        }
+      ],
+      "destination": "https://tryhanko.xyz/",
+      "permanent": true
+    },
+    {
+      "source": "/",
+      "has": [
+        {
+          "type": "host",
+          "value": "www.tryhanko.xyz"
+        }
+      ],
+      "destination": "https://tryhanko.xyz/",
+      "permanent": true
+    },
+    {
       "source": "/:path*",
       "has": [
         {
