@@ -92,7 +92,7 @@
   <div class="shell band-inner" style="padding-top: 56px; padding-bottom: 56px">
     <div class="colophon">
       <span>Hanko 判子 · RYO-CHAN Hackathon 2026</span>
-      <span><span data-stat="tests">351</span> tests · <span data-stat="lines">14,576</span> lines · <span data-stat="commits">103</span> commits · <a href="index.html">Home</a> · <a href="https://github.com/IamHarrie-Labs/hanko" data-repo>GitHub</a></span>
+      <span><span data-stat="tests">352</span> tests · <span data-stat="lines">14,618</span> lines · <span data-stat="commits">137</span> commits · <a href="index.html">Home</a> · <a href="https://github.com/IamHarrie-Labs/hanko" data-repo>GitHub</a></span>
     </div>
   </div>
 </footer>
@@ -220,9 +220,19 @@
     button.disabled = true;
     button.textContent = 'Running …';
 
-    var params = new URLSearchParams({ token: token, size_usd: size });
-    fetch('/api/exit_liquidity?' + params.toString())
-      .then(function (res) { return res.json().then(function (body) { return { ok: res.ok, body: body }; }); })
+    // RYO's own REST route shape; the envelope arrives under "result".
+    fetch('/api/tools/exit_liquidity/call', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ token: token, size_usd: Number(size) })
+    })
+      .then(function (res) {
+        return res.text().then(function (text) {
+          var body;
+          try { body = JSON.parse(text); } catch (e) { body = { message: 'the live service did not answer in time; please try again' }; }
+          return { ok: res.ok, body: (body && body.result) || body };
+        });
+      })
       .then(function (result) {
         if (!result.ok || !result.body.data) {
           var b = result.body || {};
