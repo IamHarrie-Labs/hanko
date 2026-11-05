@@ -961,6 +961,7 @@ input[type="checkbox"] { width: 24px; height: 24px; accent-color: var(--text); f
 }
 @media (max-width: 700px) {
   .vid { height: 220vh; }
+  .vid-frame { width: 62vw; }
   .vid-ui { left: auto; right: 8px; bottom: auto; top: 8px; gap: 6px; }
   .vid-btn { font-size: 11px; padding: 7px 9px; }
   .vid-intro { padding: 0 24px; }

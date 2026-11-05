@@ -103,8 +103,8 @@
     <div class="vid-dim" aria-hidden="true"></div>
     <p class="vid-intro" data-i18n="vid_intro">Keep scrolling to watch the 96-second demo</p>
     <div class="vid-frame" id="vid-frame">
-      <video id="demo-video" playsinline muted loop preload="metadata" poster="assets/video/hanko-demo-poster.jpg">
-        <source src="assets/video/hanko-demo.mp4" type="video/mp4">
+      <video id="demo-video" playsinline muted loop preload="none" data-poster="assets/video/hanko-demo-poster.jpg">
+        <source data-src="assets/video/hanko-demo.mp4" type="video/mp4">
         <track kind="captions" src="assets/video/hanko-demo.vtt" srclang="en" label="English">
         <track kind="captions" src="assets/video/hanko-demo.ja.vtt" srclang="ja" label="日本語">
       </video>
@@ -403,7 +403,7 @@
 
     <div class="colophon">
       <span>Hanko 判子 · RYO-CHAN Hackathon 2026 · <a href="judges.html" data-i18n="nav_judges">For judges</a></span>
-      <span><span data-stat="tests">352</span> tests · <span data-stat="commits">150</span> commits · <a href="https://github.com/IamHarrie-Labs/hanko" data-repo>GitHub</a></span>
+      <span><span data-stat="tests">352</span> tests · <span data-stat="commits">151</span> commits · <a href="https://github.com/IamHarrie-Labs/hanko" data-repo>GitHub</a></span>
     </div>
   </div>
 </footer>
@@ -585,6 +585,16 @@
       }
     }
     v.addEventListener('loadedmetadata', captions); captions();
+    // Nothing is downloaded until the visitor starts scrolling toward the
+    // video, so the hero loads exactly as fast as it did before it existed.
+    var loaded = false;
+    function loadVideo() {
+      if (loaded) return; loaded = true;
+      v.poster = v.getAttribute('data-poster');
+      var src = v.querySelector('source[data-src]');
+      if (src) { src.src = src.getAttribute('data-src'); src.removeAttribute('data-src'); }
+      v.preload = 'auto'; v.load(); captions();
+    }
     var wantPlay = false, userPaused = false;
     function paint() {
       playBtn.textContent = v.paused ? L.play : L.pause;
@@ -592,6 +602,7 @@
     }
     v.addEventListener('play', paint); v.addEventListener('pause', paint); v.addEventListener('volumechange', paint);
     playBtn.addEventListener('click', function () {
+      loadVideo();
       if (v.paused) { userPaused = false; v.play().catch(function () {}); } else { userPaused = true; v.pause(); }
     });
     soundBtn.addEventListener('click', function () {
@@ -599,7 +610,7 @@
       if (!v.muted && v.paused) { userPaused = false; v.play().catch(function () {}); }
     });
     paint();
-    if (reduced) { v.setAttribute('controls', ''); return; }
+    if (reduced) { v.setAttribute('controls', ''); loadVideo(); return; }
 
     var ticking = false, full = false, nav = document.querySelector('.nav');
     var sticky = sec.querySelector('.vid-sticky');
@@ -619,15 +630,16 @@
       sticky.style.paddingTop = navH + 'px';
       var nowFull = e > 0.97;
       if (nowFull !== full) { full = nowFull; sec.classList.toggle('is-full', full); }
+      if (!loaded && window.scrollY > 0 && r.top < vh * 1.5) loadVideo();
       var visible = r.bottom > vh * 0.25 && r.top < vh * 0.75;
       var should = p > 0.55 && visible;
-      if (should && !wantPlay) { wantPlay = true; if (!userPaused) v.play().catch(function () {}); }
+      if (should && !wantPlay) { wantPlay = true; loadVideo(); if (!userPaused) v.play().catch(function () {}); }
       if (!should && wantPlay) { wantPlay = false; v.pause(); }
     }
     function onScroll() { if (!ticking) { ticking = true; requestAnimationFrame(update); } }
     window.addEventListener('scroll', onScroll, { passive: true });
     window.addEventListener('resize', onScroll);
-    update();
+    if (document.readyState === 'complete') onScroll(); else window.addEventListener('load', onScroll);
 
   })();
 
