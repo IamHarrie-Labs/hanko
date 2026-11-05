@@ -152,6 +152,30 @@ def proven_count() -> str:
     return str(len(re.findall(r'class="sigil good"', docs)))
 
 
+def live_stats() -> dict[str, str]:
+    """The home page's live counters, as of this build.
+
+    The page refreshes them from the repository on load; these are what a
+    reader without JavaScript, or a crawler, sees. Read from the same file
+    the agent writes, never typed.
+    """
+    path = ROOT / "live" / "summary.json"
+    if not path.exists():
+        return {}
+    summary = json.loads(path.read_text(encoding="utf-8"))
+    totals = summary.get("totals", {})
+    enter = summary.get("scorecard", {}).get("by_verdict", {}).get("enter", {})
+    values = {
+        "live_runs": totals.get("runs"),
+        "live_reviews": totals.get("reviews"),
+        "live_anchored": totals.get("anchored_runs"),
+        "live_enter_held": enter.get("held"),
+        "live_enter_scored": (enter.get("held") or 0) + (enter.get("falsified") or 0),
+        "live_falsified": totals.get("results", {}).get("falsified"),
+    }
+    return {k: format(v, ",") for k, v in values.items() if v is not None}
+
+
 def repo_url() -> str | None:
     try:
         url = run(["git", "remote", "get-url", "origin"]).strip()
@@ -224,6 +248,7 @@ def main() -> int:
         "commits": commit_count(),
         "layers": layer_count(),
         "proven": proven_count(),
+        **live_stats(),
     }
     repo = repo_url()
 

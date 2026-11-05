@@ -25,6 +25,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 
 <link rel="stylesheet" href="styles.css">
+<script>document.documentElement.className += " js";</script>
 </head>
 
 <body>
@@ -32,29 +33,38 @@
 
 <nav class="nav" aria-label="Site">
   <div class="nav-inner">
-    <a href="index.html" aria-label="Hanko home" style="display: flex; flex: none">
+    <a href="index.html" aria-label="Hanko home" class="nav-home">
       <img class="mark mark-nav" src="assets/hanko-logo.png" width="1092" height="584" alt="">
     </a>
-    <div class="nav-links">
-      <a href="try.html">Try it live</a>
-      <a href="ledger.html">Ledger</a>
-      <a href="workbench.html">Workbench</a>
-      <a href="drill.html">Drill</a>
-      <a href="echo.html">Echo Index</a>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-links">Menu</button>
+    <div class="nav-links" id="nav-links">
+      <a href="index.html#how">How it works</a>
+      <a href="ledger.html">Live record</a>
+      <a href="try.html" aria-current="page">Try it</a>
+      <details class="nav-more">
+        <summary>Tools</summary>
+        <div class="nav-more-panel">
+          <a href="workbench.html"><span>Workbench</span><small>Change the inputs, watch the call move</small></a>
+          <a href="drill.html"><span>Failure drills</span><small>Break a source on purpose</small></a>
+          <a href="echo.html"><span>Echo study</span><small>How often voices copy each other</small></a>
+        </div>
+      </details>
       <a href="judges.html">For judges</a>
       <a href="docs.html">Docs</a>
     </div>
     <div class="nav-actions">
-      <a href="https://github.com/IamHarrie-Labs/hanko" data-repo class="btn btn-dark">GITHUB REPO</a>
+      <a href="https://github.com/IamHarrie-Labs/hanko" data-repo class="btn btn-dark">GITHUB</a>
+      <a href="try.html" class="btn btn-dark btn-accent">TRY IT LIVE</a>
     </div>
   </div>
 </nav>
 
 <header class="shell docs-hero">
   <a href="index.html" class="back-link">&larr; Hanko</a>
-  <div class="eyebrow">Try it live</div>
-  <h1>Run exit_liquidity against the real platform.</h1>
-  <p class="lede">Not a canned response and not a fixture. Each check makes three live calls: RYO's <code>analyze_token</code> for market facts, DexScreener for the depth of every pool trading the token's canonical contract, and Jupiter for an <strong>executable quote</strong> to sell your exact size. Then it runs the same pure <code>assess()</code> the CLI uses. When a quote exists, the verdict rests on it and the model's own figure is shown beside it, error and all. If any of the three is down, the answer comes back from the others and says which one failed. The response is RYO's own public envelope, so RYO's clients can read it unchanged.</p>
+  <div class="eyebrow">Try it live · exit_liquidity</div>
+  <h1>Could you sell it, and what would it cost?</h1>
+  <p class="lede">Pick a token and how much you hold. Hanko asks three live sources right now (RYO's market data, every trading pool on DexScreener, and a real sell quote from Jupiter) and tells you in plain words whether you could get out, and what it would cost you.</p>
+  <p class="footnote" style="margin-top: 14px">For builders: it runs RYO's <code>analyze_token</code>, DexScreener depth and an executable Jupiter quote through the same pure <code>assess()</code> the CLI uses. When a quote exists the answer rests on it, and the model's own figure is shown beside it, error and all. If a source is down, the answer says which one and comes back from the others, in RYO's own public envelope.</p>
 </header>
 
 <section id="try-it" class="shell">
@@ -77,6 +87,17 @@
     <button type="submit" class="btn btn-solid try-submit">Run live check</button>
   </form>
 
+  <div class="answer" id="try-answer" hidden aria-live="polite">
+    <div class="answer-badge" id="ans-badge" aria-hidden="true"></div>
+    <div>
+      <p class="answer-title" id="ans-title"></p>
+      <p class="answer-text" id="ans-text"></p>
+    </div>
+    <div class="answer-facts" id="ans-facts"></div>
+  </div>
+
+  <details class="try-details" open>
+  <summary>The full receipt</summary>
   <div class="receipt try-receipt">
     <div class="receipt-head">
       <span id="try-heading">EXIT_LIQUIDITY · LIVE CHECK</span>
@@ -84,6 +105,7 @@
     </div>
     <pre id="try-output" role="status" aria-live="polite">Pick a token and a size, then run a live check. Usually 2 to 8 seconds: three real network calls.</pre>
   </div>
+  </details>
 
   <p class="footnote" style="max-width: 48em">Every figure above is computed from what this call actually returned. Nothing is filled in when a source doesn't supply it. Solana tokens get an executable quote; ETH and BTC are measured through their wrapped forms on Ethereum, where no keyless quote venue exists, so their cost is modelled and labelled as such. Also callable the way RYO's own tools are: <code>POST /api/tools/exit_liquidity/call</code>, or as an MCP server at <code>/api/mcp</code>. See the <a href="docs.html#exit-liquidity">exit_liquidity docs</a>.</p>
 </section>
@@ -92,7 +114,7 @@
   <div class="shell band-inner" style="padding-top: 56px; padding-bottom: 56px">
     <div class="colophon">
       <span>Hanko 判子 · RYO-CHAN Hackathon 2026</span>
-      <span><span data-stat="tests">352</span> tests · <span data-stat="lines">14,618</span> lines · <span data-stat="commits">139</span> commits · <a href="index.html">Home</a> · <a href="https://github.com/IamHarrie-Labs/hanko" data-repo>GitHub</a></span>
+      <span><span data-stat="tests">352</span> tests · <span data-stat="lines">14,618</span> lines · <span data-stat="commits">140</span> commits · <a href="index.html">Home</a> · <a href="https://github.com/IamHarrie-Labs/hanko" data-repo>GitHub</a></span>
     </div>
   </div>
 </footer>
@@ -209,6 +231,53 @@
     return lines.join('\n');
   }
 
+  // The same answer, in words, above the receipt. Every number comes from
+  // the receipt below it; nothing here is computed that the receipt lacks.
+  var answer = document.getElementById('try-answer');
+  function when(h) {
+    if (h >= 48) return 'about ' + (h / 24).toFixed(1) + ' days';
+    if (h >= 1) return 'about ' + h.toFixed(1) + ' hours';
+    if (h * 60 >= 1) return 'about ' + Math.round(h * 60) + ' minutes';
+    return 'under a minute';
+  }
+  function renderAnswer(env) {
+    var d = env.data || {};
+    var size = '$' + money(d.requested_size_usd || 0);
+    var q = d.venue_quote, est = d.estimate;
+    var pct = q ? q.effective_cost_pct : est ? est.slippage_pct : null;
+    var cost = pct !== null && pct !== undefined ? (d.requested_size_usd || 0) * pct / 100 : null;
+    var costText = cost === null ? null : (cost < 1 ? 'under $1' : '$' + money(cost)) + ' (' + pctText(pct) + ')';
+    var copy = {
+      ok: ['✓', '', 'Yes. You can sell ' + size + ' of ' + d.token + ' without moving the price much.'],
+      tight: ['~', 'tight', 'You can sell ' + size + ' of ' + d.token + ', but it will cost you.'],
+      illiquid: ['✕', 'illiquid', 'Not at this size. Selling ' + size + ' of ' + d.token + ' would move the price a lot.'],
+      unknown: ['?', 'tight', 'Not enough live data to answer for ' + d.token + ' right now.']
+    }[d.verdict] || ['?', 'tight', 'No clear answer for ' + d.token + '.'];
+    var text = costText === null
+      ? 'One or more sources did not answer, so Hanko will not guess. The receipt below says which.'
+      : (q ? 'Selling now through Jupiter would cost about ' + costText + ' in price impact and fees, from a real sell quote.'
+           : 'Hanko estimates about ' + costText + ' from on-chain trading depth. There is no live sell quote for this token, so this is a model, and labelled as one.');
+    var facts = [];
+    if (costText !== null) facts.push(['Cost to sell all at once', costText]);
+    var m = d.max_size_usd || {};
+    // The model's ceilings are deliberately conservative; beside a real quote
+    // that already beat them they read as a contradiction, so the plain card
+    // shows them only when the model is the whole answer. The receipt keeps both.
+    if (m['1pct'] && !q) facts.push(['Largest sale under 1% cost (estimate)', '$' + money(m['1pct'])]);
+    if (d.hours_to_exit !== null && d.hours_to_exit !== undefined) {
+      facts.push(['Or sell slowly, ' + Math.round((d.parameters || {}).participation_pct || 10) + '% of daily trading', when(d.hours_to_exit)]);
+    }
+    document.getElementById('ans-badge').textContent = copy[0];
+    document.getElementById('ans-badge').className = 'answer-badge ' + copy[1];
+    document.getElementById('ans-title').textContent = copy[2];
+    document.getElementById('ans-text').textContent = text;
+    document.getElementById('ans-facts').innerHTML = facts.map(function (f) {
+      return '<div><b>' + f[1] + '</b><span>' + f[0] + '</span></div>';
+    }).join('');
+    answer.hidden = false;
+    answer.classList.remove('is-new'); void answer.offsetWidth; answer.classList.add('is-new');
+  }
+
   form.addEventListener('submit', function (event) {
     event.preventDefault();
     var token = document.getElementById('try-token').value;
@@ -241,6 +310,7 @@
           return;
         }
         output.textContent = renderReport(result.body);
+        renderAnswer(result.body);
       })
       .catch(function (err) {
         output.textContent = 'Network error reaching the live endpoint: ' + err.message;
@@ -253,5 +323,6 @@
 })();
 </script>
 
+<script src="assets/site.js" defer></script>
 </body>
 </html>

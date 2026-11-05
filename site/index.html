@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Hanko: an agent that files receipts</title>
-<meta name="description" content="Twenty market voices go in. What comes out is a sized position, a receipt, and a written commitment to what would prove it wrong. Replayable, byte for byte.">
+<meta name="description" content="Hanko reads what crypto traders and news sites are saying, decides whether to act, and seals its reasons before the market answers. Then it grades itself in public, wrong calls included.">
 
 <link rel="icon" href="assets/favicon.png" sizes="32x32" type="image/png">
 <link rel="icon" href="assets/icon-512.png" sizes="512x512" type="image/png">
@@ -12,7 +12,7 @@
 <meta name="theme-color" content="#E3E2DD">
 
 <meta property="og:title" content="Hanko: an agent that files receipts">
-<meta property="og:description" content="A sized position, a receipt, and a written commitment to what would prove it wrong. Replayable, byte for byte.">
+<meta property="og:description" content="It decides, seals its reasons before the market answers, and grades itself in public, wrong calls included.">
 <meta property="og:type" content="website">
 <meta property="og:image" content="assets/og-image.png">
 <meta property="og:image:width" content="1200">
@@ -25,52 +25,316 @@
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 
 <link rel="stylesheet" href="styles.css">
+<script>document.documentElement.className += " js";</script>
 </head>
 
 <body>
-<a class="skip-link" href="#receipt">Skip to content</a>
+<a class="skip-link" href="#main">Skip to content</a>
 
-<nav class="nav nav-hero-gated">
+<nav class="nav" aria-label="Site">
   <div class="nav-inner">
-    <a href="#top" aria-label="Hanko home" style="display: flex; flex: none">
+    <a href="#top" aria-label="Hanko home" class="nav-home">
       <img class="mark mark-nav" src="assets/hanko-logo.png" width="1092" height="584" alt="">
     </a>
-    <div class="nav-links">
-      <a href="#receipt">Receipt</a>
-      <a href="ledger.html">Ledger</a>
-      <a href="workbench.html">Workbench</a>
-      <a href="drill.html">Drill</a>
-      <a href="echo.html">Echo Index</a>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-links">Menu</button>
+    <div class="nav-links" id="nav-links">
+      <a href="index.html#how">How it works</a>
+      <a href="ledger.html">Live record</a>
+      <a href="try.html">Try it</a>
+      <details class="nav-more">
+        <summary>Tools</summary>
+        <div class="nav-more-panel">
+          <a href="workbench.html"><span>Workbench</span><small>Change the inputs, watch the call move</small></a>
+          <a href="drill.html"><span>Failure drills</span><small>Break a source on purpose</small></a>
+          <a href="echo.html"><span>Echo study</span><small>How often voices copy each other</small></a>
+        </div>
+      </details>
       <a href="judges.html">For judges</a>
       <a href="docs.html">Docs</a>
     </div>
     <div class="nav-actions">
-      <a href="https://github.com/IamHarrie-Labs/hanko" data-repo class="btn btn-dark">GITHUB REPO</a>
+      <a href="https://github.com/IamHarrie-Labs/hanko" data-repo class="btn btn-dark">GITHUB</a>
       <a href="try.html" class="btn btn-dark btn-accent">TRY IT LIVE</a>
     </div>
   </div>
 </nav>
 
-<header id="top" class="shell hero">
+<main id="main">
+<header id="top" class="shell hero hero-plain">
   <div class="hero-grid">
     <div>
       <img class="mark mark-hero" src="assets/hanko-logo.png" width="1092" height="584"
            alt="Hanko, hand-lettered over a pink brush stroke" fetchpriority="high">
       <div class="eyebrow">判子 · A seal you cannot take back</div>
       <h1>An agent that files receipts.</h1>
-      <p class="lede">Twenty market voices go in. What comes out is a sized position, a receipt, and a commitment to what would prove it wrong.</p>
-      <p class="lede">Replayable, byte for byte, from the exact data the agent saw.</p>
+      <p class="lede">Hanko reads what crypto traders and news sites are saying, decides whether to act, and seals its reasons <em>before</em> the market answers. Three days later it checks itself in public, wrong calls included.</p>
+      <ul class="hero-points">
+        <li>It counts independent voices, not noise. Five sites repeating one story count once.</li>
+        <li>Every decision says, in advance, what would prove it wrong.</li>
+        <li>Nothing can be edited later: each run is fingerprinted and timestamped on Bitcoin.</li>
+      </ul>
       <div class="cta-row">
-        <a href="https://github.com/IamHarrie-Labs/hanko" data-repo class="btn btn-solid">Read the code on GitHub</a>
+        <a href="ledger.html" class="btn btn-solid">See the live record</a>
         <a href="try.html" class="btn btn-outline">Try it live</a>
       </div>
     </div>
 
-    <div id="receipt">
+    <div class="hero-paper">
+      <article class="paper" id="live-receipt" aria-live="polite" aria-label="Hanko's latest sealed decision">
+        <div class="paper-head">
+          <span class="paper-live">Latest real decision</span>
+          <span id="lr-when">loading</span>
+        </div>
+        <div id="lr-body">
+          <div class="paper-skeleton" style="width: 40%; height: 30px; margin-top: 22px"></div>
+          <div class="paper-skeleton" style="width: 70%"></div>
+          <div class="paper-skeleton" style="width: 90%"></div>
+          <div class="paper-skeleton" style="width: 60%"></div>
+          <div class="paper-skeleton" style="width: 80%"></div>
+        </div>
+      </article>
+      <p class="paper-note">This card is read from Hanko's live record, which the agent updates on its own every few hours. <a href="ledger.html">Every decision is on the ledger</a>.</p>
+    </div>
+  </div>
+
+  <section class="live-band" aria-label="The live record so far">
+    <div class="live-grid" id="live-stats">
+      <div class="live-cell">
+        <div class="live-num" data-live="runs"><span data-stat="live_runs">65</span></div>
+        <div class="live-what">runs sealed and timestamped</div>
+      </div>
+      <div class="live-cell">
+        <div class="live-num" data-live="reviews"><span data-stat="live_reviews">204</span></div>
+        <div class="live-what">decisions graded against what happened</div>
+      </div>
+      <div class="live-cell">
+        <div class="live-num"><span data-live="enter_held"><span data-stat="live_enter_held">37</span></span><small> of <span data-live="enter_scored"><span data-stat="live_enter_scored">48</span></span></small></div>
+        <div class="live-what">positions it took that held up</div>
+      </div>
+      <div class="live-cell">
+        <div class="live-num" data-live="anchored"><span data-stat="live_anchored">64</span></div>
+        <div class="live-what">runs anchored in Bitcoin blocks</div>
+      </div>
+    </div>
+    <div class="live-foot">
+      <span>Misses count too: <b><span data-live="falsified"><span data-stat="live_falsified">103</span></span></b> decisions have been proved wrong, and every one is published.</span>
+      <a href="ledger.html">Open the ledger</a>
+    </div>
+  </section>
+</header>
+
+<section id="how" aria-labelledby="how-title">
+  <div class="hs" id="hs">
+    <div class="hs-sticky">
+  <div class="shell hs-head" data-reveal>
+    <div class="eyebrow">How it works</div>
+    <h2 id="how-title" style="max-width: 20em">Four steps, every few hours, with nobody at the wheel.</h2>
+    <p class="section-lede">No black box. Each step leaves something you can open and check yourself.</p>
+  </div>
+
+      <div class="hs-track" id="hs-track" tabindex="0" aria-label="The four steps, scroll sideways">
+        <article class="step">
+          <div class="step-num">STEP 01</div>
+          <svg class="step-icon" viewBox="0 0 56 56" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 14h28a4 4 0 0 1 4 4v12a4 4 0 0 1-4 4H18l-8 6v-6H6a4 4 0 0 1-4-4V18a4 4 0 0 1 4-4z"/><path d="M44 22h6a4 4 0 0 1 4 4v10a4 4 0 0 1-4 4h-2v6l-7-6h-9"/><path d="M11 24h18M11 29h11"/></svg>
+          <h3>Listen</h3>
+          <p>Hanko reads public sources: news sites, Telegram channels, Bluesky accounts, and RYO's market data. Every page it reads is saved exactly as it arrived.</p>
+          <div class="step-link"><a href="ledger.html">See what it read</a></div>
+          <div class="step-big" aria-hidden="true">1</div>
+        </article>
+        <article class="step">
+          <div class="step-num">STEP 02</div>
+          <svg class="step-icon" viewBox="0 0 56 56" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="28" r="8"/><circle cx="28" cy="28" r="8" stroke-dasharray="3 4"/><circle cx="44" cy="28" r="8"/><path d="M8 44h40"/></svg>
+          <h3>Count voices, not noise</h3>
+          <p>If five sites repeat one press release, that is one voice, not five. Copies and reposts are spotted and set aside, with the reason written down.</p>
+          <div class="step-link"><a href="echo.html">How often voices copy</a></div>
+          <div class="step-big" aria-hidden="true">2</div>
+        </article>
+        <article class="step step-dark">
+          <div class="step-num">STEP 03</div>
+          <svg class="step-icon" viewBox="0 0 56 56" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="28" cy="26" r="18"/><circle cx="28" cy="26" r="12" stroke-dasharray="2 3"/><path d="M21 26l5 5 9-10"/><path d="M14 46h28"/></svg>
+          <h3>Decide and seal</h3>
+          <p>It decides to enter, pass or wait, sizes the position, and writes down what would prove it wrong. Then the whole thing is sealed with a fingerprint and timestamped on Bitcoin, so nobody can quietly change it.</p>
+          <div class="step-link"><a href="workbench.html">Change the inputs yourself</a></div>
+          <div class="step-big" aria-hidden="true">3</div>
+        </article>
+        <article class="step step-dark">
+          <div class="step-num">STEP 04</div>
+          <svg class="step-icon" viewBox="0 0 56 56" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="12" y="8" width="32" height="42" rx="3"/><path d="M22 8v-2h12v2"/><path d="M19 22l3 3 6-6M19 36l3 3 6-6M32 23h6M32 37h6"/></svg>
+          <h3>Grade itself in public</h3>
+          <p>Three days later it checks its own words against what actually happened. Held, or proved wrong: both go on the record, and nothing is deleted.</p>
+          <div class="step-link"><a href="ledger.html">See the scorecard</a></div>
+          <div class="step-big" aria-hidden="true">4</div>
+        </article>
+      </div>
+      <div class="hs-hint">
+        <div class="hs-dots" id="hs-dots" aria-hidden="true"><span class="on"></span><span></span><span></span><span></span></div>
+        <span class="hs-say" id="hs-say">Swipe sideways</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="latest" class="shell" aria-labelledby="latest-title">
+  <div data-reveal>
+    <div class="eyebrow">The most recent grade</div>
+    <h2 id="latest-title" style="max-width: 20em">It marks its own homework, and shows you.</h2>
+    <p class="section-lede">This is the last decision Hanko graded, pulled from the live record. Good or bad, it is shown as it came out.</p>
+  </div>
+  <article class="result-card" id="latest-card" data-reveal="2">
+    <div class="result-main">
+      <div class="result-token" id="lt-token">Loading the latest grade</div>
+      <div class="result-title" id="lt-title"><span class="paper-skeleton" style="display: block; width: 60%; height: 30px"></span></div>
+      <p class="result-text" id="lt-text"></p>
+      <div class="result-stamp" id="lt-stamp" aria-hidden="true"></div>
+    </div>
+    <div class="result-side">
+      <div class="label">What it said would prove it wrong</div>
+      <ul class="result-checks" id="lt-checks"></ul>
+    </div>
+  </article>
+</section>
+
+<section id="voices" class="shell" aria-labelledby="voices-title">
+  <div data-reveal>
+    <div class="eyebrow">Why you can trust it, 1 of 3 · example with made-up names</div>
+    <h2 id="voices-title" style="max-width: 20em">Three voices, two opinions.</h2>
+    <p class="section-lede">The easiest way for an agent to be confidently wrong is to mistake an echo for agreement. Three accounts posting the same take is one opinion, so Hanko counts it once.</p>
+  </div>
+
+  <div class="voices" data-reveal="2">
+    <div class="voice">
+      <div class="avatar">α</div>
+      <div class="voice-name">voice_alpha</div>
+      <div class="voice-note">The original post. Bullish, and fairly sure.</div>
+      <div class="voice-status counted">COUNTED</div>
+    </div>
+
+    <div class="voice voice-echo" id="echo-card">
+      <div class="avatar avatar-echo">β</div>
+      <div class="voice-name" id="echo-name">voice_beta</div>
+      <div class="voice-note">A repost of voice_alpha. Same opinion, second account.</div>
+      <div class="voice-status demoted">SET ASIDE AS AN ECHO</div>
+    </div>
+
+    <div class="voice">
+      <div class="avatar">γ</div>
+      <div class="voice-name">voice_gamma</div>
+      <div class="voice-note">Its own reasons, posted at its own time.</div>
+      <div class="voice-status counted">COUNTED</div>
+    </div>
+
+    <div class="voice-tally">
+      <div class="label">Independent voices</div>
+      <div class="tally-value" id="voice-count">3</div>
+      <div class="tally-note">out of 3 posts</div>
+    </div>
+  </div>
+</section>
+
+<section id="missing" class="band" aria-labelledby="missing-title">
+  <div class="shell band-inner">
+    <div data-reveal>
+      <div class="eyebrow">Why you can trust it, 2 of 3 · example with made-up data</div>
+      <h2 id="missing-title" style="max-width: 22em">When it knows less, it bets less.</h2>
+      <p class="section-lede" style="margin-bottom: 48px">Here one safety check could not be reached. Nobody wrote a rule for that case. The missing piece simply lowers how sure Hanko is, and a less sure Hanko takes a smaller position.</p>
+    </div>
+
+    <div class="two-col" data-reveal="2">
+      <div class="panel">
+        <div class="label">Everything available</div>
+        <div class="metric">
+          <div class="metric-value">3.28%</div>
+          <div class="metric-unit">of the book</div>
+        </div>
+        <div class="readout">
+          <div>evidence complete: 4 of 4 checks</div>
+          <div class="good">+ safety check: passed</div>
+        </div>
+      </div>
+
+      <div class="panel panel-flag">
+        <div class="label">Safety check unreachable</div>
+        <div class="metric metric-flag">
+          <div class="metric-value" id="shrink-size">3.28%</div>
+          <div class="metric-unit">of the book</div>
+        </div>
+        <div class="readout">
+          <div>evidence complete: 3 of 4 checks</div>
+          <div class="flag-lead">? safety check: no answer, so the size shrinks</div>
+        </div>
+      </div>
+    </div>
+
+    <p class="footnote">The gap is also written into the decision, so you can see exactly what was missing and why the position was smaller.</p>
+  </div>
+</section>
+
+<section id="commitment" class="shell" aria-labelledby="commitment-title">
+  <div data-reveal>
+    <div class="eyebrow">Why you can trust it, 3 of 3 · example with made-up data</div>
+    <h2 id="commitment-title" style="max-width: 22em">The promise is sealed before the answer arrives.</h2>
+    <p class="section-lede">You can't move the goalposts afterwards. Change a single word of a sealed decision and its fingerprint changes too, so it becomes a different decision rather than a quietly edited one.</p>
+  </div>
+
+  <div class="two-col" data-reveal="2">
+    <div class="seal">
+      <div class="seal-head"><span>When it decided</span><span>Sealed</span></div>
+      <div class="seal-verdict">Enter TOKENA</div>
+      <div class="seal-body">
+        <div>size 3.28% · confidence 0.66</div>
+        <div class="gap">! wrong if the price falls 15% within 3 days</div>
+        <div>! wrong if trading depth drops 30% within 3 days</div>
+        <div>! wrong if fewer than 2 voices still agree in 3 days</div>
+      </div>
+    </div>
+
+    <div class="seal seal-graded" id="graded">
+      <div class="seal-head"><span>Three days later</span><span>Graded</span></div>
+      <div class="seal-verdict">Enter TOKENA</div>
+      <div class="seal-body">
+        <div class="gap met">x the price fell more than 15%</div>
+        <div class="held">+ trading depth held up</div>
+        <div class="held">+ 2 voices still agreed</div>
+      </div>
+    </div>
+  </div>
+
+  <p class="footnote">One broken promise is enough. Even if the other two held, the decision is graded as proved wrong.</p>
+</section>
+
+<section id="use" class="shell" aria-labelledby="use-title">
+  <div data-reveal>
+    <div class="eyebrow">What you can do with it</div>
+    <h2 id="use-title" style="max-width: 20em">Three ways in, no setup.</h2>
+  </div>
+  <div class="use-grid">
+    <a class="use-card" href="try.html" data-reveal>
+      <div class="label">For traders</div>
+      <h3>Check an exit before you trade</h3>
+      <p>Pick a token and an amount. Hanko asks three live sources how much it would really cost you to sell, and answers in plain words.</p>
+      <span class="use-go">Try it live</span>
+    </a>
+    <a class="use-card" href="ledger.html" data-reveal="2">
+      <div class="label">For skeptics</div>
+      <h3>Audit any decision</h3>
+      <p>Open the live record: what it decided, why, what would prove it wrong, and how each call turned out.</p>
+      <span class="use-go">Open the ledger</span>
+    </a>
+    <a class="use-card" href="docs.html#mcp-transport" data-reveal="3">
+      <div class="label">For builders</div>
+      <h3>Plug it into your tools</h3>
+      <p>The same checks are available to other agents and apps, in the same shape as RYO's own tools.</p>
+      <span class="use-go">Read the docs</span>
+    </a>
+  </div>
+
+  <details class="curious" id="receipt">
+    <summary>For the curious: the full machine receipt behind the example above</summary>
+    <div class="curious-body">
       <div class="receipt">
         <div class="receipt-head">
           <span>DECISION TRAIL · TOKENA</span>
-          <span class="receipt-live">SAMPLE · FIXTURE INPUTS</span>
+          <span class="receipt-live">EXAMPLE · MADE-UP INPUTS</span>
         </div>
         <!-- trail:start -->
         <pre id="trail" data-trail="ENTER TOKENA  size 3.28%  confidence 0.66
@@ -99,220 +363,12 @@
   replayed from stored bytes: same decision id"></pre>
         <!-- trail:end -->
       </div>
-      <p class="receipt-caption">Three authors mentioned the token. Two were independent. voice_beta was demoted, with the reason attached. The last three lines are the commitment, written before the outcome is known. Real output from the real engine, run at build time against fixed, synthetic inputs (three fictional voices and a fictional token, not real accounts or prices) so the decision id on this page stays the same one every build. <a href="try.html">Run it against live data here</a>.</p>
+      <p class="receipt-caption">Real output from the real engine, run at build time on fixed, made-up inputs (three fictional voices and a fictional token) so the example stays the same on every build. The live decisions are on the <a href="ledger.html">ledger</a>.</p>
     </div>
-  </div>
-
-  <!-- stats:start -->
-  <div class="stats">
-    <div class="stat">
-      <div class="label">Tests</div>
-      <div class="stat-value" data-stat="tests">352</div>
-      <div class="stat-note">All offline, about 5s</div>
-    </div>
-    <div class="stat">
-      <div class="label">Lines</div>
-      <div class="stat-value" data-stat="lines">14,618</div>
-      <div class="stat-note">Across <span data-stat="commits">139</span> commits</div>
-    </div>
-    <div class="stat">
-      <div class="label">Layers</div>
-      <div class="stat-value" data-stat="layers">7</div>
-      <div class="stat-note">Sources to review</div>
-    </div>
-    <div class="stat">
-      <div class="label">Transports</div>
-      <div class="stat-value">MCP + REST</div>
-      <div class="stat-note">Same facts either way</div>
-    </div>
-  </div>
-  <!-- stats:end -->
-  <div id="hero-end" aria-hidden="true"></div>
-</header>
-
-<section id="missing" class="band">
-  <div class="shell band-inner">
-    <div class="eyebrow">Missing data shrinks the position · sample inputs</div>
-    <h2 style="max-width: 22em">Nothing in the rules changed. Only what it knew.</h2>
-    <p class="section-lede" style="margin-bottom: 48px">No rule says "halve the size if the safety check is unavailable." A gap lowers completeness, completeness lowers quality, and quality sets size, combined as a geometric mean, so one component at zero takes the whole score to zero.</p>
-
-    <div class="two-col">
-      <div class="panel">
-        <div class="label">Full evidence</div>
-        <div class="metric">
-          <div class="metric-value">3.28%</div>
-          <div class="metric-unit">size</div>
-        </div>
-        <div class="readout">
-          <div>confidence 0.66</div>
-          <div>evidence quality 0.820</div>
-          <div class="faint">completeness 1.00 · freshness 0.75</div>
-          <div class="faint">corroboration 1.00 · independence 0.67</div>
-          <div class="good">+ safety: safety score 0.82</div>
-        </div>
-      </div>
-
-      <div class="panel panel-flag">
-        <div class="label">Safety check unavailable</div>
-        <div class="metric metric-flag">
-          <div class="metric-value" id="shrink-size">3.28%</div>
-          <div class="metric-unit">size</div>
-        </div>
-        <div class="readout">
-          <div>confidence 0.62</div>
-          <div>evidence quality 0.769</div>
-          <div class="faint">completeness 0.75 · freshness 0.75</div>
-          <div class="faint">corroboration 1.00 · independence 0.67</div>
-          <div class="flag-lead">. safety: no score available; size reduced</div>
-          <div class="flag">? gap market_field_missing: safety_score</div>
-        </div>
-      </div>
-    </div>
-
-    <p class="footnote">Most entries treat missing data as a compliance checkbox. Here it's the risk model.</p>
-  </div>
+  </details>
 </section>
 
-<section id="voices" class="shell">
-  <div class="eyebrow">Independence, not agreement · sample inputs</div>
-  <h2 style="max-width: 20em">Three voices, two opinions.</h2>
-  <p class="section-lede">Three accounts quoting one thesis is one observation wearing a disguise. Reposts and near-duplicates get demoted to echoes, each tagged with the post it repeats and why.</p>
-
-  <div class="voices">
-    <div class="voice">
-      <div class="avatar">α</div>
-      <div class="voice-name">voice_alpha</div>
-      <div class="voice-note">Original post. Bullish, conviction 0.8.</div>
-      <div class="voice-status counted">COUNTED</div>
-    </div>
-
-    <div class="voice voice-echo" id="echo-card">
-      <div class="avatar avatar-echo">β</div>
-      <div class="voice-name" id="echo-name">voice_beta</div>
-      <div class="voice-note">Marked as a repost or quote by the source.</div>
-      <div class="voice-status demoted">DEMOTED TO ECHO</div>
-    </div>
-
-    <div class="voice">
-      <div class="avatar">γ</div>
-      <div class="voice-name">voice_gamma</div>
-      <div class="voice-note">Separate thesis, separate timing.</div>
-      <div class="voice-status counted">COUNTED</div>
-    </div>
-
-    <div class="voice-tally">
-      <div class="label">Independent voices</div>
-      <div class="tally-value" id="voice-count">3</div>
-      <div class="tally-note">of 3 mentions</div>
-    </div>
-  </div>
-
-  <p class="footnote">This is the easiest way for a multi-voice agent to be confidently wrong. Five outlets covering one press release look like five sources. It's one wire story.</p>
-</section>
-
-<section id="commitment" class="shell">
-  <div class="eyebrow">Pre-registration · sample inputs</div>
-  <h2 style="max-width: 22em">The commitment is sealed before the outcome is known.</h2>
-  <p class="section-lede">Move a threshold, a size, or a review date after the fact and the decision_id changes too: a new decision, not an edited one. Hindsight rationalisation becomes structurally impossible. Refusals commit too: a PASS records what would have flipped it.</p>
-
-  <div class="two-col">
-    <div class="seal">
-      <div class="seal-head"><span>At decision time</span><span>Sealed</span></div>
-      <div class="seal-verdict">ENTER TOKENA</div>
-      <div class="seal-body">
-        <div>size 3.28% · confidence 0.66</div>
-        <div class="faint">dec_1c1fb9e7ae2020cb260d6f32</div>
-        <div class="gap">! wrong if price_usd &lt; 1.0625 at any point within 72h</div>
-        <div>! wrong if liquidity_usd &lt; 630000 at any point within 72h</div>
-        <div>! wrong if independent_voices &lt; 2 at review, within 72h</div>
-        <div class="gap faint">review at 2026-08-30T12:00:00Z</div>
-      </div>
-    </div>
-
-    <div class="seal seal-graded" id="graded">
-      <div class="seal-head"><span>At review time</span><span>Graded</span></div>
-      <div class="seal-verdict">ENTER TOKENA</div>
-      <div class="seal-body">
-        <div class="faint">dec_1c1fb9e7ae2020cb260d6f32 -&gt; rev_24903844c6020591a568451b</div>
-        <div class="gap met">x price_usd observed 1.02, committed to wrong below 1.0625</div>
-        <div class="held">+ liquidity_usd observed 880000, holds</div>
-        <div class="held">+ independent_voices observed 2, holds</div>
-        <div class="gap faint">realised return -18.4% (recorded, not used to grade)</div>
-      </div>
-    </div>
-  </div>
-
-  <p class="footnote">A decision can be profitable and still falsified: the price rose while the liquidity that justified the size drained away. The reasoning was wrong; the outcome was luck. Both are recorded; only one sets the grade.</p>
-
-  <div class="teaser">
-    <p>Don't take the rule list on faith. Remove a voice or tighten a threshold on this sample decision yourself and watch the real engine's verdict move, in the workbench.</p>
-    <a href="workbench.html">Open the decision workbench</a>
-  </div>
-</section>
-
-<section id="pipeline" class="shell">
-  <div class="eyebrow">How it works</div>
-  <h2 style="max-width: 20em">Four stages, and one boundary that matters.</h2>
-  <p class="section-lede" style="margin-bottom: 48px">Everything before the boundary may touch the network and fail; everything after it is a pure function of recorded inputs. Determinism and honest handling of missing data aren't features to remember. They're properties the code's shape enforces.</p>
-
-  <div class="pipeline">
-    <div class="stage">
-      <div class="label">Stage 01</div>
-      <div class="stage-name">Collect</div>
-      <div class="stage-note">X, RSS and the six RYO research tools behind one adapter interface. Every response is stored under the hash of its own bytes.</div>
-      <div class="stage-purity">impure · network</div>
-    </div>
-
-    <div class="stage">
-      <div class="label">Stage 02</div>
-      <div class="stage-name">Interpret</div>
-      <div class="stage-note">Each post becomes a reading: which token, which direction, how strongly, how urgently. Produced once and frozen into the record. Today a transparent keyword interpreter; a model can replace it without touching replay.</div>
-      <div class="stage-purity">frozen · rule-based</div>
-    </div>
-
-    <div class="boundary"><span>PURITY BOUNDARY</span></div>
-
-    <div class="stage stage-dark">
-      <div class="label">Stage 03</div>
-      <div class="stage-name">Decide</div>
-      <div class="stage-note">Independence check, evidence quality, verdict, size, and the falsifiers the decision commits to. No clock, no network, no model.</div>
-      <div class="stage-purity">pure · replayable</div>
-    </div>
-
-    <div class="stage stage-dark">
-      <div class="label">Stage 04</div>
-      <div class="stage-name">Review</div>
-      <div class="stage-note">At the pre-registered date, each falsifier is checked against observed facts and graded against its own words.</div>
-      <div class="stage-purity">pure · replayable</div>
-    </div>
-  </div>
-
-  <p class="footnote" style="max-width: 48em">Interpretation is frozen, not repeated, so replaying a decision proves something specific: the reasoning is reproducible, not that the model would repeat itself, because the model isn't part of the question.</p>
-
-  <div class="teaser">
-    <p>The MCP transport, and what a live <code>x_search</code> call actually returns (confirmed against the real API, not assumed), are written up in full in the docs.</p>
-    <a href="docs.html#mcp-transport">Read the transport docs</a>
-  </div>
-</section>
-
-<section id="proof" class="shell">
-  <div class="eyebrow">Test coverage</div>
-  <h2 style="max-width: 22em">What's actually proven.</h2>
-
-  <div class="proof-head good">Proven · <span data-stat="tests">352</span> tests, all offline</div>
-  <ul class="proof-list" style="max-width: 46em">
-    <li class="proof-item"><span class="sigil good">+</span><span>Every failure mode: rate limit, partial window, empty result, raising adapter, malformed feed, unreadable payload</span></li>
-    <li class="proof-item"><span class="sigil good">+</span><span>Size shrinking under missing safety data, a failed source, and stale evidence</span></li>
-    <li class="proof-item"><span class="sigil good">+</span><span>End-to-end reproduction of a stored decision from stored bytes</span></li>
-    <li class="proof-item"><span class="sigil good">+</span><span>Live calls against the real RYO MCP endpoint, and a live decision replayed from its stored bytes to the same decision id</span></li>
-    <li class="proof-item"><span class="sigil good">+</span><span>The null-not-zero guarantee, holding on every real exit_liquidity call against live data</span></li>
-  </ul>
-
-  <div class="teaser">
-    <p>The full list, <span data-stat="proven">16</span> proven claims each mapped to a real test, is in the docs.</p>
-    <a href="docs.html#proven">See everything that's proven</a>
-  </div>
-</section>
+</main>
 
 <footer id="name" class="band">
   <div class="shell band-inner">
@@ -323,117 +379,197 @@
       </div>
       <div>
         <p class="name-lede">A hanko is the seal you stamp on a document to commit to it. The mark goes on before the outcome is known, and it cannot be taken back.</p>
-        <p class="name-body">That's what this agent does with every decision: pre-registration is a hanko, hashing the commitment into the decision_id is a hanko. Stamped once at decision time. Stamped again at review: HELD or FALSIFIED, over the original.</p>
+        <p class="name-body">That is what this agent does with every decision. Stamped once when it decides. Stamped again at review: held, or proved wrong, over the original.</p>
       </div>
     </div>
 
     <div class="colophon">
-      <span>Hanko 判子 · RYO-CHAN Hackathon 2026</span>
-      <span><span data-stat="tests">352</span> tests · <span data-stat="lines">14,618</span> lines · <span data-stat="commits">139</span> commits · <a href="https://github.com/IamHarrie-Labs/hanko" data-repo>GitHub</a></span>
+      <span>Hanko 判子 · RYO-CHAN Hackathon 2026 · <a href="judges.html">For judges</a></span>
+      <span><span data-stat="tests">352</span> tests · <span data-stat="commits">140</span> commits · <a href="https://github.com/IamHarrie-Labs/hanko" data-repo>GitHub</a></span>
     </div>
   </div>
 </footer>
 
+<script src="assets/site.js"></script>
 <script>
 (function () {
-  var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-  // ---- the receipt types itself in -------------------------------------
-  var pre = document.getElementById('trail');
-  var trail = pre ? pre.getAttribute('data-trail') || '' : '';
-
-  function caret() {
-    var span = document.createElement('span');
-    span.className = 'caret';
-    span.setAttribute('aria-hidden', 'true');
-    span.textContent = '█';
-    return span;
-  }
-
-  if (pre) {
-    pre.removeAttribute('data-trail');
-    if (reduced || !trail) {
-      pre.textContent = trail;
-      pre.appendChild(caret());
-    } else {
-      var chars = 0;
-      pre.textContent = '';
-      var cursor = caret();
-      pre.appendChild(cursor);
-      var timer = setInterval(function () {
-        chars = Math.min(trail.length, chars + 3);
-        pre.textContent = trail.slice(0, chars);
-        pre.appendChild(cursor);
-        if (chars >= trail.length) clearInterval(timer);
-      }, 16);
-    }
-  }
-
-  // ---- three moments, each fired once when scrolled into view ----------
-  function watch(id, run) {
-    var el = document.getElementById(id);
+  function seen(el, run, t) {
     if (!el) return;
-    if (reduced || !('IntersectionObserver' in window)) { run(); return; }
-    var io = new IntersectionObserver(function (entries) {
-      entries.forEach(function (e) {
-        if (e.isIntersecting) { run(); io.disconnect(); }
-      });
-    }, { threshold: 0.35 });
-    io.observe(el);
+    if (window.hankoWhenSeen) window.hankoWhenSeen(el, run, t); else run(el);
+  }
+  function esc(s) {
+    return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; });
+  }
+  function day(iso) {
+    var d = new Date(iso);
+    return isNaN(d) ? '' : d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', timeZone: 'UTC' });
+  }
+  function cap(s) { s = String(s || ''); return s.charAt(0).toUpperCase() + s.slice(1); }
+
+  // The engine's own falsifier notes, said the way a person would.
+  var PLAIN = {
+    'thesis fails if price falls 15% from entry': 'the price falls 15% from where it entered',
+    'exit assumption fails if depth drops 30%': 'there is 30% less money to sell into',
+    'entry rested on convergence that no longer holds': 'the sources that backed it stop agreeing',
+    'verdict flips if another independent voice converges': 'another independent voice joins in',
+    'verdict is worth revisiting if volume rises 50%': 'trading volume jumps by half'
+  };
+  function plain(note) {
+    var m = /\(([^)]*)\)\s*$/.exec(note);
+    var key = (m ? m[1] : note).trim();
+    return PLAIN[key] || key;
+  }
+  var VERDICT = {
+    enter: ['Enter', 'Take a position.'],
+    pass: ['Pass', 'Stay out for now.'],
+    abstain: ['Abstain', 'Not enough evidence to call it either way.']
+  };
+
+  // ---- the hero receipt: the latest real decision -------------------
+  function receipt(s) {
+    var t = (s.tokens || [])[0];
+    if (!t) return;
+    var v = VERDICT[t.verdict] || [cap(t.verdict), ''];
+    var size = t.verdict === 'enter' && t.size_pct ? ' Size: ' + (+t.size_pct).toFixed(2) + '% of the book.' : '';
+    var sources = t.independent_voices + ' independent source' + (t.independent_voices === 1 ? '' : 's')
+      + (t.echoes ? ', ' + t.echoes + ' cop' + (t.echoes === 1 ? 'y' : 'ies') + ' set aside' : '')
+      + ', from ' + t.readings + ' posts read';
+    var wrong = (t.wrong_if || []).map(function (w) { return '<li>' + esc(cap(plain(w))) + '</li>'; }).join('');
+    document.getElementById('lr-when').textContent = 'sealed ' + day(t.decided_at);
+    document.getElementById('lr-body').innerHTML =
+      '<div class="paper-seal" aria-hidden="true">判</div>'
+      + '<div class="paper-token">' + esc(t.token) + '</div>'
+      + '<div class="paper-verdict">' + esc(v[0]) + '</div>'
+      + '<div class="paper-sub">' + esc(v[1] + size) + '</div>'
+      + '<dl class="paper-rows">'
+      + '<div class="paper-row"><dt>Why</dt><dd>' + esc(cap(t.because && t.because.detail)) + '.</dd></div>'
+      + '<div class="paper-row"><dt>Listened to</dt><dd>' + esc(sources) + '.</dd></div>'
+      + (wrong ? '<div class="paper-row"><dt>It changes its mind if</dt><dd><ul>' + wrong + '</ul></dd></div>' : '')
+      + '<div class="paper-row"><dt>Graded on</dt><dd>' + esc(day(t.review_at)) + ', against what actually happened.</dd></div>'
+      + '</dl>'
+      + '<div class="paper-foot"><span>fingerprint ' + esc(String(t.decision_id).slice(0, 16)) + '…</span><a href="ledger.html">verify on the ledger</a></div>';
   }
 
-  watch('missing', function () {
-    var el = document.getElementById('shrink-size');
-    if (el) el.textContent = '3.08%';
+  // ---- the counters --------------------------------------------------
+  function stats(s) {
+    var tot = s.totals || {}, sc = s.scorecard || {}, en = (sc.by_verdict || {}).enter || {};
+    var values = {
+      runs: tot.runs, reviews: tot.reviews, anchored: tot.anchored_runs,
+      enter_held: en.held, enter_scored: (en.held || 0) + (en.falsified || 0),
+      falsified: (tot.results || {}).falsified
+    };
+    Object.keys(values).forEach(function (k) {
+      var el = document.querySelector('[data-live="' + k + '"]');
+      if (!el || values[k] === undefined || values[k] === null) return;
+      el.innerHTML = '<span data-count="' + values[k] + '">' + (+values[k]).toLocaleString('en-US') + '</span>';
+    });
+    if (window.hankoCount) window.hankoCount(document.getElementById('live-stats').parentNode);
+  }
+
+  // ---- the latest grade ----------------------------------------------
+  var STORY = {
+    'enter:held': ['entered, and it held.', 'Hanko took a position and named what would prove it wrong. None of it happened.'],
+    'enter:falsified': ['entered, and was proved wrong.', 'One of the things Hanko said would prove it wrong happened. The miss stays on the record.'],
+    'pass:held': ['stayed out, and that held.', 'Hanko chose not to act and named what would change its mind. None of it happened.'],
+    'pass:falsified': ['stayed out, and missed a move.', 'Hanko chose not to act, but what it said would change its mind happened. A missed call, kept on the record with the rest.'],
+    'abstain:held': ['held back, and that held.', 'There was not enough evidence to call it, and nothing happened that would have changed that.'],
+    'abstain:falsified': ['held back, and missed a move.', 'Hanko said there was not enough evidence, then the thing it said would change its mind happened. Counted as a miss.']
+  };
+  function latest(s) {
+    var r = (s.reviews || [])[0];
+    if (!r) return;
+    var story = STORY[r.verdict + ':' + r.result] || [r.verdict + ', ' + r.result + '.', ''];
+    document.getElementById('lt-token').textContent = r.token + ' · ' + r.verdict + ' · graded ' + day(r.reviewed_at);
+    document.getElementById('lt-title').textContent = r.token + ': ' + story[0];
+    document.getElementById('lt-text').textContent = story[1];
+    document.getElementById('lt-checks').innerHTML = (r.checks || []).map(function (c) {
+      var i = c.lastIndexOf(':'), what = c.slice(0, i), state = c.slice(i + 1).trim();
+      var met = state === 'met';
+      return '<li><span class="' + (met ? 'no' : 'ok') + '">' + (met ? '!' : '+') + '</span><span>'
+        + esc(cap(PLAIN[what] || what)) + ': <b>' + (met ? 'it happened' : (state === 'not_met' ? 'it did not happen' : esc(state))) + '</b></span></li>';
+    }).join('');
+    var stamp = document.getElementById('lt-stamp');
+    stamp.textContent = r.result === 'held' ? 'HELD' : 'PROVED WRONG';
+    stamp.className = 'result-stamp ' + (r.result === 'held' ? 'held' : 'wrong');
+    seen(document.getElementById('latest-card'), function () { stamp.classList.add('is-in'); }, 0.45);
+  }
+
+  function render(s) {
+    try { receipt(s); } catch (e) {}
+    try { stats(s); } catch (e) {}
+    try { latest(s); } catch (e) {}
+  }
+
+  // The deployed copy answers fast; the repository copy is the freshest,
+  // written by the agent itself after every run.
+  var shown = null;
+  function load(url) {
+    return fetch(url, { cache: 'no-store' }).then(function (r) { if (!r.ok) throw r; return r.json(); }).then(function (s) {
+      if (!shown || String(s.last_decision_at) > String(shown.last_decision_at)) { shown = s; render(s); }
+    });
+  }
+  load('data/live-summary.json').catch(function () {}).then(function () {
+    return load('https://raw.githubusercontent.com/IamHarrie-Labs/hanko/master/live/summary.json');
+  }).catch(function () {
+    if (!shown) document.getElementById('lr-body').innerHTML = '<p class="paper-sub">The live record could not be reached just now. <a href="ledger.html">Open the ledger</a>.</p>';
   });
 
-  watch('voices', function () {
+  // ---- the four steps slide sideways as you scroll --------------------
+  (function () {
+    var hs = document.getElementById('hs'), track = document.getElementById('hs-track');
+    var dots = document.querySelectorAll('#hs-dots span'), say = document.getElementById('hs-say');
+    if (!hs || !track) return;
+    var wide = window.matchMedia('(min-width: 981px) and (prefers-reduced-motion: no-preference)');
+    function mark(i) { dots.forEach(function (d, j) { d.classList.toggle('on', j === i); }); }
+    function onScroll() {
+      if (!wide.matches) { track.style.transform = ''; return; }
+      var r = hs.getBoundingClientRect();
+      var span = hs.offsetHeight - window.innerHeight;
+      var p = Math.min(1, Math.max(0, -r.top / (span || 1)));
+      var shift = Math.max(0, track.scrollWidth - window.innerWidth + 40);
+      track.style.transform = 'translate3d(' + (-p * shift).toFixed(1) + 'px,0,0)';
+      mark(Math.min(dots.length - 1, Math.floor(p * dots.length * 0.999)));
+    }
+    function onSwipe() {
+      if (wide.matches) return;
+      var w = track.scrollWidth - track.clientWidth;
+      mark(Math.round((track.scrollLeft / (w || 1)) * (dots.length - 1)));
+    }
+    function label() { say.textContent = wide.matches ? 'Keep scrolling' : 'Swipe sideways'; }
+    label();
+    if (wide.addEventListener) wide.addEventListener('change', function () { label(); onScroll(); });
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
+    track.addEventListener('scroll', onSwipe, { passive: true });
+    onScroll();
+  })();
+
+  // ---- the three examples play once, when you reach them -------------
+  seen(document.getElementById('voices'), function () {
     var card = document.getElementById('echo-card');
     var name = document.getElementById('echo-name');
     var count = document.getElementById('voice-count');
     if (card) card.style.opacity = '0.55';
     if (name) name.style.textDecoration = 'line-through';
     if (count) count.textContent = '2';
-  });
-
-  watch('commitment', function () {
+  }, 0.35);
+  seen(document.getElementById('missing'), function () {
+    var el = document.getElementById('shrink-size');
+    if (el) el.textContent = '3.08%';
+  }, 0.35);
+  seen(document.getElementById('commitment'), function () {
     var card = document.getElementById('graded');
     if (!card || card.querySelector('.stamp')) return;
     var stamp = document.createElement('div');
     stamp.className = 'stamp';
-    stamp.textContent = 'FALSIFIED';
+    stamp.textContent = 'PROVED WRONG';
     card.appendChild(stamp);
-  });
+  }, 0.35);
 
-  // ---- the nav waits until the reader has scrolled past the hero --------
-  // Unlike the three moments above this toggles both ways, so it hides
-  // again on the way back to the top rather than staying revealed once.
-  //
-  // Driven by both IntersectionObserver and a plain scroll listener,
-  // deliberately redundant: IO is the efficient path, but its recompute
-  // rides the compositor's paint cycle and can lag behind a fast or
-  // programmatic scroll (an anchor jump, a scrollTo, a trackpad fling).
-  // The scroll listener reads the sentinel's real position on every
-  // event regardless, so the nav never gets stuck in the wrong state.
-  (function () {
-    var nav = document.querySelector('.nav-hero-gated');
-    var sentinel = document.getElementById('hero-end');
-    if (!nav || !sentinel) return;
-
-    function recompute() {
-      nav.classList.toggle('nav-visible', sentinel.getBoundingClientRect().top < 0);
-    }
-
-    if ('IntersectionObserver' in window) {
-      new IntersectionObserver(recompute, { threshold: 0 }).observe(sentinel);
-    } else {
-      nav.classList.add('nav-visible'); // fail open: never hide navigation permanently
-    }
-    window.addEventListener('scroll', recompute, { passive: true });
-    recompute();
-  })();
+  // ---- the machine receipt, filled from the build ---------------------
+  var pre = document.getElementById('trail');
+  if (pre) { pre.textContent = pre.getAttribute('data-trail') || ''; pre.removeAttribute('data-trail'); }
 })();
 </script>
-
 </body>
 </html>
