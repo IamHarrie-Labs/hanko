@@ -1,14 +1,14 @@
 {
  "schema": "hanko.live-summary/1",
  "first_decision_at": "2026-10-24T06:37:22.866702Z",
- "last_decision_at": "2026-11-05T12:18:18.305811Z",
+ "last_decision_at": "2026-11-05T15:37:25.538532Z",
  "totals": {
-  "runs": 66,
-  "decisions": 264,
+  "runs": 67,
+  "decisions": 268,
   "verdicts": {
    "enter": 72,
-   "pass": 110,
-   "abstain": 82
+   "pass": 112,
+   "abstain": 84
   },
   "model_read": 24,
   "reviews": 204,
@@ -21,26 +21,24 @@
  "changes": [
   {
    "token": "BTC",
-   "rank": 3,
-   "headline": "PASS to ABSTAIN",
-   "why": [
-    "symmetry now blocked: bullish weight 1.8 and bearish weight 1.8 do not discriminate between the thesis and its opposite"
-   ],
-   "magnitude": 0.0558
+   "rank": 0,
+   "headline": "no change",
+   "why": [],
+   "magnitude": 0.0723
   },
   {
    "token": "ETH",
    "rank": 0,
    "headline": "no change",
    "why": [],
-   "magnitude": 0.0288
+   "magnitude": 0.0266
   },
   {
    "token": "SOL",
    "rank": 0,
-   "headline": "-1 independent voice",
+   "headline": "no change",
    "why": [],
-   "magnitude": 0.0216
+   "magnitude": 0.0035
   },
   {
    "token": "BONK",
@@ -53,13 +51,13 @@
  "tokens": [
   {
    "token": "ETH",
-   "decision_id": "dec_7635ca9a76a6a0a8e7371bb2",
-   "decided_at": "2026-11-05T12:18:18.305811Z",
-   "review_at": "2026-11-08T12:18:18.305811Z",
+   "decision_id": "dec_0c8bd6ffda18bc1ca6004aaf",
+   "decided_at": "2026-11-05T15:37:25.538532Z",
+   "review_at": "2026-11-08T15:37:25.538532Z",
    "verdict": "pass",
    "size_pct": 0.0,
    "confidence": 0.0,
-   "quality": 0.615,
+   "quality": 0.642,
    "independent_voices": 5,
    "voices": [
     "Cointelegraph.com News",
@@ -77,27 +75,27 @@
    },
    "wrong_if": [
     "independent_voices > 5 within 72h (verdict flips if another independent voice converges)",
-    "volume_24h_usd > 22,685,902,778 within 72h (verdict is worth revisiting if volume rises 50%)"
+    "volume_24h_usd > 23,479,314,303 within 72h (verdict is worth revisiting if volume rises 50%)"
    ],
    "gaps": 1
   },
   {
    "token": "SOL",
-   "decision_id": "dec_16326c9bace2a11e52f1735a",
-   "decided_at": "2026-11-05T12:18:18.305811Z",
-   "review_at": "2026-11-08T12:18:18.305811Z",
+   "decision_id": "dec_5f107ba8592a2fcc70d28f88",
+   "decided_at": "2026-11-05T15:37:25.538532Z",
+   "review_at": "2026-11-08T15:37:25.538532Z",
    "verdict": "pass",
    "size_pct": 0.0,
    "confidence": 0.0,
-   "quality": 0.564,
+   "quality": 0.561,
    "independent_voices": 3,
    "voices": [
+    "Decrypt",
     "DegenerateNews",
-    "chainestate.bsky.social",
-    "cryptovka.com"
+    "chainestate.bsky.social"
    ],
-   "echoes": 0,
-   "readings": 8,
+   "echoes": 1,
+   "readings": 9,
    "read_by": "word list",
    "because": {
     "rule": "direction",
@@ -105,15 +103,15 @@
    },
    "wrong_if": [
     "independent_voices > 3 within 72h (verdict flips if another independent voice converges)",
-    "volume_24h_usd > 6,527,069,799 within 72h (verdict is worth revisiting if volume rises 50%)"
+    "volume_24h_usd > 6,501,548,260 within 72h (verdict is worth revisiting if volume rises 50%)"
    ],
    "gaps": 1
   },
   {
    "token": "BONK",
-   "decision_id": "dec_558657c436fdb177d1a24fed",
-   "decided_at": "2026-11-05T12:18:18.305811Z",
-   "review_at": "2026-11-08T12:18:18.305811Z",
+   "decision_id": "dec_0257e3dfbcefca21c70c1575",
+   "decided_at": "2026-11-05T15:37:25.538532Z",
+   "review_at": "2026-11-08T15:37:25.538532Z",
    "verdict": "abstain",
    "size_pct": 0.0,
    "confidence": 0.0,
@@ -129,19 +127,19 @@
    },
    "wrong_if": [
     "independent_voices > 1 within 72h (verdict flips if another independent voice converges)",
-    "volume_24h_usd > 51,629,340 within 72h (verdict is worth revisiting if volume rises 50%)"
+    "volume_24h_usd > 45,941,648 within 72h (verdict is worth revisiting if volume rises 50%)"
    ],
    "gaps": 1
   },
   {
    "token": "BTC",
-   "decision_id": "dec_db467f8f80dfc19c2ed8d149",
-   "decided_at": "2026-11-05T12:18:18.305811Z",
-   "review_at": "2026-11-08T12:18:18.305811Z",
+   "decision_id": "dec_7c768e2906da2d1cebdb7552",
+   "decided_at": "2026-11-05T15:37:25.538532Z",
+   "review_at": "2026-11-08T15:37:25.538532Z",
    "verdict": "abstain",
    "size_pct": 0.0,
-   "confidence": 0.38,
-   "quality": 0.628,
+   "confidence": 0.42,
+   "quality": 0.7,
    "independent_voices": 9,
    "voices": [
     "BWEnews",
@@ -155,15 +153,15 @@
     "cryptovka.com"
    ],
    "echoes": 0,
-   "readings": 32,
+   "readings": 26,
    "read_by": "word list",
    "because": {
     "rule": "symmetry",
-    "detail": "bullish weight 1.8 and bearish weight 1.8 do not discriminate between the thesis and its opposite"
+    "detail": "bullish weight 1.2 and bearish weight 1.2 do not discriminate between the thesis and its opposite"
    },
    "wrong_if": [
     "independent_voices > 9 within 72h (verdict flips if another independent voice converges)",
-    "volume_24h_usd > 52,359,889,858 within 72h (verdict is worth revisiting if volume rises 50%)"
+    "volume_24h_usd > 55,703,579,812 within 72h (verdict is worth revisiting if volume rises 50%)"
    ],
    "gaps": 1
   }
@@ -604,6 +602,18 @@
  },
  "runs": [
   {
+   "run_id": "run_352d1afcdab37a70",
+   "as_of": "2026-11-05T15:37:25.538532Z",
+   "manifest_digest": "sha256:2ff1d2bf574ad84ea8d4bc4b44502e0de2c195a8bd680de018c1357aa537204b",
+   "verdicts": {
+    "abstain": 2,
+    "pass": 2
+   },
+   "ots": {
+    "state": "pending"
+   }
+  },
+  {
    "run_id": "run_f7479b5a26719675",
    "as_of": "2026-11-05T12:18:18.305811Z",
    "manifest_digest": "sha256:f950b5b31250bdc28a98081f6ed00fccc4ff557c6461f21748165dfe42986d3a",
@@ -985,20 +995,6 @@
    "ots": {
     "state": "confirmed",
     "block": 973898
-   }
-  },
-  {
-   "run_id": "run_7826af1e5f65c140",
-   "as_of": "2026-10-30T19:30:28.303937Z",
-   "manifest_digest": "sha256:505e72b3273356de874018ef6a65328586fed2bc87b0d7b1a5dc6e5856aeeaec",
-   "verdicts": {
-    "enter": 1,
-    "pass": 2,
-    "abstain": 1
-   },
-   "ots": {
-    "state": "confirmed",
-    "block": 973868
    }
   }
  ]
