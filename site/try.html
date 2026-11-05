@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-i18n-page>
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -22,10 +22,11 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" href="https://fonts.gstatic.com/s/spacegrotesk/v22/V8mDoQDjQSkFtoMM3T6r8E7mPbF4C_k3HqU.woff2" as="font" type="font/woff2" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 
 <link rel="stylesheet" href="styles.css">
-<script>document.documentElement.className += " js";</script>
+<script>(function(d){d.className+=" js";var m=/[?&]lang=(ja|en)\b/.exec(location.search),l=m&&m[1];try{var s=localStorage,t=s.getItem("hanko-theme");if(t)d.setAttribute("data-theme",t);if(l)s.setItem("hanko-lang",l);else l=s.getItem("hanko-lang")}catch(e){}if(l==="ja"&&d.hasAttribute("data-i18n-page"))d.lang="ja"})(document.documentElement);</script>
 </head>
 
 <body>
@@ -38,39 +39,41 @@
     </a>
     <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-links">Menu</button>
     <div class="nav-links" id="nav-links">
-      <a href="index.html#how">How it works</a>
-      <a href="ledger.html">Live record</a>
-      <a href="try.html" aria-current="page">Try it</a>
+      <a href="index.html#how" data-i18n="nav_how">How it works</a>
+      <a href="ledger.html" data-i18n="nav_ledger">Live record</a>
+      <a href="try.html" aria-current="page" data-i18n="nav_try">Try it</a>
       <details class="nav-more">
-        <summary>Tools</summary>
+        <summary data-i18n="nav_tools">Tools</summary>
         <div class="nav-more-panel">
-          <a href="workbench.html"><span>Workbench</span><small>Change the inputs, watch the call move</small></a>
-          <a href="drill.html"><span>Failure drills</span><small>Break a source on purpose</small></a>
-          <a href="echo.html"><span>Echo study</span><small>How often voices copy each other</small></a>
+          <a href="workbench.html"><span data-i18n="nav_wb">Workbench</span><small data-i18n="nav_wb_s">Change the inputs, watch the call move</small></a>
+          <a href="drill.html"><span data-i18n="nav_drill">Failure drills</span><small data-i18n="nav_drill_s">Break a source on purpose</small></a>
+          <a href="echo.html"><span data-i18n="nav_echo">Echo study</span><small data-i18n="nav_echo_s">How often voices copy each other</small></a>
         </div>
       </details>
-      <a href="judges.html">For judges</a>
-      <a href="docs.html">Docs</a>
+      <a href="judges.html" data-i18n="nav_judges">For judges</a>
+      <a href="docs.html" data-i18n="nav_docs">Docs</a>
     </div>
     <div class="nav-actions">
+      <button class="nav-switch" type="button" data-lang-toggle lang="ja">日本語</button>
+      <button class="nav-switch" type="button" data-theme-toggle aria-label="Switch to dark theme"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M13.5 9.6A5.6 5.6 0 0 1 6.4 2.5a5.6 5.6 0 1 0 7.1 7.1z"/></svg></button>
       <a href="https://github.com/IamHarrie-Labs/hanko" data-repo class="btn btn-dark">GITHUB</a>
-      <a href="try.html" class="btn btn-dark btn-accent">TRY IT LIVE</a>
+      <a href="try.html" class="btn btn-dark btn-accent" data-i18n="nav_trylive">TRY IT LIVE</a>
     </div>
   </div>
 </nav>
 
 <header class="shell docs-hero">
   <a href="index.html" class="back-link">&larr; Hanko</a>
-  <div class="eyebrow">Try it live · exit_liquidity</div>
-  <h1>Could you sell it, and what would it cost?</h1>
-  <p class="lede">Pick a token and how much you hold. Hanko asks three live sources right now (RYO's market data, every trading pool on DexScreener, and a real sell quote from Jupiter) and tells you in plain words whether you could get out, and what it would cost you.</p>
-  <p class="footnote" style="margin-top: 14px">For builders: it runs RYO's <code>analyze_token</code>, DexScreener depth and an executable Jupiter quote through the same pure <code>assess()</code> the CLI uses. When a quote exists the answer rests on it, and the model's own figure is shown beside it, error and all. If a source is down, the answer says which one and comes back from the others, in RYO's own public envelope.</p>
+  <div class="eyebrow" data-i18n="t_eyebrow">Try it live · exit_liquidity</div>
+  <h1 data-i18n="t_h1">Could you sell it, and what would it cost?</h1>
+  <p class="lede" data-i18n="t_lede">Pick a token and how much you hold. Hanko asks three live sources right now (RYO's market data, every trading pool on DexScreener, and a real sell quote from Jupiter) and tells you in plain words whether you could get out, and what it would cost you.</p>
+  <p class="footnote" style="margin-top: 14px" data-i18n="t_build">For builders: it runs RYO's <code>analyze_token</code>, DexScreener depth and an executable Jupiter quote through the same pure <code>assess()</code> the CLI uses. When a quote exists the answer rests on it, and the model's own figure is shown beside it, error and all. If a source is down, the answer says which one and comes back from the others, in RYO's own public envelope.</p>
 </header>
 
 <section id="try-it" class="shell">
   <form id="try-form" class="try-form">
     <label class="try-field">
-      <span class="try-label">Token</span>
+      <span class="try-label" data-i18n="t_token">Token</span>
       <select id="try-token" name="token">
         <option value="SOL">SOL</option>
         <option value="BONK">BONK</option>
@@ -81,10 +84,10 @@
       </select>
     </label>
     <label class="try-field">
-      <span class="try-label">Position size (USD)</span>
+      <span class="try-label" data-i18n="t_size">Position size (USD)</span>
       <input id="try-size" name="size_usd" type="number" min="0" max="1000000000" step="1000" value="50000" inputmode="numeric">
     </label>
-    <button type="submit" class="btn btn-solid try-submit">Run live check</button>
+    <button type="submit" class="btn btn-solid try-submit" data-i18n="t_run">Run live check</button>
   </form>
 
   <div class="answer" id="try-answer" hidden aria-live="polite">
@@ -97,34 +100,36 @@
   </div>
 
   <details class="try-details" open>
-  <summary>The full receipt</summary>
+  <summary data-i18n="t_full">The full receipt</summary>
   <div class="receipt try-receipt">
     <div class="receipt-head">
       <span id="try-heading">EXIT_LIQUIDITY · LIVE CHECK</span>
       <span class="receipt-live">LIVE OUTPUT</span>
     </div>
-    <pre id="try-output" role="status" aria-live="polite">Pick a token and a size, then run a live check. Usually 2 to 8 seconds: three real network calls.</pre>
+    <pre id="try-output" role="status" aria-live="polite" data-i18n="t_wait">Pick a token and a size, then run a live check. Usually 2 to 8 seconds: three real network calls.</pre>
   </div>
   </details>
 
-  <p class="footnote" style="max-width: 48em">Every figure above is computed from what this call actually returned.  Solana tokens get an executable quote; ETH and BTC are measured through their wrapped forms on Ethereum, where no keyless quote venue exists, so their cost is modelled and labelled as such. Also callable the way RYO's own tools are: <code>POST /api/tools/exit_liquidity/call</code>, or as an MCP server at <code>/api/mcp</code>. See the <a href="docs.html#exit-liquidity">exit_liquidity docs</a>.</p>
+  <p class="footnote" style="max-width: 48em" data-i18n="t_foot">Every figure above is computed from what this call actually returned.  Solana tokens get an executable quote; ETH and BTC are measured through their wrapped forms on Ethereum, where no keyless quote venue exists, so their cost is modelled and labelled as such. Also callable the way RYO's own tools are: <code>POST /api/tools/exit_liquidity/call</code>, or as an MCP server at <code>/api/mcp</code>. See the <a href="docs.html#exit-liquidity">exit_liquidity docs</a>.</p>
 </section>
 
 <footer class="band">
   <div class="shell band-inner" style="padding-top: 56px; padding-bottom: 56px">
     <div class="colophon">
       <span>Hanko 判子 · RYO-CHAN Hackathon 2026</span>
-      <span><span data-stat="tests">352</span> tests · <span data-stat="lines">14,618</span> lines · <span data-stat="commits">145</span> commits · <a href="index.html">Home</a> · <a href="https://github.com/IamHarrie-Labs/hanko" data-repo>GitHub</a></span>
+      <span><span data-stat="tests">352</span> tests · <span data-stat="lines">14,618</span> lines · <span data-stat="commits">148</span> commits · <a href="index.html">Home</a> · <a href="https://github.com/IamHarrie-Labs/hanko" data-repo>GitHub</a></span>
     </div>
   </div>
 </footer>
 
+<script>if (document.documentElement.lang === 'ja') document.write('<script src="assets/i18n-ja.js"><\/script>');</script>
 <script>
 (function () {
   var form = document.getElementById('try-form');
   var output = document.getElementById('try-output');
   var heading = document.getElementById('try-heading');
   if (!form || !output) return;
+  var J = document.documentElement.lang === 'ja';
 
   function money(n) {
     return Math.round(n).toLocaleString('en-US');
@@ -235,6 +240,12 @@
   // the receipt below it; nothing here is computed that the receipt lacks.
   var answer = document.getElementById('try-answer');
   function when(h) {
+    if (J) {
+      if (h >= 48) return '約 ' + (h / 24).toFixed(1) + ' 日';
+      if (h >= 1) return '約 ' + h.toFixed(1) + ' 時間';
+      if (h * 60 >= 1) return '約 ' + Math.round(h * 60) + ' 分';
+      return '1分未満';
+    }
     if (h >= 48) return 'about ' + (h / 24).toFixed(1) + ' days';
     if (h >= 1) return 'about ' + h.toFixed(1) + ' hours';
     if (h * 60 >= 1) return 'about ' + Math.round(h * 60) + ' minutes';
@@ -246,26 +257,36 @@
     var q = d.venue_quote, est = d.estimate;
     var pct = q ? q.effective_cost_pct : est ? est.slippage_pct : null;
     var cost = pct !== null && pct !== undefined ? (d.requested_size_usd || 0) * pct / 100 : null;
-    var costText = cost === null ? null : (cost < 1 ? 'under $1' : '$' + money(cost)) + ' (' + pctText(pct) + ')';
-    var copy = {
+    var costText = cost === null ? null : (cost < 1 ? (J ? '1ドル未満' : 'under $1') : '$' + money(cost)) + ' (' + pctText(pct) + ')';
+    var copy = J ? {
+      ok: ['✓', '', 'はい。' + d.token + ' を ' + size + ' 分、価格をあまり動かさずに売れます。'],
+      tight: ['~', 'tight', d.token + ' を ' + size + ' 分売れますが、コストがかかります。'],
+      illiquid: ['✕', 'illiquid', 'このサイズでは難しいです。' + d.token + ' を ' + size + ' 分売ると、価格が大きく動きます。'],
+      unknown: ['?', 'tight', 'いまは ' + d.token + ' について答えるだけのライブデータがありません。']
+    }[d.verdict] || ['?', 'tight', d.token + ' について明確な答えが出ませんでした。'] : {
       ok: ['✓', '', 'Yes. You can sell ' + size + ' of ' + d.token + ' without moving the price much.'],
       tight: ['~', 'tight', 'You can sell ' + size + ' of ' + d.token + ', but it will cost you.'],
       illiquid: ['✕', 'illiquid', 'Not at this size. Selling ' + size + ' of ' + d.token + ' would move the price a lot.'],
       unknown: ['?', 'tight', 'Not enough live data to answer for ' + d.token + ' right now.']
     }[d.verdict] || ['?', 'tight', 'No clear answer for ' + d.token + '.'];
-    var text = costText === null
+    var text = J ? (costText === null
+      ? '情報源の一部が応答しなかったため、Hanko は推測しません。どれが応答しなかったかは下の記録に書かれています。'
+      : (q ? 'いま Jupiter で売ると、価格への影響と手数料で約 ' + costText + ' かかります。実際の売却見積もりに基づく数値です。'
+           : 'オンチェーンの取引の厚みから、約 ' + costText + ' と推定しています。このトークンにはライブの売却見積もりがないため、これはモデルによる推定で、その旨を明記しています。'))
+      : costText === null
       ? 'One or more sources did not answer, so Hanko will not guess. The receipt below says which.'
       : (q ? 'Selling now through Jupiter would cost about ' + costText + ' in price impact and fees, from a real sell quote.'
            : 'Hanko estimates about ' + costText + ' from on-chain trading depth. There is no live sell quote for this token, so this is a model, and labelled as one.');
     var facts = [];
-    if (costText !== null) facts.push(['Cost to sell all at once', costText]);
+    if (costText !== null) facts.push([J ? 'いっぺんに売るコスト' : 'Cost to sell all at once', costText]);
     var m = d.max_size_usd || {};
     // The model's ceilings are deliberately conservative; beside a real quote
     // that already beat them they read as a contradiction, so the plain card
     // shows them only when the model is the whole answer. The receipt keeps both.
-    if (m['1pct'] && !q) facts.push(['Largest sale under 1% cost (estimate)', '$' + money(m['1pct'])]);
+    if (m['1pct'] && !q) facts.push([J ? '1%未満のコストで売れる最大額（推定）' : 'Largest sale under 1% cost (estimate)', '$' + money(m['1pct'])]);
     if (d.hours_to_exit !== null && d.hours_to_exit !== undefined) {
-      facts.push(['Or sell slowly, ' + Math.round((d.parameters || {}).participation_pct || 10) + '% of daily trading', when(d.hours_to_exit)]);
+      var part = Math.round((d.parameters || {}).participation_pct || 10);
+      facts.push([J ? 'ゆっくり売る場合（1日の取引量の ' + part + '%）' : 'Or sell slowly, ' + part + '% of daily trading', when(d.hours_to_exit)]);
     }
     document.getElementById('ans-badge').textContent = copy[0];
     document.getElementById('ans-badge').className = 'answer-badge ' + copy[1];
@@ -285,9 +306,9 @@
     var button = form.querySelector('.try-submit');
 
     heading.textContent = 'EXIT_LIQUIDITY · ' + token;
-    output.textContent = 'Calling RYO, DexScreener and Jupiter live for ' + token + ' …';
+    output.textContent = J ? 'RYO、DexScreener、Jupiter に ' + token + ' をライブで問い合わせ中…' : 'Calling RYO, DexScreener and Jupiter live for ' + token + ' …';
     button.disabled = true;
-    button.textContent = 'Running …';
+    button.textContent = J ? '実行中…' : 'Running …';
 
     // RYO's own REST route shape; the envelope arrives under "result".
     fetch('/api/tools/exit_liquidity/call', {
@@ -298,26 +319,26 @@
       .then(function (res) {
         return res.text().then(function (text) {
           var body;
-          try { body = JSON.parse(text); } catch (e) { body = { message: 'the live service did not answer in time; please try again' }; }
+          try { body = JSON.parse(text); } catch (e) { body = { message: J ? 'ライブのサービスが時間内に応答しませんでした。もう一度お試しください' : 'the live service did not answer in time; please try again' }; }
           return { ok: res.ok, body: (body && body.result) || body };
         });
       })
       .then(function (result) {
         if (!result.ok || !result.body.data) {
           var b = result.body || {};
-          output.textContent = 'Could not complete a live check: ' + (b.message || b.error || 'unknown error')
-            + (b.details && b.details.allowed ? ' Allowed tokens: ' + b.details.allowed.join(', ') : '');
+          output.textContent = (J ? 'ライブ確認を完了できませんでした：' : 'Could not complete a live check: ') + (b.message || b.error || 'unknown error')
+            + (b.details && b.details.allowed ? (J ? ' 使えるトークン：' : ' Allowed tokens: ') + b.details.allowed.join(', ') : '');
           return;
         }
         output.textContent = renderReport(result.body);
         renderAnswer(result.body);
       })
       .catch(function (err) {
-        output.textContent = 'Network error reaching the live endpoint: ' + err.message;
+        output.textContent = (J ? 'ライブのエンドポイントに接続できませんでした：' : 'Network error reaching the live endpoint: ') + err.message;
       })
       .finally(function () {
         button.disabled = false;
-        button.textContent = 'Run live check';
+        button.textContent = J ? 'ライブで確認' : 'Run live check';
       });
   });
 })();
