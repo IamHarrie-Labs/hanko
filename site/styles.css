@@ -651,3 +651,10 @@ input[type="checkbox"] { width: 24px; height: 24px; accent-color: var(--ink); fl
 :lang(ja) { font-family: 'Space Grotesk', 'Hiragino Sans', 'Yu Gothic UI', 'Yu Gothic', 'Noto Sans JP', 'Meiryo', sans-serif; line-break: strict; }
 .ja-summary .section-lede, .ja-summary .proof-item { line-height: 1.85; }
 .ja-summary { margin-bottom: 56px; }
+
+/* Phones: grid children default to min-width:auto, so a long mono trail or
+   field hint pushed /drill and /workbench wider than the screen. */
+.drill-list > li, .wb-controls > * { min-width: 0; }
+.drill-trail { max-width: 100%; }
+@media (max-width: 900px) { .wb-controls { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 520px) { .wb-controls { grid-template-columns: minmax(0, 1fr); padding: 18px; } .drill-card { padding: 18px; } }
