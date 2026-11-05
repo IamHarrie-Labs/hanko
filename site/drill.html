@@ -58,8 +58,8 @@
 <header class="shell docs-hero">
   <a href="index.html" class="back-link">&larr; Hanko</a>
   <div class="eyebrow">Failure drill</div>
-  <h1>Break it on purpose. Watch what holds.</h1>
-  <p class="lede">Each scenario injects one real failure into Hanko's real code: not a mock of Hanko, a mock of the world around it. Then it computes whether the promise held, so a scenario can come back <strong>BROKE</strong>. One did, the first time it ran: a restarted sweep recorded the same decision twice. The fix is D-18 in the decision log. Everything runs offline against recorded responses, so pressing a button here costs nothing and calls no one.</p>
+  <h1>What happens when a source fails?</h1>
+  <p class="lede">Each scenario feeds one failure, such as a dead source or a tampered file, into Hanko's real code. Only the outside world is simulated. The drill then checks whether the promise held, so a scenario can come back <strong>BROKE</strong>. One did, the first time it ran: a restarted sweep recorded the same decision twice. The fix is D-18 in the decision log. Everything runs offline on recorded responses, so pressing a button costs nothing.</p>
 </header>
 
 <main id="drill-main" class="shell wb-section">

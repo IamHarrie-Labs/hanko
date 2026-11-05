@@ -383,7 +383,7 @@ OK  BONK  confidence high
   verdict from an executable jupiter quote; quotes move with the market
 ```
 
-Live output from 2026-10-23, while RYO's own market tools were failing. RYO
+Live output from 2026-10-23, recorded while RYO's market tools were down. RYO
 has never published pool depth, so version 2.0 asks two keyless venues.
 DexScreener supplies pools for the token's canonical contract: never searched
 by symbol, because that returns impostor pools. Jupiter supplies an executable

@@ -69,7 +69,7 @@
       <h1>An agent that files receipts.</h1>
       <p class="lede">Hanko reads what crypto traders and news sites are saying, decides whether to act, and seals its reasons <em>before</em> the market answers. Three days later it checks itself in public, wrong calls included.</p>
       <ul class="hero-points">
-        <li>It counts independent voices, not noise. Five sites repeating one story count once.</li>
+        <li>It spots copied posts, so five sites repeating one story count once.</li>
         <li>Every decision says, in advance, what would prove it wrong.</li>
         <li>Nothing can be edited later: each run is fingerprinted and timestamped on Bitcoin.</li>
       </ul>
@@ -128,8 +128,8 @@
     <div class="hs-sticky">
   <div class="shell hs-head" data-reveal>
     <div class="eyebrow">How it works</div>
-    <h2 id="how-title" style="max-width: 20em">Four steps, every few hours, with nobody at the wheel.</h2>
-    <p class="section-lede">No black box. Each step leaves something you can open and check yourself.</p>
+    <h2 id="how-title" style="max-width: 20em">It runs by itself every few hours.</h2>
+    <p class="section-lede">Each step leaves a record you can open and check.</p>
   </div>
 
       <div class="hs-track" id="hs-track" tabindex="0" aria-label="The four steps, scroll sideways">
@@ -144,8 +144,8 @@
         <article class="step">
           <div class="step-num">STEP 02</div>
           <svg class="step-icon" viewBox="0 0 56 56" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="28" r="8"/><circle cx="28" cy="28" r="8" stroke-dasharray="3 4"/><circle cx="44" cy="28" r="8"/><path d="M8 44h40"/></svg>
-          <h3>Count voices, not noise</h3>
-          <p>If five sites repeat one press release, that is one voice, not five. Copies and reposts are spotted and set aside, with the reason written down.</p>
+          <h3>Count real voices</h3>
+          <p>A press release repeated by five sites counts as one voice. Copies and reposts are set aside, and the reason is written down.</p>
           <div class="step-link"><a href="echo.html">How often voices copy</a></div>
           <div class="step-big" aria-hidden="true">2</div>
         </article>
@@ -161,7 +161,7 @@
           <div class="step-num">STEP 04</div>
           <svg class="step-icon" viewBox="0 0 56 56" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="12" y="8" width="32" height="42" rx="3"/><path d="M22 8v-2h12v2"/><path d="M19 22l3 3 6-6M19 36l3 3 6-6M32 23h6M32 37h6"/></svg>
           <h3>Grade itself in public</h3>
-          <p>Three days later it checks its own words against what actually happened. Held, or proved wrong: both go on the record, and nothing is deleted.</p>
+          <p>Three days later it checks its own words against what actually happened. Every result is published, and nothing is deleted.</p>
           <div class="step-link"><a href="ledger.html">See the scorecard</a></div>
           <div class="step-big" aria-hidden="true">4</div>
         </article>
@@ -178,7 +178,7 @@
   <div data-reveal>
     <div class="eyebrow">The most recent grade</div>
     <h2 id="latest-title" style="max-width: 20em">It marks its own homework, and shows you.</h2>
-    <p class="section-lede">This is the last decision Hanko graded, pulled from the live record. Good or bad, it is shown as it came out.</p>
+    <p class="section-lede">This is the last decision Hanko graded, pulled from the live record. It appears exactly as graded.</p>
   </div>
   <article class="result-card" id="latest-card" data-reveal="2">
     <div class="result-main">
@@ -198,7 +198,7 @@
   <div data-reveal>
     <div class="eyebrow">Why you can trust it, 1 of 3 · example with made-up names</div>
     <h2 id="voices-title" style="max-width: 20em">Three voices, two opinions.</h2>
-    <p class="section-lede">The easiest way for an agent to be confidently wrong is to mistake an echo for agreement. Three accounts posting the same take is one opinion, so Hanko counts it once.</p>
+    <p class="section-lede">The easiest way for an agent to be confidently wrong is to mistake an echo for agreement. Here one account reposts another, so Hanko counts two opinions.</p>
   </div>
 
   <div class="voices" data-reveal="2">
@@ -236,7 +236,7 @@
     <div data-reveal>
       <div class="eyebrow">Why you can trust it, 2 of 3 · example with made-up data</div>
       <h2 id="missing-title" style="max-width: 22em">When it knows less, it bets less.</h2>
-      <p class="section-lede" style="margin-bottom: 48px">Here one safety check could not be reached. Nobody wrote a rule for that case. The missing piece simply lowers how sure Hanko is, and a less sure Hanko takes a smaller position.</p>
+      <p class="section-lede" style="margin-bottom: 48px">Here one safety check could not be reached. No special rule handles this. The missing check lowers Hanko's confidence, and lower confidence means a smaller position.</p>
     </div>
 
     <div class="two-col" data-reveal="2">
@@ -273,7 +273,7 @@
   <div data-reveal>
     <div class="eyebrow">Why you can trust it, 3 of 3 · example with made-up data</div>
     <h2 id="commitment-title" style="max-width: 22em">The promise is sealed before the answer arrives.</h2>
-    <p class="section-lede">You can't move the goalposts afterwards. Change a single word of a sealed decision and its fingerprint changes too, so it becomes a different decision rather than a quietly edited one.</p>
+    <p class="section-lede">Changing one word of a sealed decision changes its fingerprint, so any later edit shows.</p>
   </div>
 
   <div class="two-col" data-reveal="2">
@@ -299,13 +299,13 @@
     </div>
   </div>
 
-  <p class="footnote">One broken promise is enough. Even if the other two held, the decision is graded as proved wrong.</p>
+  <p class="footnote">One failed condition is enough: the decision is graded as proved wrong even though the other two held.</p>
 </section>
 
 <section id="use" class="shell" aria-labelledby="use-title">
   <div data-reveal>
     <div class="eyebrow">What you can do with it</div>
-    <h2 id="use-title" style="max-width: 20em">Three ways in, no setup.</h2>
+    <h2 id="use-title" style="max-width: 20em">Use it without setting anything up.</h2>
   </div>
   <div class="use-grid">
     <a class="use-card" href="try.html" data-reveal>
@@ -379,13 +379,13 @@
       </div>
       <div>
         <p class="name-lede">A hanko is the seal you stamp on a document to commit to it. The mark goes on before the outcome is known, and it cannot be taken back.</p>
-        <p class="name-body">That is what this agent does with every decision. Stamped once when it decides. Stamped again at review: held, or proved wrong, over the original.</p>
+        <p class="name-body">Hanko seals each decision when it makes it, then stamps the result over the same seal at review.</p>
       </div>
     </div>
 
     <div class="colophon">
       <span>Hanko 判子 · RYO-CHAN Hackathon 2026 · <a href="judges.html">For judges</a></span>
-      <span><span data-stat="tests">352</span> tests · <span data-stat="commits">140</span> commits · <a href="https://github.com/IamHarrie-Labs/hanko" data-repo>GitHub</a></span>
+      <span><span data-stat="tests">352</span> tests · <span data-stat="commits">141</span> commits · <a href="https://github.com/IamHarrie-Labs/hanko" data-repo>GitHub</a></span>
     </div>
   </div>
 </footer>

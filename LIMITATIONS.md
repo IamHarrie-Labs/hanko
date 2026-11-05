@@ -3,15 +3,15 @@
 What this project has not shown, stated as plainly as what it has. A project
 about not overclaiming should not overclaim about itself either.
 
-**RYO's market data has failed on every live call made with this key since
-2026-09-28.** `analyze_token`, `deep_analysis` and `compare_tokens` return
-`400 VALIDATION_FAILED` ("couldn't analyze BTC right now") for every token,
-while health, the catalog and quota all answer normally. A support ticket
-with trace ids is open. Until it is resolved, live decisions take price,
-24h volume and pool depth from DexScreener's canonical pools, labelled as
-such and on-chain only. RYO's safety and technical fields (safety score,
-ATR) stay missing. Each missing field is a recorded gap that lowers
-evidence quality and so position size; none of them is filled with a guess.
+**Most live decisions so far ran without RYO's market data.** From
+2026-09-28 to early November, `analyze_token`, `deep_analysis` and
+`compare_tokens` returned `400 VALIDATION_FAILED` for every token. On
+2026-11-05 `analyze_token` answered again and `deep_analysis` answered in
+part. The scheduled sweeps still run without a RYO key, so their decisions
+take price, volume and pool depth from DexScreener's canonical pools and
+record RYO's safety score and ATR as missing. Each missing field lowers
+evidence quality, and with it position size. No missing field is filled
+with a guess.
 
 **The live record is young.** The keyless scheduled sweep started on 24 Oct and uses a lexicon reader. A separate daily model-read workflow is now enabled: its 30 Oct run made 21 model calls with no fallback and sealed four replayable decisions. Most history still comes from the word list. One successful model run does not establish reading accuracy. The Oct 23 hand-run seal was graded late on 28 Oct; its review-time voice counts do not reconstruct the original deadline.
 

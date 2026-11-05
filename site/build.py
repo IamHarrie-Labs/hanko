@@ -238,6 +238,8 @@ def main() -> int:
 
     if shutil.which("git") is None:
         raise SystemExit("git is required to read the commit count")
+    if not args.check:
+        vendor()
 
     # Computed once and applied to every page, so the test count on the
     # docs page can never read differently from the one on the homepage.
@@ -281,6 +283,13 @@ def main() -> int:
         page.write_text(updated, encoding="utf-8")
         print("rewrote " + str(page.relative_to(ROOT)))
     return 0
+
+
+def vendor() -> None:
+    # The API functions run the copy under site/api/_vendor, which is
+    # gitignored. A stale copy once served an old GET handler that timed
+    # out on every call, so every build refreshes it.
+    run([sys.executable, "scripts/vendor_for_site.py"])
 
 
 if __name__ == "__main__":

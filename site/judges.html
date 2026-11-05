@@ -57,7 +57,7 @@
   <a href="index.html" class="back-link">&larr; Hanko</a>
   <div class="eyebrow">For judges</div>
   <h1>Every rubric line, and where to check it yourself.</h1>
-  <p class="lede">Hanko enters <strong>Track 1</strong> (the agent), <strong>Track 3</strong> (<code>exit_liquidity</code>) and <strong>Track 2</strong> (the workbench, the drill and the Echo Index screens). Each row below is one line of the published rubric, the place that answers it, and what to look for. Nothing here asks you to take a claim on trust: every row ends at something you can run.</p>
+  <p class="lede">Hanko enters <strong>Track 1</strong> (the agent), <strong>Track 3</strong> (<code>exit_liquidity</code>) and <strong>Track 2</strong> (the workbench, the drill and the Echo Index screens). Each row below is one line of the published rubric, the place that answers it, and what to look for. Every row ends at something you can run.</p>
 </header>
 
 <main id="judges-main" class="shell wb-section">
@@ -68,7 +68,7 @@
       <li><a href="https://youtu.be/fm0B4hZQCwQ" rel="noopener">The 96-second demo video</a>: what Hanko does and the proof behind each claim. Every number on screen is from the live project.</li>
       <li><a href="#j-evidence">What held and what failed</a>: a sealed SOL refusal proved wrong, plus a reproducible comparison with a simple entry rule. Open the original decision, replay it, then inspect the review.</li>
       <li><a href="ledger.html">Live ledger</a>: a run sealed every three hours with no key, committed to the repository and anchored in Bitcoin. What changed since the last run comes first, and every decision is graded 72 hours later against conditions it wrote down in advance.</li>
-      <li><a href="try.html">Try it live</a>: <code>exit_liquidity</code> on BONK, $50,000. An executable venue quote, the model's own figure beside it, and the model's error, while RYO's market data is down.</li>
+      <li><a href="try.html">Try it live</a>: <code>exit_liquidity</code> on BONK, $50,000. An executable venue quote, the model's own figure beside it, and the model's error.</li>
       <li><a href="drill.html">Failure drill</a>: nine failures injected into the real code. <a href="echo.html">Echo Index</a>: 2,094 real posts, the measured result, and the bug the study found.</li>
       <li>From a clone, no keys: <code>pip install -e ".[dev]" &amp;&amp; pytest</code>, then <code>hanko verify-run runs/run_836b976720f63dc0.json</code>. This is the first live ENTER (BTC, 23 Oct). It is replayed decision by decision from the committed bundle, and its manifest is anchored in Bitcoin block 972,817.</li>
     </ol>
@@ -77,7 +77,7 @@
 
   <section aria-labelledby="j-evidence">
     <h2 id="j-evidence" class="label">Evidence, including the misses</h2>
-    <p class="section-lede">The SOL refusal sealed on 23 Oct was proved wrong: its one-voice assumption no longer held when two independent voices were observed at review. The review was late, so this is a review-time observation, not a reconstructed deadline count. It invalidates that assumption; it does not prove every entry gate cleared.</p>
+    <p class="section-lede">The SOL refusal sealed on 23 Oct was proved wrong: its one-voice assumption no longer held when two independent voices were observed at review. The review ran late, so the count is from review time and does not reconstruct the deadline. It invalidates that assumption; it does not prove every entry gate cleared.</p>
     <p><a href="https://github.com/IamHarrie-Labs/hanko/blob/master/study/baseline/failure-case.md">Read the failure case</a>, inspect the <a href="https://github.com/IamHarrie-Labs/hanko/blob/master/runs/run_836b976720f63dc0/decisions.jsonl">sealed decision</a>, run <code>hanko verify-run runs/run_836b976720f63dc0.json</code>, then inspect its <a href="https://github.com/IamHarrie-Labs/hanko/blob/master/runs/run_836b976720f63dc0/reviews.jsonl">review and observations</a>. The policy was not automatically retrained.</p>
     <p><a href="https://github.com/IamHarrie-Labs/hanko/blob/master/study/baseline/README.md">The retrospective baseline comparison</a> uses the same recorded readings and price windows. On 76 eligible opportunities reviewed by 30 Oct, both rules chose the same 27 entries; their mean price return was +0.24%, with 12 positive returns. A held falsifier does not mean an entry made money. This sample establishes no selection advantage. The script, input hashes, exclusions and every included row are published.</p>
     <p><a href="https://github.com/IamHarrie-Labs/hanko/actions/runs/41074224283">Verified model-read run, 30 Oct</a>: 21 model calls, no fallback, three unnamed-token readings rejected, and four sealed decisions that replay from the committed bundle. BTC ENTER, ETH PASS, SOL and BONK ABSTAIN. Its Bitcoin timestamp is pending confirmation.</p>
@@ -91,7 +91,7 @@
       <li class="proof-item"><span class="sigil">–</span><span><strong>Track 1:</strong> リポストや転送、広告を付けただけのコピーは1つの声として数えます。同じ証拠からは、モデルを呼ばずに同じ判断IDが再現されます。</span></li>
       <li class="proof-item"><span class="sigil">–</span><span><strong>Track 3:</strong> <code>exit_liquidity</code> は、そのサイズのポジションを実際に手仕舞えるか、そのコストはいくらかを、実行可能な見積もりから答えます。RYO の応答形式に準拠し、REST と MCP の両方で呼び出せます。</span></li>
       <li class="proof-item"><span class="sigil">–</span><span><strong>Track 2:</strong> <a href="ledger.html">/ledger</a> は前回の実行から何が変わったかを重要な順に示します。Lighthouse のアクセシビリティは全8ページで100です。</span></li>
-      <li class="proof-item"><span class="sigil">–</span><span>まだ証明できていないこと：RYO の市場データは2026年9月28日以降、このキーで失敗し続けています。定期実行の記録は10月24日に始まったばかりで、まだ数週間分です。詳しくは LIMITATIONS.md をご覧ください。</span></li>
+      <li class="proof-item"><span class="sigil">–</span><span>まだ証明できていないこと：RYO の市場データは9月28日から11月初めまで失敗していました。11月5日に一部が復旧しましたが、定期実行はまだ RYO キーなしで動いています。定期実行の記録は10月24日に始まったばかりで、まだ数週間分です。詳しくは LIMITATIONS.md をご覧ください。</span></li>
     </ul>
     <p class="footnote"><a href="https://youtu.be/fm0B4hZQCwQ" rel="noopener">デモ動画（96秒）</a>の<a href="https://github.com/IamHarrie-Labs/hanko/blob/master/video/subtitles/hanko-demo.ja.srt" rel="noopener">日本語字幕（SRT）</a>はリポジトリにあります。</p>
   </section>
@@ -103,7 +103,7 @@
       <thead><tr><th scope="col">Rubric line</th><th scope="col">Open</th><th scope="col">What to look for</th></tr></thead>
       <tbody>
         <tr><th scope="row">Combining sources (20)</th><td><a href="try.html">/try</a>, <code>hanko/sweep.py</code></td><td>Each decision combines X, Telegram and RSS voices (Bluesky supported) with RYO's facts and DexScreener's canonical pools. Each <code>exit_liquidity</code> answer combines RYO, DexScreener and a Jupiter quote. Every figure names the source it came from.</td></tr>
-        <tr><th scope="row">Coping with failure (20)</th><td><a href="drill.html">/drill</a></td><td>RYO down, every source down, a 429 from the quote venue, the model down, a prompt injection, tampered evidence, an edited sealed run, a source dying mid-sweep, a restart. Nine held. Missing data shrinks a position instead of defaulting to zero.</td></tr>
+        <tr><th scope="row">Coping with failure (20)</th><td><a href="drill.html">/drill</a></td><td>RYO down, every source down, a 429 from the quote venue, the model down, a prompt injection, tampered evidence, an edited sealed run, a source dying mid-sweep, a restart. Nine held. Missing data shrinks the position.</td></tr>
       </tbody>
     </table></div>
   </section>
@@ -120,7 +120,7 @@
         <tr><th scope="row">Advanced execution (5)</th><td><a href="echo.html">/echo</a>, <code>DECISIONS.md</code></td><td>A reproducible study on real data that audited the agent's own echo detector. 18 recorded engineering decisions, several of them bugs found by the project's own checks.</td></tr>
       </tbody>
     </table></div>
-    <p class="footnote">Spotlight brief (Multi-KOL Narrative Agent): voices from X, Telegram and Bluesky; per-token stance, conviction and urgency; convergence counted on independent voices only, so a repost, forward, quote or padded copy is one voice, not two; a practice position sized under user-defined limits (<code>Policy</code>), with the falsifiers committed before the outcome.</p>
+    <p class="footnote">Spotlight brief (Multi-KOL Narrative Agent): voices from X, Telegram and Bluesky; per-token stance, conviction and urgency; convergence counted on independent voices only, so a repost, forward, quote or padded copy adds no voice; a practice position sized under user-defined limits (<code>Policy</code>), with the falsifiers committed before the outcome.</p>
   </section>
 
   <section aria-labelledby="j-t3">
@@ -129,9 +129,9 @@
       <caption class="sr-only">Track 3 rubric lines and where each is answered</caption>
       <thead><tr><th scope="col">Rubric line</th><th scope="col">Open</th><th scope="col">What to look for</th></tr></thead>
       <tbody>
-        <tr><th scope="row">Fills a gap (25)</th><td><a href="try.html">/try</a></td><td>None of RYO's six tools says whether a position can be closed at its size, or what closing it costs. This one does, from an executable quote where one exists, and reports null rather than zero where it can't.</td></tr>
+        <tr><th scope="row">Fills a gap (25)</th><td><a href="try.html">/try</a></td><td>None of RYO's six tools says whether a position can be closed at its size, or what closing it costs. This one does, from an executable quote where one exists, and reports null where it can't.</td></tr>
         <tr><th scope="row">Follows the spec (15)</th><td><code>POST /api/tools/exit_liquidity/call</code></td><td>RYO's public response envelope, field for field (schema_version, tool, status, data_mode, as_of, request, data, summary, availability, warnings), on RYO's own REST route shape, with RYO's error shape. <code>tests/test_exit_venues.py</code> checks the envelope.</td></tr>
-        <tr><th scope="row">Could we use it (20)</th><td><code>/api/mcp</code>, <code>hanko/skills/exit_liquidity/http.py</code></td><td>Adopting it is a route registration, not a port. It is also a live MCP server any MCP host can add. Arguments are validated against the tool's input schema, and the handlers are tested offline.</td></tr>
+        <tr><th scope="row">Could we use it (20)</th><td><code>/api/mcp</code>, <code>hanko/skills/exit_liquidity/http.py</code></td><td>RYO can adopt it by registering one route. It is also a live MCP server any MCP host can add. Arguments are validated against the tool's input schema, and the handlers are tested offline.</td></tr>
       </tbody>
     </table></div>
   </section>
@@ -151,7 +151,7 @@
 
   <section aria-labelledby="j-limits">
     <h2 id="j-limits" class="label">What is not proven yet</h2>
-    <p class="section-lede">In full in <a href="https://github.com/IamHarrie-Labs/hanko" data-repo-path>LIMITATIONS.md</a>. In short: RYO's market data has failed on every live call made with this key since 2026-09-28 (a ticket is open), so live decisions run on venue facts and lack RYO's safety and technical fields. The scheduled live record started on 24 Oct and is still short. Keyless sweeps use a word list; a separate daily workflow now reads posts with a model, with its first successful seal verified on 30 Oct. And the first two sealed runs predate replay bundles, so they can no longer be replayed (D-17).</p>
+    <p class="section-lede">In full in <a href="https://github.com/IamHarrie-Labs/hanko" data-repo-path>LIMITATIONS.md</a>. In short: RYO's market data failed from 28 Sep to early November. It answered again on 5 Nov, but the scheduled sweeps still run without a RYO key, so their decisions use venue facts and lack RYO's safety and technical fields. The scheduled live record started on 24 Oct and is still short. Keyless sweeps use a word list; a separate daily workflow now reads posts with a model, with its first successful seal verified on 30 Oct. And the first two sealed runs predate replay bundles, so they can no longer be replayed (D-17).</p>
   </section>
 </main>
 

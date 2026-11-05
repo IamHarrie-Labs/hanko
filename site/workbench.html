@@ -62,8 +62,8 @@
 <header class="shell docs-hero">
   <a href="index.html" class="back-link">&larr; Hanko</a>
   <div class="eyebrow">Decision workbench</div>
-  <h1>Remove a source. Tighten a threshold. Watch the verdict move.</h1>
-  <p class="lede">This is the sample decision used throughout this project's README (<code id="wb-decid">loading…</code>): real output from the same <code>decide()</code> the CLI and the sealing pipeline use, run on <strong>synthetic inputs</strong>. The three voices, their posts and $TOKENA's market figures are a hand-written test fixture (<code>fixtures/x_three_voices.json</code>, <code>fixtures/market_tokena.json</code>), not real accounts, real posts or real prices. That is what lets anyone explore this page with no X or RYO call and no cost. Changing an input below computes a fresh, clearly labelled hypothetical; the baseline is never altered.</p>
+  <h1>Change the inputs and see why the verdict changes.</h1>
+  <p class="lede">This is the sample decision used throughout this project's README (<code id="wb-decid">loading…</code>): real output from the same <code>decide()</code> the CLI and the sealing pipeline use, run on <strong>synthetic inputs</strong>. The three voices, their posts and $TOKENA's market figures are a hand-written test fixture (<code>fixtures/x_three_voices.json</code>, <code>fixtures/market_tokena.json</code>). None of it is a real account, post or price, which is why the page needs no X or RYO call. Changing an input below computes a fresh, clearly labelled hypothetical; the baseline is never altered.</p>
 </header>
 
 <section id="wb-baseline" class="shell wb-section">
@@ -77,7 +77,7 @@
 
 <section id="wb-evidence" class="shell wb-section">
   <div class="label">The evidence</div>
-  <p class="section-lede">Three sample voices (synthetic, not real accounts) mention $TOKENA, a made-up token. Uncheck one to simulate it never having posted -- the same effect a quiet source or a rate-limited call has on a real sweep.</p>
+  <p class="section-lede">Three made-up voices mention $TOKENA, a made-up token. Uncheck one to simulate it never having posted -- the same effect a quiet source or a rate-limited call has on a real sweep.</p>
   <div class="voices" id="wb-voices"></div>
 </section>
 
@@ -130,7 +130,7 @@
       <div class="seal-body" id="wb-result-experiment-body"></div>
     </div>
   </div>
-  <p class="footnote">This branch is computed fresh from the same pure inputs every time and is never appended to a decision ledger. It proves the engine's cause and effect on sample inputs, not a fact about any real market. Real, live decisions are the ones sealed in the repository's <code>runs/</code> manifests.</p>
+  <p class="footnote">This branch is computed fresh from the same pure inputs every time and is never appended to a decision ledger. It shows the engine's cause and effect on sample inputs and says nothing about a real market. Real, live decisions are the ones sealed in the repository's <code>runs/</code> manifests.</p>
 </section>
 
 <footer class="band">
