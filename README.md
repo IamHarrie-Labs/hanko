@@ -112,6 +112,7 @@ and states in advance what would prove it wrong.
 - [The review loop](#the-review-loop)
 - [The sweep](#the-sweep)
 - [Architecture, decisions, limitations](#architecture-decisions-limitations)
+- [Built with](#built-with)
 
 ## Verify it yourself in 60 seconds
 
@@ -621,14 +622,26 @@ from the watchlist still getting reviewed, and review pulling fresh observations
   entire watchlist run (errors included), anchored to
   public OpenTimestamps calendars, published before the outcome is known.
 
+## Built with
+
+Everything in `hanko/` was written during the hackathon. These existing tools are used, as the rules ask entrants to disclose:
+
+- **Runtime:** Python 3.11 and [`httpx`](https://www.python-httpx.org/), the only runtime dependency. Tests use `pytest`.
+- **Data:** RYO's six read-only research tools over MCP, and xAI's `x_search` with `grok-4.3` for posts on X. The daily model-read run uses the same model.
+- **Timestamps:** the public [OpenTimestamps](https://opentimestamps.org/) calendars, which anchor each sealed run to Bitcoin.
+- **Hosting and automation:** Vercel for the site and the MCP endpoint, GitHub Actions for the scheduled sweeps.
+- **Site:** hand-written HTML, CSS and JavaScript with no framework. Fonts are Space Grotesk and JetBrains Mono from Google Fonts.
+- **Demo video:** [Remotion](https://www.remotion.dev/) 4 with React 18, in `video/`.
+
+No starter template was used.
+
 ## Next
 
-Wire `sweep`, `audit`, and `scorecard` into CI or a scheduled run, and feed
-per-voice reliability back into evidence weighting so the agent's own track
-record starts shaping what it believes.
+Feed each voice's track record back into evidence weighting, so the agent's own results start shaping what it believes. The sweeps, reviews and scorecard already run on a schedule in GitHub Actions.
+
 # Evidence update, 30 Oct 2026
 
-Hanko 2.0.0 is published in the official MCP registry as `io.github.IamHarrie-Labs/hanko`.
+Hanko is published in the official MCP registry as `io.github.IamHarrie-Labs/hanko` (version 2.0.1, served from https://tryhanko.xyz/api/mcp).
 
 - [Retrospective baseline comparison](study/baseline/README.md): 76 eligible reviewed opportunities produce identical entry selections under Hanko and a simple rule. This sample establishes no selection advantage. Reproduce with `python scripts/compare_baseline.py`.
 - [A sealed SOL refusal proved wrong](study/baseline/failure-case.md): the original commitment, late review-time observations, and what the extra voice does and does not establish.
