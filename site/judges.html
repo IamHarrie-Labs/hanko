@@ -71,7 +71,7 @@
       <li><a href="ledger.html">Live ledger</a>: a run sealed every three hours with no key, committed to the repository and anchored in Bitcoin. What changed since the last run comes first, and every decision is graded 72 hours later against conditions it wrote down in advance.</li>
       <li><a href="try.html">Try it live</a>: <code>exit_liquidity</code> on BONK, $50,000. An executable venue quote, the model's own figure beside it, and the model's error.</li>
       <li><a href="drill.html">Failure drill</a>: nine failures injected into the real code. <a href="echo.html">Echo Index</a>: 2,094 real posts, the measured result, and the bug the study found.</li>
-      <li>From a clone, no keys: <code>pip install -e ".[dev]" &amp;&amp; pytest</code>, then <code>hanko verify-run runs/run_836b976720f63dc0.json</code>. This is the first live ENTER (BTC, 23 Oct). It is replayed decision by decision from the committed bundle, and its manifest is anchored in Bitcoin block 972,817.</li>
+      <li>From a clone, no keys: <code>pip install -e ".[dev,sealing]" &amp;&amp; pytest</code>, then <code>hanko verify-run runs/run_836b976720f63dc0.json</code>. This is the first live ENTER (BTC, 23 Oct). It is replayed decision by decision from the committed bundle, and its manifest is anchored in Bitcoin block 972,817.</li>
     </ol>
     <p class="footnote"><a href="https://x.com/IamHarrie/status/2096908693967179844" rel="noopener">Hanko announcement on X</a>: the project post submitted for the Social Media Award. The same link is included in the submission PDF and README.</p>
   </section>

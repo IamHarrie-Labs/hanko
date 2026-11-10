@@ -1,0 +1,5 @@
+# Generated reports are written with LF; check them out with LF everywhere so
+# regenerating them on Windows leaves the working tree clean.
+study/**/*.md text eol=lf
+study/**/*.json text eol=lf
+study/**/*.jsonl text eol=lf

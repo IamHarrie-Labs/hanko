@@ -19,3 +19,5 @@ site/api/_vendor/
 !runs/*/snapshots/
 !live/runs/*/snapshots/
 !runs/**/reviews.jsonl
+
+.venv/

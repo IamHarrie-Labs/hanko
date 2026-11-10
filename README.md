@@ -3,7 +3,7 @@
 <div align="center">
 
 [![CI](https://github.com/IamHarrie-Labs/hanko/actions/workflows/ci.yml/badge.svg)](https://github.com/IamHarrie-Labs/hanko/actions/workflows/ci.yml)
-[![Tests: 349 passing](https://img.shields.io/badge/tests-349_passing-555555)](tests/)
+[![Tests: 352 passing](https://img.shields.io/badge/tests-352_passing-555555)](tests/)
 [![RYO tools confirmed live: 6](https://img.shields.io/badge/RYO_tools_confirmed_live-6-555555)](ARCHITECTURE.md#transport-mcp-and-rest-reach-the-same-facts)
 [![Tracks entered: 3](https://img.shields.io/badge/tracks_entered-3-8b6a27)](https://tryhanko.xyz/judges)
 [![License: MIT](https://img.shields.io/badge/license-MIT-555555)](LICENSE)
@@ -121,9 +121,9 @@ from synthetic fixtures committed in this repository (fictional sample voices an
 
 ```bash
 git clone https://github.com/IamHarrie-Labs/hanko && cd hanko
-pip install -e ".[dev]"
+pip install -e ".[dev,sealing]"
 
-pytest                                          # 349 tests, offline, ~20s
+pytest                                          # 352 tests, offline, ~15s
 
 # make a decision, then prove it replays from stored bytes
 hanko decide x --token TOKENA --subject voice_alpha --subject voice_beta \
@@ -224,7 +224,7 @@ hanko/
   sweep.py, cli.py, config.py, provenance.py, evidence.py
 site/            static landing page, /docs, /try -- the live web demo
   api/exit_liquidity.py    the /try endpoint, real assess() call, no fixture
-tests/           349 tests, one file per hanko/ package
+tests/           352 tests, one file per hanko/ package
 fixtures/        evidence and market fixtures used offline and in CI
 .github/workflows/ci.yml       pytest on every push, Python 3.11 and 3.12
 .claude/skills/hanko-exit-liquidity/SKILL.md   packages exit_liquidity as a Claude Skill
@@ -269,7 +269,7 @@ $0.005/call, roughly $25 to $35 for the whole build.
 ## Use
 
 ```bash
-pip install -e ".[dev]"
+pip install -e ".[dev,sealing]"
 pytest
 ```
 
@@ -626,7 +626,7 @@ from the watchlist still getting reviewed, and review pulling fresh observations
 
 Everything in `hanko/` was written during the hackathon. These existing tools are used, as the rules ask entrants to disclose:
 
-- **Runtime:** Python 3.11 and [`httpx`](https://www.python-httpx.org/), the only runtime dependency. Tests use `pytest`.
+- **Runtime:** Python 3.11 and [`httpx`](https://www.python-httpx.org/), the only required dependency. Sealing adds the [`opentimestamps`](https://pypi.org/project/opentimestamps/) library. Tests use `pytest`.
 - **Data:** RYO's six read-only research tools over MCP, and xAI's `x_search` with `grok-4.3` for posts on X. The daily model-read run uses the same model.
 - **Timestamps:** the public [OpenTimestamps](https://opentimestamps.org/) calendars, which anchor each sealed run to Bitcoin.
 - **Hosting and automation:** Vercel for the site and the MCP endpoint, GitHub Actions for the scheduled sweeps.
