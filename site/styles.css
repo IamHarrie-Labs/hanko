@@ -657,6 +657,8 @@ button:focus-visible, input:focus-visible, select:focus-visible, summary:focus-v
 .now-title { font-size: clamp(24px, 3vw, 32px); font-weight: 700; letter-spacing: -.01em; margin: 0 0 6px; }
 .now-when { margin: 0 0 18px; color: var(--muted); font-size: 14.5px; }
 .now-list { list-style: none; padding: 0; margin: 0; display: grid; gap: 10px; }
+.now-list:empty { min-height: 470px; }
+.now-next:empty { min-height: 96px; }
 .now-item { background: var(--surface); border: 1px solid var(--line-2); border-left: 6px solid var(--line-strong); padding: 16px 20px; }
 .now-rank-3 { border-left-color: var(--accent); background: var(--paper); }
 .now-rank-2 { border-left-color: var(--panel); background: var(--paper); }

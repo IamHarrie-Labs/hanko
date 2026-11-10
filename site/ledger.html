@@ -131,7 +131,10 @@
   }
   function verdictTag(v) { return el('span', 'verdict-tag verdict-' + v, v.toUpperCase()); }
 
+  var liveShown = false;
   function render(d, source) {
+    if (source === 'bundled' && liveShown) return;
+    if (source === 'live') liveShown = true;
     var t = d.totals, v = t.verdicts || {}, res = t.results || {};
     var stats = document.getElementById('ledger-stats');
     stats.textContent = '';
@@ -146,7 +149,7 @@
       d.last_decision_at ? 'last run ' + ago(d.last_decision_at) : ''));
     document.getElementById('ledger-fresh').textContent = source === 'live'
       ? 'Read just now from the repository, so this is the latest committed run.'
-      : 'Read from the copy bundled with this site; the live file could not be reached.';
+      : 'Read from the copy bundled with this site. The live file from the repository has not loaded.';
 
     var ACT = {
       open: 'OPEN', close: 'CLOSE', raise: 'RAISE', cut: 'CUT', hold: 'HOLD', none: 'NO POSITION'
@@ -285,10 +288,14 @@
     }).then(function (d) { render(d, source); });
   }
 
-  load(LIVE, 'live').catch(function () {
-    return load('data/live-summary.json', 'bundled');
-  }).catch(function (err) {
-    document.getElementById('ledger-when').textContent = 'Could not load the ledger: ' + err.message;
+  // Draw the copy bundled with the site at once (same origin, fast), then
+  // replace it with the live file from the repository when that arrives.
+  var shown = false;
+  var bundled = load('data/live-summary.json', 'bundled').then(function () { shown = true; }, function () {});
+  load(LIVE, 'live').catch(function (err) {
+    return bundled.then(function () {
+      if (!shown) document.getElementById('ledger-when').textContent = 'Could not load the ledger: ' + err.message;
+    });
   });
 })();
 </script>
