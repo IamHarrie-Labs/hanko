@@ -5,7 +5,7 @@ about not overclaiming should not overclaim about itself either.
 
 **Most live decisions so far ran without RYO's market data.** From
 2026-09-28 to early November, `analyze_token`, `deep_analysis` and
-`compare_tokens` returned `400 VALIDATION_FAILED` for every token. On 2026-11-05 `analyze_token` answered again and the scheduled sweeps got a RYO key. `deep_analysis` now answers in part: it leaves out technical indicators, so each sweep records it as degraded. Earlier decisions took price, volume and pool depth from DexScreener's canonical pools and recorded RYO's safety score and ATR as missing. Each missing field lowers
+`compare_tokens` returned `400 VALIDATION_FAILED` for every token. On 2026-11-05 `analyze_token` answered again and the scheduled sweeps got a RYO key. From then until 2026-11-07, 44 decisions ran on RYO's market facts, with `deep_analysis` answering in part (no technical indicators) and recorded as degraded. On 2026-11-07 the hackathon key's monthly call allowance ran out. RYO's `whoami` reports 222 calls used and a reset on 2026-12-01. Every run since then still calls RYO, records the refusal with its trace id as a gap, and takes price, volume and pool depth from DexScreener. The public `/try` page and MCP endpoint do the same and return RYO's refusal in `warnings`. Earlier decisions took price, volume and pool depth from DexScreener's canonical pools and recorded RYO's safety score and ATR as missing. Each missing field lowers
 evidence quality, and with it position size. No missing field is filled
 with a guess.
 

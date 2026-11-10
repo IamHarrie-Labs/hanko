@@ -92,7 +92,7 @@
       <li class="proof-item"><span class="sigil">–</span><span><strong>Track 1:</strong> リポストや転送、広告を付けただけのコピーは1つの声として数えます。同じ証拠からは、モデルを呼ばずに同じ判断IDが再現されます。</span></li>
       <li class="proof-item"><span class="sigil">–</span><span><strong>Track 3:</strong> <code>exit_liquidity</code> は、そのサイズのポジションを実際に手仕舞えるか、そのコストはいくらかを、実行可能な見積もりから答えます。RYO の応答形式に準拠し、REST と MCP の両方で呼び出せます。</span></li>
       <li class="proof-item"><span class="sigil">–</span><span><strong>Track 2:</strong> <a href="ledger.html">/ledger</a> は前回の実行から何が変わったかを重要な順に示します。Lighthouse のアクセシビリティは全8ページで100です。</span></li>
-      <li class="proof-item"><span class="sigil">–</span><span>まだ証明できていないこと：RYO の市場データは9月28日から11月初めまで失敗していました。11月5日から定期実行は再び RYO を呼び出していますが、テクニカル指標は返ってこないため、その欠落を記録しています。定期実行の記録は10月24日に始まったばかりで、まだ数週間分です。詳しくは LIMITATIONS.md をご覧ください。</span></li>
+      <li class="proof-item"><span class="sigil">–</span><span>まだ証明できていないこと：RYO の市場データは9月28日から11月初めまで失敗していました。11月5日から7日までの44件の判断は RYO のデータで行われました。11月7日にハッカソン用キーの月間呼び出し枠が尽き（12月1日にリセット）、それ以降の実行は RYO の拒否を欠落として記録し、市場データは DexScreener から取得しています。定期実行の記録は10月24日に始まったばかりで、まだ数週間分です。詳しくは LIMITATIONS.md をご覧ください。</span></li>
     </ul>
     <p class="footnote"><a href="https://youtu.be/fm0B4hZQCwQ" rel="noopener">デモ動画（96秒）</a>の<a href="https://github.com/IamHarrie-Labs/hanko/blob/master/video/subtitles/hanko-demo.ja.srt" rel="noopener">日本語字幕（SRT）</a>はリポジトリにあります。</p>
   </section>
@@ -152,7 +152,7 @@
 
   <section aria-labelledby="j-limits">
     <h2 id="j-limits" class="label">What is not proven yet</h2>
-    <p class="section-lede">In full in <a href="https://github.com/IamHarrie-Labs/hanko" data-repo-path>LIMITATIONS.md</a>. In short: RYO's market data failed from 28 Sep to early November. Since 5 Nov the scheduled sweeps call RYO again. Its deep analysis comes back partial, without technical indicators, and each sweep records that gap. The scheduled live record started on 24 Oct and is still short. Keyless sweeps use a word list; a separate daily workflow now reads posts with a model, with its first successful seal verified on 30 Oct. And the first two sealed runs predate replay bundles, so they can no longer be replayed (D-17).</p>
+    <p class="section-lede">In full in <a href="https://github.com/IamHarrie-Labs/hanko" data-repo-path>LIMITATIONS.md</a>. In short: RYO's market data failed from 28 Sep to early November. From 5 to 7 Nov, 44 decisions ran on RYO's facts. On 7 Nov the hackathon key's monthly call allowance ran out (it resets on 1 Dec), so each run since then records RYO's refusal as a gap and takes market facts from DexScreener. The scheduled live record started on 24 Oct and is still short. Keyless sweeps use a word list; a separate daily workflow now reads posts with a model, with its first successful seal verified on 30 Oct. And the first two sealed runs predate replay bundles, so they can no longer be replayed (D-17).</p>
   </section>
 </main>
 
