@@ -58,36 +58,34 @@
   <a href="index.html" class="back-link">&larr; Hanko</a>
   <div class="eyebrow">The live ledger</div>
   <h1>Every decision, and how it turned out.</h1>
-  <p class="lede">A scheduled run reads public Telegram, Bluesky and news voices on four tokens, decides, seals the run with its evidence, anchors it in Bitcoin and commits it to the repository. Seventy-two hours later the same job checks every decision against the conditions it wrote down in advance. This page reads those files directly and starts with what changed since the last run.</p>
+  <p class="lede">Every three hours an agent reads public voices on four tokens, decides, and seals the run in Bitcoin. Seventy-two hours later it grades each call against conditions it wrote down in advance. The top of this page shows what the latest run changed and what that means for the practice positions.</p>
 </header>
 
 <main id="ledger-main">
-  <section class="shell wb-section" aria-labelledby="ledger-totals-h">
-    <h2 id="ledger-totals-h" class="label">So far</h2>
-    <div class="stats echo-stats" id="ledger-stats" aria-live="polite">Loading the ledger…</div>
-    <p class="footnote" id="ledger-fresh"></p>
+  <section class="shell wb-section" aria-labelledby="ledger-now-h">
+    <h2 id="ledger-now-h" class="now-title">What changed in the last run</h2>
+    <p class="now-when" id="ledger-when" aria-live="polite">Loading the ledger…</p>
+    <ol class="now-list" id="ledger-changes" aria-label="Changes, most important first"></ol>
+    <div class="now-next" id="ledger-next"></div>
   </section>
-
-  <section class="shell wb-section" aria-labelledby="ledger-changes-h">
-    <h2 id="ledger-changes-h" class="label">What changed since the last run, most important first</h2>
-    <ol class="ledger-changes" id="ledger-changes"></ol>
-  </section>
-
   <section class="shell wb-section" aria-labelledby="ledger-tokens-h">
     <h2 id="ledger-tokens-h" class="label">Where each token stands now</h2>
     <div class="table-wrap"><table class="judge-table ledger-table" id="ledger-tokens">
-      <caption class="sr-only">The latest decision for each watched token</caption>
+      <caption class="sr-only">The latest decision for each watched token, open positions first</caption>
       <thead><tr><th scope="col">Token</th><th scope="col">Verdict</th><th scope="col">Because</th><th scope="col">Wrong if</th></tr></thead>
       <tbody></tbody>
     </table></div>
   </section>
-
   <section class="shell wb-section" aria-labelledby="ledger-graded-h">
     <h2 id="ledger-graded-h" class="label">Graded against its own conditions</h2>
     <p class="section-lede" id="ledger-score"></p>
     <ol class="ledger-reviews" id="ledger-reviews"></ol>
   </section>
-
+  <section class="shell wb-section" aria-labelledby="ledger-totals-h">
+    <h2 id="ledger-totals-h" class="label">The whole record so far</h2>
+    <div class="stats echo-stats" id="ledger-stats"></div>
+    <p class="footnote" id="ledger-fresh"></p>
+  </section>
   <section class="shell wb-section" aria-labelledby="ledger-runs-h">
     <h2 id="ledger-runs-h" class="label">Recent sealed runs</h2>
     <div class="table-wrap"><table class="echo-table ledger-runs" id="ledger-runs">
@@ -103,7 +101,7 @@
   <div class="shell band-inner" style="padding-top: 56px; padding-bottom: 56px">
     <div class="colophon">
       <span>Hanko 判子 · RYO-CHAN Hackathon 2026</span>
-      <span><span data-stat="tests">352</span> tests · <a href="index.html">Home</a> · <a href="https://github.com/IamHarrie-Labs/hanko" data-repo>GitHub</a></span>
+      <span><span data-stat="tests">355</span> tests · <a href="index.html">Home</a> · <a href="https://github.com/IamHarrie-Labs/hanko" data-repo>GitHub</a></span>
     </div>
   </div>
 </footer>
@@ -129,7 +127,7 @@
   function when(iso) { return iso ? iso.slice(0, 16).replace('T', ' ') : '–'; }
   function ago(iso) {
     var h = (Date.now() - Date.parse(iso)) / 36e5;
-    return h < 1 ? Math.max(1, Math.round(h * 60)) + ' minutes ago' : Math.round(h) + ' hours ago';
+    return h < 1 ? (Math.round(h * 60) <= 1 ? '1 minute ago' : Math.round(h * 60) + ' minutes ago') : (Math.round(h) === 1 ? '1 hour ago' : Math.round(h) + ' hours ago');
   }
   function verdictTag(v) { return el('span', 'verdict-tag verdict-' + v, v.toUpperCase()); }
 
@@ -150,22 +148,65 @@
       ? 'Read just now from the repository, so this is the latest committed run.'
       : 'Read from the copy bundled with this site; the live file could not be reached.';
 
+    var ACT = {
+      open: 'OPEN', close: 'CLOSE', raise: 'RAISE', cut: 'CUT', hold: 'HOLD', none: 'NO POSITION'
+    };
+    document.getElementById('ledger-when').textContent = d.last_decision_at
+      ? 'Run sealed ' + ago(d.last_decision_at) + ' (' + when(d.last_decision_at) + ' UTC). Most important change first.'
+      : 'No run yet.';
     var changes = document.getElementById('ledger-changes');
     changes.textContent = '';
-    if (!d.changes.length) changes.appendChild(el('li', 'ledger-change', 'One run so far: nothing to compare yet.'));
+    if (!d.changes.length) changes.appendChild(el('li', 'now-item', 'One run so far: nothing to compare yet.'));
     d.changes.forEach(function (c) {
-      var li = el('li', 'ledger-change ledger-rank-' + c.rank);
-      var head = el('div', 'ledger-change-head');
-      head.appendChild(el('span', 'ledger-token', c.token));
-      head.appendChild(el('span', 'ledger-headline', c.headline));
+      var act = c.action || (c.rank === 3 ? 'flip' : c.rank ? 'resize' : 'hold');
+      var li = el('li', 'now-item now-rank-' + c.rank + ' now-' + act);
+      var head = el('div', 'now-head');
+      head.appendChild(el('span', 'now-act', ACT[act] || act.toUpperCase()));
+      head.appendChild(el('span', 'now-token', c.token));
+      if (c.from && c.to) {
+        head.appendChild(el('span', 'now-move',
+          c.from.verdict.toUpperCase() + ' ' + c.from.size_pct.toFixed(2) + '%  →  '
+          + c.to.verdict.toUpperCase() + ' ' + c.to.size_pct.toFixed(2) + '%'));
+      }
       li.appendChild(head);
-      c.why.forEach(function (w) { li.appendChild(el('p', 'ledger-why', w)); });
+      li.appendChild(el('p', 'now-matters', c.matters || c.headline));
+      var detail = [];
+      if (c.headline && c.headline !== 'no change') detail.push(c.headline);
+      (c.why || []).forEach(function (w) { detail.push(w); });
+      if (detail.length && c.rank > 0) {
+        var more = el('details', 'now-more');
+        more.appendChild(el('summary', null, 'Why'));
+        var ul = el('ul');
+        detail.forEach(function (w) { ul.appendChild(el('li', null, w)); });
+        more.appendChild(ul);
+        li.appendChild(more);
+      }
       changes.appendChild(li);
     });
-
+    var next = document.getElementById('ledger-next');
+    next.textContent = '';
+    var now = Date.now();
+    var due = d.tokens.filter(function (k) { return Date.parse(k.review_at) > now; })
+      .sort(function (a, b) { return Date.parse(a.review_at) - Date.parse(b.review_at); })[0];
+    if (due) {
+      var hrs = Math.round((Date.parse(due.review_at) - now) / 36e5);
+      next.appendChild(stat('Next grading', due.token + ' in ' + (hrs < 1 ? 'under an hour' : hrs + 'h'),
+        due.verdict.toUpperCase() + ' call from ' + when(due.decided_at) + ' UTC, checked against its own conditions'));
+    }
+    var last = d.reviews[0];
+    if (last) {
+      next.appendChild(stat('Latest grade', last.token + ' ' + (last.result === 'falsified' ? 'proved wrong' : last.result),
+        last.verdict.toUpperCase() + ' call, graded ' + ago(last.reviewed_at)));
+    }
+    if (d.scorecard && d.scorecard.scored) {
+      var e = (d.scorecard.by_verdict || {}).enter;
+      next.appendChild(stat('ENTER calls that held', e ? e.held + ' of ' + (e.held + e.falsified) : '–',
+        d.scorecard.held + ' of ' + d.scorecard.scored + ' across every verdict'));
+    }
     var tbody = document.querySelector('#ledger-tokens tbody');
     tbody.textContent = '';
-    d.tokens.forEach(function (k) {
+    d.tokens.slice().sort(function (a, b) { return b.size_pct - a.size_pct || a.token.localeCompare(b.token); })
+      .forEach(function (k) {
       var tr = el('tr');
       var th = el('th', null, k.token); th.scope = 'row'; tr.appendChild(th);
       var td = el('td'); td.appendChild(verdictTag(k.verdict));
@@ -247,7 +288,7 @@
   load(LIVE, 'live').catch(function () {
     return load('data/live-summary.json', 'bundled');
   }).catch(function (err) {
-    document.getElementById('ledger-stats').textContent = 'Could not load the ledger: ' + err.message;
+    document.getElementById('ledger-when').textContent = 'Could not load the ledger: ' + err.message;
   });
 })();
 </script>

@@ -94,15 +94,81 @@ def _change(prev: DecisionRecord, cur: DecisionRecord) -> dict[str, Any]:
     dv = cur.convergence.independent_voices - prev.convergence.independent_voices
     if dv:
         lines.append(("+" if dv > 0 else "") + str(dv) + " independent voice" + ("" if abs(dv) == 1 else "s"))
-    before = {r.rule_id: r.outcome for r in prev.rules}
-    moved = [r for r in cur.rules if before.get(r.rule_id) not in (None, r.outcome)]
+    why = _why(prev, cur)
+    action, matters = _action(prev, cur, dq, dv)
     return {
         "token": cur.subject,
         "rank": rank,
         "headline": "; ".join(lines) if lines else "no change",
-        "why": [_rule_name(r.rule_id) + " now " + r.outcome.value + ": " + r.detail for r in moved],
+        "action": action,
+        "matters": matters,
+        "from": {"verdict": prev.verdict.value, "size_pct": round(prev.size_fraction * 100, 2)},
+        "to": {"verdict": cur.verdict.value, "size_pct": round(cur.size_fraction * 100, 2)},
+        "why": why,
         "magnitude": round(abs(dq), 4),
     }
+
+
+def _why(prev: DecisionRecord, cur: DecisionRecord) -> list[str]:
+    """The rules that explain the change, in their own words.
+
+    A rule counts when its outcome changed, when it was reached this time but
+    not last time (an ABSTAIN stops before the later rules run), or when it
+    blocked last time and no longer appears. A lean that flipped sides is
+    included too, since it is usually the reason a verdict moved.
+    """
+    before = {r.rule_id: r for r in prev.rules}
+    now = {r.rule_id for r in cur.rules}
+    out: list[str] = []
+    for r in cur.rules:
+        old = before.get(r.rule_id)
+        if old is None:
+            out.append(_rule_name(r.rule_id) + " now " + r.outcome.value + ": " + r.detail)
+        elif old.outcome is not r.outcome:
+            out.append(_rule_name(r.rule_id) + " now " + r.outcome.value + ": " + r.detail)
+        elif r.rule_id == "symmetry" and _lean(old.detail) != _lean(r.detail):
+            out.append("symmetry: " + _lean(old.detail) + " before, " + r.detail)
+    for rule_id, old in before.items():
+        if rule_id not in now and old.outcome is Outcome.BLOCKED:
+            out.append(_rule_name(rule_id) + " no longer blocks (was: " + old.detail + ")")
+    return out
+
+
+def _lean(detail: str) -> str:
+    for word in ("bullish", "bearish", "neutral"):
+        if word in detail:
+            return word
+    return detail
+
+
+def _action(prev: DecisionRecord, cur: DecisionRecord, dq: float, dv: int) -> tuple[str, str]:
+    """What the change means for someone holding the practice position."""
+    was, now = prev.verdict.value == "enter", cur.verdict.value == "enter"
+    size = format(cur.size_fraction * 100, ".2f") + "%"
+    reason = _deciding_rule(cur)["detail"]
+    if now and not was:
+        voices = cur.convergence.independent_voices
+        return "open", ("Opens a " + size + " practice position: the evidence leans "
+                        + _lean(next((r.detail for r in cur.rules if r.rule_id == "symmetry"), "bullish"))
+                        + " and " + str(voices) + " independent voice" + ("" if voices == 1 else "s") + " agree.")
+    if was and not now:
+        return "close", "Closes the practice position. " + _cap(reason) + "."
+    if not now:
+        return "none", "Still no position. " + _cap(reason) + "." if reason else "Still no position."
+    move = cur.size_fraction - prev.size_fraction
+    if abs(move) < SIZE_MOVE:
+        return "hold", "Holds at " + size + ". The size moved by less than a quarter point, so nothing to act on."
+    causes = []
+    if dv:
+        causes.append(("more" if dv > 0 else "fewer") + " independent voices")
+    if abs(dq) >= 0.01:
+        causes.append(("stronger" if dq > 0 else "weaker") + " evidence")
+    because = " because of " + " and ".join(causes) if causes else ""
+    return ("raise" if move > 0 else "cut"), ("Raised" if move > 0 else "Cut") + " to " + size + because + "."
+
+
+def _cap(text: str) -> str:
+    return text[:1].upper() + text[1:] if text else text
 
 
 def _ots_state(path: Path) -> dict[str, Any]:

@@ -23,13 +23,37 @@
    "token": "BTC",
    "rank": 3,
    "headline": "PASS to ENTER; size 0.00% to 2.32%; +3 independent voices",
-   "why": [],
+   "action": "open",
+   "matters": "Opens a 2.32% practice position: the evidence leans bullish and 9 independent voices agree.",
+   "from": {
+    "verdict": "pass",
+    "size_pct": 0.0
+   },
+   "to": {
+    "verdict": "enter",
+    "size_pct": 2.32
+   },
+   "why": [
+    "symmetry: bearish before, evidence leans bullish (2.2 vs 1.8)",
+    "conviction now satisfied: mean bullish conviction 0.73",
+    "direction no longer blocks (was: evidence does not argue for entry)"
+   ],
    "magnitude": 0.0479
   },
   {
    "token": "SOL",
    "rank": 2,
    "headline": "size 1.58% to 1.30%; evidence quality 0.63 to 0.52; -2 independent voices",
+   "action": "cut",
+   "matters": "Cut to 1.30% because of fewer independent voices and weaker evidence.",
+   "from": {
+    "verdict": "enter",
+    "size_pct": 1.58
+   },
+   "to": {
+    "verdict": "enter",
+    "size_pct": 1.3
+   },
    "why": [],
    "magnitude": 0.1129
   },
@@ -37,6 +61,16 @@
    "token": "ETH",
    "rank": 0,
    "headline": "size 2.29% to 2.12%; +1 independent voice",
+   "action": "hold",
+   "matters": "Holds at 2.12%. The size moved by less than a quarter point, so nothing to act on.",
+   "from": {
+    "verdict": "enter",
+    "size_pct": 2.29
+   },
+   "to": {
+    "verdict": "enter",
+    "size_pct": 2.12
+   },
    "why": [],
    "magnitude": 0.088
   },
@@ -44,6 +78,16 @@
    "token": "BONK",
    "rank": 0,
    "headline": "no change",
+   "action": "none",
+   "matters": "Still no position. No readings reference BONK.",
+   "from": {
+    "verdict": "abstain",
+    "size_pct": 0.0
+   },
+   "to": {
+    "verdict": "abstain",
+    "size_pct": 0.0
+   },
    "why": [],
    "magnitude": 0.0
   }

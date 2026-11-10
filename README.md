@@ -3,7 +3,7 @@
 <div align="center">
 
 [![CI](https://github.com/IamHarrie-Labs/hanko/actions/workflows/ci.yml/badge.svg)](https://github.com/IamHarrie-Labs/hanko/actions/workflows/ci.yml)
-[![Tests: 352 passing](https://img.shields.io/badge/tests-352_passing-555555)](tests/)
+[![Tests: 355 passing](https://img.shields.io/badge/tests-355_passing-555555)](tests/)
 [![RYO tools confirmed live: 6](https://img.shields.io/badge/RYO_tools_confirmed_live-6-555555)](ARCHITECTURE.md#transport-mcp-and-rest-reach-the-same-facts)
 [![Tracks entered: 3](https://img.shields.io/badge/tracks_entered-3-8b6a27)](https://tryhanko.xyz/judges)
 [![License: MIT](https://img.shields.io/badge/license-MIT-555555)](LICENSE)
@@ -123,7 +123,7 @@ from synthetic fixtures committed in this repository (fictional sample voices an
 git clone https://github.com/IamHarrie-Labs/hanko && cd hanko
 pip install -e ".[dev,sealing]"
 
-pytest                                          # 352 tests, offline, ~15s
+pytest                                          # 355 tests, offline, ~15s
 
 # make a decision, then prove it replays from stored bytes
 hanko decide x --token TOKENA --subject voice_alpha --subject voice_beta \
@@ -224,7 +224,7 @@ hanko/
   sweep.py, cli.py, config.py, provenance.py, evidence.py
 site/            static landing page, /docs, /try -- the live web demo
   api/exit_liquidity.py    the /try endpoint, real assess() call, no fixture
-tests/           352 tests, one file per hanko/ package
+tests/           355 tests, one file per hanko/ package
 fixtures/        evidence and market fixtures used offline and in CI
 .github/workflows/ci.yml       pytest on every push, Python 3.11 and 3.12
 .claude/skills/hanko-exit-liquidity/SKILL.md   packages exit_liquidity as a Claude Skill
@@ -292,7 +292,7 @@ a `FAILED` snapshot saying so and carries on.
 
 ## Status
 
-352 tests, all offline, ~20s. Covered at the evidence layer: canonical form and
+355 tests, all offline, ~20s. Covered at the evidence layer: canonical form and
 address stability, payload deduplication, tamper detection, adapter-version
 mismatch on replay, replay determinism, evidence identity pinned to bytes and
 position, and each failure mode (rate limit, partial window, empty result,

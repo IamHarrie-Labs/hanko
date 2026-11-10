@@ -653,6 +653,37 @@ button:focus-visible, input:focus-visible, select:focus-visible, summary:focus-v
 .ledger-result-inconclusive { color: var(--muted); }
 .ledger-runs a { word-break: break-all; }
 
+/* the 30-second view: what the last run changed, most important first */
+.now-title { font-size: clamp(24px, 3vw, 32px); font-weight: 700; letter-spacing: -.01em; margin: 0 0 6px; }
+.now-when { margin: 0 0 18px; color: var(--muted); font-size: 14.5px; }
+.now-list { list-style: none; padding: 0; margin: 0; display: grid; gap: 10px; }
+.now-item { background: var(--surface); border: 1px solid var(--line-2); border-left: 6px solid var(--line-strong); padding: 16px 20px; }
+.now-rank-3 { border-left-color: var(--accent); background: var(--paper); }
+.now-rank-2 { border-left-color: var(--panel); background: var(--paper); }
+.now-rank-1 { border-left-color: var(--muted); }
+.now-rank-0 { padding-top: 12px; padding-bottom: 12px; }
+.now-rank-0 .now-matters { color: var(--muted); font-size: 15px; }
+.now-head { display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: baseline; }
+.now-act { font-family: var(--mono); font-weight: 700; font-size: 12px; letter-spacing: .1em; padding: 3px 8px; border: 1.5px solid currentColor; }
+.now-open .now-act, .now-raise .now-act { color: var(--good); }
+.now-close .now-act, .now-cut .now-act { color: var(--accent-deep); }
+.now-hold .now-act, .now-none .now-act { color: var(--muted); border-color: var(--line-strong); }
+.now-token { font-family: var(--mono); font-weight: 700; font-size: 20px; letter-spacing: .03em; }
+.now-move { font-family: var(--mono); font-size: 13px; color: var(--muted); white-space: pre; }
+.now-matters { margin: 8px 0 0; font-size: 17px; line-height: 1.45; color: var(--text); }
+.now-more { margin-top: 8px; font-size: 14px; color: var(--body); }
+.now-more summary { cursor: pointer; font-family: var(--mono); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.now-more summary:focus-visible { outline: 2px solid var(--accent-deep); outline-offset: 3px; }
+.now-more ul { margin: 8px 0 0; padding-left: 18px; }
+.now-more li + li { margin-top: 4px; }
+.now-next { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px; margin-top: 14px; }
+.now-next .stat { background: var(--surface); border: 1px solid var(--line-2); padding: 14px 18px; }
+.now-next .stat-value { font-size: 20px; }
+@media (max-width: 700px) {
+  .now-item { padding: 14px 16px; }
+  .now-move { white-space: normal; flex-basis: 100%; }
+}
+
 /* Accessibility: links in the footer line are underlined like links in text,
    and checkboxes meet the 24px minimum target size. */
 .colophon a { text-decoration: underline; text-underline-offset: 2px; }
