@@ -66,7 +66,6 @@
   <div class="eyebrow" data-i18n="t_eyebrow">Try it live · exit_liquidity</div>
   <h1 data-i18n="t_h1">Could you sell it, and what would it cost?</h1>
   <p class="lede" data-i18n="t_lede">Pick a token and how much you hold. Hanko asks three live sources right now (RYO's market data, every trading pool on DexScreener, and a real sell quote from Jupiter) and tells you in plain words whether you could get out, and what it would cost you.</p>
-  <p class="footnote" style="margin-top: 14px" data-i18n="t_build">For builders: it runs RYO's <code>analyze_token</code>, DexScreener depth and an executable Jupiter quote through the same pure <code>assess()</code> the CLI uses. When a quote exists the answer rests on it, and the model's own figure is shown beside it, error and all. If a source is down, the answer says which one and comes back from the others, in RYO's own public envelope.</p>
 </header>
 
 <section id="try-it" class="shell">
@@ -109,6 +108,8 @@
   </div>
   </details>
 
+  <p class="footnote" style="margin-top: 20px" data-i18n="t_build">For builders: it runs RYO's <code>analyze_token</code>, DexScreener depth and an executable Jupiter quote through the same pure <code>assess()</code> the CLI uses. When a quote exists the answer rests on it, and the model's own figure is shown beside it, error and all. If a source is down, the answer says which one and comes back from the others, in RYO's own public envelope.</p>
+
   <p class="footnote" style="max-width: 48em" data-i18n="t_foot">Every figure above is computed from what this call actually returned.  Solana tokens get an executable quote; ETH and BTC are measured through their wrapped forms on Ethereum, where no keyless quote venue exists, so their cost is modelled and labelled as such. Also callable the way RYO's own tools are: <code>POST /api/tools/exit_liquidity/call</code>, or as an MCP server at <code>/api/mcp</code>. See the <a href="docs.html#exit-liquidity">exit_liquidity docs</a>.</p>
 </section>
 
@@ -116,7 +117,7 @@
   <div class="shell band-inner" style="padding-top: 56px; padding-bottom: 56px">
     <div class="colophon">
       <span>Hanko 判子 · RYO-CHAN Hackathon 2026</span>
-      <span><span data-stat="tests">355</span> tests · <span data-stat="lines">14,723</span> lines · <span data-stat="commits">181</span> commits · <a href="index.html">Home</a> · <a href="https://github.com/IamHarrie-Labs/hanko" data-repo>GitHub</a></span>
+      <span><span data-stat="tests">355</span> tests · <span data-stat="lines">14,723</span> lines · <span data-stat="commits">186</span> commits · <a href="index.html">Home</a> · <a href="https://github.com/IamHarrie-Labs/hanko" data-repo>GitHub</a></span>
     </div>
   </div>
 </footer>

@@ -64,6 +64,27 @@
   };
   window.hankoCount();
 
+  // ---- wide tables become stacked cards on phones ------------------------
+  // Each cell gets its column's name, which the card layout prints above the
+  // value. Explicit roles keep screen readers on table semantics even when
+  // the layout is no longer a table.
+  window.hankoStack = function (root) {
+    (root || document).querySelectorAll('table.judge-table, table.ledger-runs, table.layer-table').forEach(function (t) {
+      var heads = Array.prototype.map.call(t.querySelectorAll('thead th'), function (h) { return h.textContent.trim(); });
+      t.setAttribute('role', 'table');
+      t.querySelectorAll('thead, tbody').forEach(function (g) { g.setAttribute('role', 'rowgroup'); });
+      t.querySelectorAll('tr').forEach(function (tr) {
+        tr.setAttribute('role', 'row');
+        Array.prototype.forEach.call(tr.children, function (c, i) {
+          var head = c.parentNode.parentNode.tagName === 'THEAD';
+          c.setAttribute('role', head ? 'columnheader' : (c.tagName === 'TH' ? 'rowheader' : 'cell'));
+          if (!head && heads[i] && c.tagName === 'TD') c.setAttribute('data-label', heads[i]);
+        });
+      });
+    });
+  };
+  window.hankoStack();
+
   var root = document.documentElement, ja = root.lang === 'ja';
 
   // ---- English / 日本語 (home and /try) ---------------------------------

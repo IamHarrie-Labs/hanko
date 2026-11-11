@@ -999,3 +999,31 @@ input[type="checkbox"] { width: 24px; height: 24px; accent-color: var(--text); f
   .vid-btn { font-size: 11px; padding: 7px 9px; }
   .vid-intro { padding: 0 24px; }
 }
+
+
+/* ---- phones: wide tables as stacked cards, and tap targets that fit a thumb */
+.back-link { display: inline-block; padding: 8px 0; }
+.colophon a { display: inline-block; padding: 6px 2px; }
+.now-more summary { display: inline-block; padding: 10px 0; }
+@media (max-width: 700px) {
+  table.judge-table, table.ledger-runs, table.layer-table { display: block; width: 100%; overflow: visible; }
+  .judge-table thead, .ledger-runs thead, .layer-table thead {
+    position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap;
+  }
+  .judge-table tbody, .ledger-runs tbody, .layer-table tbody { display: block; }
+  .judge-table tr, .ledger-runs tr, .layer-table tr {
+    display: block; margin: 0 0 12px; padding: 6px 0;
+    background: var(--surface); border: 1px solid var(--line-2);
+  }
+  .judge-table th, .judge-table td, .ledger-runs td, .layer-table td {
+    display: block; width: auto !important; border: 0; padding: 6px 16px;
+  }
+  .judge-table tbody th { font-size: 16px; padding-top: 12px; }
+  .judge-table td:nth-child(2) { font-size: 13px; }
+  .judge-table td[data-label]::before, .ledger-runs td[data-label]::before, .layer-table td[data-label]::before {
+    content: attr(data-label); display: block; margin-bottom: 2px;
+    font-family: var(--mono); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted);
+  }
+  .ledger-runs td:first-child a { word-break: normal; }
+  .ledger-table td:nth-child(2) { width: auto; }
+}
