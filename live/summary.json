@@ -1,74 +1,86 @@
 {
  "schema": "hanko.live-summary/1",
  "first_decision_at": "2026-10-24T06:37:22.866702Z",
- "last_decision_at": "2026-11-26T10:08:54.712221Z",
+ "last_decision_at": "2026-11-26T19:15:47.854405Z",
  "totals": {
-  "runs": 160,
-  "decisions": 640,
+  "runs": 161,
+  "decisions": 644,
   "verdicts": {
    "enter": 165,
-   "pass": 262,
-   "abstain": 213
+   "pass": 263,
+   "abstain": 216
   },
-  "model_read": 104,
-  "reviews": 596,
+  "model_read": 108,
+  "reviews": 600,
   "results": {
-   "held": 341,
+   "held": 345,
    "falsified": 255
   },
   "anchored_runs": 159
  },
  "changes": [
   {
-   "token": "BTC",
-   "rank": 2,
-   "headline": "size 2.26% to 1.92%",
-   "action": "cut",
-   "matters": "Cut to 1.92% because of weaker evidence.",
+   "token": "SOL",
+   "rank": 3,
+   "headline": "PASS to ABSTAIN; evidence quality 0.56 to 0.00; -3 independent voices",
+   "action": "none",
+   "matters": "Still no position. No readings reference SOL.",
    "from": {
-    "verdict": "enter",
-    "size_pct": 2.26
+    "verdict": "pass",
+    "size_pct": 0.0
    },
    "to": {
-    "verdict": "enter",
-    "size_pct": 1.92
+    "verdict": "abstain",
+    "size_pct": 0.0
    },
-   "why": [],
-   "magnitude": 0.0905
+   "why": [
+    "evidence present now blocked: no readings reference SOL",
+    "quality floor now blocked: evidence quality 0.0 is below the floor of 0.4",
+    "independent voices now blocked: 0 independent voice(s) of 0 author(s); 0 echo(es) discounted; policy requires 2"
+   ],
+   "magnitude": 0.5629
   },
   {
    "token": "ETH",
-   "rank": 0,
-   "headline": "no change",
+   "rank": 3,
+   "headline": "PASS to ABSTAIN; evidence quality 0.53 to 0.00; -5 independent voices",
    "action": "none",
-   "matters": "Still no position. Evidence does not argue for entry.",
+   "matters": "Still no position. No readings reference ETH.",
    "from": {
     "verdict": "pass",
     "size_pct": 0.0
    },
    "to": {
-    "verdict": "pass",
+    "verdict": "abstain",
     "size_pct": 0.0
    },
-   "why": [],
-   "magnitude": 0.0685
+   "why": [
+    "evidence present now blocked: no readings reference ETH",
+    "quality floor now blocked: evidence quality 0.0 is below the floor of 0.4",
+    "independent voices now blocked: 0 independent voice(s) of 0 author(s); 0 echo(es) discounted; policy requires 2"
+   ],
+   "magnitude": 0.5297
   },
   {
-   "token": "SOL",
-   "rank": 0,
-   "headline": "-2 independent voices",
-   "action": "none",
-   "matters": "Still no position. Evidence does not argue for entry.",
+   "token": "BTC",
+   "rank": 3,
+   "headline": "ENTER to PASS; size 1.92% to 0.00%; evidence quality 0.61 to 0.44; -7 independent voices",
+   "action": "close",
+   "matters": "Closes the practice position. 1 independent voice(s) of 1 author(s); 0 echo(es) discounted; policy requires 2.",
    "from": {
-    "verdict": "pass",
-    "size_pct": 0.0
+    "verdict": "enter",
+    "size_pct": 1.92
    },
    "to": {
     "verdict": "pass",
     "size_pct": 0.0
    },
-   "why": [],
-   "magnitude": 0.0059
+   "why": [
+    "symmetry: bullish before, evidence is directionally neutral (0 vs 0)",
+    "independent voices now blocked: 1 independent voice(s) of 1 author(s); 0 echo(es) discounted; policy requires 2",
+    "direction now blocked: evidence does not argue for entry"
+   ],
+   "magnitude": 0.1718
   },
   {
    "token": "BONK",
@@ -91,101 +103,35 @@
  "tokens": [
   {
    "token": "BTC",
-   "decision_id": "dec_f5ad0642d0edea1eff1e2ae4",
-   "decided_at": "2026-11-26T10:08:54.712221Z",
-   "review_at": "2026-11-29T10:08:54.712221Z",
-   "verdict": "enter",
-   "size_pct": 1.92,
-   "confidence": 0.38,
-   "quality": 0.615,
-   "independent_voices": 8,
-   "voices": [
-    "Cointelegraph.com News",
-    "Decrypt",
-    "WatcherGuru",
-    "bitcoin",
-    "btcbreakdown.com",
-    "chainestate.bsky.social",
-    "cointelegraph",
-    "cryptovka.com"
-   ],
-   "echoes": 2,
-   "readings": 52,
-   "read_by": "word list",
-   "because": {
-    "rule": "conviction",
-    "detail": "mean bullish conviction 0.62"
-   },
-   "wrong_if": [
-    "price_usd < 51,837 within 72h (thesis fails if price falls 15% from entry)",
-    "liquidity_usd < 160,688,924 within 72h (exit assumption fails if depth drops 30%)",
-    "independent_voices < 2 within 72h (entry rested on convergence that no longer holds)"
-   ],
-   "gaps": 3
-  },
-  {
-   "token": "ETH",
-   "decision_id": "dec_b555d137ab488e048e21f1e0",
-   "decided_at": "2026-11-26T10:08:54.712221Z",
-   "review_at": "2026-11-29T10:08:54.712221Z",
-   "verdict": "pass",
-   "size_pct": 0.0,
-   "confidence": 0.32,
-   "quality": 0.53,
-   "independent_voices": 5,
-   "voices": [
-    "Cointelegraph.com News",
-    "CryptoRankNews",
-    "Decrypt",
-    "cointelegraph",
-    "cryptovka.com"
-   ],
-   "echoes": 1,
-   "readings": 10,
-   "read_by": "word list",
-   "because": {
-    "rule": "direction",
-    "detail": "evidence does not argue for entry"
-   },
-   "wrong_if": [
-    "independent_voices > 5 within 72h (verdict flips if another independent voice converges)",
-    "volume_24h_usd > 314,695,065 within 72h (verdict is worth revisiting if volume rises 50%)"
-   ],
-   "gaps": 3
-  },
-  {
-   "token": "SOL",
-   "decision_id": "dec_1750326f577b461260a1f98e",
-   "decided_at": "2026-11-26T10:08:54.712221Z",
-   "review_at": "2026-11-29T10:08:54.712221Z",
+   "decision_id": "dec_1eca0e13785028da12bd0ada",
+   "decided_at": "2026-11-26T19:15:47.854405Z",
+   "review_at": "2026-11-29T19:15:47.854405Z",
    "verdict": "pass",
    "size_pct": 0.0,
    "confidence": 0.0,
-   "quality": 0.563,
-   "independent_voices": 3,
+   "quality": 0.443,
+   "independent_voices": 1,
    "voices": [
-    "Cointelegraph.com News",
-    "chainestate.bsky.social",
-    "cryptovka.com"
+    "cointelegraph"
    ],
    "echoes": 0,
-   "readings": 3,
-   "read_by": "word list",
+   "readings": 1,
+   "read_by": "model, checked by code",
    "because": {
-    "rule": "direction",
-    "detail": "evidence does not argue for entry"
+    "rule": "independent voices",
+    "detail": "1 independent voice(s) of 1 author(s); 0 echo(es) discounted; policy requires 2"
    },
    "wrong_if": [
-    "independent_voices > 3 within 72h (verdict flips if another independent voice converges)",
-    "volume_24h_usd > 232,612,323 within 72h (verdict is worth revisiting if volume rises 50%)"
+    "independent_voices > 1 within 72h (verdict flips if another independent voice converges)",
+    "volume_24h_usd > 98,543,165 within 72h (verdict is worth revisiting if volume rises 50%)"
    ],
    "gaps": 3
   },
   {
    "token": "BONK",
-   "decision_id": "dec_b65788425447cdf87948e5f5",
-   "decided_at": "2026-11-26T10:08:54.712221Z",
-   "review_at": "2026-11-29T10:08:54.712221Z",
+   "decision_id": "dec_4ee1fd2cb77cd6b32fddf85a",
+   "decided_at": "2026-11-26T19:15:47.854405Z",
+   "review_at": "2026-11-29T19:15:47.854405Z",
    "verdict": "abstain",
    "size_pct": 0.0,
    "confidence": 0.0,
@@ -194,19 +140,111 @@
    "voices": [],
    "echoes": 0,
    "readings": 0,
-   "read_by": "word list",
+   "read_by": "model, checked by code",
    "because": {
     "rule": "evidence present",
     "detail": "no readings reference BONK"
    },
    "wrong_if": [
     "independent_voices > 1 within 72h (verdict flips if another independent voice converges)",
-    "volume_24h_usd > 1,256,278 within 72h (verdict is worth revisiting if volume rises 50%)"
+    "volume_24h_usd > 494,397 within 72h (verdict is worth revisiting if volume rises 50%)"
+   ],
+   "gaps": 3
+  },
+  {
+   "token": "ETH",
+   "decision_id": "dec_6f5789f1fa7ece0a8d1a056a",
+   "decided_at": "2026-11-26T19:15:47.854405Z",
+   "review_at": "2026-11-29T19:15:47.854405Z",
+   "verdict": "abstain",
+   "size_pct": 0.0,
+   "confidence": 0.0,
+   "quality": 0.0,
+   "independent_voices": 0,
+   "voices": [],
+   "echoes": 0,
+   "readings": 0,
+   "read_by": "model, checked by code",
+   "because": {
+    "rule": "evidence present",
+    "detail": "no readings reference ETH"
+   },
+   "wrong_if": [
+    "independent_voices > 1 within 72h (verdict flips if another independent voice converges)",
+    "volume_24h_usd > 241,237,406 within 72h (verdict is worth revisiting if volume rises 50%)"
+   ],
+   "gaps": 3
+  },
+  {
+   "token": "SOL",
+   "decision_id": "dec_efab38af79bd3788c9908dc4",
+   "decided_at": "2026-11-26T19:15:47.854405Z",
+   "review_at": "2026-11-29T19:15:47.854405Z",
+   "verdict": "abstain",
+   "size_pct": 0.0,
+   "confidence": 0.0,
+   "quality": 0.0,
+   "independent_voices": 0,
+   "voices": [],
+   "echoes": 0,
+   "readings": 0,
+   "read_by": "model, checked by code",
+   "because": {
+    "rule": "evidence present",
+    "detail": "no readings reference SOL"
+   },
+   "wrong_if": [
+    "independent_voices > 1 within 72h (verdict flips if another independent voice converges)",
+    "volume_24h_usd > 156,276,749 within 72h (verdict is worth revisiting if volume rises 50%)"
    ],
    "gaps": 3
   }
  ],
  "reviews": [
+  {
+   "decision_id": "dec_0e0930c5248dae9206f758ee",
+   "token": "BTC",
+   "verdict": "pass",
+   "result": "held",
+   "reviewed_at": "2026-11-26T19:15:47.854405Z",
+   "checks": [
+    "verdict flips if another independent voice converges: not_met",
+    "verdict is worth revisiting if volume rises 50%: not_met"
+   ]
+  },
+  {
+   "decision_id": "dec_2c6293d9ccf9f04fbb7dbafa",
+   "token": "ETH",
+   "verdict": "pass",
+   "result": "held",
+   "reviewed_at": "2026-11-26T19:15:47.854405Z",
+   "checks": [
+    "verdict flips if another independent voice converges: not_met",
+    "verdict is worth revisiting if volume rises 50%: not_met"
+   ]
+  },
+  {
+   "decision_id": "dec_4f63ced54d5bda5609ea26e3",
+   "token": "BONK",
+   "verdict": "abstain",
+   "result": "held",
+   "reviewed_at": "2026-11-26T19:15:47.854405Z",
+   "checks": [
+    "verdict flips if another independent voice converges: not_met",
+    "verdict is worth revisiting if volume rises 50%: not_met"
+   ]
+  },
+  {
+   "decision_id": "dec_c34066e46248f9e046e3c9d1",
+   "token": "SOL",
+   "verdict": "pass",
+   "result": "held",
+   "reviewed_at": "2026-11-26T19:15:47.854405Z",
+   "checks": [
+    "verdict flips if another independent voice converges: not_met",
+    "verdict is worth revisiting if volume rises 50%: not_met"
+   ]
+  },
   {
    "decision_id": "dec_5c5d603e9419c843f5c10a02",
    "token": "SOL",
@@ -384,65 +422,21 @@
     "verdict flips if another independent voice converges: met",
     "verdict is worth revisiting if volume rises 50%: not_met"
    ]
-  },
-  {
-   "decision_id": "dec_14e629c3c066b5eb94ec5519",
-   "token": "ETH",
-   "verdict": "abstain",
-   "result": "falsified",
-   "reviewed_at": "2026-11-25T17:25:08.543539Z",
-   "checks": [
-    "verdict flips if another independent voice converges: met",
-    "verdict is worth revisiting if volume rises 50%: not_met"
-   ]
-  },
-  {
-   "decision_id": "dec_37f2a52b32145733cb18baf7",
-   "token": "BTC",
-   "verdict": "pass",
-   "result": "falsified",
-   "reviewed_at": "2026-11-25T17:25:08.543539Z",
-   "checks": [
-    "verdict flips if another independent voice converges: met",
-    "verdict is worth revisiting if volume rises 50%: met"
-   ]
-  },
-  {
-   "decision_id": "dec_51545173dd11eedc4ed2a7da",
-   "token": "SOL",
-   "verdict": "abstain",
-   "result": "falsified",
-   "reviewed_at": "2026-11-25T17:25:08.543539Z",
-   "checks": [
-    "verdict flips if another independent voice converges: met",
-    "verdict is worth revisiting if volume rises 50%: met"
-   ]
-  },
-  {
-   "decision_id": "dec_a8d82e010ebf7bf5f61cab12",
-   "token": "BONK",
-   "verdict": "abstain",
-   "result": "falsified",
-   "reviewed_at": "2026-11-25T17:25:08.543539Z",
-   "checks": [
-    "verdict flips if another independent voice converges: not_met",
-    "verdict is worth revisiting if volume rises 50%: met"
-   ]
   }
  ],
  "scorecard": {
-  "reviewed": 596,
-  "scored": 596,
+  "reviewed": 600,
+  "scored": 600,
   "inconclusive": 0,
-  "held": 341,
+  "held": 345,
   "falsified": 255,
-  "hit_rate": 0.572148,
+  "hit_rate": 0.575,
   "brier": 0.313366,
   "brier_over": "enter decisions only",
   "forecasts": 159,
   "by_verdict": {
    "abstain": {
-    "held": 112,
+    "held": 113,
     "falsified": 84
    },
    "enter": {
@@ -450,7 +444,7 @@
     "falsified": 28
    },
    "pass": {
-    "held": 98,
+    "held": 101,
     "falsified": 143
    }
   },
@@ -504,35 +498,35 @@
   "authors": [
    {
     "key": "chainestate.bsky.social",
-    "held": 156,
+    "held": 158,
     "falsified": 119,
     "inconclusive": 0,
-    "scored": 275,
-    "hit_rate": 0.567273
+    "scored": 277,
+    "hit_rate": 0.570397
    },
    {
     "key": "CryptoRankNews",
-    "held": 48,
+    "held": 49,
     "falsified": 36,
     "inconclusive": 0,
-    "scored": 84,
-    "hit_rate": 0.571429
+    "scored": 85,
+    "hit_rate": 0.576471
    },
    {
     "key": "DegenerateNews",
-    "held": 118,
+    "held": 120,
     "falsified": 87,
     "inconclusive": 0,
-    "scored": 205,
-    "hit_rate": 0.57561
+    "scored": 207,
+    "hit_rate": 0.57971
    },
    {
     "key": "cryptovka.com",
-    "held": 224,
+    "held": 227,
     "falsified": 155,
     "inconclusive": 0,
-    "scored": 379,
-    "hit_rate": 0.591029
+    "scored": 382,
+    "hit_rate": 0.594241
    },
    {
     "key": "cointelegraph",
@@ -544,43 +538,43 @@
    },
    {
     "key": "Cointelegraph.com News",
-    "held": 187,
+    "held": 188,
     "falsified": 100,
     "inconclusive": 0,
-    "scored": 287,
-    "hit_rate": 0.651568
+    "scored": 288,
+    "hit_rate": 0.652778
    },
    {
     "key": "Decrypt",
-    "held": 163,
+    "held": 165,
     "falsified": 64,
     "inconclusive": 0,
-    "scored": 227,
-    "hit_rate": 0.718062
+    "scored": 229,
+    "hit_rate": 0.720524
    },
    {
     "key": "bitcoin",
-    "held": 98,
+    "held": 99,
     "falsified": 37,
     "inconclusive": 0,
-    "scored": 135,
-    "hit_rate": 0.725926
+    "scored": 136,
+    "hit_rate": 0.727941
    },
    {
     "key": "WatcherGuru",
-    "held": 73,
+    "held": 74,
     "falsified": 24,
     "inconclusive": 0,
-    "scored": 97,
-    "hit_rate": 0.752577
+    "scored": 98,
+    "hit_rate": 0.755102
    },
    {
     "key": "btcbreakdown.com",
-    "held": 63,
+    "held": 64,
     "falsified": 17,
     "inconclusive": 0,
-    "scored": 80,
-    "hit_rate": 0.7875
+    "scored": 81,
+    "hit_rate": 0.790123
    },
    {
     "key": "BWEnews",
@@ -589,48 +583,56 @@
     "inconclusive": 0,
     "scored": 30,
     "hit_rate": 0.866667
+   },
+   {
+    "key": "bwenews",
+    "held": 1,
+    "falsified": 0,
+    "inconclusive": 0,
+    "scored": 1,
+    "hit_rate": 1.0
    }
   ],
   "rules": [
    {
     "key": "evidence_present",
-    "held": 243,
+    "held": 246,
     "falsified": 193,
     "inconclusive": 0,
-    "scored": 436,
-    "hit_rate": 0.557339
+    "scored": 439,
+    "hit_rate": 0.560364
    },
    {
     "key": "quality_floor",
-    "held": 242,
+    "held": 245,
     "falsified": 190,
     "inconclusive": 0,
-    "scored": 432,
-    "hit_rate": 0.560185
+    "scored": 435,
+    "hit_rate": 0.563218
    },
    {
     "key": "symmetry",
-    "held": 230,
+    "held": 233,
     "falsified": 174,
     "inconclusive": 0,
-    "scored": 404,
-    "hit_rate": 0.569307
+    "scored": 407,
+    "hit_rate": 0.572482
    },
    {
     "key": "exit_liquidity",
-    "held": 341,
+    "held": 345,
     "falsified": 255,
     "inconclusive": 0,
-    "scored": 596,
-    "hit_rate": 0.572148
+    "scored": 600,
+    "hit_rate": 0.575
    },
    {
     "key": "independent_voices",
-    "held": 235,
+    "held": 238,
     "falsified": 165,
     "inconclusive": 0,
-    "scored": 400,
-    "hit_rate": 0.5875
+    "scored": 403,
+    "hit_rate": 0.590571
    },
    {
     "key": "conviction",
@@ -643,6 +645,18 @@
   ]
  },
  "runs": [
+  {
+   "run_id": "run_a069069e601d7796",
+   "as_of": "2026-11-26T19:15:47.854405Z",
+   "manifest_digest": "sha256:fa685b7424711f3973e87d725e911d6141e813c717afb3585fa4f1fb26b4383e",
+   "verdicts": {
+    "pass": 1,
+    "abstain": 3
+   },
+   "ots": {
+    "state": "pending"
+   }
+  },
   {
    "run_id": "run_d42592a9c9e61b45",
    "as_of": "2026-11-26T10:08:54.712221Z",
@@ -1028,18 +1042,6 @@
    "ots": {
     "state": "confirmed",
     "block": 976646
-   }
-  },
-  {
-   "run_id": "run_f0e43eb009abfa2b",
-   "as_of": "2026-11-19T18:38:48.212196Z",
-   "manifest_digest": "sha256:b37fb70954d9673419a30ac573c91901e13a96ea4287dc3c8c59171e43fb607f",
-   "verdicts": {
-    "abstain": 4
-   },
-   "ots": {
-    "state": "confirmed",
-    "block": 976624
    }
   }
  ]
